@@ -1,0 +1,147 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html><head>
+<meta name="keywords" content="wbsrch, web, directory, {% trans "search" %}, engine, independent, faq, frequently, asked, questions" lang="en-us">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine." lang="en-us">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>Frequently Asked Questions (FAQ) | WbSrch Web {% trans "Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %} Frequently Asked Questions</h1></div>
+<div class="body">
+<p><strong>Are you just one of the thousands of Google affiliate sites that pretend they're a search engine when they're really just using Google search?</strong></p>
+
+<p>No. We have our own index. We've built this search engine from scratch. For better or worse you will *not* get the same results as on Google, Bing, or DuckDuckGo.</p>
+
+<p><strong>What if I don't get any results?</strong></p>
+
+<p>We keep track of how many results we return for a search and use that as a signal to crawl more sites focused on that topic and to improve and expand our index. The best way to improve WbSrch is to use it.</p>
+
+<p><strong>How can I have my site indexed by WbSrch?</strong></p>
+
+<p>We don't have a method for you to submit your URL for crawling. There are already hundreds of millions of URLs in our "to-be-crawled" queue. If your site has many external links or is a popular high-traffic site, we'll add it sooner.</p>
+
+<p><strong>How much information are you gathering from my searches?</strong></p>
+
+<p>We don't keep track of who you are, and frankly don't care. We're not trying to build a dossier of information about you like some other providers. We do currently use Google Analytics to keep track of general site metrics. The data we store when you search looks like this:</p>
+
+<table class="inline">
+<tr><th>Keywords</th><th>Result count</th><th>Search time</th><th>Date</th><th>IP</th><th>Indexed</th><th>Referer</th><th>Browser</th></tr>
+<tr><td>chickens</td><td>461</td><td>0.23</td><td>Jan. 16, 2014</td><td>216.151.3.15</td><td>True</td><td>https://wbsrch.com/search/</td><td>Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0</td></tr>
+</table>
+
+<p>We don't know who you are from that information (an IP address is not a specific person), but we can learn important things like whether we need to go find more information about "chickens", how often a term is searched for, whether a bot is spamming searches, where our traffic comes from so we know where to focus efforts to increase traffic, what browsers we need to support, and whether our server is fast enough to keep up. If it weren't for spambots we would probably stop logging IP addresses.</p>
+
+<p>There is no such thing as a WbSrch user account, so search history is not connected with a specific person. We do not keep a machine fingerprint or use cookies to link search activity history to a specific machine or person.</p>
+
+<p>We also don't store any personally-identifiable information in cookies. You can disable cookies on this site without any loss of functionality. We do use Google Analytics for visitor tracking, so Google may place an ID for that in a cookie. You can disable that if you want with plugins like Ghostery, and we have no way to link that ID to search history.</p>
+
+<p>So, in short, we do track some things, but we don't track <em>YOU</em>.</p>
+
+<p><strong>What if I look up my domain and find that my site was wrongly excluded from the index?</strong></p>
+
+<p>Most often that's an unintentional language classification issue -- perhaps you have some Russian pages on your site but the whole thing isn't in Russian. If it's something that's OK by our <a href="/policy/">inclusion policy</a> we can unblock it.</p>
+
+<p><strong>What if there's a site is in the search results that shouldn't be (i.e. porn, torrent, or Chinese language sites)?</strong></p>
+
+<p>Excluding things that don't fit our inclusion policy is a daunting and never-ending task. We estimate that porn is about 15% of the internet. That's still billions of URLs. We'll eventually get to excluding sites that make it into our index and don't belong there, but it's a slow process.</p>
+
+<p><strong>What if I see English language sites in the Italian search, or Spanish language sites in the English search?</strong></p>
+
+<p>We tend to tag things based on their domain name, so sites ending with .br tend to end up in the Portuguese search, while sites ending in .co.uk end up in the English search, but sites can be in any language. That confuses our robots sometimes. Our language classification tools will continue to get better over time.</p>
+
+<p><strong>What do you mean when you say that you're an "independent search engine"?</strong></p>
+
+<p>That means that the search engine is not under the control of any outside influence. We haven't taken any investment. We built the hardware and the algorithms for the search engine and are not using search technology copied, bought, or leased from anyone else.</p>
+
+<p><strong>Why don't your search results look much like Google, Bing, or DuckDuckGo?</strong></p>
+
+<p>We're doing our own thing and have no interest in copying what the other seach engines are doing. We're also very early stage and our algorithms are still evolving, so we don't have as much data to present as the larger search engines.</p>
+
+<p>We do not ignore word order. A search for "cheese sandwich" will return different results than a search for "sandwich cheese".</p>
+
+<p>We also do not do stemming, meaning a search for "cheeses" is treated differently than a search for "cheese".</p>
+
+<p>This means that WbSrch may be a good choice where you specifically want the results of a plural word, different word tense, or specific word order.</p>
+
+<p><strong>You say you don't have investors. Does that mean that this will go away when you run out of money?</strong></p>
+
+<p>WbSrch costs about $100 per month to run right now, so it's not like it needs a firehose of cash to stay running. If we can get to the point of 100,000 searches per day, it'll be big enough to be the creator's full-time job rather than just a long-term hobby project.</p>
+
+<p id="removal"><strong>What if I don't want to have my website indexed in your search engine?</strong></p>
+
+<p>If you have a public-facing website on the internet, you should expect that it will be indexed by search engines. If you do not want this to happen, you always have the option of shutting down your website.</p>
+
+<p>People who don't understand SEO sometimes ask not to be linked to, incorrectly believing that it will somehow negatively impact their rankings in other search engines. We do not honor or respond to these requests and it is a waste of time to ask. We have no legal obligation to remove links to other websites, nor does a site have the right to decide who links to them.</p>
+
+<p>We support robots.txt and obey rules for the Google user agent. We don't look for own user agent because a statistically significant number of websites have not added rules specifically for WbSrch.</p>
+
+<p><strong>How does the recent EU "right to be forgotten" ruling affect WbSrch?</strong></p>
+
+<p>It doesn't. We do not have a physical presence outside of the United States and are not bound by the laws and rulings of other lands.</p>
+
+<p><strong>Why don't you use autocorrect for spelling errors, or autocomplete for searches?</strong></p>
+
+<p>We believe that these autocorrect, while somewhat useful, is disrepectful to our users. We are not going to presume to know what you intended to type, but we may <em>suggest</em> a spelling correction once in a while.</p>
+
+<p>For autocomplete, we don't yet have enough data to do it well.</p>
+
+<p>There's also a problem with recommendation engines and suggestion-based systems: They're dehumanizing. They influence your decisions in subtle ways that cause you to conform ever so slightly to their algorithms. Over time, this causes everyone to be trained to become a little bit more like the algorithm expects them to be. You're better than that. Be a real person, and take responsibility for your typos.</p>
+
+<p><strong>Has WbSrch.com ever been served a warrant or National Security Letter to request user information</strong></p>
+
+<p>We have never received a National Security Letter requesting user information.</p>
+
+<p>We have also never been served with a warrant requesting information about any of our users.</p>
+
+<p>It would really be pointless to do so. We don't collect any personally identifiable information, and there's no such thing as a "WbSrch User Account".</p>
+
+<p><strong>How do you feel about the new generic top-level domain extensions?</strong></p>
+
+<p>We think they're generally a bad idea and a waste of money. We'll tend to rank them lower than more reputable extensions, such as .com.</p>
+
+<p><strong>What technologies was WbSrch built with?</strong></p>
+
+<p>WbSrch was built entirely with open source tools, including <a href="http://www.ubuntu.com">Ubuntu Linux</a>, <a href="http://www.python.org">Python</a>, <a href="http://www.postgresql.org">PostgreSQL</a>, <a href="http://djangoproject.com">Django</a>, and <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a>.</p>
+
+<p><strong>How do you feel about link directories? Does adding my site to one affect my rankings?</strong></p>
+
+<p>Link directories are fine. A good link directory is a legitimate way of finding things on the web. We're not so afraid of competition that we'll demote link directories or the sites they link to. Having your site in them makes it more likely that we'll discover your site. There are, however, many low-quality link directories that are not worth the time or effort.</p>
+
+<p><strong>How do you feel about guest blogging? Will it affect my rankings?</strong></p>
+
+<p>We think guest blogging is great. It's a good way for readers of blogs with similar topics to find new reading material. We're not so afraid of people finding other sites without going through us that we'll demote sites that use guest bloggers. It won't affect your ranking in any way, so go for it.</strong></p>
+
+<p><strong>Can I follow you on Twitbook, Friendoogle, Face+, or other social sites?</strong></p>
+
+<p>We are <a href="https://twitter.com/WbSrchDotCom">@WbSrchDotCom</a> on Twitter and have a Facebook page. They're both linked to at the bottom of the English-language front page.</p>
+
+<p><strong>Why do I only see 250 results for a common search when you've crawled millions of pages?</strong></p>
+
+<p>We only show the top 250 results (or combine 250 results per word for not-fully-indexed searches) and don't show multiple pages of results.</p>
+
+<p>If you can't find something in the first 250 items, which is page 25 on most other search engines, chances are low that you'll find it at all. Try being more specific or rephrasing your query if you don't see what you hoped for.</p>
+
+<p>It's possible we've just not found it yet. We're still pretty new.</p>
+
+<p><strong>Do I need JavaScript to use WbSrch?</strong></p>
+
+<p>Nope. You don't need JavaScript, Flash, Silverlight, Adobe Air, Java, or anything other than a working browser. Disabling JavaScript won't cause any problems.</p>
+
+<p><strong>Does WbSrch work with text-only browsers like w3m and Lynx?</strong></p>
+
+<p>Yes, it works very well with text-only browsers. If you're on a Linux console and don't have access to a GUI, WbSrch is probably the best choice - it looks better than other major search engines. You also won't be prompted to accept cookies by Lynx.</p>
+
+<p><strong>Why can't I reach your site from my server when I can reach it from home?</strong></p>
+
+<p>We've blocked a handful of networks that were the source of most of our spambot visits, including OVH, Global Crossing, and most of the network in mainland China. We'll consider unblocking those if they deal with their spammer problems.</p>
+
+<p><a href="/search/">Back to search form.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

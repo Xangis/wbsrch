@@ -1,0 +1,30 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html><head>
+<meta name="keywords" content="wbsrch, independent, web, directory, {% trans "search" %}, engine, philosophy" lang="en-us">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine." lang="en-us">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>Philosophy and Goals | WbSrch Web {% trans "Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %} Philosophy and Goals</h1></div>
+<div class="body">
+<p>We don't want want to be the biggest, or the fastest. We know we'll never be #1, but we hope to be useful to enough people that we'll be #5 someday. We do this by doing things our own way and offering a different set of search results, not driven by popularity or social media, but rather by trying to index original content and presenting it above "meta" or "aggregator" sites that gather other people's content and thrive on comments. We don't think that articles with comments are a net benefit for the web.</p>
+<p>We think content created by an individual rather than by a collective or an algorithm has more value, and are likely to take that into consideration with our ranking algorithms. And yet, that search result then becomes content created by an algorithm. You can't always win because computers are stupid, and no matter how hard you try you can't make them not be stupid (you're just creating the illusion of intelligence at best).</p>
+<p>One of the things we're specifically not doing is using a PageRank-style algorithm. That's already being done, and better than we possibly could. It's funny how billions of dollars and more than a decade of development let you build something big. We're more interested in indexing more of the content that isn't winning popularity (or link-building) contests, but is still useful.</p>
+<p>We will never ask you to link your Facebook, Google+, MySpace, or SocialWhatever account. We aim to be the best search engine for people who don't worry too much about what other people think.</p>
+<p>We will never display personalized results based on something we think we know about you. We do not know or care who you are. We just want to help you find things.</p>
+<p>We also don't want to index non-text content: images, videos, audio, and other things like that aren't on the list of things we want to include. We'll index sites that host that kind of content, but we won't index that content. We'd like to work just as well for those using text-only browsers like w3m or lynx. We don't want to show you search results packed full of images, videos, and other non-text content. We may add video, audio, or book searching at some point, but it's not our first mission.<p>
+<p>We don't want to index the entire web, but if a page is around long enough we will probably eventually index it. No, you can't submit your site to our index. We have hundreds of millions of pages on our "to be crawled" list and if something is important enough to find and is something <a href="/policy/">we consider worth indexing</a>, we'll get to it eventually.</p>
+<p>We don't plan to spend a lot on infrastructure. We're using inexpensive server hardware and we're going to try to do what we can with what we have. Rather than burning quickly and brightly and using up a huge amount of fuel like Cuil only to end up a pile of smoldering cinders, we plan to gradually but steadily improve over time like DuckDuckGo. Sustainability is more important than domination.</p>
+<p>Right now we're bootstrapped and though we may take some investment at some point, we don't buy into the "land grab now, profit later" mentality. We are not a "Google killer", and anyone who claims to be is both ignorant and delusional.</p>
+<p>Give us a try. If we don't do what you want, come back in a few months and try again. Add us to the list of search engines in your browser. If you can't find something with Google or Bing, we'll be here for you. We're OK with being the second search engine you try when looking for something, and we primise that our results will be different.</p>
+<p><a href="/search/">Back to search form.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

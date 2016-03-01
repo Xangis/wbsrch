@@ -1,0 +1,469 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-24 22:45-0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: adminpanel.htm:4 article.htm:4 article2.htm:4 changelog.htm:4
+#: changelog.htm.py:22 criteria.htm:4 dmca.htm:4 dmcanotices.htm:4 faq.htm:4
+#: howto.htm:4 index.htm:3 indexstats.htm:4 mostlinked.htm:6 philosophy.htm:4
+#: policy.htm:4 policy.htm.py:16 popular.htm:6 search.htm:3 search2.htm:3
+#: terms.htm:4
+msgid "search"
+msgstr ""
+
+#: adminpanel.htm:5 adminpanel.htm.py:9 adminpanel.htm.py:14 article.htm:5
+#: article.htm.py:9 article.htm.py:14 article2.htm:5 article2.htm.py:9
+#: article2.htm.py:14 changelog.htm:5 changelog.htm.py:9 changelog.htm.py:14
+#: criteria.htm:5 criteria.htm.py:9 criteria.htm.py:14 dmca.htm:5
+#: dmca.htm.py:14 dmcanotices.htm:5 dmcanotices.htm.py:14 domain.htm:3
+#: domain.htm.py:7 domain.htm.py:13 faq.htm:5 faq.htm.py:9 faq.htm.py:14
+#: howto.htm:5 howto.htm.py:9 howto.htm.py:14 index.htm:4 index.htm.py:17
+#: index.htm.py:32 index.htm.py:35 index.htm:40 ip.htm:3 ip.htm.py:7
+#: ip.htm.py:13 mostlinked.htm:17 philosophy.htm:5 philosophy.htm.py:9
+#: philosophy.htm.py:14 policy.htm:5 policy.htm.py:9 policy.htm.py:14
+#: popular.htm:17 privacy.htm:4 privacy.htm.py:11 search.htm:4 search.htm.py:8
+#: search.htm.py:15 search.htm.py:18 search.htm:23 search2.htm:4
+#: search2.htm.py:8 search2.htm.py:14 search2.htm.py:17 search2.htm:20
+#: terms.htm:5 terms.htm.py:9 terms.htm.py:14
+msgid "Search"
+msgstr ""
+
+#: adminpanel.htm:39
+msgid "Crawl a Single URL"
+msgstr ""
+
+#: adminpanel.htm:41
+msgid "Crawl"
+msgstr ""
+
+#: adminpanel.htm:49
+#, fuzzy
+#| msgid "Check a Domain"
+msgid "Block a Domain"
+msgstr "Ελέγξτε ένα τομέα"
+
+#: adminpanel.htm:57
+msgid "Block"
+msgstr ""
+
+#: adminpanel.htm:63 domain.htm:34 indexstats.htm:17 ip.htm:30
+msgid "Language"
+msgstr "γλώσσα"
+
+#: adminpanel.htm:72
+msgid "Get"
+msgstr ""
+
+#: adminpanel.htm:94
+msgid "Check keyword score for a page"
+msgstr ""
+
+#: adminpanel.htm:97
+msgid "Calculate"
+msgstr ""
+
+#: article.htm:4 article2.htm:4
+msgid "articles"
+msgstr ""
+
+#: article.htm:5 article.htm.py:9 article.htm.py:14 article2.htm:5
+#: article2.htm.py:9 article2.htm.py:14
+msgid "Articles"
+msgstr ""
+
+#: domain.htm:7 domain.htm.py:13 domain.htm.py:24 domain.htm.py:33
+#: domain.htm:58 domain.htm.py:77 index.htm:51 ip.htm:29
+msgid "Domain"
+msgstr "γλώσσα"
+
+#: domain.htm:13 domain.htm.py:24 ip.htm:24
+msgid "Info"
+msgstr ""
+
+#: domain.htm:16 index.htm:48
+msgid "Check a Domain"
+msgstr "Ελέγξτε ένα τομέα"
+
+#: domain.htm:19
+msgid "Check Domain"
+msgstr "Ελέγξτε τομέα"
+
+#: domain.htm:24 domain.htm.py:58 domain.htm.py:62 domain.htm.py:77 ip.htm:24
+#: search.htm:8 search.htm.py:35 search2.htm:8 search2.htm.py:34
+msgid "for"
+msgstr "για"
+
+#: domain.htm:36
+msgid "Created"
+msgstr ""
+
+#: domain.htm:47
+msgid "We have"
+msgstr ""
+
+#: domain.htm:47
+msgid "in the"
+msgstr ""
+
+#: domain.htm:47
+msgid "database for that domain"
+msgstr ""
+
+#: domain.htm:51
+msgid "No exact match for that domain name found"
+msgstr ""
+
+#: domain.htm:53
+msgid "Enter a domain name to check"
+msgstr ""
+
+#: domain.htm:58
+msgid "Top Keyword Rankings"
+msgstr ""
+
+#: domain.htm:58 domain.htm.py:77
+msgid "this"
+msgstr ""
+
+#: domain.htm:62
+msgid "Ranks"
+msgstr ""
+
+#: domain.htm:69
+msgid "Related"
+msgstr ""
+
+#: domain.htm:69 index.htm:3
+msgid "domain"
+msgstr "γλώσσα"
+
+#: domain.htm:71
+msgid "This domain is excluded from our index"
+msgstr ""
+
+#: domain.htm:78
+msgid "Here is what is in our index"
+msgstr ""
+
+#: domain.htm:92
+msgid "No URLs in the index for"
+msgstr ""
+
+#: domain.htm:97 ip.htm:41
+msgid "Go to web search form"
+msgstr ""
+
+#: footer.inc:2 footerwithoutcopyright.inc:2
+msgid "IP Address Info"
+msgstr ""
+
+#: footer.inc:3 footerwithoutcopyright.inc:3
+msgid "Changelog"
+msgstr ""
+
+#: footer.inc:3 footerwithoutcopyright.inc:3
+msgid "Inclusion Policy"
+msgstr ""
+
+#: footer.inc:4 footerwithoutcopyright.inc:4
+msgid "Philosophy and Goals"
+msgstr ""
+
+#: footer.inc:5 footerwithoutcopyright.inc:5
+msgid "Index Statistics"
+msgstr ""
+
+#: footer.inc:5 footerwithoutcopyright.inc:5
+msgid "How to Use WbSrch"
+msgstr ""
+
+#: footer.inc:7 footerwithoutcopyright.inc:9
+msgid "Terms of Service"
+msgstr ""
+
+#: footer.inc:8 footerwithoutcopyright.inc:9
+msgid "Privacy Policy"
+msgstr ""
+
+#: footer.inc:9 footerwithoutcopyright.inc:10
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: footer.inc:9 footerwithoutcopyright.inc:10
+msgid "Ranking Criteria"
+msgstr ""
+
+#: footer.inc:10 footerwithoutcopyright.inc:11
+msgid "DMCA and Copyright Policy"
+msgstr ""
+
+#: footer.inc:10 footerwithoutcopyright.inc:11
+msgid "Contact Information"
+msgstr ""
+
+#: index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6 search.htm:3
+#: search2.htm:3
+msgid "search engine"
+msgstr ""
+
+#: index.htm:3 indexstats.htm:4 search.htm:3 search2.htm:3
+msgid "independent"
+msgstr ""
+
+#: index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6 search.htm:3
+#: search2.htm:3
+msgid "directory"
+msgstr ""
+
+#: index.htm:3 search.htm:3 search2.htm:3
+msgid "engine"
+msgstr ""
+
+#: index.htm:4 search.htm:4 search2.htm:4
+msgid "home"
+msgstr ""
+
+#: index.htm:4 index.htm.py:17 index.htm.py:33 indexstats.htm:5
+#: mostlinked.htm:7 popular.htm:7 search.htm:4 search.htm.py:16 search2.htm:4
+#: search2.htm.py:15
+msgid "The Independent Search Engine"
+msgstr ""
+
+#: index.htm:43
+msgid "Most Recently Indexed Search Terms"
+msgstr ""
+
+#: index.htm:51
+msgid "Check"
+msgstr ""
+
+#: indexstats.htm:4 mostlinked.htm:6 popular.htm:6
+msgid "index"
+msgstr ""
+
+#: indexstats.htm:4
+msgid "statistics"
+msgstr ""
+
+#: indexstats.htm:5 indexstats.htm.py:9 indexstats.htm.py:14 mostlinked.htm:7
+#: mostlinked.htm.py:11 mostlinked.htm.py:16 popular.htm:7 popular.htm.py:11
+#: popular.htm.py:16
+msgid "Web Search"
+msgstr ""
+
+#: indexstats.htm:9 indexstats.htm.py:14
+msgid "Index"
+msgstr ""
+
+#: indexstats.htm:9 indexstats.htm.py:14
+msgid "Statistics"
+msgstr ""
+
+#: indexstats.htm:17
+msgid "# of"
+msgstr ""
+
+#: indexstats.htm:17
+msgid "URLs"
+msgstr ""
+
+#: indexstats.htm:17
+msgid "Crawled"
+msgstr ""
+
+#: indexstats.htm:17
+msgid "Terms"
+msgstr ""
+
+#: indexstats.htm:17
+msgid "Indexed"
+msgstr ""
+
+#: indexstats.htm:17
+msgid "Pending"
+msgstr ""
+
+#: indexstats.htm:17
+msgid "Indexes"
+msgstr ""
+
+#: indexstats.htm:21
+msgid "Total"
+msgstr ""
+
+#: indexstats.htm:22
+msgid "Excluded"
+msgstr ""
+
+#: indexstats.htm:22
+#, fuzzy
+#| msgid "Domain"
+msgid "Domains"
+msgstr "γλώσσα"
+
+#: indexstats.htm:24 mostlinked.htm:27 popular.htm:33
+msgid "Back to search form"
+msgstr ""
+
+#: ip.htm:7 ip.htm.py:24
+msgid "IP"
+msgstr ""
+
+#: ip.htm:13
+msgid "IP Address"
+msgstr ""
+
+#: ip.htm:16
+msgid "Check an IP Address"
+msgstr ""
+
+#: ip.htm:19
+#, fuzzy
+#| msgid "Check Domain"
+msgid "Check IP"
+msgstr "Ελέγξτε τομέα"
+
+#: ip.htm:35
+msgid "Our crawler has not found any domains at that IP address"
+msgstr ""
+
+#: mostlinked.htm:6 popular.htm:6
+msgid "searches"
+msgstr ""
+
+#: mostlinked.htm:6
+msgid "most linked to domains"
+msgstr ""
+
+#: mostlinked.htm:6 popular.htm:6
+msgid "terms"
+msgstr ""
+
+#: mostlinked.htm:6
+msgid "most links"
+msgstr ""
+
+#: mostlinked.htm:6 popular.htm:6
+msgid "frequent"
+msgstr ""
+
+#: mostlinked.htm:11 mostlinked.htm.py:17
+msgid "Most Linked To Domains"
+msgstr ""
+
+#: popular.htm:6
+msgid "popular searches"
+msgstr ""
+
+#: popular.htm:6
+msgid "most popular"
+msgstr ""
+
+#: popular.htm:11 popular.htm.py:17
+msgid "Most Popular Searches"
+msgstr ""
+
+#: popular.htm:19
+msgid "Total Searches in Month"
+msgstr ""
+
+#: popular.htm:21
+msgid "Search Phrase"
+msgstr ""
+
+#: popular.htm:21
+msgid "Number of Searches"
+msgstr ""
+
+#: popular.htm:26
+msgid "Other monthly results"
+msgstr ""
+
+#: popular.htm:28
+msgid "Current Month"
+msgstr ""
+
+#: search.htm:3 search2.htm:3
+msgid "results"
+msgstr ""
+
+#: search.htm:3 search2.htm:3
+msgid "internet"
+msgstr ""
+
+#: search.htm:8 search2.htm:8
+msgid "Search Results"
+msgstr ""
+
+#: search.htm:30 search2.htm:29
+msgid "Did you mean to search for"
+msgstr ""
+
+#: search.htm:31 search2.htm:30
+msgid "Did you mean to look up domain details for"
+msgstr ""
+
+#: search.htm:32 search2.htm:31
+msgid "Did you mean to look up details for the IP address"
+msgstr ""
+
+#: search.htm:33 search2.htm:32
+msgid "This search contains a word in the "
+msgstr ""
+
+#: search.htm:33 search.htm.py:34 search2.htm:32 search2.htm.py:33
+#, fuzzy
+#| msgid "Language"
+msgid "language"
+msgstr "γλώσσα"
+
+#: search.htm:34 search2.htm:33
+msgid "This search mentions the "
+msgstr ""
+
+#: search.htm:35 search2.htm:34
+msgid "Results"
+msgstr ""
+
+#: search.htm:35 search2.htm:34
+#, fuzzy
+#| msgid "domain"
+msgid "from domain"
+msgstr "γλώσσα"
+
+#: search.htm:39 search2.htm:38
+msgid "No results were found for that search."
+msgstr "Δεν βρέθηκαν αποτελέσματα για αυτήν την αναζήτηση."
+
+#: search.htm:40 search2.htm:39
+msgid ""
+"Our robots are very embarrassed by their failure to find what you were "
+"looking for. They'll be on the hunt for new content and should have better "
+"results in a few days."
+msgstr ""
+
+#: search.htm:47 search.htm.py:61 search.htm.py:72 search2.htm:46
+#: search2.htm.py:60 search2.htm.py:71
+msgid "No page description."
+msgstr "Δεν υπάρχει περιγραφή της σελίδας."
+
+#: search.htm:85 search2.htm:84
+msgid ""
+"Note: The phrase you searched for is not fully indexed. We have queued it "
+"for indexing and will have better results available soon."
+msgstr ""

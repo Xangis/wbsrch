@@ -1,0 +1,27 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html><head>
+<meta name="keywords" content="wbsrch, web, directory, {% trans "search" %}, engine, terms, service, ToS" lang="en-us">
+<meta name="description" content="Terms of service for WbSrch Web {% trans "Search" %}, the Independent {% trans "Search" %} Engine." lang="en-us">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>Terms of Service | WbSrch Web {% trans "Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Terms of Service / Terms of Use</h1></div>
+<div class="body">
+<p>We provide this service in the hope that it may be useful, but make no guarantees about its usefulness.</p>
+<p>We accept no responsibility for any harm, real or imagined, that this service may cause, either directly or indirectly.</p>
+<p>We are not responsible for other people's content. We make a cursory effort to block or remove bad things if we notice them, but we make no guarantees. You are responsible for your own activity and security when accessing the internet.</p>
+<p>This is a free ad-supported service with minimal advertising. Please do not use an ad blocker.</p>
+<p>We do not make any service availability guarantees.</p>
+<p>Framing our search results into another site or application or using this site's results in a meta-search site is not permitted. If you want to do so, you can contact us to see if we can agree on the details.</p>
+
+<p><a href="/search/">Back to search form.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

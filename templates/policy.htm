@@ -1,0 +1,46 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html><head>
+<meta name="keywords" content="wbsrch, web, directory, independent, engine, {% trans "search" %}, find, inclusion, exclusion, policy" lang="en-us">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine." lang="en-us">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>Inclusion Policy | WbSrch Web {% trans "Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %} Directory Inclusion Policy</h1></div>
+<div class="body">
+<p>This is a proprietary {% trans "search" %} engine, the project of one person. The inclusion, exclusion, and ranking of a site is the opinion (or lack of opinion) of WbSrch's creator, as expressed through code.</p>
+
+<p>We don't want to include the following types of sites:<p>
+
+<ul>
+<li>Porn (this also includes prostitution, escort services, and sex toy shops).</li>
+<li>Gambling (we'll include sites about gambling strategy, but not sites where you *can* gamble).</li>
+<li>Social Media.</li>
+<li>Aggregators and Meta Sites (sites that don't create their own content).</li>
+<li>Content Farms.</li>
+<li>Pill Sites (the kind of places where you get pill email spam from).</li>
+<li>Spam Sites (i.e. computer-generated content such as auto-generated domain whois info/valuation sites, parked domains, made-for-adsense, affiliate spam, or anything just too crapped up with ads to look at).</li>
+<li>Sites not in English or one of our supported languages.</li>
+<li>Bait and Switch Sites (sites that hide their content behind a modal popup/paywall, require login to see content, or other hinky things like that - which often happens with question-and-answer sites).</li>
+<li>Piracy Sites (torrent search engines, crack sites, warez, or anything related to illegal downloading).</li>
+<li>Ad Servers (by this we mean we don't want to index actual advertisements as if they were standalone pages, advertising companies are fine).</li>
+</ul>
+
+<p>That doesn't mean that those types of sites won't make it into the search engine. We use an automated crawler and don't look at or screen everything. We can't guarantee these types of sites won't be included, but we'll remove or demote them when we notice they've shown up.</p>
+
+<p>Sometimes a site will be borderline and will not be entirely excluded, but may be ranked lower than other sites in search results.</p>
+
+<p>If you don't like that a site has been specifically excluded from the index, you are welcome to build your own search engine.</p>
+
+<p>It's entirely possible that we'll relax these requirements in the future, but we started this project sick to death of all of the email and comment bot and email spam about pills, porn, warez, gambling, and the like, so that has influenced our inclusion policy.</p>
+
+<p><a href="/search/">Back to search form.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

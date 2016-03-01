@@ -1,0 +1,105 @@
+{% load i18n %}<!DOCTYPE html>
+<html lang="{{ language_code }}"><head><!-- Cached Query: {{ cached }} -->
+<meta name="keywords" content="{% trans "search engine" %}, wbsrch, {% trans "independent" %}, web, {% trans "directory" %}, {% trans "search" %}, {% trans "engine" %}, {% trans "domain" %}" lang="{{ language_code }}">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, {% trans "home" %} of {% trans "The Independent Search Engine" %}." lang="{{ language_code }}">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="msvalidate.01" content="46D044C2A2181D7D0BFD6FF19630FDEC" />
+<meta name="google-site-verification" content="w_FL4pcP2gbbcsZ5UqBWhMbPFX-HhEtNuyCgqqkJqc4" />
+<meta name="wot-verification" content="02fc60ed7fb094538bca"/>
+<meta name="norton-safeweb-site-verification" content="qs6kkvxl-fe688z8-y12nnr8pazj956cwfyhzij11hh9humfjm3f2l6jibz4en4cop34sbp-b972ek7ex7ugu7er5-isdk-oqgwmxu0mt4mmjtnvvlf0s522dsbuuzrz" />
+<meta property="og:image" content="https://wbsrch.com/images/WbSrchLogo.png">
+<meta property="og:locale" content="{{ language_code }}" />
+<meta name=”twitter:creator” content=”@xangis“>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link href="https://twitter.com/xangis" rel="me">
+<link rel="canonical" href="https://{% if language_code != "en" %}{{ language_code }}.{% endif %}wbsrch.com" />
+<title>WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }}) | {% trans "The Independent Search Engine" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+<script src="/wbsrch.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=649581031815449";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="head">
+<h1><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" />&nbsp;WbSrch Web {% trans "Search" %}</h1>
+<h2>{% trans "The Independent Search Engine" %}</h2>
+</div>
+<p><strong>{% trans "Search" %}:</strong></p>
+<form method="get" action="/search/">
+<input id="searchbox" type="text" name="q" maxlength="250" onkeyup="autocomp();" list="autocompleteOptions"/>
+<datalist id="autocompleteOptions">
+</datalist>
+<input type="submit" value="{% trans "Search" %}">
+</form>
+<p>&nbsp;</p>
+<p><strong>{% trans "Most Recently Indexed Search Terms" %}:</strong></p>
+<p>
+{% for term in recent_terms %}<a href="/search/?q={{ term.keywords|urlencode }}">{{ term.keywords }}</a>&nbsp;{% if forloop.counter == 5 %}<br class="visible-small"/>{% endif %}{% endfor %}
+</p>
+<p>&nbsp;</p>
+<p>{% trans "Check a Domain" %}:</p>
+<form method="get" action="/domain/">
+<input id="domainbox" type="text" name="q" maxlength="250" />
+<input type="submit" value="{% trans "Check" %} {% trans "Domain" %}">
+</form>
+<p>&nbsp;</p>
+<!--<p class="centered">Try the <a href="http://wbbrowse.com">WbBrowse web browser</p>.</p>-->
+<p class="centered">Please help us grow by <a href="http://igg.me/at/wbsrch/x/7554892">contributing to our campaign on IndieGoGo.</p><br/>
+{% ssi '/var/django/wbsrch/templates/footerwithoutcopyright.inc' parsed %}
+<br/>
+<div class="head">
+<a href="https://wbsrch.com"><img src="/flags/us-flag.gif" alt="English" title="English" class="flag" /></a>  
+<a href="https://ca.wbsrch.com"><img src="/flags/ca-flag.png" alt="Català" title="Català" class="flag" /></a>
+<a href="https://cs.wbsrch.com"><img src="/flags/cs-flag.png" alt="Česká" title="Česká" class="flag" /></a> 
+<a href="https://da.wbsrch.com"><img src="/flags/da-flag.gif" alt="Dansk" title="Dansk" class="flag" /></a> 
+<a href="https://de.wbsrch.com"><img src="/flags/de-flag.gif" alt="Deutsch" title="Deutsch" class="flag" /></a> 
+<a href="https://el.wbsrch.com"><img src="/flags/el-flag.gif" alt="ελληνικά" title="ελληνικά" class="flag" /></a> 
+<a href="https://es.wbsrch.com"><img src="/flags/es-flag.gif" alt="España" title="España" class="flag" /></a> 
+<a href="https://et.wbsrch.com"><img src="/flags/et-flag.png" alt="Eesti" title="Eesti" class="flag" /></a> 
+<a href="https://fi.wbsrch.com"><img src="/flags/fi-flag.gif" alt="Suomalais" title="Suomalais" class="flag" /></a> 
+<a href="https://fr.wbsrch.com"><img src="/flags/fr-flag.gif" alt="Français" title="Français" class="flag" /></a> 
+<a href="https://ha.wbsrch.com"><img src="/flags/ne-flag.png" alt="Hausa" title="Hausa" class="flag" /></a>
+<a href="https://hr.wbsrch.com"><img src="/flags/hr-flag.gif" alt="Hrvatski" title="Hrvatski" class="flag" /></a>
+<a href="https://hu.wbsrch.com"><img src="/flags/hu-flag.gif" alt="Magyar" title="Magyar" class="flag" /></a> 
+<a href="https://is.wbsrch.com"><img src="/flags/is-flag.gif" alt="Íslenska" title="Íslenska" class="flag" /></a> 
+<a href="https://it.wbsrch.com"><img src="/flags/it-flag.gif" alt="Italiano" title="Italiano" class="flag" /></a> 
+<a href="https://lt.wbsrch.com"><img src="/flags/lt-flag.png" alt="Lietuvių" title="Lietuvių" class="flag" /></a>
+<a href="https://lv.wbsrch.com"><img src="/flags/lv-flag.png" alt="Latviešu" title="Latviešu" class="flag" /></a>
+<a href="https://nl.wbsrch.com"><img src="/flags/nl-flag.gif" alt="Nederlands" title="Nederlands" class="flag" /></a> 
+<a href="https://no.wbsrch.com"><img src="/flags/no-flag.gif" alt="Norsk" title="Norsk" class="flag" /></a> 
+<a href="https://pl.wbsrch.com"><img src="/flags/pl-flag.gif" alt="Polski" title="Polski" class="flag" /></a> 
+<a href="https://pt.wbsrch.com"><img src="/flags/pt-flag.gif" alt="Português" title="Português" class="flag" /></a> 
+<a href="https://ro.wbsrch.com"><img src="/flags/ro-flag.gif" alt="Română" title="Română" class="flag" /></a> 
+<a href="https://rw.wbsrch.com"><img src="/flags/rw-flag.png" alt="Kinyarwanda" title="Kinyarwanda" class="flag" /></a>
+<a href="https://sk.wbsrch.com"><img src="/flags/sk-flag.png" alt="Slovenský" title="Slovenský" class="flag" /></a> 
+<a href="https://sl.wbsrch.com"><img src="/flags/sl-flag.png" alt="Slovenski" title="Slovenski" class="flag" /></a> 
+<a href="https://sn.wbsrch.com"><img src="/flags/zw-flag.png" alt="chiShona" title="chiShona" height="18" class="flag" /></a>
+<a href="https://so.wbsrch.com"><img src="/flags/so-flag.png" alt="Soomaali" title="Soomaali" class="flag" /></a> 
+<a href="https://sv.wbsrch.com"><img src="/flags/sv-flag.gif" alt="Svenska" title="Svenska" class="flag" /></a> 
+<a href="https://sw.wbsrch.com"><img src="/flags/sw-flag.gif" alt="Kiswahili" title="Kiswahili" class="flag" /></a> 
+<a href="https://tr.wbsrch.com"><img src="/flags/tr-flag.png" alt="Türkçe" title="Türkçe" class="flag" /></a>
+<a href="https://wo.wbsrch.com"><img src="/flags/sn-flag.png" alt="Wolof" title="Wolof" class="flag" /></a> 
+<a href="https://yo.wbsrch.com"><img src="/flags/ng-flag.png" alt="Yorùbá" title="Yorùbá" class="flag" /></a> 
+</div>
+<br/>
+{% if language_code == 'en' %}
+<div class="floatright">
+<div class="fb-like" data-width="220px" data-href="https://www.facebook.com/WbSrch" data-layout="standard" data-action="like" data-show-faces="false" data-share="true"></div>
+</div>
+<div class="floatleft">
+<a href="https://twitter.com/WbSrchDotCom" class="twitter-follow-button" data-show-count="false">Follow @WbSrchDotCom</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+<br class="clear"/>
+{% endif %}
+{% ssi '/var/django/wbsrch/templates/copyright.inc' %}
+</body>
+</html>

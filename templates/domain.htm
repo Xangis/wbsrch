@@ -1,0 +1,138 @@
+{% load i18n %}<!DOCTYPE html>
+<html lang="{{ language_code }}"><head>
+<meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% if domain %}{{ domain }} | {% endif %} {% trans "Domain" %} Details | WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }})</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head">
+<h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch {% trans "Domain" %} {% trans "Info" %} {% trans "Search" %}</h1>
+</div>
+<div class="body">
+<p>{% trans "Check a Domain" %}:</p>
+<form method="get" action="/domain/">
+<input id="domainbox" type="text" name="q" maxlength="250" {% if domain %}value="{{ domain }}"{% endif %} />
+<input type="submit" value="{% trans "Check Domain" %}">
+</form>
+<br />
+
+{% if domain %}
+<h2 class="left indented2 spacebelow">WbSrch {% trans "Domain" %} {% trans "Info" %} {% trans "for" %} {% trans "Domain" %} '{{ domain }}':</h2>
+{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+{% else %}
+{% endif %}
+
+{% if domains %}
+{% for domain in domains %}
+{% if superuser %}<p><a href="/adm/dir/domaininfo/{{ domain.id }}/">View this domain in the admin.</a><br/>
+<a href="/adminpanel/?crawlurl={{ domain.url }}&randomfromdomain=1">Crawl a random URL from this domain.</a></p>{% endif %}
+<p>{% trans "Domain" %}: {% if link %}<a href="http://{{ domain.url }}" rel="nofollow">{{ domain.url }}</a>{% else %}{{ domain.url }}</p>{% endif %}
+{% if domain.language_association %}<p>{% trans "Language" %}: {{ domain.language_association }} ({{ domain.language_association|language_name_local }})</p>{% endif %}
+{% if domain.language_association and domain.language_association != language_code %}<p><a href="https://{{ domain.language_association }}.wbsrch.com/domain/?q={{ domain.url }}">Check this domain on the {{ domain.language_association|language_name }} site.</a></p>{% endif %}
+{% if domain.domain_created %}<p>{% trans "Created" %}: {{ domain.domain_created|date:"Y-m-d" }}</p>{% endif %}
+{% if domain.notes %}<p>Notes: {{ domain.notes }}</p>{% endif %}
+{% if domain.rank_adjustment %}<p>This domain is set to rank {{ domain.get_rank_adjustment_display }} in search results.</p>
+{% if domain.rank_reason %}<p>Reason for adjustment: {{ domain.get_rank_reason_display }}</p>{% endif %}{% endif %}
+{% if domain.robots_ip %}<p>IP Address: <a href="/ip/?q={{ domain.robots_ip }}">{{ domain.robots_ip }}</a> <em class="smallertext">(A domain may have more than one IP address. This was the IP we found when retrieving robots.txt)</em></p>{%endif %}
+{% if domain.domains_linking_in < 2 %}<p>This domain does not have many inbound links from other domains.</p>
+{% elif domain.domains_linking_in < 5 %}<p>This domain has a few inbound links from other domains.</p>
+{% elif domain.domains_linking_in < 10 %}<p>This domain has a moderate number of inbound links from other domains.</p>
+{% elif domain.domains_linking_in > 9 %}<p>This domain has a lot of inbound links from other domains.</p>{% endif %}
+{% if extra %}<p>We also have data available for <a href="/domain/?q={{ extra.url }}">{{ extra.url }}</a>.</p>{% endif %}
+{% if parent %}<p>We also have data available for <a href="/domain/?q={{ parent.url }}">{{ parent.url }}</a>.</p>{% endif %}
+<p>{% trans "We have" %} {{ num_records }} URL{{ num_records|pluralize }} {% trans "in the" %} {{ language_code|language_name_local }} {% trans "database for that domain" %}.</p>
+{% endfor %}
+{% else %}
+{% if domain %}
+<p>{% trans 'No exact match for that domain name found' %}.</p>
+{% else %}
+<p>{% trans 'Enter a domain name to check' %}.</p>
+{% endif %}
+{% endif %}
+
+{% if rankings %}
+<h3 class="indented">{% trans 'Top Keyword Rankings' %} {% trans 'for' %} {% trans 'this' %} {% trans 'Domain' %}</h3>
+<table class="indented">
+{% for rank in rankings %}
+{% cycle '<tr><td>' '' %}
+<p>{% trans 'Ranks' %} {{ rank.rank }} {% trans 'for' %} <a href="/search/?q={{ rank.keywords|urlencode }}">{{ rank.keywords }}</a></p>
+{% cycle '</td><td>' '</td></tr>' %}
+{% endfor %}
+</table>
+{% endif %}
+
+{% if excluded %}
+<h3 class="indented">{% trans 'Related' %} {% trans "domain" %} exclusions:</h3>
+{% for exclude in excluded %}
+<p>{% trans "This domain is excluded from our index" %}: {{ exclude.url }}  (<em>Reason: {{ exclude.get_reason_display }}</em>) {% if exclude.detailed_reason %}Detail: {{ exclude.detailed_reason }}<br />{% endif %}
+</p>
+{% endfor %}
+{% endif %}
+
+{% if domains %}
+<h3 class="indented">URLs {% trans 'for' %} {% trans 'this' %} {% trans 'Domain' %}</h3>
+<p>{% trans "Here is what is in our index" %} (max. 200 URLs shown):</p>
+{% if siteinfos %}
+{% for result in siteinfos %}
+<h3 class="indented"><a href="{{ result.url }}" rel="nofollow">{{ result.pagetitle|truncatewords:15 }}</a></h3>
+<p class="site indented">{% if result.pagedescription %}{{ result.pagedescription|truncatewords:45 }}
+{% else %}<em>No page description.</em>{% if result.pagetext %}<br />{{ result.pagetext|truncatewords:45 }}{% endif %}{% endif %}<br />
+<em><a href="{{ result.url }}" rel="nofollow">{{ result.url }}</a></em><br />
+{% if superuser %}<span class="smallertext"><a href="https://wbsrch.com/adminpanel/?crawlurl={{ result.url }}">[recrawl]</a>
+<a href="https://wbsrch.com/adminpanel/blocksite/?reason=8&site={{ result.url }}">[block]</a>
+<a href="https://wbsrch.com/adm/dir/siteinfo/?q={{ result.rooturl }}">[view domain pages in admin]</a>
+<a href="https://wbsrch.com/adm/dir/siteinfo/{{ result.id }}/">[view this page in admin]</a></span> <br/>{% endif %}
+</p>
+{% endfor %}
+{% else %}
+<p><em>{% trans "No URLs in the index for" %} {{ domain }}</em></p>
+{% endif %}
+{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+{% endif %}
+
+<p><a href="/search/">{% trans 'Go to web search form' %}.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footerwithoutcopyright.inc' parsed %}
+<br/>
+<div class="head">
+<a href="https://wbsrch.com/domain/"><img src="/flags/us-flag.gif" alt="English" title="English" height="18" /></a>
+<a href="https://ca.wbsrch.com/domain/"><img src="/flags/ca-flag.png" alt="Català" title="Català" class="flag" /></a>
+<a href="https://cs.wbsrch.com/domain/"><img src="/flags/cs-flag.png" alt="Česká" title="Česká" height="18" /></a>
+<a href="https://da.wbsrch.com/domain/"><img src="/flags/da-flag.gif" alt="Dansk" title="Dansk" height="18" /></a>
+<a href="https://de.wbsrch.com/domain/"><img src="/flags/de-flag.gif" alt="Deutsch" title="Deutsch" height="18" /></a>
+<a href="https://el.wbsrch.com/domain/"><img src="/flags/el-flag.gif" alt="ελληνικά" title="ελληνικά" height="18" /></a>
+<a href="https://es.wbsrch.com/domain/"><img src="/flags/es-flag.gif" alt="España" title="España" height="18" /></a>
+<a href="https://et.wbsrch.com/domain/"><img src="/flags/et-flag.png" alt="Eesti" title="Eesti" height="18" /></a>
+<a href="https://fi.wbsrch.com/domain/"><img src="/flags/fi-flag.gif" alt="Suomalais" title="Suomalais" height="18" /></a>
+<a href="https://fr.wbsrch.com/domain/"><img src="/flags/fr-flag.gif" alt="Français" title="Français" height="18" /></a>
+<a href="https://ha.wbsrch.com/domain/"><img src="/flags/ne-flag.png" alt="Hausa" title="Hausa" class="flag" /></a>
+<a href="https://hr.wbsrch.com/domain/"><img src="/flags/hr-flag.gif" alt="Hrvatski" title="Hrvatski" height="18" /></a>
+<a href="https://hu.wbsrch.com/domain/"><img src="/flags/hu-flag.gif" alt="Magyar" title="Magyar" height="18" /></a>
+<a href="https://is.wbsrch.com/domain/"><img src="/flags/is-flag.gif" alt="Íslenska" title="Íslenska" height="18" /></a>
+<a href="https://it.wbsrch.com/domain/"><img src="/flags/it-flag.gif" alt="Italiano" title="Italiano" height="18" /></a>
+<a href="https://lt.wbsrch.com/domain/"><img src="/flags/lt-flag.png" alt="Lietuvių" title="Lietuvių" height="18" /></a>
+<a href="https://lv.wbsrch.com/domain/"><img src="/flags/lv-flag.png" alt="Latviešu" title="Latviešu" height="18" /></a>
+<a href="https://nl.wbsrch.com/domain/"><img src="/flags/nl-flag.gif" alt="Nederlands" title="Nederlands" height="18" /></a>
+<a href="https://no.wbsrch.com/domain/"><img src="/flags/no-flag.gif" alt="Norsk" title="Norsk" height="18" /></a>
+<a href="https://pl.wbsrch.com/domain/"><img src="/flags/pl-flag.gif" alt="Polski" title="Polski" height="18" /></a>
+<a href="https://pt.wbsrch.com/domain/"><img src="/flags/pt-flag.gif" alt="Português" title="Português" height="18" /></a>
+<a href="https://ro.wbsrch.com/domain/"><img src="/flags/ro-flag.gif" alt="Română" title="Română" height="18" /></a>
+<a href="https://rw.wbsrch.com/domain/"><img src="/flags/rw-flag.png" alt="Kinyarwanda" title="Kinyarwanda" class="flag" /></a>
+<a href="https://sk.wbsrch.com/domain/"><img src="/flags/sk-flag.png" alt="Slovenský" title="Slovenský" height="18" /></a>
+<a href="https://sl.wbsrch.com/domain/"><img src="/flags/sl-flag.png" alt="Slovenski" title="Slovenski" height="18" /></a>
+<a href="https://sn.wbsrch.com/domain/"><img src="/flags/zw-flag.png" alt="chiShona" title="chiShona" height="18" /></a>
+<a href="https://so.wbsrch.com/domain/"><img src="/flags/so-flag.png" alt="Soomaali" title="Soomaali" class="flag" /></a>
+<a href="https://sv.wbsrch.com/domain/"><img src="/flags/sv-flag.gif" alt="Svenska" title="Svenska" height="18" /></a>
+<a href="https://sw.wbsrch.com/domain/"><img src="/flags/sw-flag.gif" alt="Kiswahili" title="Kiswahili" height="18" /></a>
+<a href="https://tr.wbsrch.com/domain/"><img src="/flags/tr-flag.png" alt="Türkçe" title="Türkçe" height="18" /></a>
+<a href="https://wo.wbsrch.com/domain/"><img src="/flags/sn-flag.png" alt="Wolof" title="Wolof" class="flag" /></a>
+<a href="https://yo.wbsrch.com/domain/"><img src="/flags/ng-flag.png" alt="Yorùbá" title="Yorùbá" class="flag" /></a>
+</div>
+{% ssi '/var/django/wbsrch/templates/copyright.inc' %}
+</body>
+</html>
+

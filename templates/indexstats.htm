@@ -1,0 +1,27 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ language_code }}"><head>
+<meta name="keywords" content="wbsrch, web, {% trans "search" %}, {% trans "independent" %}, {% trans "index" %}, {% trans "statistics" %}, urls, counts, {% trans "directory" %}, {% trans "search engine" %}">
+<meta name="description" content="WbSrch {% trans "Web Search" %}, home of {% trans "The Independent Search Engine" %}.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% trans "Index" %} {% trans "Statistics" %} | WbSrch {% trans "Web Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch {% trans "Web Search" %} {% trans "Index" %} {% trans "Statistics" %}</h1></div>
+
+<table class="centered">
+<tr><th>{% trans "Language" %}</th><th>{% trans "# of" %} {% trans "URLs" %} {% trans "Crawled" %}</th><th>{% trans "# of" %} {% trans "Terms" %} {% trans "Indexed" %}</th><th>{% trans "Pending" %} {% trans "Indexes" %}</th></tr>
+{% for language in stats.langs %}
+<tr><td>{% trans language.lang %}</td><td>{{ language.count }}</td><td>{{ language.indexes }}</td><td>{{ language.pending_indexes }}</td></tr>
+{% endfor %}
+<tr><td>{% trans "Total" %}</td><td>{{ stats.total_urls }}</td><td>{{ stats.total_indexes }}</td><td>{{ stats.total_pendingindexes }}</td></tr>
+<tr><td colspan="4" class="centered">{% trans "Excluded" %} {% trans "Domains" %}: {{ stats.num_excluded }}</td><tr>
+</table>
+<br /><p class="centered"><a href="/search/">{% trans "Back to search form" %}.</a></p><br />
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

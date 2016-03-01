@@ -1,0 +1,26 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html><head><!-- Cached Query: {{ cached }} -->
+<meta name="keywords" content="wbsrch, independent, web, directory, {% trans "search" %}, engine, changelog, history, release, notes" lang="en-us">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine." lang="en-us">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>Changelog / Version History | WbSrch Web {% trans "Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %} Changelog</h1></div>
+<div class="body">
+{% for item in changelog %}
+<p><span class="date">{{ item.date_added }}</span>: {% if item.version %}<span class="version">Version {{ item.version }}</span> - {% endif %}
+{{ item.comment|safe }}<span class="stats">{% if item.num_urls_crawled %} [URLS: {{ item.num_urls_crawled }}]{% endif %}
+{% if item.num_terms_indexed %} [Index: {{ item.num_terms_indexed }}]{% endif %}{% if item.num_domains_blocked %} [Blocked Domains: 
+{{ item.num_domains_blocked }}]{% endif %}</span></p>
+{% endfor %}
+<p><a href="/search/">Back to {% trans "search" %} form.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

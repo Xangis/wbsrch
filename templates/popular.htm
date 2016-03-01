@@ -1,0 +1,72 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ language_code }}">
+<head>
+<!-- Cached Query: {{ cached }} -->
+<meta name="keywords" content="{% trans "search engine" %}, web, {% trans "index" %}, {% trans "searches" %}, {% trans "popular searches" %}, {% trans "terms" %}, {% trans "directory" %}, {% trans "search" %}, {% trans "most popular" %}, {% trans "frequent" %}">
+<meta name="description" content="WbSrch {% trans "Web Search" %}, home of {% trans "The Independent Search Engine" %}.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% trans "Most Popular Searches" %} in {{ report.year }} - {{ report.month }} | WbSrch {% trans "Web Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch Web 
+{% trans "Search" %} {% trans "Most Popular Searches" %} in {% trans month_name %} {{ report.year }}</h1></div>
+<p class="centered">These are the most popular searches. We get a lot of bot and crawler traffic, so these results may not accurately reflect what real Humans search for on WbSrch.</p>
+<p class="centered"><strong>{% trans "Total Searches in Month" %}</strong>: {{ report.total_searches }} <em>(as of {% now "Y-m-d" %})</em></p>
+<table class="centered">
+<tr><th class="left">{% trans "Search Phrase" %}</th><th class="right">{% trans "Number of Searches" %}</th></tr>
+{% for search in report.top_searches %}
+<tr><td class="left"><a href="/search/?q={{ search.keywords }}">{{ search.keywords }}</a></td><td class="right">{{ search.keywords__count }}</td></tr>
+{% endfor %}
+</table>
+<p class="centered">{% trans "Other monthly results" %}:</p>
+<p class="centered">
+<a href="/popular-searches/">{% trans "Current Month" %}</a> 
+{% for oth in others %}
+<a href="/popular-searches/{{ oth.year }}/{{ oth.month }}/">{{ oth.year }} - {{ oth.month }}</a> 
+{% endfor %}
+</p>
+<br /><p class="centered"><a href="/popular-searches/">{% trans "Back to search form" %}.</a></p>
+{% ssi '/var/django/wbsrch/templates/footerwithoutcopyright.inc' parsed %}
+<br/>
+<div class="head">
+<a href="https://wbsrch.com/popular-searches/"><img src="/flags/us-flag.gif" alt="English" title="English" class="flag" /></a>
+<a href="https://ca.wbsrch.com/popular-searches/"><img src="/flags/ca-flag.png" alt="Català" title="Català" class="flag" /></a>
+<a href="https://cs.wbsrch.com/popular-searches/"><img src="/flags/cs-flag.png" alt="Česká" title="Česká" class="flag" /></a>
+<a href="https://da.wbsrch.com/popular-searches/"><img src="/flags/da-flag.gif" alt="Dansk" title="Dansk" class="flag" /></a>
+<a href="https://de.wbsrch.com/popular-searches/"><img src="/flags/de-flag.gif" alt="Deutsch" title="Deutsch" class="flag" /></a>
+<a href="https://el.wbsrch.com/popular-searches/"><img src="/flags/el-flag.gif" alt="ελληνικά" title="ελληνικά" class="flag" /></a>
+<a href="https://es.wbsrch.com/popular-searches/"><img src="/flags/es-flag.gif" alt="España" title="España" class="flag" /></a>
+<a href="https://et.wbsrch.com/popular-searches/"><img src="/flags/et-flag.png" alt="Eesti" title="Eesti" class="flag" /></a>
+<a href="https://fi.wbsrch.com/popular-searches/"><img src="/flags/fi-flag.gif" alt="Suomalais" title="Suomalais" class="flag" /></a>
+<a href="https://fr.wbsrch.com/popular-searches/"><img src="/flags/fr-flag.gif" alt="Français" title="Français" class="flag" /></a>
+<a href="https://ha.wbsrch.com/popular-searches/"><img src="/flags/ne-flag.png" alt="Hausa" title="Hausa" class="flag" /></a>
+<a href="https://hr.wbsrch.com/popular-searches/"><img src="/flags/hr-flag.gif" alt="Hrvatski" title="Hrvatski" class="flag" /></a>
+<a href="https://hu.wbsrch.com/popular-searches/"><img src="/flags/hu-flag.gif" alt="Magyar" title="Magyar" class="flag" /></a>
+<a href="https://is.wbsrch.com/popular-searches/"><img src="/flags/is-flag.gif" alt="Íslenska" title="Íslenska" class="flag" /></a>
+<a href="https://it.wbsrch.com/popular-searches/"><img src="/flags/it-flag.gif" alt="Italiano" title="Italiano" class="flag" /></a>
+<a href="https://lt.wbsrch.com/popular-searches/"><img src="/flags/lt-flag.png" alt="Lietuvių" title="Lietuvių" class="flag" /></a>
+<a href="https://lv.wbsrch.com/popular-searches/"><img src="/flags/lv-flag.png" alt="Latviešu" title="Latviešu" class="flag" /></a>
+<a href="https://nl.wbsrch.com/popular-searches/"><img src="/flags/nl-flag.gif" alt="Nederlands" title="Nederlands" class="flag" /></a>
+<a href="https://no.wbsrch.com/popular-searches/"><img src="/flags/no-flag.gif" alt="Norsk" title="Norsk" class="flag" /></a>
+<a href="https://pl.wbsrch.com/popular-searches/"><img src="/flags/pl-flag.gif" alt="Polski" title="Polski" class="flag" /></a>
+<a href="https://pt.wbsrch.com/popular-searches/"><img src="/flags/pt-flag.gif" alt="Português" title="Português" class="flag" /></a>
+<a href="https://ro.wbsrch.com/popular-searches/"><img src="/flags/ro-flag.gif" alt="Română" title="Română" class="flag" /></a>
+<a href="https://rw.wbsrch.com/popular-searches/"><img src="/flags/rw-flag.png" alt="Kinyarwanda" title="Kinyarwanda" class="flag" /></a>
+<a href="https://sk.wbsrch.com/popular-searches/"><img src="/flags/sk-flag.png" alt="Slovenský" title="Slovenský" class="flag" /></a>
+<a href="https://sl.wbsrch.com/popular-searches/"><img src="/flags/sl-flag.png" alt="Slovenski" title="Slovenski" class="flag" /></a>
+<a href="https://sn.wbsrch.com/popular-searches/"><img src="/flags/zw-flag.png" alt="chiShona" title="chiShona" height="18" class="flag" /></a>
+<a href="https://so.wbsrch.com/popular-searches/"><img src="/flags/so-flag.png" alt="Soomaali" title="Soomaali" class="flag" /></a>
+<a href="https://sv.wbsrch.com/popular-searches/"><img src="/flags/sv-flag.gif" alt="Svenska" title="Svenska" class="flag" /></a>
+<a href="https://sw.wbsrch.com/popular-searches/"><img src="/flags/sw-flag.gif" alt="Kiswahili" title="Kiswahili" class="flag" /></a>
+<a href="https://tr.wbsrch.com/popular-searches/"><img src="/flags/tr-flag.png" alt="Türkçe" title="Türkçe" class="flag" /></a>
+<a href="https://wo.wbsrch.com/popular-searches/"><img src="/flags/sn-flag.png" alt="Wolof" title="Wolof" class="flag" /></a>
+<a href="https://yo.wbsrch.com/popular-searches/"><img src="/flags/ng-flag.png" alt="Yorùbá" title="Yorùbá" class="flag" /></a>
+</div>
+{% ssi '/var/django/wbsrch/templates/copyright.inc' %}
+</body>
+</html>

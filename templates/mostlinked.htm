@@ -1,0 +1,32 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ language_code }}">
+<head>
+<!-- Cached Query: {{ cached }} -->
+<meta name="keywords" content="{% trans "search engine" %}, web, {% trans "index" %}, {% trans "searches" %}, {% trans "most linked to domains" %}, {% trans "terms" %}, {% trans "directory" %}, {% trans "search" %}, {% trans "most links" %}, {% trans "frequent" %}">
+<meta name="description" content="WbSrch {% trans "Web Search" %}, home of {% trans "The Independent Search Engine" %}.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% trans "Most Linked To Domains" %} in {{ report.year }} - {{ report.month }} | WbSrch {% trans "Web Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch Web 
+{% trans "Search" %} {% trans "Most Linked To Domains" %}</h1></div>
+<div class="page">
+<h2 class="left">Domains with the Most Inbound Links</h2><br/>
+{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+<ol>
+{% for domain in domains %}
+<li><a href="/domain/?q={{ domain.url }}">{{ domain.url }}</a></li>
+{% endfor %}
+</ol>
+<p>These are the most linked-to domains based on data in the WbSrch index. Counts are taken based on the number of different domains linking to the target domain. We don't count links from domains that have been excluded due to our <a href="/policy/">inclusion policy</a>.</p>
+<br /><p><a href="/">{% trans "Back to search form" %}.</a></p>
+{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

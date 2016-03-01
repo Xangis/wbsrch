@@ -1,0 +1,129 @@
+{% load i18n %}<!DOCTYPE html>
+<html lang="{{ language_code }}"><head>
+<meta name="keywords" content="{% trans "search engine" %}, wbsrch, web, {% trans "independent" %}, {% trans "directory" %}, {% trans "search" %}, {% trans "engine" %}, {% trans "results" %}, {% trans "internet" %}" lang="{{ language_code }}">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, {% trans "home" %} of {% trans "The Independent Search Engine" %}." lang="{{ language_code }}">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% if searchterm %}{% trans "Search Results" %} {% trans "for" %} {{ searchterm }} | {% endif %}WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }})</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head">
+<h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %}</h1>
+<h2>{% trans "The Independent Search Engine" %}</h2>
+</div>
+<p><strong>{% trans "Search" %}:</strong></p>
+<form method="get" action="/search/">
+<input id="searchbox" type="text" name="q" maxlength="250" {% if searchterm %}value="{{ searchterm }}"{% endif %} />
+<input type="submit" value="{% trans "Search" %}">
+</form>
+
+{% if searchterm %}
+{% if show_sd_ad %}
+<p><a href="https://www.statdragon.com"><img src="/images/StatDragonBanner.png" alt="StatDragon Video Marketing Software"></p>
+{% elif show_network_ad %}
+{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+{% endif %}
+{% if typo_for %}<p><em>{% trans "Did you mean to search for" %} <a href="/search/?q={{ typo_for }}">{{ typo_for }}</a>?</em></p>{% endif %}
+{% if is_domain %}<p><em>{% trans "Did you mean to look up domain details for" %} <a href="/domain/?q={{ is_domain }}">{{ is_domain }}</a>?</em></p>{% endif %}
+{% if is_ip %}<p><em>{% trans "Did you mean to look up details for the IP address" %} <a href="/ip/?q={{ is_ip }}">{{ is_ip }}</a>?</em></p>{% endif %}
+{% if is_language %}<p><em>{% trans "This search contains a word in the " %} {% trans is_language_name %} {% trans "language" %}. Do you want to <a href="https://{% if is_language != 'en' %}{{ is_language }}.{% endif %}wbsrch.com/search/?q={{ searchterm }}">search {{ searchterm }} in {% trans is_language_name %}</a>?</em></p>{% endif %}
+{% if names_language %}<p><em>{% trans "This search mentions the " %} {% trans names_language_name %} {% trans "language" %}. Do you want to <a href="https://{% if names_language != 'en' %}{{ names_language }}.{% endif %}wbsrch.com/search/{% if names_language_search %}?q={{ names_language_search }}{% endif %}">search {{ names_language_search }} in {% trans names_language_name %}</a>?</em></p>{% endif %}
+<p>{% trans "Results" %} {% trans "for" %} "{{ searchterm }}"{% if allfromdomain %} {% trans "from domain" %} "{{ allfromdomain }}"{% endif %}:</p>
+{% if refused %}<p><strong>We refuse to show any search results for this query. If you want to look for that sort of thing you'll have to use a different search engine.</strong></p>
+{% elif actively_blocked %}<p>We have excluded many of the sites related to this search from our index. You may see fewer results than you expect.</p>{% endif %}
+{% if not results and not search_results and not refused %}
+<p>{% trans "No results were found for that search." %}</p>
+<p>{% trans "Our robots are very embarrassed by their failure to find what you were looking for. They'll be on the hunt for new content and should have better results in a few days." %}</p>
+{% else %}
+<table><tr><td>
+{% for result, value in results %}
+<h3><a href="{{ result.url }}">{% if result.pagetitle %}{{ result.pagetitle|truncatewords:15 }}{% else %}(No Title){% endif %}</a></h3>
+<p class="site">
+{% if result.pagedescription %}{{ result.pagedescription|truncatewords:45 }}
+{% else %}<em>{% trans "No page description." %}</em>{% if result.pagetext %}<br />{{ result.pagetext|truncatechars:100 }}{% endif %}{% endif %}<br />
+<em><a href="{{ result.url }}">{{ result.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.rooturl }}"><img src="/images/Link.png" title="View domain details for {{ result.rooturl }}." alt="Domain" /></a><br />
+</p>
+{% endfor %}
+</td><td>
+</td></tr></table>
+{% endif %}
+{% if search_results %}
+<div class="results">
+{% for result in search_results %}
+{% if allfromdomain %}
+{% for url in result.1.urls %}
+<h3><a href="{{ url.url }}">{% if url.title %}{{ url.title|truncatewords:15 }}{% else %}(No Title){% endif %}</a></h3>
+<p class="site">
+{% if url.description %}{{ url.description|truncatewords:45 }}{% else %}<em>{% trans "No page description." %}</em>{% endif %}<br />
+<em><a href="{{ url.url }}">{{ url.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.0 }}"><img src="/images/Link.png" title="View domain details for {{ result.0 }}." alt="Domain" /></a><br />
+{% if superuser %}<span class="smallertext"><a href="https://wbsrch.com/adminpanel/?crawlurl={{ result.1.urls.0.url }}">[recrawl]</a> 
+<a href="https://wbsrch.com/adminpanel/blocksite/?reason=8&site={{ result.1.urls.0.url }}">[block]</a> 
+<a href="https://wbsrch.com/adm/dir/siteinfo/?q={{ result.0 }}">[view domain pages in admin]</a>
+<a href="https://wbsrch.com/adm/dir/siteinfo/{{ url.id }}/">[view this page in admin]</a></span> <br/>{% endif %}
+</p>
+{% endfor %}
+{% else %}
+<h3><a href="{{ result.1.urls.0.url }}">{% if result.1.urls.0.title %}{{ result.1.urls.0.title|truncatewords:15 }}{% else %}(No Title){% endif %}</a></h3>
+<p class="site">
+{% if result.1.urls.0.description %}{{ result.1.urls.0.description|truncatewords:45 }}{% else %}<em>{% trans "No page description." %}</em>{% endif %}<br />
+<em><a href="{{ result.1.urls.0.url }}">{{ result.1.urls.0.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.0 }}"><img src="/images/Link.png" title="View domain details for {{ result.0 }}." alt="Domain" /></a> <a href="/search/?q={{ searchterm }}&domain={{ result.0 }}">({{ result.1.urls|length }} from this site)</a><br />
+{% if superuser %}<span class="smallertext"><a href="https://wbsrch.com/adminpanel/?crawlurl={{ result.1.urls.0.url }}">[recrawl]</a> 
+<a href="https://wbsrch.com/adminpanel/blocksite/?reason=8&site={{ result.1.urls.0.url }}">[block]</a> 
+<a href="https://wbsrch.com/adm/dir/siteinfo/?q={{ result.0 }}">[view domain pages in admin]</a>
+<a href="https://wbsrch.com/adm/dir/siteinfo/{{ result.1.urls.0.id }}/">[view this page in admin]</a></span> <br/>{% endif %}
+</p>
+{% endif %}
+{% endfor %}
+</div>
+{% endif %}
+<p>{{ result_count }} results found{% if allfromdomain %} from this domain{% endif %}.</p>
+{% if allfromdomain %}<p><a href="/search/?q={{ searchterm }}">Back to search for "{{ searchterm }}" from all domains.</a></p>{% endif %}
+{% if not indexed and not refused %}<p><em>{% trans "Note: The phrase you searched for is not fully indexed. We have queued it for indexing and will have better results available soon." %}</em></p>{% endif %}
+{% if show_network_ad %}
+{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+{% endif %}
+{% else %}
+<br/><br/>
+{% endif %}
+{% ssi '/var/django/wbsrch/templates/footerwithoutcopyright.inc' parsed %}
+<br/>
+<div class="head">
+<a href="https://wbsrch.com/search/"><img src="/flags/us-flag.gif" alt="English" title="English" class="flag" /></a>
+<a href="https://ca.wbsrch.com/search/"><img src="/flags/ca-flag.png" alt="Català" title="Català" class="flag" /></a>
+<a href="https://cs.wbsrch.com/search/"><img src="/flags/cs-flag.png" alt="Česká" title="Česká" class="flag" /></a>
+<a href="https://da.wbsrch.com/search/"><img src="/flags/da-flag.gif" alt="Dansk" title="Dansk" class="flag" /></a>
+<a href="https://de.wbsrch.com/search/"><img src="/flags/de-flag.gif" alt="Deutsch" title="Deutsch" class="flag" /></a>
+<a href="https://el.wbsrch.com/search/"><img src="/flags/el-flag.gif" alt="ελληνικά" title="ελληνικά" class="flag" /></a>
+<a href="https://es.wbsrch.com/search/"><img src="/flags/es-flag.gif" alt="España" title="España" class="flag" /></a>
+<a href="https://et.wbsrch.com/search/"><img src="/flags/et-flag.png" alt="Eesti" title="Eesti" class="flag" /></a>
+<a href="https://fi.wbsrch.com/search/"><img src="/flags/fi-flag.gif" alt="Suomalais" title="Suomalais" class="flag" /></a>
+<a href="https://fr.wbsrch.com/search/"><img src="/flags/fr-flag.gif" alt="Français" title="Français" class="flag" /></a>
+<a href="https://ha.wbsrch.com/search/"><img src="/flags/ne-flag.png" alt="Hausá" title="Hausa" class="flag" /></a>
+<a href="https://hr.wbsrch.com/search/"><img src="/flags/hr-flag.gif" alt="Hrvatski" title="Hrvatski" class="flag" /></a>
+<a href="https://hu.wbsrch.com/search/"><img src="/flags/hu-flag.gif" alt="Magyar" title="Magyar" class="flag" /></a>
+<a href="https://is.wbsrch.com/search/"><img src="/flags/is-flag.gif" alt="Íslenska" title="Íslenska" class="flag" /></a>
+<a href="https://it.wbsrch.com/search/"><img src="/flags/it-flag.gif" alt="Italiano" title="Italiano" class="flag" /></a>
+<a href="https://lt.wbsrch.com/search/"><img src="/flags/lt-flag.png" alt="Lietuvių" title="Lietuvių" class="flag" /></a>
+<a href="https://lv.wbsrch.com/search/"><img src="/flags/lv-flag.png" alt="Latviešu" title="Latviešu" class="flag" /></a>
+<a href="https://nl.wbsrch.com/search/"><img src="/flags/nl-flag.gif" alt="Nederlands" title="Nederlands" class="flag" /></a>
+<a href="https://no.wbsrch.com/search/"><img src="/flags/no-flag.gif" alt="Norsk" title="Norsk" class="flag" /></a>
+<a href="https://pl.wbsrch.com/search/"><img src="/flags/pl-flag.gif" alt="Polski" title="Polski" class="flag" /></a>
+<a href="https://pt.wbsrch.com/search/"><img src="/flags/pt-flag.gif" alt="Português" title="Português" class="flag" /></a>
+<a href="https://ro.wbsrch.com/search/"><img src="/flags/ro-flag.gif" alt="Română" title="Română" class="flag" /></a>
+<a href="https://rw.wbsrch.com/search/"><img src="/flags/rw-flag.png" alt="Kinyarwanda" title="Kinyarwanda" class="flag" /></a>
+<a href="https://sk.wbsrch.com/search/"><img src="/flags/sk-flag.png" alt="Slovenský" title="Slovenský" class="flag" /></a>
+<a href="https://sl.wbsrch.com/search/"><img src="/flags/sl-flag.png" alt="Slovenski" title="Slovenski" class="flag" /></a>
+<a href="https://sn.wbsrch.com/search/"><img src="/flags/zw-flag.png" alt="chiShona" title="chiShona" height="18" class="flag" /></a>
+<a href="https://so.wbsrch.com/search/"><img src="/flags/so-flag.png" alt="Soomaali" title="Soomaali" class="flag" /></a>
+<a href="https://sv.wbsrch.com/search/"><img src="/flags/sv-flag.gif" alt="Svenska" title="Svenska" class="flag" /></a>
+<a href="https://sw.wbsrch.com/search/"><img src="/flags/sw-flag.gif" alt="Kiswahili" title="Kiswahili" class="flag" /></a>
+<a href="https://tr.wbsrch.com/search/"><img src="/flags/tr-flag.png" alt="Türkçe" title="Türkçe" class="flag" /></a>
+<a href="https://wo.wbsrch.com/search/"><img src="/flags/sn-flag.png" alt="Wolof" title="Wolof" class="flag" /></a>
+<a href="https://yo.wbsrch.com/search/"><img src="/flags/ng-flag.png" alt="Yorùbá" title="Yorùbá" class="flag" /></a>
+</div>
+{% ssi '/var/django/wbsrch/templates/copyright.inc' %}
+</body>
+</html>

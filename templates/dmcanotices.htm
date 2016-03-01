@@ -1,0 +1,35 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html><head>
+<meta name="keywords" content="wbsrch, web, directory, {% trans "search" %}, engine, independent, faq, frequently, asked, questions" lang="en-us">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine." lang="en-us">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>DMCA Notices Received by WbSrch</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %} DMCA Information</h1></div>
+<div class="body">
+<h3>DMCA Notices Received by WbSrch</h3>
+
+<p><em>Please refer to our <a href="/dmca/">DMCA Policy</a></em> for DMCA contact information.</p>
+
+{% for notice in notices %}
+<p><strong>Date:</strong> {{ notice.date|date:"Y-m-d" }}</p>
+<p><strong>Sender:</strong> {{ notice.sender }}</p>
+<p><strong>WbSrch URL(s):</strong> {{ notice.url }}</p>
+<p><strong>Contents:</strong> {{ notice.contents|safe }}</p>
+<p><strong>Validity:</strong> {{ notice.validity|safe }}</p>
+<p><strong>Action Taken:</strong> {{ notice.action_taken|safe }}</p>
+<p><strong>Additional Notes:</strong> {{ notice.notes }}</p>
+<hr>
+{% endfor %}
+
+<p><a href="/search/">Back to search form.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

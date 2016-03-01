@@ -1,0 +1,140 @@
+{% load i18n %}{% load extratags %}
+<!DOCTYPE html>
+<html><head>
+<meta name="keywords" content="wbsrch, web, directory, admin, panel, {% trans "search" %}, engine, find" lang="en-us">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine." lang="en-us">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>WbSrch Web {% trans "Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %}</h1>
+
+<p>
+<table width="100%"><tr>
+<td><a href="/adminpanel/">Admin Panel Root</a></td>
+<td><a href="/adminpanel/blocksite/">Block a Site</a></td>
+<td><a href="/adminpanel/topsites/">Top Sites</a></td>
+</tr><tr>
+<td><a href="/adminpanel/sitelimits/">URL Limit Report</a></td>
+<td><a href="/adminpanel/unclassified/">Top Sites With Unclassified Language</a></td>
+<td><a href="/adminpanel/oldestcrawls/">Sites Crawled Least Recently</a></td>
+</tr><tr>
+<td><a href="/adminpanel/index-stats/">Index Stats in Real-Time</a></td>
+<td><a href="/adminpanel/pagescore/">Analyze a page's score for a keyword.</a></td>
+<td><a href="/adminpanel/searchlogs/">View recent search logs excluding bots.</a></td>
+</tr><tr>
+<td><a href="/adminpanel/urlrange/?low=0&high=100&language=en&model=SiteInfo">URL Range</a></td>
+<td><a href="/adminpanel/domainsafterz/">Root Domains After Z</a></td>
+</tr></table>
+</p>
+
+{% if message %}<h3>Message: {{ message }}</h3>{% endif %}
+
+{% if not blocksite %}
+<form method="get" action="/adminpanel/">
+<p><strong>{% trans "Crawl a Single URL" %}:</strong></p>
+<input id="searchbox" type="text" name="crawlurl" maxlength="250" />
+<input type="submit" value="{% trans "Crawl" %}">
+</form>
+{% if result %}<p><em>Successfully crawled the URL.</em></p>{% endif %}
+{% endif %}
+
+{% if blocksite %}
+<form method="post" action="/adminpanel/blocksite/">
+{% csrf_token %}
+<p><strong>{% trans "Block a Domain" %}:</strong></p>
+<input type="text" class="narrowText" name="site" maxlength="250" value="{% if sitename %}{{ sitename }}{% endif %}" /> 
+<br/>Reason: 
+<select id="reason" name="reason">
+{% for item in choices %}
+<option value="{{ item.0 }}"{% if item.0|to_int == reason|to_int %} selected="selected"{% endif %} autocomplete="off">{{ item.1 }}</option>
+{% endfor %}
+</select>
+<input type="submit" value="{% trans "Block" %}">
+</form>
+{% endif %}
+
+{% if logs %}
+<form method="get" action="/adminpanel/searchlogs/">
+<p><strong>{% trans "Language" %}:</strong></p>
+<input id="lang" type="text" name="lang" maxlength="4" class="narrowText" {% if lang %}value="{{ lang }}"{% endif %} autocomplete="off" /><br/>
+Just Unindexed: <input type="checkbox" name="unindexed" id="unindexed" {% if unindexed %}checked="checked"{%endif%} autocomplete="off" /> | 
+2-Or-More-Words: <input type="checkbox" name="twoormore" id="twoormore" {% if twoormore %}checked="checked"{% endif %} autocomplete="off" /> |  
+3-Or-More-Words: <input type="checkbox" name="threeormore" id="threeormore" {% if threeormore %}checked="checked"{% endif %} autocomplete="off" /> | 
+Zero Results: <input type="checkbox" name="zeroresults" id="zeroresults" {% if zeroresults %}checked="checked"{% endif %} autocomplete="off" /> | 
+Bing Searches: <input type="checkbox" name="bingsearches" id="bingsearches" {% if bingsearches %}checked="checked"{% endif %} autocomplete="off" /> | 
+Google Searches: <input type="checkbox" name="googlesearches" id="googlesearches" {% if googlesearches %}checked="checked"{% endif %} autocomplete="off" /> |
+Slow Searches: <input type="checkbox" name="slowsearches" id="slowsearches" {% if slowsearches %}checked="checked"{% endif %} autocomplete="off" />
+<input type="submit" value="{% trans "Get" %}">
+</form>
+<table width="100%">
+<tr><th>Search Time</th><th>Keywords</th><th># Results</th><th>Time</th><th>Indexed?</th><th>Referer</th><th>Browserstring</th><th>IP</th></tr>
+{% for log in logs %}
+<tr>
+<td>{{ log.last_search|date:"M d h:m" }}</td>
+<td><span title="{{ log.keywords }}"><a href="/adm/dir/indexterm/?q={{ log.keywords }}">{{ log.keywords|truncatechars:64 }}</a></span></td>
+<td>{% if log.result_count == 0 %}<span class="error">{{ log.result_count }}</span>{% else %}{{ log.result_count }}{% endif %}</td>
+<td>{% if log.search_time > 2 %}<span class="error">{{ log.search_time }}s</span>{% else %}{{ log.search_time }}s{% endif %}</td>
+<td>{% if log.indexed %}Yes{% else %}<span class="error">No</span>{% endif %}</td>
+<td><span title="{{ log.referer }}">{{ log.referer|truncatechars:64 }}</span></td>
+<td>{{ log.browserstring }}</td>
+<td><a href="/ip/?q={{ log.ip }}">{{ log.ip }}</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if pagescore %}
+<form method="get" action="/adminpanel/pagescore/">
+{% csrf_token %}
+<p><strong>{% trans "Check keyword score for a page" %}:</strong></p>
+URL: <input type="text" class="narrowText" name="url" maxlength="250" value="{% if myurl %}{{ myurl }}{% endif %}" /><br/>
+KW: <input type="text" class="narrowText" name="keyword" maxlength="250" value="{% if keyword %}{{ keyword }}{% endif %}" /> 
+<input type="submit" value="{% trans "Calculate" %}">
+</form>
+{% for reason in reasons %}
+{{ reason }}<br/>
+{% endfor %}
+{% if calctime %}<p>Calculated in {{ calctime }} seconds.</p>{% endif %}
+{% endif %}
+
+
+{% if limit_counts %}
+<h3>Domain Limit URL Counts</h3>
+<table>
+<tr><th># of URLs</th><th>Domain</th><th>Limit</th><th>Alexa Rank</th><th>Language</th><th>Admin Link</th>
+{% for item in limit_counts %}
+<tr><td>{{ item.1.0.0 }}</td><td>{{ item.0.url }}</td><td>{{ item.0.max_urls }}</td><td>{{ item.0.alexa_rank }}</td><td>
+{% if item.0.language_association %}{{ item.0.language_association }}{% endif %} </td>
+<td><a href="/adm/dir/domaininfo/?q={{ item.0.url }}">{{ item.0.url }}</a></td></tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if domain_counts %}
+<h3>Top Domain URL Counts</h3>
+<p>
+{% for language in domain_counts %}
+<h4>Domain Counts for Language {{ language.0 }}</h4>
+{% for domain in language.1 %}
+{{ domain.0 }} <a href="/adm/dir/siteinfo/?q={{ domain.1 }}">{{ domain.1 }}</a><br />
+{% endfor %}
+{% endfor %}
+</p>
+{% endif %}
+
+{% if urls %}
+{% if lang %}<p>Language is set to {{ lang }}. Use URL parameter "lang=xx" to change it.</p>{% endif %}
+{% for url in urls %}
+[<a href="/adm/dir/siteinfo{% if lang %}_{{ lang }}{% endif %}/{{ url.0 }}/">{{ url.0 }}</a>] [<a href="https://wbsrch.com/adminpanel/?crawlurl={{ url.2 }}">recrawl</a>] ({{ url.1 }}) <a href="/adminpanel/?crawlurl={{ url.2 }}">{{ url.2 }}</a><br />
+{% endfor %}
+{% endif %}
+<p><a href="/search/">Back to search form.</a></p>
+<p class="copyright"><a href="/privacy/">Privacy Policy</a></p>
+{% ssi '/var/django/wbsrch/templates/copyright.inc' %}
+</body>
+</html>

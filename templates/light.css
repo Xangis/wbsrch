@@ -1,0 +1,100 @@
+body {
+font-family: Gudea-Regular, Arial, Helvetica, sans-serif;
+background-color: #f9f9f9;
+color: #111111;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-family: Lato-Bol, Arial, Helvetica, sans-serif;
+}
+
+h1 {
+padding: 10px;
+text-size: 3em;
+}
+
+.faded {
+color: #444444;
+}
+
+.date {
+color: #3366AA;
+font-weight: bold;
+}
+
+.version {
+color: #555555;
+font-family: Courier, Courier New, Console, fixed;
+font-weight: bold;
+}
+
+.stats {
+color: #551111;
+font-size: smaller;
+font-family: Courier, Courier New, Console, fixed;
+font-weight: bold;
+}
+
+a:link {
+color: #3366AA;
+}
+
+a:visited {
+color: #3366AA;
+}
+
+h3 {
+text-align: left;
+color: #3366AA;
+margin-left: 6px;
+margin-right: 0px;
+margin-top: 0px;
+margin-bottom: 0px;
+padding: 0px;
+}
+
+.heading {
+color: #993300;
+font-weight: bold;
+}
+
+.site {
+margin-left: 6px;
+background: #f9f9f9;
+}
+
+.section {
+background: #dddddd;
+}
+
+em {
+color: #334455;
+}
+
+@media (max-width: 959px) {
+  h1 {
+  padding: 8px;
+  text-size: 1.9em;
+  }
+}
+
+@media (max-width: 599px) {
+  h1 {
+  padding: 0px;
+  }
+
+  a {
+  display: inline-block;
+  margin: 5px;
+  }
+
+  .hidden-small {
+  display: none;
+  }
+}
+
+@media (min-width: 600px) {
+  .visible-small {
+  display: none;
+  }
+}

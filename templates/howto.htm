@@ -1,0 +1,32 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html><head>
+<meta name="keywords" content="wbsrch, web, directory, independent, {% trans "search" %}, engine, howto, tutorial, instructions" lang="en-us">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine." lang="en-us">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>How to Use The {% trans "Search" %} Engine (HOWTO) | WbSrch Web {% trans "Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;How to Use WbSrch Web {% trans "Search" %}</h1></div>
+<div class="body">
+<p>Just type your phrase in the <a href="/search/">search box</a> and click "search".</p>
+
+<p>For a multi-word search, terms are "ANDed" together so that all words in the search phrase are required to match before a result is returned. We don't support any boolean operators, and words are examined in the order they are typed. "cheese sandwich" will return different results than "sandwich cheese". We also do not do stemming, so a search for "cheese" will return different results than a search for "cheeses". We also don't remove "stop words" so a search for "salt and pepper" won't ignore the "and" in the phrase.</p>
+
+<p>If you want results from a specific domain, you can add the domain to your search as "site:example.com". It doesn't matter whether you add this to the beginning or the end. Searching for "site:example.com cheese" is the same as searching for "cheese site:example.com".
+
+<p>We will probably be adding more features that give you more control over searching, but for now all you can do is a basic ANDed search and a domain search.</p>
+
+<p><a href="/domain/">Domain search</a> is also simple. Just type in the name of a domain and we'll show you everything we know about that domain if we've found it.<p>
+
+<p>You can also <a href="/ip/">search for an IP</a> address. We'll show you the list of domains we've found at that IP address and the number of pages we've retrieved from that IP.<p>
+
+<p><a href="/search/">Back to search form.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

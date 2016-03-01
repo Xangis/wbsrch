@@ -1,0 +1,19 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html><head>
+<title>Privacy Policy | WbSrch Web {% trans "Search" %}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %}</h1></div>
+<div class="body">
+<p>WbSrch does not directly collect personally identifiable information from anyone, nor would we sell that information if we had it.</p>
+<p>We do log searches to improve our search engine, but do not use tracking cookies and do not have any way to know who searched for what - we don't put a cookie on your machine and we don't keep any kind of machine fingerprint. We do not care who you are, but we do want to make searches better over time and want to be able to identify and block botnets and spam scripts. We use general-purpose web analytics from Google Analytics to gather aggregate visitor data, and that does use a tracking cookie. We do not link that to any search information. <a href="/faq/">See our FAQ for more information on what we log</a>.</p>
+<p>We use third-party advertising companies to serve ads when you visit our website. These companies may use information (not including your name, address, email address, or telephone number) about your visits to this and other websites in order to provide advertisements for goods and services. These companies may use cookies or web beacons for this purpose. We do not link that to any search information.</p>
+<p><a href="/search/">Back to search form.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body></html>
