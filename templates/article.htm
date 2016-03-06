@@ -27,7 +27,7 @@
 {% if listview %}<p>{% if post.slug %}{{ post.slug }} ... {% else %}{{ post.content|truncatewords:"75" }}{% endif %} <a href="/article/{{ post.url }}/">read more</a></p>{% else %}{{ post.content|safe }}{% endif %}
 </div>
 {% endfor %}
-{% if listview %}<p><a href="/search/">Go to search</a></p>{% else %}<p><a href="/articles/">Back to articles.</a></p>{% endif %}
+{% if listview %}<p><a href="/search/">{% trans "Back to search form" %}.</a></p>{% else %}<p><a href="/articles/">Back to articles.</a></p>{% endif %}
 
 </div>
 

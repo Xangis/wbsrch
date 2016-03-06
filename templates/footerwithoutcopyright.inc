@@ -8,5 +8,5 @@
 <a href="/articles/">Articles</a> | 
 <a href="/terms/">{% trans "Terms of Service" %}</a> | <a href="/privacy/">{% trans "Privacy Policy" %}</a> | 
 <a href="/faq/">{% trans "Frequently Asked Questions" %}</a> | <a href="/criteria/">{% trans "Ranking Criteria" %}</a> | 
-<a href="/dmca/">{% trans "DMCA and Copyright Policy" %}</a> | <a href="http://zetacentauri.com/contact/">{% trans "Contact Information" %}</a></p>
+<a href="/dmca/">{% trans "DMCA and Copyright Policy" %}</a> | <a href="/contact/">{% trans "Contact Information" %}</a></p>
 </div>

@@ -15,13 +15,15 @@
 <h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %}</h1>
 <h2>{% trans "The Independent Search Engine" %}</h2>
 </div>
-<p><strong>{% trans "Search" %}:</strong></p>
-<form method="get" action="/search/">
+{% if not searchterm %}<div class="centered">{% endif %}
+<br/>
+<p><form method="get" action="/search/">
 <input id="searchbox" type="text" name="q" maxlength="250" {% if searchterm %}value="{{ searchterm }}"{% endif %} onkeyup="autocomp();" list="autocompleteOptions"/>
 <datalist id="autocompleteOptions">
 </datalist>
 <input type="submit" value="{% trans "Search" %}">
-</form>
+</form></p>
+{% if not searchterm %}</div>{% endif %}
 
 {% if searchterm %}
 {% if show_network_ad %}
@@ -91,40 +93,43 @@
 {% endif %}
 {% ssi '/var/django/wbsrch/templates/footerwithoutcopyright.inc' parsed %}
 <br/>
-<div class="head">
-<a href="https://wbsrch.com/search/"><img src="/flags/us-flag.gif" alt="English" title="English" class="flag" /></a>
-<a href="https://ca.wbsrch.com/search/"><img src="/flags/ca-flag.png" alt="Català" title="Català" class="flag" /></a>
-<a href="https://cs.wbsrch.com/search/"><img src="/flags/cs-flag.png" alt="Česká" title="Česká" class="flag" /></a>
-<a href="https://da.wbsrch.com/search/"><img src="/flags/da-flag.gif" alt="Dansk" title="Dansk" class="flag" /></a>
-<a href="https://de.wbsrch.com/search/"><img src="/flags/de-flag.gif" alt="Deutsch" title="Deutsch" class="flag" /></a>
-<a href="https://el.wbsrch.com/search/"><img src="/flags/el-flag.gif" alt="ελληνικά" title="ελληνικά" class="flag" /></a>
-<a href="https://es.wbsrch.com/search/"><img src="/flags/es-flag.gif" alt="España" title="España" class="flag" /></a>
-<a href="https://et.wbsrch.com/search/"><img src="/flags/et-flag.png" alt="Eesti" title="Eesti" class="flag" /></a>
-<a href="https://fi.wbsrch.com/search/"><img src="/flags/fi-flag.gif" alt="Suomalais" title="Suomalais" class="flag" /></a>
-<a href="https://fr.wbsrch.com/search/"><img src="/flags/fr-flag.gif" alt="Français" title="Français" class="flag" /></a>
-<a href="https://ha.wbsrch.com/search/"><img src="/flags/ne-flag.png" alt="Hausá" title="Hausa" class="flag" /></a>
-<a href="https://hr.wbsrch.com/search/"><img src="/flags/hr-flag.gif" alt="Hrvatski" title="Hrvatski" class="flag" /></a>
-<a href="https://hu.wbsrch.com/search/"><img src="/flags/hu-flag.gif" alt="Magyar" title="Magyar" class="flag" /></a>
-<a href="https://is.wbsrch.com/search/"><img src="/flags/is-flag.gif" alt="Íslenska" title="Íslenska" class="flag" /></a>
-<a href="https://it.wbsrch.com/search/"><img src="/flags/it-flag.gif" alt="Italiano" title="Italiano" class="flag" /></a>
-<a href="https://lt.wbsrch.com/search/"><img src="/flags/lt-flag.png" alt="Lietuvių" title="Lietuvių" class="flag" /></a>
-<a href="https://lv.wbsrch.com/search/"><img src="/flags/lv-flag.png" alt="Latviešu" title="Latviešu" class="flag" /></a>
-<a href="https://nl.wbsrch.com/search/"><img src="/flags/nl-flag.gif" alt="Nederlands" title="Nederlands" class="flag" /></a>
-<a href="https://no.wbsrch.com/search/"><img src="/flags/no-flag.gif" alt="Norsk" title="Norsk" class="flag" /></a>
-<a href="https://pl.wbsrch.com/search/"><img src="/flags/pl-flag.gif" alt="Polski" title="Polski" class="flag" /></a>
-<a href="https://pt.wbsrch.com/search/"><img src="/flags/pt-flag.gif" alt="Português" title="Português" class="flag" /></a>
-<a href="https://ro.wbsrch.com/search/"><img src="/flags/ro-flag.gif" alt="Română" title="Română" class="flag" /></a>
-<a href="https://rw.wbsrch.com/search/"><img src="/flags/rw-flag.png" alt="Kinyarwanda" title="Kinyarwanda" class="flag" /></a>
-<a href="https://sk.wbsrch.com/search/"><img src="/flags/sk-flag.png" alt="Slovenský" title="Slovenský" class="flag" /></a>
-<a href="https://sl.wbsrch.com/search/"><img src="/flags/sl-flag.png" alt="Slovenski" title="Slovenski" class="flag" /></a>
-<a href="https://sn.wbsrch.com/search/"><img src="/flags/zw-flag.png" alt="chiShona" title="chiShona" height="18" class="flag" /></a>
-<a href="https://so.wbsrch.com/search/"><img src="/flags/so-flag.png" alt="Soomaali" title="Soomaali" class="flag" /></a>
-<a href="https://sv.wbsrch.com/search/"><img src="/flags/sv-flag.gif" alt="Svenska" title="Svenska" class="flag" /></a>
-<a href="https://sw.wbsrch.com/search/"><img src="/flags/sw-flag.gif" alt="Kiswahili" title="Kiswahili" class="flag" /></a>
-<a href="https://tr.wbsrch.com/search/"><img src="/flags/tr-flag.png" alt="Türkçe" title="Türkçe" class="flag" /></a>
-<a href="https://wo.wbsrch.com/search/"><img src="/flags/sn-flag.png" alt="Wolof" title="Wolof" class="flag" /></a>
-<a href="https://yo.wbsrch.com/search/"><img src="/flags/ng-flag.png" alt="Yorùbá" title="Yorùbá" class="flag" /></a>
-</div>
+<p class="subhead">{% trans "Other languages" %}:</p>
+<nav class="language">
+<ul name="language" id="language">
+<li><a href="https://wbsrch.com/search/" alt="English" title="English" />English (EN)</a></li>
+<li><a href="https://ca.wbsrch.com/search/" alt="Català" title="Català" />Català (CA)</a></li>
+<li><a href="https://cs.wbsrch.com/search/" alt="Česká" title="Česká" />Česká (CS)</a></li>
+<li><a href="https://da.wbsrch.com/search/" alt="Dansk" title="Dansk" />Dansk (DA)</a></li>
+<li><a href="https://de.wbsrch.com/search/" alt="Deutsch" title="Deutsch" />Deutsch (DE)</a></li>
+<li><a href="https://el.wbsrch.com/search/" alt="ελληνικά" title="ελληνικά" />ελληνικά (EL)</a></li>
+<li><a href="https://es.wbsrch.com/search/" alt="España" title="España" />España (ES)</a></li>
+<li><a href="https://et.wbsrch.com/search/" alt="Eesti" title="Eesti" />Eestu (ET)</a></li>
+<li><a href="https://fi.wbsrch.com/search/" alt="Suomalais" title="Suomalais" />Suomolais (FI)</a></li>
+<li><a href="https://fr.wbsrch.com/search/" alt="Français" title="Français" />Français (FR)</a></li>
+<li><a href="https://ha.wbsrch.com/search/" alt="Hausa" title="Hausa" />Hausa (HA)</a></li> 
+<li><a href="https://hr.wbsrch.com/search/" alt="Hrvatski" title="Hrvatski" />Hrvatski (HR)</a></li>
+<li><a href="https://hu.wbsrch.com/search/" alt="Magyar" title="Magyar" />Magyar (HU)</a></li>
+<li><a href="https://is.wbsrch.com/search/" alt="Íslenska" title="Íslenska" />Íslenska (IS)</a></li>
+<li><a href="https://it.wbsrch.com/search/" alt="Italiano" title="Italiano" />Italiano (IT)</a></li>
+<li><a href="https://lt.wbsrch.com/search/" alt="Lietuvių" title="Lietuvių" />Lietuvių (LT)</a></li> 
+<li><a href="https://lv.wbsrch.com/search/" alt="Latviešu" title="Latviešu" />Latviešu (LV)</a></li>
+<li><a href="https://nl.wbsrch.com/search/" alt="Nederlands" title="Nederlands" />Nederlands (NL)</a></li>
+<li><a href="https://no.wbsrch.com/search/" alt="Norsk" title="Norsk" />Norsk (NO)</a></li>
+<li><a href="https://pl.wbsrch.com/search/" alt="Polski" title="Polski" />Polski (PL)</a></li>
+<li><a href="https://pt.wbsrch.com/search/" alt="Português" title="Português" />Português (PT)</a></li>
+<li><a href="https://ro.wbsrch.com/search/" alt="Română" title="Română" />Română (RO)</a></li>
+<li><a href="https://rw.wbsrch.com/search/" alt="Kinyarwanda" title="Kinyarwanda" />Kinyarwanda (RW)</a></li> 
+<li><a href="https://sk.wbsrch.com/search/" alt="Slovenský" title="Slovenský" />Slovenský (SK)</a></li>
+<li><a href="https://sl.wbsrch.com/search/" alt="Slovenščina" title="Slovenščina" />Slovenščina (SL)</a></li>
+<li><a href="https://sn.wbsrch.com/search/" alt="chiShona" title="chiShona" />chiShona (SN)</a></li>
+<li><a href="https://so.wbsrch.com/search/" alt="Soomaali" title="Soomaali" />Soomaali (SO)</a></li>
+<li><a href="https://sv.wbsrch.com/search/" alt="Svenska" title="Svenska" />Svenska (SV)</a></li>
+<li><a href="https://sw.wbsrch.com/search/" alt="Kiswahili" title="Kiswahili" />Kiswahili (SW)</a></li>
+<li><a href="https://tr.wbsrch.com/search/" alt="Türkçe" title="Türkçe" />Türkçe (TR)</a></li> 
+<li><a href="https://wo.wbsrch.com/search/" alt="Wolof" title="Wolof" />Wolof (WO)</a></li>
+<li><a href="https://yo.wbsrch.com/search/" alt="Yorùbá" title="Yorùbá" />Yorùbá (YO)</a></li>
+</ul>
+</nav>
 {% ssi '/var/django/wbsrch/templates/copyright.inc' %}
 {% if searchterm %}
 <script>

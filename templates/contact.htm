@@ -1,0 +1,30 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ language_code }}">
+<head>
+<meta name="keywords" content="{% trans "search engine" %}, web, {% trans "index" %}, {% trans "searches" %}, {% trans "most linked to domains" %}, {% trans "terms" %}, {% trans "directory" %}, {% trans "search" %}, {% trans "most links" %}, {% trans "frequent" %}">
+<meta name="description" content="Contact information for WbSrch {% trans "Web Search" %}, home of {% trans "The Independent Search Engine" %}.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% trans "Contact Information" %} | WbSrch {% trans "Web Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch Web 
+{% trans "Search" %} {% trans "Contact Information" %}</h1></div>
+<div class="page">
+<h2 class="left">Contact Information</h2><br/>
+<h3>Email</h3>
+<p><img src="/images/ContactInfo.png" alt="WbSrch Contact Info"></p>
+<p>Please note that link removal requests will be ignored. If you would like your site to be excluded from search engines, please do so using a robots.txt file.</p>
+<h3>Postal Mail</h3>
+<p>WbSrch<br/>
+18225 SW Broad Oak Blvd<br/>
+Beaverton, OR 97007</p>
+<br /><p><a href="/">{% trans "Back to search form" %}.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>
