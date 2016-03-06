@@ -24,7 +24,7 @@ msgstr ""
 #: policy.htm:4 policy.htm.py:16 popular.htm:6 search.htm:3 search2.htm:3
 #: terms.htm:4
 msgid "search"
-msgstr ""
+msgstr "haku"
 
 #: adminpanel.htm:5 adminpanel.htm.py:9 adminpanel.htm.py:14 article.htm:5
 #: article.htm.py:9 article.htm.py:14 article2.htm:5 article2.htm.py:9
@@ -41,7 +41,7 @@ msgstr ""
 #: search2.htm.py:8 search2.htm.py:14 search2.htm.py:17 search2.htm:20
 #: terms.htm:5 terms.htm.py:9 terms.htm.py:14
 msgid "Search"
-msgstr ""
+msgstr "Haku"
 
 #: adminpanel.htm:39
 msgid "Crawl a Single URL"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: adminpanel.htm:63 domain.htm:34 indexstats.htm:17 ip.htm:30
 msgid "Language"
-msgstr ""
+msgstr "Kieli"
 
 #: adminpanel.htm:72
 msgid "Get"
@@ -77,29 +77,29 @@ msgstr ""
 
 #: article.htm:4 article2.htm:4
 msgid "articles"
-msgstr ""
+msgstr "artikkelit"
 
 #: article.htm:5 article.htm.py:9 article.htm.py:14 article2.htm:5
 #: article2.htm.py:9 article2.htm.py:14
 msgid "Articles"
-msgstr ""
+msgstr "Artikkelit"
 
 #: domain.htm:7 domain.htm.py:13 domain.htm.py:24 domain.htm.py:33
 #: domain.htm:58 domain.htm.py:77 index.htm:51 ip.htm:29
 msgid "Domain"
-msgstr ""
+msgstr "Verkkotunnus"
 
 #: domain.htm:13 domain.htm.py:24 ip.htm:24
 msgid "Info"
-msgstr ""
+msgstr "Tiedot"
 
 #: domain.htm:16 index.htm:48
 msgid "Check a Domain"
-msgstr ""
+msgstr "Tarkista Verkkotunnus"
 
 #: domain.htm:19
 msgid "Check Domain"
-msgstr ""
+msgstr "Tarkista Verkkotunnus"
 
 #: domain.htm:24 domain.htm.py:58 domain.htm.py:62 domain.htm.py:77 ip.htm:24
 #: search.htm:8 search.htm.py:35 search2.htm:8 search2.htm.py:34
@@ -108,35 +108,35 @@ msgstr ""
 
 #: domain.htm:36
 msgid "Created"
-msgstr ""
+msgstr "Luotu"
 
 #: domain.htm:47
 msgid "We have"
-msgstr ""
+msgstr "Meillä on"
 
 #: domain.htm:47
 msgid "in the"
-msgstr ""
+msgstr "vuonna"
 
 #: domain.htm:47
 msgid "database for that domain"
-msgstr ""
+msgstr "tietokanta että verkkotunnus"
 
 #: domain.htm:51
 msgid "No exact match for that domain name found"
-msgstr ""
+msgstr "Ei täydellinen vastaavuus että verkkotunnus todettiin"
 
 #: domain.htm:53
 msgid "Enter a domain name to check"
-msgstr ""
+msgstr "Anna verkkotunnus tarkistaa"
 
 #: domain.htm:58
 msgid "Top Keyword Rankings"
-msgstr ""
+msgstr "Top Avainsanan Rankingissa"
 
 #: domain.htm:58 domain.htm.py:77
 msgid "this"
-msgstr ""
+msgstr "tämä"
 
 #: domain.htm:62
 msgid "Ranks"
@@ -148,141 +148,141 @@ msgstr ""
 
 #: domain.htm:69 index.htm:3
 msgid "domain"
-msgstr ""
+msgstr "verkkotunnus"
 
 #: domain.htm:71
 msgid "This domain is excluded from our index"
-msgstr ""
+msgstr "Tämä verkkotunnus on jätetty pois hakemistostamme"
 
 #: domain.htm:78
 msgid "Here is what is in our index"
-msgstr ""
+msgstr "Tässä on se, mitä on hakemistossamme"
 
 #: domain.htm:92
 msgid "No URLs in the index for"
-msgstr ""
+msgstr "Ei URL-osoitteita löytyivät indeksissä"
 
 #: domain.htm:97 ip.htm:41
 msgid "Go to web search form"
-msgstr ""
+msgstr "Siirry Web hakulomake"
 
 #: footer.inc:2 footerwithoutcopyright.inc:2
 msgid "IP Address Info"
-msgstr ""
+msgstr "IP-osoite Info"
 
 #: footer.inc:3 footerwithoutcopyright.inc:3
 msgid "Changelog"
-msgstr ""
+msgstr "Muutoshistoriaa"
 
 #: footer.inc:3 footerwithoutcopyright.inc:3
 msgid "Inclusion Policy"
-msgstr ""
+msgstr "Osallisuuden Politiikka"
 
 #: footer.inc:4 footerwithoutcopyright.inc:4
 msgid "Philosophy and Goals"
-msgstr ""
+msgstr "Filosofia ja Tavoitteet"
 
 #: footer.inc:5 footerwithoutcopyright.inc:5
 msgid "Index Statistics"
-msgstr ""
+msgstr "Indeksi Tilastot"
 
 #: footer.inc:5 footerwithoutcopyright.inc:5
 msgid "How to Use WbSrch"
-msgstr ""
+msgstr "Miten Käyttää WbSrch"
 
 #: footer.inc:7 footerwithoutcopyright.inc:9
 msgid "Terms of Service"
-msgstr ""
+msgstr "Käyttöehdot"
 
 #: footer.inc:8 footerwithoutcopyright.inc:9
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Tietosuojakäytäntö"
 
 #: footer.inc:9 footerwithoutcopyright.inc:10
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Usein Kysytyt Kysymykset"
 
 #: footer.inc:9 footerwithoutcopyright.inc:10
 msgid "Ranking Criteria"
-msgstr ""
+msgstr "Arviointikriteereillä"
 
 #: footer.inc:10 footerwithoutcopyright.inc:11
 msgid "DMCA and Copyright Policy"
-msgstr ""
+msgstr "DMCA ja Tekijänoikeuspolitiikassa"
 
 #: footer.inc:10 footerwithoutcopyright.inc:11
 msgid "Contact Information"
-msgstr ""
+msgstr "Yhteystiedot"
 
 #: index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6 search.htm:3
 #: search2.htm:3
 msgid "search engine"
-msgstr ""
+msgstr "hakukone"
 
 #: index.htm:3 indexstats.htm:4 search.htm:3 search2.htm:3
 msgid "independent"
-msgstr ""
+msgstr "itsenäinen"
 
 #: index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6 search.htm:3
 #: search2.htm:3
 msgid "directory"
-msgstr ""
+msgstr "hakemisto"
 
 #: index.htm:3 search.htm:3 search2.htm:3
 msgid "engine"
-msgstr ""
+msgstr "moottori"
 
 #: index.htm:4 search.htm:4 search2.htm:4
 msgid "home"
-msgstr ""
+msgstr "etusivu"
 
 #: index.htm:4 index.htm.py:17 index.htm.py:33 indexstats.htm:5
 #: mostlinked.htm:7 popular.htm:7 search.htm:4 search.htm.py:16 search2.htm:4
 #: search2.htm.py:15
 msgid "The Independent Search Engine"
-msgstr ""
+msgstr "Riippumaton Hakukone"
 
 #: index.htm:43
 msgid "Most Recently Indexed Search Terms"
-msgstr ""
+msgstr "Viimeksi Indeksoitu Hakutermejä"
 
 #: index.htm:51
 msgid "Check"
-msgstr ""
+msgstr "Tarkista"
 
 #: indexstats.htm:4 mostlinked.htm:6 popular.htm:6
 msgid "index"
-msgstr ""
+msgstr "indeksi"
 
 #: indexstats.htm:4
 msgid "statistics"
-msgstr ""
+msgstr "tilastotiedot"
 
 #: indexstats.htm:5 indexstats.htm.py:9 indexstats.htm.py:14 mostlinked.htm:7
 #: mostlinked.htm.py:11 mostlinked.htm.py:16 popular.htm:7 popular.htm.py:11
 #: popular.htm.py:16
 msgid "Web Search"
-msgstr ""
+msgstr "web-haku"
 
 #: indexstats.htm:9 indexstats.htm.py:14
 msgid "Index"
-msgstr ""
+msgstr "Indeksi"
 
 #: indexstats.htm:9 indexstats.htm.py:14
 msgid "Statistics"
-msgstr ""
+msgstr "tilastotiedot"
 
 #: indexstats.htm:17
 msgid "# of"
-msgstr ""
+msgstr "lukumäärä"
 
 #: indexstats.htm:17
 msgid "URLs"
-msgstr ""
+msgstr "URL-osoitteita"
 
 #: indexstats.htm:17
 msgid "Crawled"
-msgstr ""
+msgstr "Indeksoitu"
 
 #: indexstats.htm:17
 msgid "Terms"
@@ -314,7 +314,7 @@ msgstr ""
 
 #: indexstats.htm:24 mostlinked.htm:27 popular.htm:33
 msgid "Back to search form"
-msgstr ""
+msgstr "Palata hakulomake"
 
 #: ip.htm:7 ip.htm.py:24
 msgid "IP"
@@ -322,19 +322,19 @@ msgstr ""
 
 #: ip.htm:13
 msgid "IP Address"
-msgstr ""
+msgstr "IP-osoite"
 
 #: ip.htm:16
 msgid "Check an IP Address"
-msgstr ""
+msgstr "Tarkista IP-osoite"
 
 #: ip.htm:19
 msgid "Check IP"
-msgstr ""
+msgstr "Tarkista IP-osoite"
 
 #: ip.htm:35
 msgid "Our crawler has not found any domains at that IP address"
-msgstr ""
+msgstr "Hakurobottimme ei ole löytänyt verkkotunnuksia että ip-osoite"
 
 #: mostlinked.htm:6 popular.htm:6
 msgid "searches"
@@ -342,7 +342,7 @@ msgstr ""
 
 #: mostlinked.htm:6
 msgid "most linked to domains"
-msgstr ""
+msgstr "useimmat liittyvät verkkotunnuksia"
 
 #: mostlinked.htm:6 popular.htm:6
 msgid "terms"
@@ -358,7 +358,7 @@ msgstr ""
 
 #: mostlinked.htm:11 mostlinked.htm.py:17
 msgid "Most Linked To Domains"
-msgstr ""
+msgstr "Useimmat Liittyvät Verkkotunnuksia"
 
 #: popular.htm:6
 msgid "popular searches"
@@ -414,7 +414,7 @@ msgstr ""
 
 #: search.htm:32 search2.htm:31
 msgid "Did you mean to look up details for the IP address"
-msgstr ""
+msgstr "Sinä aio etsiä verkkotunnus tiedot"
 
 #: search.htm:33 search2.htm:32
 msgid "This search contains a word in the "
@@ -422,7 +422,7 @@ msgstr ""
 
 #: search.htm:33 search.htm.py:34 search2.htm:32 search2.htm.py:33
 msgid "language"
-msgstr ""
+msgstr "kieli"
 
 #: search.htm:34 search2.htm:33
 msgid "This search mentions the "
@@ -430,7 +430,7 @@ msgstr ""
 
 #: search.htm:35 search2.htm:34
 msgid "Results"
-msgstr ""
+msgstr "Tulokset"
 
 #: search.htm:35 search2.htm:34
 msgid "from domain"
@@ -438,7 +438,7 @@ msgstr ""
 
 #: search.htm:39 search2.htm:38
 msgid "No results were found for that search."
-msgstr ""
+msgstr "Tuloksia ei löytynyt, että hakuun"
 
 #: search.htm:40 search2.htm:39
 msgid ""
@@ -450,10 +450,10 @@ msgstr ""
 #: search.htm:47 search.htm.py:61 search.htm.py:72 search2.htm:46
 #: search2.htm.py:60 search2.htm.py:71
 msgid "No page description."
-msgstr ""
+msgstr "No sivu kuvaus."
 
 #: search.htm:85 search2.htm:84
 msgid ""
 "Note: The phrase you searched for is not fully indexed. We have queued it "
 "for indexing and will have better results available soon."
-msgstr ""
+msgstr "Huomautus: ilmaus etsimäsi ei ole täysin indeksoitu. Olemme jonossa sen indeksointiin ja on parempia tuloksia käytettävissä pian."

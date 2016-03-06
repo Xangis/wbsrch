@@ -24,7 +24,7 @@ msgstr ""
 #: policy.htm:4 policy.htm.py:16 popular.htm:6 search.htm:3 search2.htm:3
 #: terms.htm:4
 msgid "search"
-msgstr ""
+msgstr "keresés"
 
 #: adminpanel.htm:5 adminpanel.htm.py:9 adminpanel.htm.py:14 article.htm:5
 #: article.htm.py:9 article.htm.py:14 article2.htm:5 article2.htm.py:9
@@ -43,7 +43,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Search Results"
 msgid "Search"
-msgstr "Keresési Eredmények"
+msgstr "keresés"
 
 #: adminpanel.htm:39
 msgid "Crawl a Single URL"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: adminpanel.htm:63 domain.htm:34 indexstats.htm:17 ip.htm:30
 msgid "Language"
-msgstr ""
+msgstr "Nyelv"
 
 #: adminpanel.htm:72
 msgid "Get"
@@ -79,29 +79,29 @@ msgstr ""
 
 #: article.htm:4 article2.htm:4
 msgid "articles"
-msgstr ""
+msgstr "cikkek"
 
 #: article.htm:5 article.htm.py:9 article.htm.py:14 article2.htm:5
 #: article2.htm.py:9 article2.htm.py:14
 msgid "Articles"
-msgstr ""
+msgstr "Cikkek"
 
 #: domain.htm:7 domain.htm.py:13 domain.htm.py:24 domain.htm.py:33
 #: domain.htm:58 domain.htm.py:77 index.htm:51 ip.htm:29
 msgid "Domain"
-msgstr ""
+msgstr "Domain"
 
 #: domain.htm:13 domain.htm.py:24 ip.htm:24
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: domain.htm:16 index.htm:48
 msgid "Check a Domain"
-msgstr ""
+msgstr "Ellenőrizze a Domain"
 
 #: domain.htm:19
 msgid "Check Domain"
-msgstr ""
+msgstr "Ellenőrizze Domén"
 
 #: domain.htm:24 domain.htm.py:58 domain.htm.py:62 domain.htm.py:77 ip.htm:24
 #: search.htm:8 search.htm.py:35 search2.htm:8 search2.htm.py:34
@@ -174,39 +174,39 @@ msgstr ""
 
 #: footer.inc:3 footerwithoutcopyright.inc:3
 msgid "Changelog"
-msgstr ""
+msgstr "Legutóbbi Módosítások"
 
 #: footer.inc:3 footerwithoutcopyright.inc:3
 msgid "Inclusion Policy"
-msgstr ""
+msgstr "Befogadási Politika"
 
 #: footer.inc:4 footerwithoutcopyright.inc:4
 msgid "Philosophy and Goals"
-msgstr ""
+msgstr "Filozófia és Célok"
 
 #: footer.inc:5 footerwithoutcopyright.inc:5
 msgid "Index Statistics"
-msgstr ""
+msgstr "Index Statisztika"
 
 #: footer.inc:5 footerwithoutcopyright.inc:5
 msgid "How to Use WbSrch"
-msgstr ""
+msgstr "Hogyan Kell Használni WbSrch"
 
 #: footer.inc:7 footerwithoutcopyright.inc:9
 msgid "Terms of Service"
-msgstr ""
+msgstr "Szolgáltatás Feltételei"
 
 #: footer.inc:8 footerwithoutcopyright.inc:9
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Adatvédelmi Irányelvek"
 
 #: footer.inc:9 footerwithoutcopyright.inc:10
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Gyakran Ismételt Kérdések"
 
 #: footer.inc:9 footerwithoutcopyright.inc:10
 msgid "Ranking Criteria"
-msgstr ""
+msgstr "Rangsor Kritériumai"
 
 #: footer.inc:10 footerwithoutcopyright.inc:11
 msgid "DMCA and Copyright Policy"
@@ -214,12 +214,12 @@ msgstr ""
 
 #: footer.inc:10 footerwithoutcopyright.inc:11
 msgid "Contact Information"
-msgstr ""
+msgstr "Elérhetőség"
 
 #: index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6 search.htm:3
 #: search2.htm:3
 msgid "search engine"
-msgstr ""
+msgstr "keresőmotor"
 
 #: index.htm:3 indexstats.htm:4 search.htm:3 search2.htm:3
 msgid "independent"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: index.htm:3 search.htm:3 search2.htm:3
 msgid "engine"
-msgstr ""
+msgstr "motor"
 
 #: index.htm:4 search.htm:4 search2.htm:4
 msgid "home"
@@ -248,11 +248,11 @@ msgstr "Független Keresőprogram"
 
 #: index.htm:43
 msgid "Most Recently Indexed Search Terms"
-msgstr ""
+msgstr "Legutóbb Indexelt Keresési Kifejezések"
 
 #: index.htm:51
 msgid "Check"
-msgstr ""
+msgstr "Ellenőrizd"
 
 #: indexstats.htm:4 mostlinked.htm:6 popular.htm:6
 msgid "index"
@@ -274,7 +274,7 @@ msgstr ""
 
 #: indexstats.htm:9 indexstats.htm.py:14
 msgid "Statistics"
-msgstr ""
+msgstr "Statisztika"
 
 #: indexstats.htm:17
 msgid "# of"
@@ -418,7 +418,7 @@ msgstr ""
 
 #: search.htm:31 search2.htm:30
 msgid "Did you mean to look up domain details for"
-msgstr ""
+msgstr "Meg akarja nézni tartomány adatai"
 
 #: search.htm:32 search2.htm:31
 msgid "Did you mean to look up details for the IP address"
@@ -430,7 +430,7 @@ msgstr ""
 
 #: search.htm:33 search.htm.py:34 search2.htm:32 search2.htm.py:33
 msgid "language"
-msgstr ""
+msgstr "nyelv"
 
 #: search.htm:34 search2.htm:33
 msgid "This search mentions the "

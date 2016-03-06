@@ -39,8 +39,11 @@ def ip_to_country(request):
     print 'IP: {0}'.format(ip)
     gi = GeoIP()
     country = gi.country_code(ip)
-    if country:
-        return Response({'ip': ip, 'country': country}, status=200)
+    latlon = gi.lat_lon(ip)
+    if country and latlon:
+        return Response({'ip': ip, 'country': country, 'lat': latlon[0], 'lon': latlon[1] }, status=200)
+    elif country:
+        return Response({'ip': ip, 'country': country }, status=200)
     else:
         return Response(status=404)
 
@@ -66,8 +69,10 @@ def domain_link_rank(request):
     except ObjectDoesNotExist:
         pass
     link_rank = GetLinkRank(domaininfo.domains_linking_in)
+    # Round to the nearest integer because we don't want to give too much precision away.
+    link_rank = int(round(link_rank))
     # TODO: Include domains_linking_in_last_updated in response.
-    return Response({'domain': domain, 'link_rank': link_rank, 'excluded': is_excluded}, status=200)
+    return Response({'domain': domain, 'wbrank': link_rank, 'excluded': is_excluded}, status=200)
 
 @api_view(['GET'])
 def domain_pages_in_index(request):

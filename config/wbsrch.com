@@ -27,7 +27,6 @@ server {
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
         gzip_vary on;
         gzip_proxied any;
-        client_max_body_size 2M;
 
         ssl_certificate /etc/nginx/certs/wbsrch.crt;
         ssl_certificate_key /etc/nginx/certs/wbsrch.key;

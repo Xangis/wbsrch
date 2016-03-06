@@ -25,7 +25,7 @@ msgstr ""
 #: policy.htm:4 policy.htm.py:16 popular.htm:6 search.htm:3 search2.htm:3
 #: terms.htm:4
 msgid "search"
-msgstr ""
+msgstr "căutare"
 
 #: adminpanel.htm:5 adminpanel.htm.py:9 adminpanel.htm.py:14 article.htm:5
 #: article.htm.py:9 article.htm.py:14 article2.htm:5 article2.htm.py:9
@@ -42,7 +42,7 @@ msgstr ""
 #: search2.htm.py:8 search2.htm.py:14 search2.htm.py:17 search2.htm:20
 #: terms.htm:5 terms.htm.py:9 terms.htm.py:14
 msgid "Search"
-msgstr ""
+msgstr "Căutare"
 
 #: adminpanel.htm:39
 msgid "Crawl a Single URL"
@@ -62,7 +62,7 @@ msgstr ""
 
 #: adminpanel.htm:63 domain.htm:34 indexstats.htm:17 ip.htm:30
 msgid "Language"
-msgstr ""
+msgstr "Limba"
 
 #: adminpanel.htm:72
 msgid "Get"
@@ -96,11 +96,11 @@ msgstr ""
 
 #: domain.htm:16 index.htm:48
 msgid "Check a Domain"
-msgstr ""
+msgstr "Verifica un Domeniu"
 
 #: domain.htm:19
 msgid "Check Domain"
-msgstr ""
+msgstr "Verifica un Domeniu"
 
 #: domain.htm:24 domain.htm.py:58 domain.htm.py:62 domain.htm.py:77 ip.htm:24
 #: search.htm:8 search.htm.py:35 search2.htm:8 search2.htm.py:34
@@ -125,15 +125,15 @@ msgstr ""
 
 #: domain.htm:51
 msgid "No exact match for that domain name found"
-msgstr ""
+msgstr "Nu se potrivesc exact pentru acel nume de domeniu a fost găsit"
 
 #: domain.htm:53
 msgid "Enter a domain name to check"
-msgstr ""
+msgstr "Introduceți un nume de domeniu pentru a verifica"
 
 #: domain.htm:58
 msgid "Top Keyword Rankings"
-msgstr ""
+msgstr "Clasamentele de Top Ale Cuvintelor Cheie"
 
 #: domain.htm:58 domain.htm.py:77
 msgid "this"
@@ -149,11 +149,11 @@ msgstr ""
 
 #: domain.htm:69 index.htm:3
 msgid "domain"
-msgstr ""
+msgstr "domeniu"
 
 #: domain.htm:71
 msgid "This domain is excluded from our index"
-msgstr ""
+msgstr "Acest domeniu a fost exclus din indexul nostru"
 
 #: domain.htm:78
 msgid "Here is what is in our index"
@@ -165,11 +165,11 @@ msgstr ""
 
 #: domain.htm:97 ip.htm:41
 msgid "Go to web search form"
-msgstr ""
+msgstr "Du-te la formularul de căutare web"
 
 #: footer.inc:2 footerwithoutcopyright.inc:2
 msgid "IP Address Info"
-msgstr ""
+msgstr "Informații Despre Adresa IP"
 
 #: footer.inc:3 footerwithoutcopyright.inc:3
 msgid "Changelog"
@@ -185,7 +185,7 @@ msgstr ""
 
 #: footer.inc:5 footerwithoutcopyright.inc:5
 msgid "Index Statistics"
-msgstr ""
+msgstr "Statistici Index"
 
 #: footer.inc:5 footerwithoutcopyright.inc:5
 msgid "How to Use WbSrch"
@@ -193,15 +193,15 @@ msgstr ""
 
 #: footer.inc:7 footerwithoutcopyright.inc:9
 msgid "Terms of Service"
-msgstr ""
+msgstr "Termenii Serviciului"
 
 #: footer.inc:8 footerwithoutcopyright.inc:9
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Politica de Confidentialitate"
 
 #: footer.inc:9 footerwithoutcopyright.inc:10
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "Întrebări Frecvente"
 
 #: footer.inc:9 footerwithoutcopyright.inc:10
 msgid "Ranking Criteria"
@@ -213,12 +213,12 @@ msgstr ""
 
 #: footer.inc:10 footerwithoutcopyright.inc:11
 msgid "Contact Information"
-msgstr ""
+msgstr "Informatii de Contact"
 
 #: index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6 search.htm:3
 #: search2.htm:3
 msgid "search engine"
-msgstr ""
+msgstr "motor de căutare"
 
 #: index.htm:3 indexstats.htm:4 search.htm:3 search2.htm:3
 msgid "independent"
@@ -235,17 +235,17 @@ msgstr ""
 
 #: index.htm:4 search.htm:4 search2.htm:4
 msgid "home"
-msgstr ""
+msgstr "pagina principala"
 
 #: index.htm:4 index.htm.py:17 index.htm.py:33 indexstats.htm:5
 #: mostlinked.htm:7 popular.htm:7 search.htm:4 search.htm.py:16 search2.htm:4
 #: search2.htm.py:15
 msgid "The Independent Search Engine"
-msgstr ""
+msgstr "Motorul de Căutare Independent"
 
 #: index.htm:43
 msgid "Most Recently Indexed Search Terms"
-msgstr ""
+msgstr "Cel Mai Recent Indexate Termenii de Căutare"
 
 #: index.htm:51
 msgid "Check"
@@ -315,7 +315,7 @@ msgstr ""
 
 #: indexstats.htm:24 mostlinked.htm:27 popular.htm:33
 msgid "Back to search form"
-msgstr ""
+msgstr "Du-te înapoi la formularul de căutare"
 
 #: ip.htm:7 ip.htm.py:24
 msgid "IP"
@@ -323,15 +323,15 @@ msgstr ""
 
 #: ip.htm:13
 msgid "IP Address"
-msgstr ""
+msgstr "Adresă IP"
 
 #: ip.htm:16
 msgid "Check an IP Address"
-msgstr ""
+msgstr "Verifica o adresă IP"
 
 #: ip.htm:19
 msgid "Check IP"
-msgstr ""
+msgstr "Verifica o adresă IP"
 
 #: ip.htm:35
 msgid "Our crawler has not found any domains at that IP address"
@@ -395,7 +395,7 @@ msgstr ""
 
 #: search.htm:3 search2.htm:3
 msgid "results"
-msgstr ""
+msgstr "rezultatele"
 
 #: search.htm:3 search2.htm:3
 msgid "internet"
@@ -403,15 +403,15 @@ msgstr ""
 
 #: search.htm:8 search2.htm:8
 msgid "Search Results"
-msgstr ""
+msgstr "Rezultatele Cautarii"
 
 #: search.htm:30 search2.htm:29
 msgid "Did you mean to search for"
-msgstr ""
+msgstr "Ai de gând să căutați"
 
 #: search.htm:31 search2.htm:30
 msgid "Did you mean to look up domain details for"
-msgstr ""
+msgstr "Ai de gând să se uite în sus detaliile de domeniu pentru"
 
 #: search.htm:32 search2.htm:31
 msgid "Did you mean to look up details for the IP address"
@@ -423,7 +423,7 @@ msgstr ""
 
 #: search.htm:33 search.htm.py:34 search2.htm:32 search2.htm.py:33
 msgid "language"
-msgstr ""
+msgstr "limba"
 
 #: search.htm:34 search2.htm:33
 msgid "This search mentions the "
@@ -439,7 +439,7 @@ msgstr ""
 
 #: search.htm:39 search2.htm:38
 msgid "No results were found for that search."
-msgstr ""
+msgstr "Nu au fost găsite rezultate pentru căutarea respectivă."
 
 #: search.htm:40 search2.htm:39
 msgid ""
@@ -451,10 +451,10 @@ msgstr ""
 #: search.htm:47 search.htm.py:61 search.htm.py:72 search2.htm:46
 #: search2.htm.py:60 search2.htm.py:71
 msgid "No page description."
-msgstr ""
+msgstr "Nici o descriere a paginii."
 
 #: search.htm:85 search2.htm:84
 msgid ""
 "Note: The phrase you searched for is not fully indexed. We have queued it "
 "for indexing and will have better results available soon."
-msgstr ""
+msgstr "Notă: fraza ați căutat nu este complet indexat. Noi am stat la coadă pentru indexare și va avea rezultate mai bune disponibile în curând."

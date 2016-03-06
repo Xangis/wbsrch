@@ -1,0 +1,14 @@
+Need to add a teSt for "is unblockable" for domains + excluded sites.
+
+Need to test for both language blocking and porn blocking.
+
+RemoveURLsForDomain or some other method should handle this logic, with maybe a bool
+to also delete all parent domains, and automatically check whether the unblockable flag
+is set, and/or create block entries.
+
+In other words, don't put all the logic in the admin code.
+
+Perhaps just a recursion flag will do.
+----
+
+Need to test GetRootURL with the new domain extensions for second-level ccTLDs.
