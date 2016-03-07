@@ -91,50 +91,14 @@
 {% else %}
 <br/><br/>
 {% endif %}
+<div class="footer">
 {% ssi '/var/django/wbsrch/templates/footerwithoutcopyright.inc' parsed %}
-<br/>
-<p class="subhead">{% trans "Other languages" %}:</p>
-<nav class="language">
-<ul name="language" id="language">
-<li><a href="https://wbsrch.com/search/" alt="English" title="English" />English (EN)</a></li>
-<li><a href="https://ca.wbsrch.com/search/" alt="Català" title="Català" />Català (CA)</a></li>
-<li><a href="https://cs.wbsrch.com/search/" alt="Česká" title="Česká" />Česká (CS)</a></li>
-<li><a href="https://da.wbsrch.com/search/" alt="Dansk" title="Dansk" />Dansk (DA)</a></li>
-<li><a href="https://de.wbsrch.com/search/" alt="Deutsch" title="Deutsch" />Deutsch (DE)</a></li>
-<li><a href="https://el.wbsrch.com/search/" alt="ελληνικά" title="ελληνικά" />ελληνικά (EL)</a></li>
-<li><a href="https://es.wbsrch.com/search/" alt="España" title="España" />España (ES)</a></li>
-<li><a href="https://et.wbsrch.com/search/" alt="Eesti" title="Eesti" />Eestu (ET)</a></li>
-<li><a href="https://fi.wbsrch.com/search/" alt="Suomalais" title="Suomalais" />Suomolais (FI)</a></li>
-<li><a href="https://fr.wbsrch.com/search/" alt="Français" title="Français" />Français (FR)</a></li>
-<li><a href="https://ha.wbsrch.com/search/" alt="Hausa" title="Hausa" />Hausa (HA)</a></li> 
-<li><a href="https://hr.wbsrch.com/search/" alt="Hrvatski" title="Hrvatski" />Hrvatski (HR)</a></li>
-<li><a href="https://hu.wbsrch.com/search/" alt="Magyar" title="Magyar" />Magyar (HU)</a></li>
-<li><a href="https://is.wbsrch.com/search/" alt="Íslenska" title="Íslenska" />Íslenska (IS)</a></li>
-<li><a href="https://it.wbsrch.com/search/" alt="Italiano" title="Italiano" />Italiano (IT)</a></li>
-<li><a href="https://lt.wbsrch.com/search/" alt="Lietuvių" title="Lietuvių" />Lietuvių (LT)</a></li> 
-<li><a href="https://lv.wbsrch.com/search/" alt="Latviešu" title="Latviešu" />Latviešu (LV)</a></li>
-<li><a href="https://nl.wbsrch.com/search/" alt="Nederlands" title="Nederlands" />Nederlands (NL)</a></li>
-<li><a href="https://no.wbsrch.com/search/" alt="Norsk" title="Norsk" />Norsk (NO)</a></li>
-<li><a href="https://pl.wbsrch.com/search/" alt="Polski" title="Polski" />Polski (PL)</a></li>
-<li><a href="https://pt.wbsrch.com/search/" alt="Português" title="Português" />Português (PT)</a></li>
-<li><a href="https://ro.wbsrch.com/search/" alt="Română" title="Română" />Română (RO)</a></li>
-<li><a href="https://rw.wbsrch.com/search/" alt="Kinyarwanda" title="Kinyarwanda" />Kinyarwanda (RW)</a></li> 
-<li><a href="https://sk.wbsrch.com/search/" alt="Slovenský" title="Slovenský" />Slovenský (SK)</a></li>
-<li><a href="https://sl.wbsrch.com/search/" alt="Slovenščina" title="Slovenščina" />Slovenščina (SL)</a></li>
-<li><a href="https://sn.wbsrch.com/search/" alt="chiShona" title="chiShona" />chiShona (SN)</a></li>
-<li><a href="https://so.wbsrch.com/search/" alt="Soomaali" title="Soomaali" />Soomaali (SO)</a></li>
-<li><a href="https://sv.wbsrch.com/search/" alt="Svenska" title="Svenska" />Svenska (SV)</a></li>
-<li><a href="https://sw.wbsrch.com/search/" alt="Kiswahili" title="Kiswahili" />Kiswahili (SW)</a></li>
-<li><a href="https://tr.wbsrch.com/search/" alt="Türkçe" title="Türkçe" />Türkçe (TR)</a></li> 
-<li><a href="https://wo.wbsrch.com/search/" alt="Wolof" title="Wolof" />Wolof (WO)</a></li>
-<li><a href="https://yo.wbsrch.com/search/" alt="Yorùbá" title="Yorùbá" />Yorùbá (YO)</a></li>
-</ul>
-</nav>
 {% ssi '/var/django/wbsrch/templates/copyright.inc' %}
 {% if searchterm %}
 <script>
 highlightText('{{ searchterm }}');
 </script>
 {% endif %}
+</div>
 </body>
 </html>

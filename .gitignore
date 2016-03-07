@@ -3,5 +3,3 @@
 .coverage
 coverage.txt
 log/*.log
-run/*
-alexaurls/*

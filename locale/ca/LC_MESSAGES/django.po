@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-24 22:45-0800\n"
+"POT-Creation-Date: 2016-03-06 10:03-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,27 +19,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: adminpanel.htm:4 article.htm:4 article2.htm:4 changelog.htm:4
-#: changelog.htm.py:22 criteria.htm:4 dmca.htm:4 dmcanotices.htm:4 faq.htm:4
-#: howto.htm:4 index.htm:3 indexstats.htm:4 mostlinked.htm:6 philosophy.htm:4
-#: policy.htm:4 policy.htm.py:16 popular.htm:6 search.htm:3 search2.htm:3
-#: terms.htm:4
+#: changelog.htm.py:22 contact.htm:5 criteria.htm:4 dmca.htm:4
+#: dmcanotices.htm:4 faq.htm:4 howto.htm:4 index.htm:3 indexstats.htm:4
+#: mostlinked.htm:6 philosophy.htm:4 policy.htm:4 policy.htm.py:16
+#: popular.htm:6 search.htm:3 terms.htm:4
 msgid "search"
 msgstr "cerca"
 
 #: adminpanel.htm:5 adminpanel.htm.py:9 adminpanel.htm.py:14 article.htm:5
 #: article.htm.py:9 article.htm.py:14 article2.htm:5 article2.htm.py:9
 #: article2.htm.py:14 changelog.htm:5 changelog.htm.py:9 changelog.htm.py:14
-#: criteria.htm:5 criteria.htm.py:9 criteria.htm.py:14 dmca.htm:5
-#: dmca.htm.py:14 dmcanotices.htm:5 dmcanotices.htm.py:14 domain.htm:3
-#: domain.htm.py:7 domain.htm.py:13 faq.htm:5 faq.htm.py:9 faq.htm.py:14
-#: howto.htm:5 howto.htm.py:9 howto.htm.py:14 index.htm:4 index.htm.py:17
-#: index.htm.py:32 index.htm.py:35 index.htm:40 ip.htm:3 ip.htm.py:7
+#: contact.htm:16 criteria.htm:5 criteria.htm.py:9 criteria.htm.py:14
+#: dmca.htm:5 dmca.htm.py:14 dmcanotices.htm:5 dmcanotices.htm.py:14
+#: domain.htm:3 domain.htm.py:7 domain.htm.py:13 faq.htm:5 faq.htm.py:9
+#: faq.htm.py:14 howto.htm:5 howto.htm.py:9 howto.htm.py:14 index.htm:4
+#: index.htm.py:17 index.htm.py:32 index.htm.py:41 ip.htm:3 ip.htm.py:7
 #: ip.htm.py:13 mostlinked.htm:17 philosophy.htm:5 philosophy.htm.py:9
 #: philosophy.htm.py:14 policy.htm:5 policy.htm.py:9 policy.htm.py:14
 #: popular.htm:17 privacy.htm:4 privacy.htm.py:11 search.htm:4 search.htm.py:8
-#: search.htm.py:15 search.htm.py:18 search.htm:23 search2.htm:4
-#: search2.htm.py:8 search2.htm.py:14 search2.htm.py:17 search2.htm:20
-#: terms.htm:5 terms.htm.py:9 terms.htm.py:14
+#: search.htm.py:15 search.htm.py:24 terms.htm:5 terms.htm.py:9
+#: terms.htm.py:14
 msgid "Search"
 msgstr "Cerca"
 
@@ -86,8 +85,70 @@ msgstr ""
 msgid "Articles"
 msgstr ""
 
+#: article.htm:30 contact.htm:26 indexstats.htm:24 mostlinked.htm:27
+#: popular.htm:33 privacy.htm:16
+msgid "Back to search form"
+msgstr ""
+
+#: contact.htm:5 index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6
+#: search.htm:3
+#, fuzzy
+#| msgid "search"
+msgid "search engine"
+msgstr "cerca"
+
+#: contact.htm:5 indexstats.htm:4 mostlinked.htm:6 popular.htm:6
+msgid "index"
+msgstr ""
+
+#: contact.htm:5 mostlinked.htm:6 popular.htm:6
+#, fuzzy
+#| msgid "search"
+msgid "searches"
+msgstr "cerca"
+
+#: contact.htm:5 mostlinked.htm:6
+msgid "most linked to domains"
+msgstr ""
+
+#: contact.htm:5 mostlinked.htm:6 popular.htm:6
+msgid "terms"
+msgstr ""
+
+#: contact.htm:5 index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6
+#: search.htm:3
+msgid "directory"
+msgstr "directorio"
+
+#: contact.htm:5 mostlinked.htm:6
+msgid "most links"
+msgstr ""
+
+#: contact.htm:5 mostlinked.htm:6 popular.htm:6
+msgid "frequent"
+msgstr ""
+
+#: contact.htm:6 contact.htm.py:10 contact.htm.py:15 indexstats.htm:5
+#: indexstats.htm.py:9 indexstats.htm.py:14 mostlinked.htm:7
+#: mostlinked.htm.py:11 mostlinked.htm.py:16 popular.htm:7 popular.htm.py:11
+#: popular.htm.py:16
+#, fuzzy
+#| msgid "Search"
+msgid "Web Search"
+msgstr "Cerca"
+
+#: contact.htm:6 index.htm:4 index.htm.py:17 index.htm.py:33 indexstats.htm:5
+#: mostlinked.htm:7 popular.htm:7 search.htm:4 search.htm.py:16
+msgid "The Independent Search Engine"
+msgstr "El Motor de Cerca Independiente"
+
+#: contact.htm:10 contact.htm.py:16 footer.inc:10
+#: footerwithoutcopyright.inc:11
+msgid "Contact Information"
+msgstr "Información de Contacto"
+
 #: domain.htm:7 domain.htm.py:13 domain.htm.py:24 domain.htm.py:33
-#: domain.htm:58 domain.htm.py:77 index.htm:51 ip.htm:29
+#: domain.htm:58 domain.htm.py:77 ip.htm:29
 msgid "Domain"
 msgstr "Domini"
 
@@ -95,16 +156,16 @@ msgstr "Domini"
 msgid "Info"
 msgstr "Informació"
 
-#: domain.htm:16 index.htm:48
+#: domain.htm:16 index.htm:53
 msgid "Check a Domain"
 msgstr "Comprovar un Domini"
 
-#: domain.htm:19
+#: domain.htm:19 index.htm:56
 msgid "Check Domain"
 msgstr "Comprovar Domini"
 
 #: domain.htm:24 domain.htm.py:58 domain.htm.py:62 domain.htm.py:77 ip.htm:24
-#: search.htm:8 search.htm.py:35 search2.htm:8 search2.htm.py:34
+#: search.htm:8 search.htm.py:37
 msgid "for"
 msgstr "por"
 
@@ -216,65 +277,33 @@ msgstr "Criterios de Clasificación"
 msgid "DMCA and Copyright Policy"
 msgstr ""
 
-#: footer.inc:10 footerwithoutcopyright.inc:11
-msgid "Contact Information"
-msgstr "Información de Contacto"
-
-#: index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6 search.htm:3
-#: search2.htm:3
+#: footer.inc:12 footerwithoutcopyright.inc:13
 #, fuzzy
-#| msgid "search"
-msgid "search engine"
-msgstr "cerca"
+#| msgid "Language"
+msgid "Other languages"
+msgstr "Idioma"
 
-#: index.htm:3 indexstats.htm:4 search.htm:3 search2.htm:3
+#: index.htm:3 indexstats.htm:4 search.htm:3
 msgid "independent"
 msgstr "independiente"
 
-#: index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6 search.htm:3
-#: search2.htm:3
-msgid "directory"
-msgstr "directorio"
-
-#: index.htm:3 search.htm:3 search2.htm:3
+#: index.htm:3 search.htm:3
 msgid "engine"
 msgstr "motor"
 
-#: index.htm:4 search.htm:4 search2.htm:4
+#: index.htm:4 search.htm:4
 msgid "home"
 msgstr ""
 
-#: index.htm:4 index.htm.py:17 index.htm.py:33 indexstats.htm:5
-#: mostlinked.htm:7 popular.htm:7 search.htm:4 search.htm.py:16 search2.htm:4
-#: search2.htm.py:15
-msgid "The Independent Search Engine"
-msgstr "El Motor de Cerca Independiente"
-
-#: index.htm:43
+#: index.htm:45
 msgid "Most Recently Indexed Search Terms"
 msgstr "Més Recentment Indexades Termes de Cerca"
-
-#: index.htm:51
-msgid "Check"
-msgstr "Inspeccionar"
-
-#: indexstats.htm:4 mostlinked.htm:6 popular.htm:6
-msgid "index"
-msgstr ""
 
 #: indexstats.htm:4
 #, fuzzy
 #| msgid "Index Statistics"
 msgid "statistics"
 msgstr "Estadísticas de Indice"
-
-#: indexstats.htm:5 indexstats.htm.py:9 indexstats.htm.py:14 mostlinked.htm:7
-#: mostlinked.htm.py:11 mostlinked.htm.py:16 popular.htm:7 popular.htm.py:11
-#: popular.htm.py:16
-#, fuzzy
-#| msgid "Search"
-msgid "Web Search"
-msgstr "Cerca"
 
 #: indexstats.htm:9 indexstats.htm.py:14
 msgid "Index"
@@ -330,10 +359,6 @@ msgstr "Domini Excluidos"
 msgid "Domains"
 msgstr "Domini"
 
-#: indexstats.htm:24 mostlinked.htm:27 popular.htm:33
-msgid "Back to search form"
-msgstr ""
-
 #: ip.htm:7 ip.htm.py:24
 msgid "IP"
 msgstr ""
@@ -354,28 +379,6 @@ msgstr "Inspeccionar"
 
 #: ip.htm:35
 msgid "Our crawler has not found any domains at that IP address"
-msgstr ""
-
-#: mostlinked.htm:6 popular.htm:6
-#, fuzzy
-#| msgid "search"
-msgid "searches"
-msgstr "cerca"
-
-#: mostlinked.htm:6
-msgid "most linked to domains"
-msgstr ""
-
-#: mostlinked.htm:6 popular.htm:6
-msgid "terms"
-msgstr ""
-
-#: mostlinked.htm:6
-msgid "most links"
-msgstr ""
-
-#: mostlinked.htm:6 popular.htm:6
-msgid "frequent"
 msgstr ""
 
 #: mostlinked.htm:11 mostlinked.htm.py:17
@@ -416,62 +419,62 @@ msgstr ""
 msgid "Current Month"
 msgstr ""
 
-#: search.htm:3 search2.htm:3
+#: search.htm:3
 #, fuzzy
 #| msgid "Results"
 msgid "results"
 msgstr "Resultats"
 
-#: search.htm:3 search2.htm:3
+#: search.htm:3
 msgid "internet"
 msgstr ""
 
-#: search.htm:8 search2.htm:8
+#: search.htm:8
 #, fuzzy
 msgid "Search Results"
 msgstr "Resultados de la Búsqueda"
 
-#: search.htm:30 search2.htm:29
+#: search.htm:32
 msgid "Did you mean to search for"
 msgstr ""
 
-#: search.htm:31 search2.htm:30
+#: search.htm:33
 msgid "Did you mean to look up domain details for"
 msgstr ""
 
-#: search.htm:32 search2.htm:31
+#: search.htm:34
 msgid "Did you mean to look up details for the IP address"
 msgstr ""
 
-#: search.htm:33 search2.htm:32
+#: search.htm:35
 msgid "This search contains a word in the "
 msgstr ""
 
-#: search.htm:33 search.htm.py:34 search2.htm:32 search2.htm.py:33
+#: search.htm:35 search.htm.py:36
 #, fuzzy
 #| msgid "Language"
 msgid "language"
 msgstr "Idioma"
 
-#: search.htm:34 search2.htm:33
+#: search.htm:36
 #, fuzzy
 #| msgid "search"
 msgid "This search mentions the "
 msgstr "cerca"
 
-#: search.htm:35 search2.htm:34
+#: search.htm:37
 msgid "Results"
 msgstr "Resultats"
 
-#: search.htm:35 search2.htm:34
+#: search.htm:37
 msgid "from domain"
 msgstr "de domini"
 
-#: search.htm:39 search2.htm:38
+#: search.htm:41
 msgid "No results were found for that search."
 msgstr "No se encontraron resultados para esa cerca."
 
-#: search.htm:40 search2.htm:39
+#: search.htm:42
 msgid ""
 "Our robots are very embarrassed by their failure to find what you were "
 "looking for. They'll be on the hunt for new content and should have better "
@@ -481,18 +484,20 @@ msgstr ""
 "que estabas buscando. Van a estar a la caza de nuevos contenidos y deberían "
 "tener un mejor resultados en un par de días."
 
-#: search.htm:47 search.htm.py:61 search.htm.py:72 search2.htm:46
-#: search2.htm.py:60 search2.htm.py:71
+#: search.htm:49 search.htm.py:63 search.htm.py:74
 msgid "No page description."
 msgstr "No descripció de la página."
 
-#: search.htm:85 search2.htm:84
+#: search.htm:87
 msgid ""
 "Note: The phrase you searched for is not fully indexed. We have queued it "
 "for indexing and will have better results available soon."
 msgstr ""
 "Nota: La frase que está buscando no está totalmente indexada. Hemos puesto "
 "en cola que para indexar y tendrán mejores resultados disponibles pronto."
+
+#~ msgid "Check"
+#~ msgstr "Inspeccionar"
 
 #~ msgid "Domain Info"
 #~ msgstr "Informació de Domini"

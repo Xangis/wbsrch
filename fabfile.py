@@ -35,7 +35,7 @@ def getdb():
 
 def getcode():
     local('mkdir -p ../bak')
-    local('tar czf ../bak/' + app_name + '_' + str(datetime.date.today()) + '.tgz . --exclude=*.log --exclude=*.out --exclude=.git --exclude=top-1m* --exclude=urls --exclude=env')
+    local('tar czf ../bak/' + app_name + '_' + str(datetime.date.today()) + '.tgz . --exclude=*.log --exclude=*.out --exclude=.git --exclude=top-1m* --exclude=urls --exclude=env --exclude=.git')
     with cd(code_dir + app_name + '/'):
         run('tar czf /tmp/django-' + app_name + '.tgz . --exclude=top-1m.csv --exclude=env --exclude=urls --exclude=crawler --exclude=log --exclude=test_logs --exclude=*.log --exclude=*.out --exclude=x* --exclude=*.txt --exclude=alexatmp')
     get('/tmp/django-' + app_name + '.tgz', './django-' + app_name + '.tgz')
