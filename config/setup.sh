@@ -19,6 +19,8 @@ sudo cp etc.environment /etc/environment
 echo Copying SSH certificates.
 sudo mkdir -p /etc/nginx/certs
 sudo cp wbsrch.crt wbsrch.key /etc/nginx/certs/
+echo Creating log directory
+mkdir -p /var/django/wbsrch/log
 echo Setting up cron job.
 sudo cp wbsrch_cron /etc/cron.d/wbsrch_cron
 echo Setting up virtualenv.
