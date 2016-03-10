@@ -24,3 +24,4 @@ langid==1.1.5
 wget==2.2
 pytz==2015.7
 djangorestframework==3.3.2
+GeoIP==1.3.2

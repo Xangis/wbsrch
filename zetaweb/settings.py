@@ -55,7 +55,7 @@ else:
             'NAME': 'zetaweb',                      # Or path to database file if using sqlite3.
             'USER': 'zetaweb',                      # Not used with sqlite3.
             'PASSWORD': 'd9irk0kfnv,er9kd2',                  # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'HOST': '216.151.17.11',                # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         },
         'urls': {
