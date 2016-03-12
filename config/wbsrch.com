@@ -21,13 +21,15 @@ server {
 	server_name *.wbsrch.com wbsrch.com;
         listen 443 ssl;
         root /var/django/wbsrch/templates;
-	access_log /var/django/wbsrch/log/access.log;
-	error_log /var/django/wbsrch/log/error.log;
+	access_log off;
+	error_log off;
         gzip on;
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
         gzip_vary on;
         gzip_proxied any;
+        client_max_body_size 2M;
 
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
         ssl_certificate /etc/nginx/certs/wbsrch.crt;
         ssl_certificate_key /etc/nginx/certs/wbsrch.key;
 
@@ -48,7 +50,7 @@ server {
         location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|pdf|zip|exe|wav|gz|bmp|tgz|gz|rar|txt|tar|rtf|otf|ttf|html)$ {
             root /var/django/wbsrch/templates/;
             access_log off;
-            expires 30d;
+            expires 14d;
         }
 
         location / {
