@@ -2432,6 +2432,11 @@ class SiteInfoEndingInEC(SiteInfo):
         proxy = True
         verbose_name_plural = 'Site Infos Ending With .ec'
 
+class SiteInfoEndingInEDU(SiteInfo):
+    class Meta:
+        proxy = True
+        verbose_name_plural = 'Site Infos Ending With .edu'
+
 class SiteInfoEndingInEE(SiteInfo):
     class Meta:
         proxy = True

@@ -1134,6 +1134,10 @@ class SiteInfoEndingInECAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ec')
 
+class SiteInfoEndingInEDUAdmin(SiteInfoAdmin):
+    def get_queryset(self, request):
+        return self.model.objects.filter(rooturl__endswith='.edu')
+
 class SiteInfoEndingInEEAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
     def get_queryset(self, request):
@@ -2203,6 +2207,7 @@ admin.site.register(SiteInfoEndingInDM, SiteInfoEndingInDMAdmin)
 admin.site.register(SiteInfoEndingInDO, SiteInfoEndingInDOAdmin)
 admin.site.register(SiteInfoEndingInDZ, SiteInfoEndingInDZAdmin)
 admin.site.register(SiteInfoEndingInEC, SiteInfoEndingInECAdmin)
+admin.site.register(SiteInfoEndingInEDU, SiteInfoEndingInEDUAdmin)
 admin.site.register(SiteInfoEndingInEE, SiteInfoEndingInEEAdmin)
 admin.site.register(SiteInfoEndingInEG, SiteInfoEndingInEGAdmin)
 admin.site.register(SiteInfoEndingInER, SiteInfoEndingInERAdmin)
