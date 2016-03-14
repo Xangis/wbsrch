@@ -2411,11 +2411,14 @@ def IsBotAgent(text):
     # Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
     if u'Googlebot' in text:
         return True
-    # Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6 - James BOT - WebCrawler http://cognitiveseo.com/bot.html
-    if u'James BOT' in text:
-        return True
     # Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)
     if u'bingbot' in text:
+        return True
+    # Mozilla/5.0 (compatible; Applebot/0.3; +http://www.apple.com/go/applebot)
+    if u'Applebot' in text:
+        return True
+    # Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6 - James BOT - WebCrawler http://cognitiveseo.com/bot.html
+    if u'James BOT' in text:
         return True
     # Mozilla/5.0 (compatible; MJ12bot/v1.4.5; http://www.majestic12.co.uk/bot.php?+)
     if u'MJ12bot' in text:
@@ -2728,6 +2731,12 @@ def IsBotAgent(text):
         return True
     # Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0 ; Claritybot)
     if u'Claritybot' in text:
+        return True
+    # istellabot/Nutch-1.10
+    if u'istellabot' in text:
+        return True
+    # WikiDo/1.1 (http://wikido.com; crawler@wikido.com)
+    if u'WikiDo' in text:
         return True
     return False
 
