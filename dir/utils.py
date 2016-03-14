@@ -962,14 +962,18 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             value -= 3
             if verbose:
                 rulematches.append('-3 points for .casa and not language es.')
-    elif item.rooturl.endswith(u'.club') or item.rooturl.endswith(u'.guru') or item.rooturl.endswith(u'.ninja') or item.rooturl.endswith(u'.kr') or item.rooturl.endswith(u'.jp') or item.rooturl.endswith(u'.az') or item.rooturl.endswith(u'.iq') or item.rooturl.endswith(u'.ir'):
+    elif item.rooturl.endswith(u'.club') or item.rooturl.endswith(u'.guru') or item.rooturl.endswith(u'.ninja') or item.rooturl.endswith(u'.kr') or item.rooturl.endswith(u'.jp') or item.rooturl.endswith(u'.az') or item.rooturl.endswith(u'.iq') or item.rooturl.endswith(u'.ir') or item.rooturl.endswith(u'.name'):
         value -= 4
         if verbose:
-            rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir')
-    elif item.rooturl.endswith(u'.me') or item.rooturl.endswith(u'.name') or item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith(u'.biz') or item.rooturl.endswith('.mobi') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or rooturl.endswith(u'.om') or rooturl.endswith(u'.kw') or rooturl.endswith(u'.th') or rooturl.endswith(u'.bn') or rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae'):
+            rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir/.name')
+    elif item.rooturl.endswith(u'.me') or item.rooturl.endswith(u'.biz'):
+        value -= 3
+        if verbose:
+            rulematches.append('-3 points for domain .me/.biz')
+    elif item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith('.mobi') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or rooturl.endswith(u'.om') or rooturl.endswith(u'.kw') or rooturl.endswith(u'.th') or rooturl.endswith(u'.bn') or rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae'):
         value -= 2
         if verbose:
-            rulematches.append('-2 points for domain .name/.me/.ng/.id/.ph/.my/.mobi/.ng/.tw/.sg/.in/.lk/.ae/.ws/.om/.kw/.th/.bn/.am/.ge/.mn/.jo/.by/.la/.bt/.ae')
+            rulematches.append('-2 points for domain .in/.sg/.tw/.mobi/.biz/.ng/.my/.id/.ph/.tw/.sg/.in/.lk/.ae/.ws/.om/.kw/.th/.bn/.am/.ge/.mn/.jo/.by/.la/.bt/.ae')
     elif item.rooturl.endswith(u'.tv') or item.rooturl.endswith(u'.vi') or item.rooturl.endswith(u'.vg') or item.rooturl.endswith(u'.sc') or item.rooturl.endswith(u'.vu') or item.rooturl.endswith(u'.to') or item.rooturl.endswith(u'.tl') or item.rooturl.endswith(u'.nr') or item.rooturl.endswith(u'.sh') or item.rooturl.endswith(u'.pn') or item.rooturl.endswith(u'.tk') or item.rooturl.endswith(u'.tc'):
         value -= 1
         if verbose:
