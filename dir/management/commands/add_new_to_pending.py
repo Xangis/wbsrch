@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
 from optparse import make_option
 from dir.models import PendingIndex, IndexTerm, DomainInfo
-from dir.utils import AddPendingTerm, GetIndexModelFromLanguage
+from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
 import codecs
 
 class Command(BaseCommand):
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     """
     option_list = BaseCommand.option_list + (
         make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for pending indexes (default=en).'),
-        make_option('-d', '--domains', default=False, action='store_true', dest='domains', help='Add new domains to pending instead (default=no).'),
+        make_option('-d', '--domains', default=False, action='store_true', dest='domains', help='Process file as a domain list and print the domains that need to be crawled. (default=no).'),
         make_option('-n', '--noindividual', default=False, action='store_true', dest='noindividual', help='Make sure individual words of a phrase are not indexed (default=False)'),
         make_option('-m', '--maxwords', default=5, action='store', type='int', dest='maxwords', help='Max number of terms to index. (default=5)'),
         make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load term list from specified file.'),
@@ -32,7 +32,7 @@ class Command(BaseCommand):
         numdone = 0
         numadded = 0
         for line in reader.readlines():
-             line = line.strip().lower()
+             line = GetRootUrl(line.strip().lower())
              # Do not queue anything less than 2 characters long.
              if len(line) < 2:
                  continue
