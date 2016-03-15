@@ -20,7 +20,7 @@
 <li><a href="https://de.wbsrch.com/" alt="Deutsch" title="Deutsch">Deutsch (DE)</a></li>
 <li><a href="https://el.wbsrch.com/" alt="ελληνικά" title="ελληνικά">ελληνικά (EL)</a></li>
 <li><a href="https://es.wbsrch.com/" alt="España" title="España">España (ES)</a></li>
-<li><a href="https://et.wbsrch.com/" alt="Eesti" title="Eesti">Eestu (ET)</a></li>
+<li><a href="https://et.wbsrch.com/" alt="Eesti" title="Eesti">Eesti (ET)</a></li>
 <li><a href="https://fi.wbsrch.com/" alt="Suomalais" title="Suomalais">Suomolais (FI)</a></li>
 <li><a href="https://fr.wbsrch.com/" alt="Français" title="Français">Français (FR)</a></li>
 <li><a href="https://ha.wbsrch.com/" alt="Hausa" title="Hausa">Hausa (HA)</a></li> 
