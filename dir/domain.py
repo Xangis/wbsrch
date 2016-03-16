@@ -38,3 +38,14 @@ def GetDomainAge(domain):
         expiration_date = dateutil.parser.parse(expiration_date)
     print 'Domain "{0}" Created: {1}, Expires: {2}'.format(domain, creation_date, expiration_date)
     return (creation_date, expiration_date)
+
+def GetDomainInfo(domain):
+    """
+    Gets the full set of data for a domain.
+    """
+    try:
+        info = whois.whois(domain)
+        return info
+    except whois.parser.PywhoisError, e:
+        print 'PywhoisError (setting creation and expiration to None): {0}'.format(e)
+        return None

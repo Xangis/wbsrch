@@ -590,7 +590,8 @@ class DomainInfo(models.Model):
     is_unblockable = models.BooleanField(blank=True, default=False, help_text='Is this domain unblockable, even by an idiot?')
     domain_created = models.DateTimeField(null=True, blank=True)
     domain_expires = models.DateTimeField(null=True, blank=True)
-    expiration_last_updated = models.DateTimeField(null=True, blank=True)
+    domain_updated = models.DateTimeField(null=True, blank=True)
+    whois_last_updated = models.DateTimeField(null=True, blank=True)
     robots_ip = models.CharField(max_length=16, null=True, blank=True, db_index=True, help_text='The IP address of the server we retrieved (or tried to retrieve) the robots.txt from.')
     robots_txt = models.TextField(null=True, blank=True)
     robots_last_updated = models.DateTimeField(null=True, blank=True)
@@ -605,6 +606,14 @@ class DomainInfo(models.Model):
     num_urls_last_updated = models.DateField(null=True, blank=True)
     num_keywords_ranked = models.IntegerField(null=True, blank=True)
     num_keywords_last_updated = models.DateField(null=True, blank=True)
+    whois_name = models.CharField(max_length=60, null=True, blank=True)
+    whois_city = models.CharField(max_length=40, null=True, blank=True)
+    whois_country = models.CharField(max_length=3, null=True, blank=True)
+    whois_state = models.CharField(max_length=10, null=True, blank=True)
+    whois_address = models.CharField(max_length=80, null=True, blank=True)
+    whois_org = models.CharField(max_length=60, null=True, blank=True)
+    whois_registrar = models.CharField(max_length=60, null=True, blank=True)
+    whois_zipcode = models.CharField(max_length=6, null=True, blank=True)
 
     def __unicode__(self):
         return self.url

@@ -2345,25 +2345,6 @@ def PornBlock(item):
         site.save()
     RequeueRankedKeywordsForDomain(parsedurl.netloc)
 
-def GetDomainAge(domain):
-    """
-    Gets the creation and expiration date for a domain as a tuple.
-    """
-    info = whois.whois(domain)
-    try:
-        expiration_date = info.expiration_date
-    except:
-        print 'GetDomainAge: Cannot get expiration date. Returned ""'.format(info.expiration_date)
-        expiration_date = None
-    try:
-        creation_date = info.creation_date
-    except:
-        print 'GetDomainAge: Cannot get creation date. Returned ""'.format(info.creation_date)
-        creation_date = None
-    print 'Domain "{0}" Created: {1}, Expires: {2}'.format(domain, creation_date, expiration_date)
-    return (creation_date, expiration_date)
-
-
 def BannedSearchString(text):
     #print 'Checking {0} for banned search string.'.format(text)
     if text.endswith(u'a=0') or text.endswith(u'A=0') or u'11111111' in text or u'999999' in text or u'sleep(3)' in text or u'result: ' in text or u'concat((select' in text or u'unhex(hex(' in text or u'name_const(char(' in text or u'rk=0' in text or u'1=1' in text or u'1=2' in text:
