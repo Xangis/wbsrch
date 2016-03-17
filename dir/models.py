@@ -614,6 +614,8 @@ class DomainInfo(models.Model):
     whois_org = models.CharField(max_length=60, null=True, blank=True)
     whois_registrar = models.CharField(max_length=60, null=True, blank=True)
     whois_zipcode = models.CharField(max_length=6, null=True, blank=True)
+    whois_nameservers = models.TextField(null=True, blank=True)
+    whois_emails = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.url

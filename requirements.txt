@@ -26,3 +26,5 @@ pytz==2015.7
 djangorestframework==3.3.2
 # Requires libgeoip-dev.
 GeoIP==1.3.2
+future==0.15.2
+PyYAML==3.11
