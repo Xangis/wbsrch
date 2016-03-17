@@ -96,10 +96,18 @@ class Command(BaseCommand):
                     domain.whois_zipcode = info['zipcode'][0:6]
                 except TypeError:
                     pass
+                try:
+                    domain.whois_nameservers = info['name_servers']
+                except KeyError:
+                    pass
+                try:
+                    domain.whois_emails = info['emails']
+                except KeyError:
+                    pass
             domain.whois_last_updated = timezone.now()
             if detailed:
-                print 'Created: {0}, Expires: {1}, Update Date: {2}, Name: {3}, City: {4}, Country: {5}, State: {6}, Address: {7}, Org: {8}, Registrar: {9}, Zipcode: {10}'.format(
-                    domain.domain_created, domain.domain_expires, domain.domain_updated, domain.whois_name, domain.whois_city, domain.whois_country, domain.whois_state, domain.whois_address, domain.whois_org, domain.whois_registrar, domain.whois_zipcode)
+                print 'Created: {0}, Expires: {1}, Update Date: {2}, Name: {3}, City: {4}, Country: {5}, State: {6}, Address: {7}, Org: {8}, Registrar: {9}, Zipcode: {10}, Nameservers: {11}, EMails: {12}'.format(
+                    domain.domain_created, domain.domain_expires, domain.domain_updated, domain.whois_name, domain.whois_city, domain.whois_country, domain.whois_state, domain.whois_address, domain.whois_org, domain.whois_registrar, domain.whois_zipcode, domain.whois_nameservers, domain.whois_emails)
             domain.save()
             #except Exception, e:
             #    print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
