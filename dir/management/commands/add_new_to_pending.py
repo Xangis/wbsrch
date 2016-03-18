@@ -31,7 +31,7 @@ class Command(BaseCommand):
         reader = codecs.getreader('utf8')(f)
         numdone = 0
         numadded = 0
-        for line in reader.readlines():
+        for line in reader:
              line = GetRootUrl(line.strip().lower())
              # Do not queue anything less than 2 characters long.
              if len(line) < 2:
