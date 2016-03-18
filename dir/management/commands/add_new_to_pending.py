@@ -26,7 +26,7 @@ class Command(BaseCommand):
         domains = options.get('domains', False)
         noindividual = options.get('noindividual', None)
         term_model = GetIndexModelFromLanguage(language)
-        print 'Using file {0} with {1} max words and language {2}.'.format(file, maxwords, language)
+        print 'Using file {0} with {1} max words and language {2}.'.format(filename, maxwords, language)
         f = open(filename, 'rb')
         reader = codecs.getreader('utf8')(f)
         numdone = 0
