@@ -249,7 +249,7 @@ def domain(request):
         site_model = GetSiteInfoModelFromLanguage(language_code)
         ranking_model = GetKeywordRankingModelFromLanguage(language_code)
         # Normalize URL
-        if domain.startswith(u'http'):
+        if domain.startswith(u'http:') or domain.startswith(u'https:'):
             parsedurl = urlparse(domain)
             domain = parsedurl.geturl()
             rawdomain = parsedurl.netloc

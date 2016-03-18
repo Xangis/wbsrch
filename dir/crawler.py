@@ -168,7 +168,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
             frame = PageIFrame()
             frame.rooturl_source = siteinfo.rooturl
             frame.url_source = siteinfo.url
-            if src.startswith(u'http'):
+            if src.startswith(u'http:') or src.startswith(u'https:'):
                 frame.url_destination = src[0:2048]
                 frame.rooturl_destination = GetRootUrl(src)
             elif src.startswith(u'//'):
@@ -264,7 +264,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
             pjs = PageJavaScript()
             pjs.rooturl_source = siteinfo.rooturl
             pjs.url_source = siteinfo.url
-            if src.startswith(u'http'):
+            if src.startswith(u'http:') or src.startswith(u'https:'):
                 pjs.rooturl_destination = GetRootUrl(src)
                 pjs.url_destination = src[0:2048]
             elif src.startswith(u'//'):
@@ -536,7 +536,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
         if hr:
             if IsHtmlUrl(hr):
                 #prehr = hr
-                if realurl.startswith(u'https'):
+                if realurl.startswith(u'https:'):
                     hr = MakeRealUrl(hr, rooturl, secure=True)
                 else:
                     hr = MakeRealUrl(hr, rooturl)

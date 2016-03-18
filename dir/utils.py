@@ -257,7 +257,7 @@ def GetAutoCompleteModelFromLanguage(language):
         return AutoComplete
 
 def GetRootUrl(url, secure=False):
-    if not url.startswith(u'http'):
+    if not url.startswith(u'http:') and not url.startswith(u'https:'):
         url = u'http://' + url
     parsed_uri = urlparse.urlparse( url )
     loc = parsed_uri.netloc
@@ -326,7 +326,7 @@ def IsIPAddress(url):
 
 # Like GetRootUrl, but also drops subdomains.
 def GetRootDomain(url):
-    if not url.startswith(u'http'):
+    if not url.startswith(u'http:') and not url.startswith(u'https:'):
         url = u'http://' + url
     parsed_uri = urlparse.urlparse( url )
     loc = parsed_uri.netloc
@@ -1544,9 +1544,15 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
             #    newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
             #    print u'Was: {0}, Now: {1}'.format(url, newurl)
         else:
-            newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
+            if parsedurl.scheme:
+                newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
+            else:
+                newurl = 'http://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
     else:
-        newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
+        if parsedurl.scheme:
+            newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
+        else:
+            newurl = 'http://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
     return newurl
 
 def CanCrawlUrl(url, verbose=False):

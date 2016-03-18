@@ -23,7 +23,7 @@ def get_token(user):
 
 def NormalizeDomain(domain):
     # Normalize URL
-    if domain.startswith(u'http'):
+    if not domain.startswith(u'http:') or domain.startswith(u'https:'):
         parsedurl = urlparse(domain)
         parseddomain = parsedurl.geturl()
         domain = parsedurl.netloc
