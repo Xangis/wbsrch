@@ -21,11 +21,11 @@
 import os
 import sys
 import codecs
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 def GetRootUrl(url, secure=False):
-    if not url.startswith(u'http://') and not url.startswith(u'https://'):
-        url = u'http://' + url
+    if not url.startswith('http://') and not url.startswith('https://'):
+        url = 'http://' + url
     parsed_uri = urlparse( url )
     loc = parsed_uri.netloc
     loc = loc.lower()
