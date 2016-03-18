@@ -93,7 +93,7 @@ class Command(BaseCommand):
                 except TypeError:
                     pass
                 try:
-                    domain.whois_zipcode = info['zipcode'][0:6]
+                    domain.whois_zipcode = info['zipcode'][0:8]
                 except TypeError:
                     pass
                 try:
