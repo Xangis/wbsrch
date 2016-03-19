@@ -109,8 +109,8 @@ height: 12px;
 }
 
 .logo {
-margin-top: -18px;
-width: 62px;
+margin-top: -16px;
+width: 56px;
 }
 
 table.inline {
