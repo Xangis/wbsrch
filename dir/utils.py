@@ -424,17 +424,17 @@ def GetLinkRank(domains_linking_in):
     """
     bonus = 0
     if domains_linking_in >= 1000000:
-        bonus += 8.0 + (0.0000001333 * (domains_linking_in-1000000))
+        bonus += 8.0 + (0.000001 * (domains_linking_in-1000000))
     elif domains_linking_in >= 250000:
-        bonus += 7.0 + (0.0000001 * (domains_linking_in-250000))
+        bonus += 7.0 + (0.000001333 * (domains_linking_in-250000))
     elif domains_linking_in >= 33333:
         bonus += 6.0 + (0.0000046 * (domains_linking_in-33333))
     elif domains_linking_in >= 4000:
         bonus += 5.0 + (0.000034 * (domains_linking_in-4000))
     elif domains_linking_in >= 500:
-        bonus += 4.0 + (0.00227 * (domains_linking_in-400))
+        bonus += 4.0 + (0.000278 * (domains_linking_in-400))
     elif domains_linking_in >= 60:
-        bonus += 3.0 + (0.0192 * (domains_linking_in-60))
+        bonus += 3.0 + (0.00294 * (domains_linking_in-60))
     elif domains_linking_in >= 8:
         bonus += 2.0 + (0.0192 * (domains_linking_in-8))
     elif domains_linking_in >= 1:
