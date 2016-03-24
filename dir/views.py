@@ -602,6 +602,20 @@ def adminpanel(request):
     return render_to_response('adminpanel.htm', { 'result': result, 'message': message })
 
 @permission_required('is_superuser')
+def adminpanel_movesite(request):
+    domain = request.POST.get('domain', None)
+    lang = request.POST.get('lang', None)
+    if not domain or not lang:
+        raise Http404
+    pages = SiteInfo.objects.filter(rooturl=domain)
+    numpages = 0
+    for item in pages:
+        MoveSiteTo(item, lang)
+        numpages = numpages + 1
+    message = 'Moved {0} pages to {1} for domain {2}'.format(numpages, lang, domain)
+    return render_to_response('adminpanel.htm', { 'message': message }, context_instance=RequestContext(request))
+
+@permission_required('is_superuser')
 def adminpanel_blocksite(request):
     domain = None
     counts = []
