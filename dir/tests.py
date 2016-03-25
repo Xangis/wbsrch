@@ -24,6 +24,7 @@ from utils import *
 from crawler import *
 from indexer import *
 from language import *
+from domain import *
 from zetaweb.settings import *
 from datetime import datetime, date, timedelta
 

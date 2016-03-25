@@ -171,7 +171,7 @@ def dmca_notices(request):
     if language_code == 'en-us':
         language_code = 'en'
     notices = DMCANotice.objects.all()
-    return render_to_response('dmcanotices.htm', {'language_code': language_code, 'notices': notices})   
+    return render_to_response('dmcanotices.htm', {'language_code': language_code, 'notices': notices})
 
 def howto(request):
     language_code = request.LANGUAGE_CODE
@@ -195,7 +195,7 @@ def changelog(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
-    cached = False    
+    cached = False
     changelog = cache.get('changelog')
     if not changelog:
         changelog = list(ChangelogItem.objects.filter(date_added__lte=timezone.now()).order_by('-date_added'))
@@ -314,7 +314,7 @@ def domain(request):
                 searchlog.ip_country = country
         searchlog.save()
 
-        return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain, 
+        return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
             'num_records': num_records, 'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
             'link': link, 'parent': parent },
             context_instance=RequestContext(request))
@@ -368,7 +368,7 @@ def search(request):
         result.allfromdomain = request.POST.get('domain', False)
         if request.POST.get('s') == 'fp':
             return HttpResponsePermanentRedirect(u'/search/?q={0}'.format(result.searchterm))
-    elif request.method == 'GET': 
+    elif request.method == 'GET':
         result.searchterm = request.GET.get('q', None)
         result.allfromdomain = request.GET.get('domain', False)
         if request.GET.get('s') == 'fp':
@@ -558,7 +558,7 @@ def search(request):
     if result.result_count > 200:
         result.search_results = result.search_results[0:200]
         result.result_count = 200
-    return render_to_response('search.htm', 
+    return render_to_response('search.htm',
         { 'search_results': result.search_results, 'searchterm': result.searchterm,
           'result_count': result.result_count, 'language_code': result.language_code, 'indexed': result.indexed,
           'allfromdomain': result.allfromdomain, 'actively_blocked': result.actively_blocked, 'show_sd_ad': result.show_sd_ad,
@@ -600,6 +600,20 @@ def adminpanel(request):
             options['seconds'] = 0
             result = Crawler(options)
     return render_to_response('adminpanel.htm', { 'result': result, 'message': message })
+
+@permission_required('is_superuser')
+def adminpanel_movesite(request):
+    domain = request.POST.get('domain', None)
+    lang = request.POST.get('lang', None)
+    if not domain or not lang:
+        raise Http404
+    pages = SiteInfo.objects.filter(rooturl=domain)
+    numpages = 0
+    for item in pages:
+        MoveSiteTo(item, lang)
+        numpages = numpages + 1
+    message = 'Moved {0} pages to {1} for domain {2}'.format(numpages, lang, domain)
+    return render_to_response('adminpanel.htm', { 'message': message }, context_instance=RequestContext(request))
 
 @permission_required('is_superuser')
 def adminpanel_blocksite(request):
@@ -725,6 +739,44 @@ def adminpanel_urlrange(request):
         context_instance=RequestContext(request))
 
 @permission_required('is_superuser')
+def adminpanel_siteinfoendingin(request):
+    suffix = request.GET.get('suffix', None)
+    language_code = request.GET.get('language', u'en')
+
+    result = SearchResult(language_code)
+
+    if suffix:
+        start = timezone.now()
+        site_model = get_model('dir', 'SiteInfoEndingIn' + suffix.upper())
+        if not site_model:
+            return HttpResponse(status=404)
+        #term_model = GetIndexModelFromLanguage(language_code)
+        term_model = GetIndexModelFromLanguage('en')
+        term = term_model()
+        term.keywords = 'Site Infos Ending In {0}'.format(suffix)
+        result.searchterm = term.keywords
+        term.search_results = '{}'
+        term.num_results = 0
+        results = []
+        tmp_results = site_model.objects.all()
+        for item_result in tmp_results:
+            results.append([item_result.id, (0-item_result.id)])
+        term.num_results = len(results)
+        term.page_rankings = str(results)
+        if term.num_results > 0:
+            end_delta = timezone.now() - start
+            term.index_time = end_delta.total_seconds()
+            term = JsonifyIndexTerm(term, language_code, save=False, limit=5000)
+        result = MergeSearchResult(result, term)
+    # This renders the search results in the search results template.
+    return render_to_response('search.htm', { 'search_results': result.search_results, 'searchterm': result.searchterm,
+        'result_count': result.result_count, 'language_code': result.language_code, 'indexed': False, 'allfromdomain': False,
+        'actively_blocked': False, 'show_sd_ad': False, 'show_network_ad': False, 'superuser': True },
+        context_instance=RequestContext(request))
+    # This renders the search results in the admin panel template.
+    #return render_to_response('adminpanel.htm', { 'urls': tmp_results, 'lang': language_code })
+
+@permission_required('is_superuser')
 def adminpanel_domainsafterz(request):
     language_code = request.GET.get('language', u'en')
     result = SearchResult(language_code)
@@ -775,7 +827,7 @@ def adminpanel_pagescore(request):
         reasons = CalculateTermValue(page, keyword, lang=language_code, verbose=True)
         elapsed = (start - timezone.now()).total_seconds()
 
-    return render_to_response('adminpanel.htm', 
+    return render_to_response('adminpanel.htm',
         { 'reasons': reasons, 'keyword': keyword, 'myurl': url, 'pagescore': True, 'calctime': elapsed, 'message': message },
         context_instance=RequestContext(request))
 
@@ -825,7 +877,7 @@ def adminpanel_searchlogs(request):
     else:
         logs = logs[0:200]
 
-    return render_to_response('adminpanel.htm', 
+    return render_to_response('adminpanel.htm',
         { 'message': 'Showing recent non-bot {0} logs'.format(lang), 'logs': logs, 'lang': lang, 'twoormore': twoormore, 'zeroresults': zeroresults,
           'threeormore': threeormore, 'bingsearches': bingsearches, 'googlesearches': googlesearches },
         context_instance=RequestContext(request))
