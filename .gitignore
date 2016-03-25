@@ -3,3 +3,7 @@
 .coverage
 coverage.txt
 log/*.log
+urls.txt
+index.txt
+indexes.txt
+domains.txt
