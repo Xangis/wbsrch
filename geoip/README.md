@@ -8,3 +8,4 @@ GeoIPASNum.dat
 GeoIP.dat
 GeoLiteCity.dat
 
+You can get these files by running geoip_update.sh in the parent directory.
