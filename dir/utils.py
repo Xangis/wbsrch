@@ -278,21 +278,24 @@ def MakeRealUrl(url, domain=None, secure=False):
     blocked or processed further.
     """
     if secure:
-        scheme = u'https://'
+        scheme = u'https:'
     else:
-        scheme = u'http://'
+        scheme = u'http:'
     oldurl = url
     if not IsHtmlUrl(url):
         return url
-    if url.startswith(u'//'):
+    if url.startswith(u'//') or url.startswith('://'):
+        # If there's a colon, remove it and process as if it wasn't there. We'll add it later.
+        if url.startswith('://'):
+            url = url[1:]
         pieces = url[2:].split(u'/')
         if len(pieces) > 0:
-            if domain and domain in pieces[0]:
+            if domain and '.' not in pieces[0]:
                 url = scheme + url
-            elif domain and '.' not in pieces[0]:
+            elif domain and domain not in pieces[0]:
                 url = scheme + domain + url[1:]
             # This doesn't handle all well-known extensions. TODO: Make it so.
-            elif domain and (pieces[0].endswith(u'.htm') or pieces[0].endswith(u'.html')):
+            elif domain and (pieces[0].endswith(u'.htm') or pieces[0].endswith(u'.html') or pieces[0].endswith(u'.php')):
                 url = scheme + domain + url[1:]
             else:
                 url = scheme + url
@@ -311,7 +314,7 @@ def MakeRealUrl(url, domain=None, secure=False):
     elif domain and not u'/' in url:
         url = scheme + domain + '/' + url
     elif not url.startswith(u'http'):
-        url = scheme + url
+        url = scheme + '//' + url
     url = NormalizeUrl(url, pre_crawl_replacement=True, secure=secure)
     return url
 
@@ -1956,7 +1959,7 @@ def AddPendingTerm(item, language_code='en', reason=None):
     except ObjectDoesNotExist:
         new_index = pending_model()
         new_index.keywords = item
-        if len(reason) > 239:
+        if reason and len(reason) > 239:
             reason = reason[0:240]
         new_index.reason = reason
         # This can happen if two searches happen at once and there's a race condition.
