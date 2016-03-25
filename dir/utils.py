@@ -423,22 +423,26 @@ def GetLinkRank(domains_linking_in):
     Returns a link rank value based on the number of domains linking in.
     """
     bonus = 0
-    if domains_linking_in >= 1000000:
-        bonus += 8.0 + (0.000001 * (domains_linking_in-1000000))
-    elif domains_linking_in >= 250000:
-        bonus += 7.0 + (0.000001333 * (domains_linking_in-250000))
-    elif domains_linking_in >= 33333:
-        bonus += 6.0 + (0.0000046 * (domains_linking_in-33333))
-    elif domains_linking_in >= 4000:
-        bonus += 5.0 + (0.000034 * (domains_linking_in-4000))
-    elif domains_linking_in >= 500:
-        bonus += 4.0 + (0.000278 * (domains_linking_in-400))
-    elif domains_linking_in >= 60:
-        bonus += 3.0 + (0.00294 * (domains_linking_in-60))
-    elif domains_linking_in >= 8:
-        bonus += 2.0 + (0.0192 * (domains_linking_in-8))
+    if domains_linking_in >= 1953125:
+        bonus += 10.0 + (0.000000128 * (domains_linking_in-1953125))
+    elif domains_linking_in >= 390625:
+        bonus += 9.0 + (0.00000064 * (domains_linking_in-390625))
+    elif domains_linking_in >= 78125:
+        bonus += 8.0 + (0.0000032 * (domains_linking_in-78125))
+    elif domains_linking_in >= 15625:
+        bonus += 7.0 + (0.000016 * (domains_linking_in-15625))
+    elif domains_linking_in >= 3125:
+        bonus += 6.0 + (0.00008 * (domains_linking_in-3125))
+    elif domains_linking_in >= 625:
+        bonus += 5.0 + (0.0004 * (domains_linking_in-625))
+    elif domains_linking_in >= 125:
+        bonus += 4.0 + (0.002 * (domains_linking_in-125))
+    elif domains_linking_in >= 25:
+        bonus += 3.0 + (0.01 * (domains_linking_in-25))
+    elif domains_linking_in >= 5:
+        bonus += 2.0 + (0.05 * (domains_linking_in-5))
     elif domains_linking_in >= 1:
-        bonus += 1.0 + (0.125 * (domains_linking_in-1))
+        bonus += 1.0 + (0.25 * (domains_linking_in-1))
     return bonus
 
 def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=False):
