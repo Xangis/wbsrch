@@ -249,7 +249,7 @@ def domain(request):
         site_model = GetSiteInfoModelFromLanguage(language_code)
         ranking_model = GetKeywordRankingModelFromLanguage(language_code)
         # Normalize URL
-        if domain.startswith(u'http'):
+        if domain.startswith(u'http:') or domain.startswith(u'https:'):
             parsedurl = urlparse(domain)
             domain = parsedurl.geturl()
             rawdomain = parsedurl.netloc
@@ -600,6 +600,20 @@ def adminpanel(request):
             options['seconds'] = 0
             result = Crawler(options)
     return render_to_response('adminpanel.htm', { 'result': result, 'message': message })
+
+@permission_required('is_superuser')
+def adminpanel_movesite(request):
+    domain = request.POST.get('domain', None)
+    lang = request.POST.get('lang', None)
+    if not domain or not lang:
+        raise Http404
+    pages = SiteInfo.objects.filter(rooturl=domain)
+    numpages = 0
+    for item in pages:
+        MoveSiteTo(item, lang)
+        numpages = numpages + 1
+    message = 'Moved {0} pages to {1} for domain {2}'.format(numpages, lang, domain)
+    return render_to_response('adminpanel.htm', { 'message': message }, context_instance=RequestContext(request))
 
 @permission_required('is_superuser')
 def adminpanel_blocksite(request):

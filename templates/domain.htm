@@ -29,6 +29,12 @@
 {% if domains %}
 {% for domain in domains %}
 {% if superuser %}<p><a href="/adm/dir/domaininfo/{{ domain.id }}/">View this domain in the admin.</a><br/>
+<p><form method="post" action="/adminpanel/movesite/">Move this domain to language</a> 
+<input type="hidden" name="domain" value="{{ domain.url }}">
+<input id="langbox" class="shortbox" type="text" name="lang" maxlength="3" />
+<input type="submit" value="{% trans "Move" %}">
+{% csrf_token %}</form>
+<br/>
 <a href="/adminpanel/?crawlurl={{ domain.url }}&randomfromdomain=1">Crawl a random URL from this domain.</a></p>{% endif %}
 <p>{% trans "Domain" %}: {% if link %}<a href="http://{{ domain.url }}" rel="nofollow">{{ domain.url }}</a>{% else %}{{ domain.url }}</p>{% endif %}
 {% if domain.language_association %}<p>{% trans "Language" %}: {{ domain.language_association }} ({{ domain.language_association|language_name_local }})</p>{% endif %}

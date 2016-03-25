@@ -23,7 +23,7 @@ def get_token(user):
 
 def NormalizeDomain(domain):
     # Normalize URL
-    if domain.startswith(u'http'):
+    if domain.startswith(u'http:') or domain.startswith(u'https:'):
         parsedurl = urlparse(domain)
         parseddomain = parsedurl.geturl()
         domain = parsedurl.netloc
@@ -50,18 +50,18 @@ def ip_to_country(request):
 @api_view(['GET'])
 def domain_link_rank(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse({'error': 'Not authorized.'}, status=403)
     else:
         print 'domain_link_rank called by {0}'.format(request.user)
     domain = request.GET.get('domain', None)
     if not domain:
-        return Response(status=404)
+        return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
     print 'Domain: {0}'.format(domain)
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
     except ObjectDoesNotExist:
-        return Response(status=404)
+        return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
     is_excluded = False
     try:
         excluded = BlockedSite.objects.get(url=domain)
@@ -71,6 +71,8 @@ def domain_link_rank(request):
     link_rank = GetLinkRank(domaininfo.domains_linking_in)
     # Round to the nearest integer because we don't want to give too much precision away.
     link_rank = int(round(link_rank))
+    if link_rank > 8:
+        link_rank = 8
     # TODO: Include domains_linking_in_last_updated in response.
     return Response({'domain': domain, 'wbrank': link_rank, 'excluded': is_excluded}, status=200)
 

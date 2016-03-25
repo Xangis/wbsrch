@@ -26,12 +26,12 @@ class Command(BaseCommand):
         domains = options.get('domains', False)
         noindividual = options.get('noindividual', None)
         term_model = GetIndexModelFromLanguage(language)
-        print 'Using file {0} with {1} max words and language {2}.'.format(file, maxwords, language)
+        print 'Using file {0} with {1} max words and language {2}.'.format(filename, maxwords, language)
         f = open(filename, 'rb')
         reader = codecs.getreader('utf8')(f)
         numdone = 0
         numadded = 0
-        for line in reader.readlines():
+        for line in reader:
              line = GetRootUrl(line.strip().lower())
              # Do not queue anything less than 2 characters long.
              if len(line) < 2:

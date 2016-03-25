@@ -257,7 +257,7 @@ def GetAutoCompleteModelFromLanguage(language):
         return AutoComplete
 
 def GetRootUrl(url, secure=False):
-    if not url.startswith(u'http'):
+    if not url.startswith(u'http:') and not url.startswith(u'https:'):
         url = u'http://' + url
     parsed_uri = urlparse.urlparse( url )
     loc = parsed_uri.netloc
@@ -326,7 +326,7 @@ def IsIPAddress(url):
 
 # Like GetRootUrl, but also drops subdomains.
 def GetRootDomain(url):
-    if not url.startswith(u'http'):
+    if not url.startswith(u'http:') and not url.startswith(u'https:'):
         url = u'http://' + url
     parsed_uri = urlparse.urlparse( url )
     loc = parsed_uri.netloc
@@ -424,17 +424,17 @@ def GetLinkRank(domains_linking_in):
     """
     bonus = 0
     if domains_linking_in >= 1000000:
-        bonus += 8.0 + (0.0000001333 * (domains_linking_in-1000000))
+        bonus += 8.0 + (0.000001 * (domains_linking_in-1000000))
     elif domains_linking_in >= 250000:
-        bonus += 7.0 + (0.0000001 * (domains_linking_in-250000))
+        bonus += 7.0 + (0.000001333 * (domains_linking_in-250000))
     elif domains_linking_in >= 33333:
         bonus += 6.0 + (0.0000046 * (domains_linking_in-33333))
     elif domains_linking_in >= 4000:
         bonus += 5.0 + (0.000034 * (domains_linking_in-4000))
     elif domains_linking_in >= 500:
-        bonus += 4.0 + (0.00227 * (domains_linking_in-400))
+        bonus += 4.0 + (0.000278 * (domains_linking_in-400))
     elif domains_linking_in >= 60:
-        bonus += 3.0 + (0.0192 * (domains_linking_in-60))
+        bonus += 3.0 + (0.00294 * (domains_linking_in-60))
     elif domains_linking_in >= 8:
         bonus += 2.0 + (0.0192 * (domains_linking_in-8))
     elif domains_linking_in >= 1:
@@ -1544,9 +1544,15 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
             #    newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
             #    print u'Was: {0}, Now: {1}'.format(url, newurl)
         else:
-            newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
+            if parsedurl.scheme:
+                newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
+            else:
+                newurl = 'http://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
     else:
-        newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
+        if parsedurl.scheme:
+            newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
+        else:
+            newurl = 'http://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
     return newurl
 
 def CanCrawlUrl(url, verbose=False):
