@@ -590,7 +590,7 @@ class DomainInfo(models.Model):
     is_unblockable = models.BooleanField(blank=True, default=False, help_text='Is this domain unblockable, even by an idiot?')
     domain_created = models.DateTimeField(null=True, blank=True)
     domain_expires = models.DateTimeField(null=True, blank=True)
-    domain_updated = models.DateTimeField(null=True, blank=True)
+    domain_updated = models.DateTimeField(null=True, blank=True) # The last time WbSrch updated the domain.
     whois_last_updated = models.DateTimeField(null=True, blank=True)
     robots_ip = models.CharField(max_length=16, null=True, blank=True, db_index=True, help_text='The IP address of the server we retrieved (or tried to retrieve) the robots.txt from.')
     robots_txt = models.TextField(null=True, blank=True)
