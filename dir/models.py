@@ -2273,7 +2273,12 @@ class SiteInfoEndingInBN(SiteInfo):
         proxy = True
         verbose_name_plural = 'Site Infos Ending With .bn'
 
+class SiteInfoEndingInBRManager(models.Manager):
+    def get_queryset(self):
+        return super(SiteInfoEndingInBRManager, self).get_queryset().filter(rooturl__endswith='.br')
+
 class SiteInfoEndingInBR(SiteInfo):
+    objects = SiteInfoEndingInBRManager()
     class Meta:
         proxy = True
         verbose_name_plural = 'Site Infos Ending With .br'

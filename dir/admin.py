@@ -985,8 +985,7 @@ class SiteInfoEndingInBOAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.bo')
 
 class SiteInfoEndingInBRAdmin(SiteInfoAdmin):
-    def get_queryset(self, request):
-        return self.model.objects.filter(rooturl__endswith='.br')
+    pass
 
 class SiteInfoEndingInBSAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
