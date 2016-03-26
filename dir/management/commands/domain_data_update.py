@@ -15,12 +15,14 @@ class Command(BaseCommand):
         make_option('-p', '--popularity', default=False, action='store_true', dest='popularity', help='Sort by popularity before processing. (default=False)'),
         make_option('-u', '--urlcounts', default=False, action='store_true', dest='urlcounts', help='Update domain URL counts, not link counts.. (default=False)'),
         make_option('-k', '--keywordcounts', default=False, action='store_true', dest='keywordcounts', help='Update domain URL counts, not link counts.. (default=False)'),
+        make_option('-t', '--total', default=False, action='store_true', dest='total', help='After running, show the total number of domains without number of links calculated. (defaul=False)'),
     )
 
     def handle(self, *args, **options):
         start = timezone.now()
         sleeptime = options['sleep']
         urlcounts = options.get('urlcounts', False)
+        total = options.get('total', False)
         keywordcounts = options.get('keywordcounts', False)
         if options.get('justthisurl', None):
             domains = DomainInfo.objects.filter(url=options['justthisurl'])
@@ -67,4 +69,7 @@ class Command(BaseCommand):
                 time.sleep(sleeptime)
         updated = domains.count()
         elapsed = timezone.now() - start
+        if total:
+            nototal = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=True).count()
+            print u'{0} domains still do not have link count information.'.format(nototal)
         print u'{0} domains updated in {1} seconds.'.format(updated, elapsed.total_seconds())
