@@ -54,6 +54,7 @@ def domain_link_rank(request):
     else:
         print 'domain_link_rank called by {0}'.format(request.user)
     domain = request.GET.get('domain', None)
+    decimal = request.GET.get('decimal', None)
     if not domain:
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
@@ -70,7 +71,8 @@ def domain_link_rank(request):
         pass
     link_rank = GetLinkRank(domaininfo.domains_linking_in)
     # Round to the nearest integer because we don't want to give too much precision away.
-    link_rank = int(round(link_rank))
+    if not decimal:
+        link_rank = int(round(link_rank))
     if link_rank > 8:
         link_rank = 8
     # TODO: Include domains_linking_in_last_updated in response.
