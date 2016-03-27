@@ -724,6 +724,10 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
     """
     Gets the page score for a term based on its contents and metadata.
 
+    Item should be a SiteInfo class, keywords are the keywords to be indexes, abbreviated
+    only searches title if true, lang is the language code for the page, and verbose
+    logs each score modifier so you can see why a page scored how it did for those keywords.
+
     If called with verbose, it returns an array of strings describing point
     values instead of a score.
     """
@@ -977,7 +981,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         value -= 3
         if verbose:
             rulematches.append('-3 points for domain .me/.biz')
-    elif item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith('.mobi') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or rooturl.endswith(u'.om') or rooturl.endswith(u'.kw') or rooturl.endswith(u'.th') or rooturl.endswith(u'.bn') or rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae'):
+    elif item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith('.mobi') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or item.rooturl.endswith(u'.om') or item.rooturl.endswith(u'.kw') or item.rooturl.endswith(u'.th') or item.rooturl.endswith(u'.bn') or item.rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae'):
         value -= 2
         if verbose:
             rulematches.append('-2 points for domain .in/.sg/.tw/.mobi/.biz/.ng/.my/.id/.ph/.tw/.sg/.in/.lk/.ae/.ws/.om/.kw/.th/.bn/.am/.ge/.mn/.jo/.by/.la/.bt/.ae')
