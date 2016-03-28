@@ -1335,7 +1335,7 @@ class IndexerTestCase(TestCase):
         info.save()
         info = SiteInfo_fr()
         info.rooturl = u'zeta-cen-tau.com'
-        info.url = u'http://zeta-cen-tau.com/page.htm'
+        info.url = u'http://zeta-cen-tau.com/pa-e.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
@@ -1419,10 +1419,10 @@ class IndexerTestCase(TestCase):
         norank = CalculateTermValue(noh, 'zet', False, 'fr')
         oneh = SiteInfo_fr.objects.get(url=u'http://zeta-centaur.com/page.htm')
         onerank = CalculateTermValue(oneh, 'zet', False, 'fr')
-        twoh = SiteInfo_fr.objects.get(url=u'http://zeta-cen-tau.com/page.htm')
-        tworank = CalculateTermValue(twoh, 'zet', False, 'fr')
+        threeh = SiteInfo_fr.objects.get(url=u'http://zeta-cen-tau.com/pa-e.htm')
+        threerank = CalculateTermValue(threeh, 'zet', False, 'fr')
+        self.assertGreater(onerank, threerank)
         self.assertGreater(norank, onerank)
-        self.assertGreater(onerank, tworank)
 
     def testUnderscorePenalty(self):
         noh = SiteInfo_fr.objects.get(url=u'http://zetacentauri.com/page.htm')

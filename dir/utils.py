@@ -258,7 +258,12 @@ def GetAutoCompleteModelFromLanguage(language):
 
 def GetRootUrl(url, secure=False):
     if not url.startswith(u'http:') and not url.startswith(u'https:'):
-        url = u'http://' + url
+        if url.startswith(u'//'):
+            url = u'http:' + url
+        elif  url.startswith('://'):
+            url = u'http' + url
+        else:
+            url = u'http://' + url
     parsed_uri = urlparse.urlparse( url )
     loc = parsed_uri.netloc
     loc = loc.lower()
@@ -290,13 +295,13 @@ def MakeRealUrl(url, domain=None, secure=False):
             url = url[1:]
         pieces = url[2:].split(u'/')
         if len(pieces) > 0:
-            if domain and '.' not in pieces[0]:
-                url = scheme + url
-            elif domain and domain not in pieces[0]:
+            if domain and domain not in pieces[0]:
                 url = scheme + domain + url[1:]
+            #elif domain and domain not in pieces[0]:
+            #    url = scheme + domain + url[1:]
             # This doesn't handle all well-known extensions. TODO: Make it so.
-            elif domain and (pieces[0].endswith(u'.htm') or pieces[0].endswith(u'.html') or pieces[0].endswith(u'.php')):
-                url = scheme + domain + url[1:]
+            #elif domain and (pieces[0].endswith(u'.htm') or pieces[0].endswith(u'.html') or pieces[0].endswith(u'.php')):
+            #    url = scheme + domain + url[1:]
             else:
                 url = scheme + url
         else:
