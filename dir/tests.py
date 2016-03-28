@@ -503,6 +503,8 @@ class CanCrawlUrlTestCase(TestCase):
     def tearDown(self):
         for site in BlockedSite.objects.all():
             site.delete()
+        for suffix in DomainSuffix.objects.all():
+            suffix.delete()
         domain = DomainInfo.objects.get(url=u'www.spamsite.com')
         domain.delete()
         url = SiteInfo.objects.get(url=u'http://www.spamsite.com/1/')
