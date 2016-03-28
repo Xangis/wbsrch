@@ -625,6 +625,18 @@ class MakeRealUrlTestCase(TestCase):
         url = u'://tutorial.php'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.php')
 
+    def test_colonslash_url6(self):
+        url = u'://tutorial.site/tutorial.php'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://tutorial.site/tutorial.php')
+
+    def test_colonslash_url7(self):
+        url = u'//tutorial.site/tutorial/'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://tutorial.site/tutorial/')
+	
+    def test_colonslash_url8(self):
+        url = u'//tutorial.php?q=first'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.php?q=first')
+	
     def test_slash_url5(self):
         url = u'/tutorial/tutorial.htm'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/tutorial.htm')
@@ -636,6 +648,10 @@ class MakeRealUrlTestCase(TestCase):
     def test_doubleslash_url2(self):
         url = u'//tutorial/cheese/burgers/'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/cheese/burgers/')
+
+    def test_doubleslash_url3(self):
+        url = u'//tutorial/cheese/burgers?size=two'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/cheese/burgers?size=two')
 
     def test_doubleslash_url3(self):
         url = u'//tutorial/'
@@ -672,6 +688,10 @@ class MakeRealUrlTestCase(TestCase):
     def test_doubleslash_domainurl7(self):
         url = u'//someothersite.com/tutorial.htm'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://someothersite.com/tutorial.htm')
+
+    def test_doubleslash_domainurl8(self):
+        url = u'//someothersite.com?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://someothersite.com?name=me')
 
     def test_normal_url(self):
         url = u'http://wbsrch.com/tutorial'

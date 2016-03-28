@@ -23,6 +23,29 @@ import ipaddr
 import whois
 from nltk.corpus import stopwords
 
+# This list is not exhaustive, nor can it be because new TLDs are being created all the time.
+top_level_domains = [
+# Original TLDs
+'.com', '.net', '.org', '.mil', '.gov', '.edu', '.int', '.arpa',
+# CCTLDs
+'.ac', '.ad', '.ae', '.af', '.ag', '.ai', '.al', '.am', '.an', '.ao', '.aq', '.ar', '.as', '.at', '.au', '.aw', '.ax', '.az',
+'.ba', '.bb', '.bd', '.be', '.bf', '.bg', '.bh', '.bi', '.bj', '.bm', '.bn', '.bo', '.bq', '.br', '.bs', '.bt', '.bv', '.bw', '.by', '.bz',
+'.ca', '.cc', '.cd', '.cf', '.cg', '.ch', '.ci', '.ck', '.cl', '.cm', '.cn', '.co', '.cr', '.cu', '.cv', '.cw', '.cx', '.cy', '.cz',
+'.de', '.dj', '.dk', '.dm', '.do', '.dz',
+'.ec', '.ee', '.eg', '.eh', '.er', '.es', '.et', '.eu',
+'.fi', '.fj', '.fk', '.fm', '.fo', '.fr',
+'.ga', '.gb', '.gd', '.ge', '.gf', '.gh', '.gi', '.gl', '.gm', '.gn', '.gp', '.gq', '.gr', '.gs', '.gt', '.gu', '.gw', '.gy',
+'.hk', '.hm', '.hn', '.hr', '.ht', '.hu',
+'.id', '.ie', '.il', '.im', '.in', '.io', '.iq', '.ir', '.is', '.it',
+'.je', '.jm', '.jo', '.jp',
+# To be continued starting with K.
+# Major new TLDs
+'.adult', '.aero', '.app', '.biz', '.club', '.coop', '.guru', '.hotel', 
+'.info', '.jobs', '.kim', '.link', '.mobi', '.music', '.name', '.ninja', 
+'.pics', '.porn', '.pro', '.science', '.sexy', '.shop', '.site', '.top', '.video', 
+'.wang', '.web', '.website', '.win', '.xxx', '.xyz',
+]
+
 second_level_domains = [
 '.ac.uk', '.co.uk', '.gov.uk', '.judiciary.uk', '.ltd.uk', '.me.uk', '.net.uk', '.nhs.uk', '.nic.uk', '.org.uk', '.parliament.uk', '.plc.uk', '.police.uk', '.sch.uk', # UK
 '.ac.jp', '.ad.jp', '.co.jp', '.ed.jp', '.go.jp', '.gr.jp', '.lg.jp', '.ne.jp', '.or.jp', # Japan
@@ -169,6 +192,19 @@ second_level_domains = [
 '.com.vc', # Saint Vincent and the Grenadines
 ]
 
+def IsValidDomainExtension(text):
+    """
+    Checks whether a domain extension is valid.
+
+    .de or de can be passed it, it'll deal.
+    """
+    if not text.startswith('.'):
+        text = '.' + text
+    for ext in top_level_domains:
+        if text == ext:
+            return True
+    return False
+
 def HasNumber(text):
     return any(char.isdigit() for char in text)
 
@@ -295,15 +331,16 @@ def MakeRealUrl(url, domain=None, secure=False):
             url = url[1:]
         pieces = url[2:].split(u'/')
         if len(pieces) > 0:
-            if domain and domain not in pieces[0]:
+            if not '.' in pieces[0]:
                 url = scheme + domain + url[1:]
-            #elif domain and domain not in pieces[0]:
-            #    url = scheme + domain + url[1:]
-            # This doesn't handle all well-known extensions. TODO: Make it so.
-            #elif domain and (pieces[0].endswith(u'.htm') or pieces[0].endswith(u'.html') or pieces[0].endswith(u'.php')):
-            #    url = scheme + domain + url[1:]
-            else:
+            elif domain and domain in pieces[0]:
                 url = scheme + url
+            else:
+                domainparts = pieces[0].split('.')
+                if len(domainparts) > 1 and IsValidDomainExtension(domainparts[1]):
+                    url = scheme + url
+                else:
+                    url = scheme + domain + url[1:]
         else:
             if secure:
                 url = u'https:' + url
