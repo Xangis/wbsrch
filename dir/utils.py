@@ -38,12 +38,33 @@ top_level_domains = [
 '.hk', '.hm', '.hn', '.hr', '.ht', '.hu',
 '.id', '.ie', '.il', '.im', '.in', '.io', '.iq', '.ir', '.is', '.it',
 '.je', '.jm', '.jo', '.jp',
-# To be continued starting with K.
-# Major new TLDs
+'.ke', '.kg', '.kh', '.ki', '.km', '.kn', '.kp', '.kr', '.kw', '.ky', '.kz',
+'.la', '.lb', '.lc', '.li', '.lk', '.lr', '.ls', '.lt', '.lu', '.lv', '.ly',
+'.ma', '.mc', '.md', '.me', '.mg', '.mh', '.mk', '.ml', '.mm', '.mn', '.mo', '.mp', '.mq', '.mr', '.ms', '.mt', '.mu', '.mv', '.mw', '.mx', '.my', '.mz',
+'.na', '.nc', '.ne', '.nf', '.ng', '.ni', '.nl', '.no', '.np', '.nr', '.nu',
+'.om',
+'.pa', '.pe', '.pf', '.pg', '.pg', '.pk', '.pl', '.pm', '.pn', '.pr', '.ps', '.pt', '.pw', '.py',
+'.qa',
+'.re', '.ro', '.rs', '.ru', '.rw',
+'.sa', '.sb', '.sc', '.sd', '.se', '.sg', '.sh', '.si', '.sj', '.sk', '.sl', '.sm', '.sn', '.so', '.sr', '.ss', '.st', '.su', '.sv', '.sx', '.sy', '.sz',
+'.tc', '.td', '.tf', '.tg', '.th', '.tj', '.tk', '.tl', '.tm', '.tn', '.to', '.tp', '.tr', '.tt', '.tv', '.tw', '.tz',
+'.ua', '.ug', '.uk', '.us', '.uy', '.uz',
+'.va', '.vc', '.ve', '.vg', '.vi', '.vn', '.vu',
+'.wf', '.ws',
+'.ye', '.yt',
+'.za', '.zm', '.zw',
+# Still need internationalized CCTLDs.
+# New TLDs (many still needed)
 '.adult', '.aero', '.app', '.biz', '.club', '.coop', '.guru', '.hotel', 
 '.info', '.jobs', '.kim', '.link', '.mobi', '.music', '.name', '.ninja', 
 '.pics', '.porn', '.pro', '.science', '.sexy', '.shop', '.site', '.top', '.video', 
 '.wang', '.web', '.website', '.win', '.xxx', '.xyz',
+# Still need New internationalized TLDs
+# Geographic TLDs (many still needed)
+'.berlin', '.brussels', '.cat', '.eus', '.frl', '.gal', '.london', '.paris', '.wales', '.wien',
+# Still need Internationalized Geographic TLDs.
+# Still need Brand top-level domains.
+# Still need Internationalized brand top-level domains.
 ]
 
 second_level_domains = [
