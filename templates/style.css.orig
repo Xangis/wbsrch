@@ -149,6 +149,14 @@ text-align: left;
 text-align: right;
 }
 
+.floatright {
+float: right;
+}
+
+.clear {
+clear: both;
+}
+
 .body {
 margin-left: 2%;
 margin-right: 2%;
