@@ -983,6 +983,9 @@ def LoadUrlsFromFile(pendinglinks, filename, descriptive=False):
     f = open(filename, 'rb')
     reader = codecs.getreader('utf8')(f)
     for line in reader.readlines():
+        # Ignore blank lines.
+        if len(line) < 2:
+            continue
         CrawlSingleUrl(line)
         time.sleep(1)
         #AddPendingLink(pendinglinks, line, descriptive=descriptive, recrawl=True)
