@@ -619,14 +619,6 @@ class MakeRealUrlTestCase(TestCase):
         url = u'/tutorial.php'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.php')
 
-    def test_slash_url4(self):
-        url = u'//tutorial.php'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.php')
-
-    def test_colonslash_url4(self):
-        url = u'://tutorial.php'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.php')
-
     def test_colonslash_url6(self):
         url = u'://tutorial.site/tutorial.php'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://tutorial.site/tutorial.php')
@@ -635,29 +627,9 @@ class MakeRealUrlTestCase(TestCase):
         url = u'//tutorial.site/tutorial/'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://tutorial.site/tutorial/')
 	
-    def test_colonslash_url8(self):
-        url = u'//tutorial.php?q=first'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.php?q=first')
-	
     def test_slash_url5(self):
         url = u'/tutorial/tutorial.htm'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/tutorial.htm')
-
-    def test_doubleslash_url(self):
-        url = u'//tutorial.htm'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
-
-    def test_doubleslash_url2(self):
-        url = u'//tutorial/cheese/burgers/'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/cheese/burgers/')
-
-    def test_doubleslash_url3(self):
-        url = u'//tutorial/cheese/burgers?size=two'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/cheese/burgers?size=two')
-
-    def test_doubleslash_url3(self):
-        url = u'//tutorial/'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/')
 
     def test_doubleslash_domainurl(self):
         url = u'//wbsrch.com/tutorial/'

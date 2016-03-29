@@ -350,23 +350,7 @@ def MakeRealUrl(url, domain=None, secure=False):
         # If there's a colon, remove it and process as if it wasn't there. We'll add it later.
         if url.startswith('://'):
             url = url[1:]
-        pieces = url[2:].split(u'/')
-        if len(pieces) > 0:
-            if not '.' in pieces[0]:
-                url = scheme + domain + url[1:]
-            elif domain and domain in pieces[0]:
-                url = scheme + url
-            else:
-                domainparts = pieces[0].split('.')
-                if len(domainparts) > 1 and IsValidDomainExtension(domainparts[1]):
-                    url = scheme + url
-                else:
-                    url = scheme + domain + url[1:]
-        else:
-            if secure:
-                url = u'https:' + url
-            else:
-                url = u'http:' + url
+        url = scheme + url
     elif url.startswith(u':'):
         if secure:
             url = u'https' + url
