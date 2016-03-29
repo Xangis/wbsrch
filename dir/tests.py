@@ -1409,14 +1409,18 @@ class IndexerTestCase(TestCase):
         self.assertTrue(httpsrank > httprank)
 
     def testHyphenPenalty(self):
+        """
+        Hyphen penalty is not calculated in CalculateTermValue, but rather in
+        GetIndexModifiersForDomain
+        """
         noh = SiteInfo_fr.objects.get(url=u'http://zetacentauri.com/page.htm')
-        norank = CalculateTermValue(noh, 'zet', False, 'fr')
+        norank = GetIndexModifiersForDomain(noh.rooturl, 'fr')
         oneh = SiteInfo_fr.objects.get(url=u'http://zeta-centaur.com/page.htm')
-        onerank = CalculateTermValue(oneh, 'zet', False, 'fr')
+        onerank = GetIndexModifiersForDomain(oneh.rooturl, 'fr', verbose=True)
         threeh = SiteInfo_fr.objects.get(url=u'http://zeta-cen-tau.com/pa-e.htm')
-        threerank = CalculateTermValue(threeh, 'zet', False, 'fr')
-        self.assertGreater(onerank, threerank)
-        self.assertGreater(norank, onerank)
+        threerank = GetIndexModifiersForDomain(threeh.rooturl, 'fr')
+        self.assertGreater(onerank[1], threerank[1])
+        self.assertGreater(norank[1], onerank[1])
 
     def testUnderscorePenalty(self):
         noh = SiteInfo_fr.objects.get(url=u'http://zetacentauri.com/page.htm')
