@@ -55,15 +55,34 @@ top_level_domains = [
 '.za', '.zm', '.zw',
 # Still need internationalized CCTLDs.
 # New TLDs (many still needed)
-'.adult', '.aero', '.app', '.biz', '.club', '.coop', '.guru', '.hotel', 
-'.info', '.jobs', '.kim', '.link', '.mobi', '.music', '.name', '.ninja', 
-'.pics', '.porn', '.pro', '.science', '.sexy', '.shop', '.site', '.top', '.video', 
-'.wang', '.web', '.website', '.win', '.xxx', '.xyz',
+'.accountant', '.academy', '.adult', '.aero', '.agency', '.apartments', '.app', '.archi', '.associates', '.audio',
+'.bar', '.bargains', '.best', '.bike', '.biz', '.black', '.blackfriday', '.blog', '.blue', '.boo', '.builders',
+'.cab', '.camera', '.camp', '.cancerresearch', '.cards', '.center', '.ceo', '.cheap', '.christmas', '.church', '.click', '.clothing', 
+'.club', '.codes', '.coffee', '.college', '.coop',
+'.dance', '.date', '.dating', '.design', '.diet', '.directory', '.download',
+'.education', '.email', '.events', '.exposed',
+'.faith', '.farm', '.fit', '.flowers', '.futbol', 
+'.gift', '.glass', '.global', '.gop', '.green', '.guitars', '.guru',
+'.help', '.hiphop', '.hiv', '.holdings', '.hosting', '.hotel', '.house',
+'.info', '.ink', '.international', 
+'.jobs', '.juegos', '.kaufen', '.kim',
+'.land', '.lighting', '.link', '.loan', '.lol', '.love',
+'.meet', '.men', '.menu', '.mobi', '.moda', '.moe', '.mov', '.museum', '.music', 
+'.name', '.ngo', '.ninja', '.one', '.ong', '.onl', '.ooo', '.organic',
+'.photo', '.photos', '.pics', '.pink', '.plumbing', '.porn', '.post', '.pub', '.pro', '.properties', '.property',
+'.realtor', '.red', '.rich',
+'.science', '.sex', '.sexy', '.shiksha', '.shop', '.singles', '.site', '.social', '.solar', '.sucks', '.systems',
+'.tattoo', '.tel', '.today', '.top', '.travel',
+'.uno', '.ventures', '.video', '.voting',
+'.wang', '.web', '.website', '.wiki', '.win', '.wtf', '.xxx', '.xyz', '.yoga', '.zone',
 # Still need New internationalized TLDs
 # Geographic TLDs (many still needed)
-'.berlin', '.brussels', '.cat', '.eus', '.frl', '.gal', '.london', '.paris', '.wales', '.wien',
+'.alsace', '.asia', '.berlin', '.brussels', '.bzh', '.cat', '.cymru', '.eus', '.frl', '.gal', '.gent',
+'.irish', '.kiwi', '.krd', '.lat', '.london', '.melbourne', '.miami', '.nyc',
+'.paris', '.quebec', '.saarland', '.sydney', '.tokyo', '.vlaanderen', '.wales', '.wien',
 # Still need Internationalized Geographic TLDs.
 # Still need Brand top-level domains.
+'.google', '.ovh', '.yandex',
 # Still need Internationalized brand top-level domains.
 ]
 
