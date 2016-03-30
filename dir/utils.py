@@ -332,6 +332,38 @@ def GetAutoCompleteModelFromLanguage(language):
     else:
         return AutoComplete
 
+def ReverseWWW(domain, rootonly=False):
+    """
+    If a domain starts with www., return the domain name without that prefix.
+
+    If it doesn't start with www., return the domain with that prefix added.
+
+    www.example.com => example.com
+    example.com => www.example.com
+
+    If rootonly is true, it means that we don't add www. if the domain is not
+    a root domain. So cheese.website.com returns None instead of
+    www.cheese.website.com.
+    """
+    if not domain:
+        return None
+    if not domain.startswith(u'www.'):
+        pieces = domain.split('.')
+        if len(pieces) > 2 and rootonly:
+            root = False
+            for suffix in second_level_domains:
+                if domain.endswith(suffix):
+                    root = True
+                    break
+            if not root:
+                return None
+            else:
+                return u'www.' + domain
+        else:
+            return u'www.' + domain
+    else:
+        return domain[4:]
+
 def GetRootUrl(url, secure=False):
     if not url.startswith(u'http:') and not url.startswith(u'https:'):
         if url.startswith(u'//'):

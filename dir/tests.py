@@ -2348,3 +2348,22 @@ class WhoisTestCase(TestCase):
         ages = GetDomainAge(u'zetacentauri.com')
         print ages
         self.assertNotEqual(ages, None)
+
+class ReverseWWWTestCase(TestCase):
+    def testroot(self):
+        self.assertEqual(ReverseWWW(u'example.com'), u'www.example.com')
+
+    def testwww(self):
+        self.assertEqual(ReverseWWW(u'example.com'), u'www.example.com')
+
+    def testrootonlytld(self):
+        self.assertEqual(ReverseWWW(u'example.com', True), u'www.example.com')
+
+    def testrootonlywwwtld(self):
+        self.assertEqual(ReverseWWW(u'www.example.com', True), u'example.com')
+
+    def testrootonlysecondleveltld(self):
+        self.assertEqual(ReverseWWW(u'example.co.uk', True), u'www.example.co.uk')
+
+    def testrootonlysecondlevel(self):
+        self.assertEqual(ReverseWWW(u'my.example.com', True), None)
