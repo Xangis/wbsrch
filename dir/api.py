@@ -83,16 +83,24 @@ def domain_pages_in_index(request):
     if not request.auth:
         return HttpResponse(status=403)
     domain = request.GET.get('domain', None)
+    if not domain:
+        return Response({'error': 'Domain query parameter is required.'}, status=400)
+    domain = NormalizeDomain(domain)
     print 'Domain: {0}'.format(domain)
-    return Response({'domain': domain }, status=200)
+    pages = SiteInfo.objects.filter(rooturl=domain).count()
+    return Response({'domain': domain, 'en': pages }, status=200)
 
 @api_view(['GET'])
 def domain_keywords_ranked(request):
     if not request.auth:
         return HttpResponse(status=403)
     domain = request.GET.get('domain', None)
+    if not domain:
+        return Response({'error': 'Domain query parameter is required.'}, status=400)
+    domain = NormalizeDomain(domain)
     print 'Domain: {0}'.format(domain)
-    return Response({'domain': domain }, status=200)
+    keywords = KeywordRanking.objects.filter(rooturl=domain, rank__lt=200).count()
+    return Response({'domain': domain, 'en': keywords }, status=200)
 
 @api_view(['GET'])
 def autocomplete(request):
