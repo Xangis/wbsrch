@@ -54,7 +54,7 @@ def Crawler(options):
         # File mode implies recrawl is not OK. Since there's no combined setting, you'll have to swap these to recrawl file URLs.
         options['recrawl'] = False
         #options['recrawl'] = True
-        LoadUrlsFromFile(pendinglinks, options['file'], options['descriptive'])
+        LoadUrlsFromFile(pendinglinks, options['file'], options['descriptive'], seconds=options['seconds'])
     else:
         print u"You didn't give me anything to do. I'm done doing that nothing you asked for."
         return
@@ -978,7 +978,7 @@ def CrawlSingleUrl(url):
         except:
             print u'Failure in CrawlSingleUrl. Error or URL is unprintable'
 
-def LoadUrlsFromFile(pendinglinks, filename, descriptive=False):
+def LoadUrlsFromFile(pendinglinks, filename, descriptive=False, seconds=1):
     numloaded = 0
     f = open(filename, 'rb')
     reader = codecs.getreader('utf8')(f)
@@ -987,7 +987,7 @@ def LoadUrlsFromFile(pendinglinks, filename, descriptive=False):
         if len(line) < 2:
             continue
         CrawlSingleUrl(line)
-        time.sleep(1)
+        time.sleep(seconds)
         #AddPendingLink(pendinglinks, line, descriptive=descriptive, recrawl=True)
         #numloaded = numloaded + 1
     #print unicode(numloaded) + ' URLs loaded from ' + filename + '. ' + unicode(len(pendinglinks)) + ' of those are crawlable and the rest were deleted.'
