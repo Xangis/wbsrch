@@ -10,7 +10,9 @@ flup==1.0.2
 nltk==2.0.5
 ipaddr==2.1.11
 newrelic==2.56.0.42
-python-whois==0.6.0
+# Temporarily using bitbucket repo until 0.6.1 is released due to bug.
+https://bitbucket.org/richardpenman/pywhois/get/tip.tar.gz
+#python-whois==0.6.0
 uWSGI==2.0.11.1
 numpy==1.9.1
 csscompressor==0.9.3
