@@ -618,7 +618,10 @@ def IsBadMimeType(mimetype):
                     u'"image/jpg"', u'application/msword', u'application/vnd.ms-excel', u'audio/mpegurl', u'audio/x-mp3',
                     u'application/vnd.openxmlformats-officedocument.presentationml.presentation', u'application/postscript',
                     u'application/vnd.symbian.install', u'application/download', u'audio/mpeg3; Charset=UTF-8', u'MIME type: audio/x-mpegurl',
-                    u'application/octet-stream, text/html; charset=UTF-8', u'application/x-pdf', u'application/pdf; charset=UTF-8']:
+                    u'application/octet-stream, text/html; charset=UTF-8', u'application/x-pdf', u'application/pdf; charset=UTF-8',
+                    u'video/x-ms-asf; charset=utf-8', u'application/pdf;charset=utf-8', u'application/pdf;charset=ISO-8859-1',
+                    u'image/jpeg; charset=binary', u'image/jpeg;charset=UTF-8', u'image/jpeg; charset=utf-8',
+                    u'text/calendar;charset=UTF-8', u'text/calendar; charset=utf-8', u'application/calendar; charset=utf-8']:
         return True
     return False
 
@@ -644,7 +647,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
                     u'text/html;charset=UTF8', u'text/html; Charset=UTF8', u'text/html; charset=utf-8; boundary=xYzZY',
                     u'text/html; charset: UTF-8; charset=UTF-8', u'text/html; Charset=UTF-8;charset=UTF-8', u'text/html; encoding=utf-8;charset=UTF-8',
                     u'text/HTML; charset=utf-8', u'text/HTML; Charset=utf-8', u'Text/html; charset=UTF-8', u'Text/Html; Charset=Utf-8',
-                    u'text/html; UTF-8; charset=UTF-8']:
+                    u'text/html; UTF-8; charset=UTF-8', u'TEXT/HTML; charset=UTF-8', u'text/html; Charset=utf8',
+                    u'Text/HTML; charset=utf-8', u'text/HTML; charset=UTF-8', u'text/html;Charset=UTF-8']:
         return 1.0
     # I have no idea how to treat the xhtml+xml MIME type. No effect right now.
     elif mimetype in [u'application/xhtml+xml; charset=utf-8',]:
@@ -661,14 +665,16 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html; charset=ISO8859-1', u'text/html; charset: iso-8859-1', u'text/html; charset: iso-8859-1; charset=utf-8',
                       u'text/html; charset=LATIN1', u'text/html; charset=latin-1', u'text/html; UTF-8;charset=ISO-8859-1',
                       u'text/html; charset=ISO-8859-1, text/html', u'text/html; charset="iso-8859-1"', u'text/html; Charset=windows-28591',
-                      u"text/html; charset='iso-8859-1'", u'text/html; profile=xhtml;charset=ISO-8859-1']:
+                      u"text/html; charset='iso-8859-1'", u'text/html; profile=xhtml;charset=ISO-8859-1', u'text/HTML; Charset=ISO-8859-1',
+                      u'text/HTML;charset=ISO-8859-1', u'text/HTML; charset=iso-8859-1']:
         return 0.5
     # Quarter point for ISO-8859-15 or Windows-1252. They're not UTF-8, but they're latin text at least.
     elif mimetype in [u'text/html; charset=Windows-1252', u'text/html; charset=windows-1252', u'text/html; charset=ISO-8859-15',
                       u'text/html; charset=iso-8859-15', u'text/html;charset=windows-1252', u'text/html; Charset=windows-1252',
                       u'text/html;charset=ISO-8859-15', u'text/html; charset= iso-8859-15', u'text/html; charset=WINDOWS-1252',
                       u'text/html; Charset=ISO-8859-15', u'text/html;charset=iso-8859-15', u'text/html; charset=iso8859-15',
-                      u'text/html, charset=iso-8859-15', u'text/html; charset=iso-8859-15;']:
+                      u'text/html, charset=iso-8859-15', u'text/html; charset=iso-8859-15;', u'text/html;charset=Windows-1252',
+                      u'text/html; Charset=Windows-1252', u'text/HTML; Charset=windows-1252', u'text/html; Charset=iso-8859-15']:
         return 0.25
     # No point modifier for unknown or undeclared charset.
     elif mimetype in [u'text/html; charset=_CHARSET',]:
@@ -686,7 +692,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html; charset=Windows-1250', u'text/html; charset=WINDOWS-1250', u'text/html; charset=cp1250',
                       u'text/html; Charset=windows-1250', u"text/html; charset='iso-8859-2'", u'text/html; Charset=ISO-8859-2',
                       u'text/html; charset=iso8859-2', 'text/html; Charset=iso-8859-2', u'text/html; ISO-8859-2; charset=ISO-8859-2',
-                      u'type: text/html; charset=windows-1250;', u'text/html; charset=win-1250']:
+                      u'type: text/html; charset=windows-1250;', u'text/html; charset=win-1250', u'text/html; charset=win1250', 
+                      u'text/html; charset= windows-1250', u'text/html; Charset=Windows-1250', u'text/html; charset=iso-8859-2;']:
         if language == 'en':
             return -1.0
         elif language in ['pl', 'cs', 'sk', 'hu', 'sl', 'hr', 'ro', 'de']:
@@ -707,7 +714,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
             return -3.0
     # ISO-8859-7 for Greek, as is Windows-28597 and Windows-1253
     elif mimetype in [u'text/html; charset=iso-8859-7', u'text/html; charset=windows-1253', u'text/html; charset=ISO-8859-7', 
-                      u'text/html; charset=Windows-1253', u'text/html;charset=iso-8859-7', u'text/html; Charset=windows-1253']:
+                      u'text/html; charset=Windows-1253', u'text/html;charset=iso-8859-7', u'text/html; Charset=windows-1253',
+                      u'text/html;charset=windows-1253']:
         if language in ['el',]:
             return 1.0
         else:
@@ -717,7 +725,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html; Charset=windows-1254', u'text/html; Charset=Windows-1254', u'text/html; Charset=iso-8859-9',
                       u'text/html; charset=windows-1254', u'text/html; charset=WINDOWS-1254', u'text/html;Windows-1254',
                       u'text/HTML; Charset=Windows-1254', u'text/html; charset=8859-9', u'text/html;charset=ISO-8859-9',
-                      u'text/html; charset=Windows-1254', u'text/html; charset=latin5']:
+                      u'text/html; charset=Windows-1254', u'text/html; charset=latin5', u'text/HTML; Charset=windows-1254',
+                      u'text/html;charset=iso-8859-9', u'text/HTML; Charset=iso-8859-9', u'text/html; charset=ISO-8859-9;']:
         if language == 'tr':
             return 0.5
         else:
@@ -743,10 +752,10 @@ def GetMimeTypeModifier(mimetype, language='en'):
     elif mimetype in [u'text/x-diff',]:
         return -4.0
     # Broken IIS configurations. Not sure how much to adjust.
-    elif mimetype in [u'text/vnd.wap.wml; charset=UTF-8',]:
+    elif mimetype in [u'text/vnd.wap.wml; charset=UTF-8', u'text/vnd.wap.wml']:
         return -6.0
     # Russian scripts: koi8-r
-    elif mimetype in [u'text/html; charset=koi8-r',]:
+    elif mimetype in [u'text/html; charset=koi8-r', u'text/html; charset=KOI8-R']:
         return -8.0
     # Thai and Japanese and Korean - EUC-KR, TIS-620, Shift-JIS
     elif mimetype in [u'text/html; charset=TIS-620', u'text/html; charset=tis-620', u'text/html; charset=EUC-JP', u'text/html; charset=euc-kr',
@@ -777,7 +786,9 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'application/rss+xml;', u'application/atom+xml; charset=iso-8859-1', u'text/xml;charset=iso-8859-1', 
                       u'application/rss+xml; charset=ISO-8859-1', u'text/xml;charset=iso-8859-1', u'text/html;charset=iso-8859-1;',
                       u'application/rss+xml; charset=iso-8859-1', u'text/xml;', u'text/xml; charset=tis-620', u'text/xml; charset=ISO-8859-15',
-                      u'text/html; Charset=ISO-8859-9']:
+                      u'text/html; Charset=ISO-8859-9', u'text/xml; charset=windows-1254', u'text/xml; charset=Windows-1254', 
+                      u'text/xml; charset=WINDOWS-1254', u'text/xml;charset=iso-8859-2', u'text/xml; charset=ISO-8859-9',
+                      u'text/xml; charset=utf8']:
         return -12.0
     # Unreadable/unsaved file types
     elif IsBadMimeType(mimetype):
