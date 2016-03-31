@@ -20,6 +20,10 @@ curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=freewavesamples
 echo
 curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=stampscoinsnotes.com -H 'Authorization: Token ed740e11d3f0e7383d1c7a05a204d6c5f9c501d6'
 echo
+curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=huffingtonpost.com -H 'Authorization: Token ed740e11d3f0e7383d1c7a05a204d6c5f9c501d6'
+echo
+curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=dailykos.com -H 'Authorization: Token ed740e11d3f0e7383d1c7a05a204d6c5f9c501d6'
+echo
 curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=zetacentauri.com -H 'Authorization: Token ed740e11d3f0e7383d1c7a05a204d6c5f9c501d6'
 echo
 curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=freewavesamples.com -H 'Authorization: Token ed740e11d3f0e7383d1c7a05a204d6c5f9c501d6'

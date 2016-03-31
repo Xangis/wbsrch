@@ -62,8 +62,6 @@ class Command(BaseCommand):
                     pass
                 except KeyError:
                     pass
-                except KeyError:
-                    pass
                 try:
                     domain.whois_city = info['city'][0:40]
                 except TypeError:
@@ -80,21 +78,31 @@ class Command(BaseCommand):
                     domain.whois_state = info['state'][0:3]
                 except TypeError:
                     pass
+                except KeyError:
+                    pass
                 try:
                     domain.whois_address = info['address'][0:60]
                 except TypeError:
+                    pass
+                except KeyError:
                     pass
                 try:
                     domain.whois_org = info['org'][0:60]
                 except TypeError:
                     pass
+                except KeyError:
+                    pass
                 try:
                     domain.whois_registrar = info['registrar'][0][0:60]
                 except TypeError:
                     pass
+                except KeyError:
+                    pass
                 try:
                     domain.whois_zipcode = info['zipcode'][0:8]
                 except TypeError:
+                    pass
+                except KeyError:
                     pass
                 try:
                     domain.whois_nameservers = info['name_servers']
