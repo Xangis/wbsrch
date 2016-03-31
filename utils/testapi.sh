@@ -10,6 +10,8 @@ curl -X GET https://wbsrch.com/api/domain_link_rank/?domain=https://youtube.com 
 echo
 curl -X GET https://wbsrch.com/api/domain_link_rank/?domain=arstechnica.com -H 'Authorization: Token ed740e11d3f0e7383d1c7a05a204d6c5f9c501d6'
 echo
+curl -X GET https://wbsrch.com/api/domain_link_rank/?domain=www.zetacentauri.com -H 'Authorization: Token ed740e11d3f0e7383d1c7a05a204d6c5f9c501d6'
+echo
 curl -X GET https://wbsrch.com/api/ip_to_country/?ip=216.151.17.10 -H 'Authorization: Token ed740e11d3f0e7383d1c7a05a204d6c5f9c501d6'
 echo
 curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=zetacentauri.com -H 'Authorization: Token ed740e11d3f0e7383d1c7a05a204d6c5f9c501d6'

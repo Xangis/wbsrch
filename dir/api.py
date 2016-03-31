@@ -60,28 +60,38 @@ def domain_link_rank(request):
     domain = NormalizeDomain(domain)
     print 'Domain: {0}'.format(domain)
     altdomain = ReverseWWW(domain, False)
+    domainfound = False
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
+        domainfound = True
     except ObjectDoesNotExist:
-        return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
+        pass
     is_excluded = False
     try:
         excluded = BlockedSite.objects.get(url=domain)
         is_excluded = True
     except ObjectDoesNotExist:
         pass
-    domains_linking_in = domaininfo.domains_linking_in
+    if domainfound:
+        domains_linking_in = domaininfo.domains_linking_in
+    else:
+        domains_linking_in = 0
     altdomain = ReverseWWW(domain, False)
     if altdomain:
+        print u'Altdomain is {0}'.format(altdomain)
         try:
             altdomaininfo = DomainInfo.objects.get(url=altdomain)
+            print 'Alt domain DomainInfo found'
+            domainfound = True
             print u'{0} domains linking in to domain {1} and {2} linking in to {3} for a total of {4}'.format(domains_linking_in,
                 domain, altdomaininfo.domains_linking_in, altdomain, domains_linking_in + altdomaininfo.domains_linking_in)
             domains_linking_in += altdomaininfo.domains_linking_in
-        except:
+        except ObjectDoesNotExist:
             pass
-    else:
+    elif domainfound:
         print u'{0} domains linking in to domain {1}'.format(domains_linking_in, domain)
+    if not domainfound:
+        return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
     link_rank = GetLinkRank(domains_linking_in)
     # Round to the nearest integer because we don't want to give too much precision away.
     if not decimal:

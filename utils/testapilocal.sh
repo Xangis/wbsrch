@@ -11,6 +11,8 @@ curl -X GET http://localhost:8000/api/domain_link_rank/?domain=http://youtube.co
 echo
 curl -X GET http://localhost:8000/api/domain_link_rank/?domain=arstechnica.com -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
 echo
+curl -X GET http://localhost:8000/api/domain_link_rank/?domain=www.zetacentauri.com -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
+echo
 curl -X GET http://localhost:8000/api/ip_to_country/?ip=216.151.17.10 -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
 echo
 curl -X GET http://localhost:8000/api/domain_pages_in_index/?domain=zetacentauri.com -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
