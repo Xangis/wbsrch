@@ -59,6 +59,7 @@ def domain_link_rank(request):
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
     print 'Domain: {0}'.format(domain)
+    altdomain = ReverseWWW(domain, False)
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
     except ObjectDoesNotExist:
@@ -69,7 +70,19 @@ def domain_link_rank(request):
         is_excluded = True
     except ObjectDoesNotExist:
         pass
-    link_rank = GetLinkRank(domaininfo.domains_linking_in)
+    domains_linking_in = domaininfo.domains_linking_in
+    altdomain = ReverseWWW(domain, False)
+    if altdomain:
+        try:
+            altdomaininfo = DomainInfo.objects.get(url=altdomain)
+            print u'{0} domains linking in to domain {1} and {2} linking in to {3} for a total of {4}'.format(domains_linking_in,
+                domain, altdomaininfo.domains_linking_in, altdomain, domains_linking_in + altdomaininfo.domains_linking_in)
+            domains_linking_in += altdomaininfo.domains_linking_in
+        except:
+            pass
+    else:
+        print u'{0} domains linking in to domain {1}'.format(domains_linking_in, domain)
+    link_rank = GetLinkRank(domains_linking_in)
     # Round to the nearest integer because we don't want to give too much precision away.
     if not decimal:
         link_rank = int(round(link_rank))
@@ -86,8 +99,15 @@ def domain_pages_in_index(request):
     if not domain:
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
+    altdomain = ReverseWWW(domain, False)
     print 'Domain: {0}'.format(domain)
     pages = SiteInfo.objects.filter(rooturl=domain).count()
+    if altdomain:
+        added = SiteInfo.objects.filter(rooturl=altdomain).count()
+        print u'{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages+added)
+        pages += added
+    else:
+        print u'{0} pages for domain {1}'.format(pages, domain)
     return Response({'domain': domain, 'en': pages }, status=200)
 
 @api_view(['GET'])
@@ -98,8 +118,15 @@ def domain_keywords_ranked(request):
     if not domain:
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
+    altdomain = ReverseWWW(domain, False)
     print 'Domain: {0}'.format(domain)
     keywords = KeywordRanking.objects.filter(rooturl=domain, rank__lt=200).count()
+    if altdomain:
+        added = KeywordRanking.objects.filter(rooturl=altdomain, rank__lt=200).count()
+        print u'{0} keywords for domain {1} and {2} keywords for domain {3} for a total of {4}'.format(keywords, domain, added, altdomain, keywords+added)
+        keywords += added
+    else:
+        print u'{0} keywords for domain {1}'.format(keywords, domain)
     return Response({'domain': domain, 'en': keywords }, status=200)
 
 @api_view(['GET'])
