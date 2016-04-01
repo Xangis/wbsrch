@@ -1,0 +1,11 @@
+# This file contains some useful PostgreSQL commands that might be tough to remember exactly.
+
+# Database dump:
+
+time pg_dump -f /media/usb/<dirname> -j 8 -F d zetaweb
+
+# Database restore:
+
+time pg_restore -d zetaweb --format=d -j 8 /media/usb/<dirname>
+
+<dirname> is typically the db name with the date: zetaweb_2016-03-10
