@@ -3640,7 +3640,7 @@ class NewsSite(models.Model):
        return self.url
 
     class Meta:
-        in_db = 'urls'
+        in_db = 'news'
 
 class AutoCompleteBase(models.Model):
     keywords = models.TextField(unique=False)

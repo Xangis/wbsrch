@@ -46,6 +46,14 @@ if environment == 'development':
             'PASSWORD': 'd9irk0kfnv,er9kd2', # Not used with sqlite3.
             'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        },
+        'news': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'news',                  # Or path to database file if using sqlite3.
+            'USER': 'zetaweb',               # Not used with sqlite3.
+            'PASSWORD': 'd9irk0kfnv,er9kd2', # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
 else:
@@ -54,25 +62,33 @@ else:
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'zetaweb',                      # Or path to database file if using sqlite3.
             'USER': 'zetaweb',                      # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',                  # Not used with sqlite3.
+            'PASSWORD': 'd9irk0kfnv,er9kd2',        # Not used with sqlite3.
             'HOST': '216.151.17.11',                # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
         },
         'urls': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'urls',                      # Or path to database file if using sqlite3.
-            'USER': 'urls',                      # Not used with sqlite3.
-            'PASSWORD': 'lkjasd0j3elkd,verdrd.',  # Not used with sqlite3.
-            'HOST': '216.151.17.11',              # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            'NAME': 'urls',                         # Or path to database file if using sqlite3.
+            'USER': 'urls',                         # Not used with sqlite3.
+            'PASSWORD': 'lkjasd0j3elkd,verdrd.',    # Not used with sqlite3.
+            'HOST': '216.151.17.11',                # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
         },
         'indexes': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'indexes',                      # Or path to database file if using sqlite3.
             'USER': 'indexes',                      # Not used with sqlite3.
             'PASSWORD': 'BlargHonk.Dirty,Dirty3Shisno',  # Not used with sqlite3.
-            'HOST': '216.151.17.12',              # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            'HOST': '216.151.17.12',                # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
+        },
+        'news': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'news',                         # Or path to database file if using sqlite3.
+            'USER': 'news',                         # Not used with sqlite3.
+            'PASSWORD': 'WouldYouPleasePutSomeGoddamnedPantsOn?',  # Not used with sqlite3.
+            'HOST': '216.151.17.21',                # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
         }
     }
 
