@@ -356,6 +356,7 @@ def ipaddry(request):
     return render_to_response('ip.htm', {'language_code': language_code }, context_instance=RequestContext(request))
 
 def search(request):
+    log = None
     start = timezone.now()
     result = SearchResult(request.LANGUAGE_CODE)
     # Handle language
@@ -565,7 +566,7 @@ def search(request):
           'show_network_ad': result.show_network_ad, 'typo_for': result.typo_for, 'is_language': result.is_language,
           'is_language_name': is_language_name, 'superuser': superuser, 'refused': result.refused, 'is_domain': result.is_domain,
           'is_ip': result.is_ip, 'names_language': result.names_language, 'names_language_search': result.names_language_search,
-          'names_language_name': names_language_name },
+          'names_language_name': names_language_name, 'log': log },
         context_instance=RequestContext(request))
 
 @permission_required('is_superuser')
@@ -1019,3 +1020,16 @@ def autocomplete(request):
             return HttpResponse(status=404)
     else:
         raise HttpResponse(status=404)
+
+def go(request):
+    click = ResultClick()
+    click.keywords = request.GET.get('keywords', None)
+    click.search_id = request.GET.get('id', None)
+    click.url = request.GET.get('url', None)
+    click.position = request.GET.get('pos', None)
+    if request.META.has_key('REMOTE_ADDR'):
+        click.ip = request.META['REMOTE_ADDR']
+    click.xpos = 0
+    click.ypos = 0
+    click.save()
+    return HttpResponse(status=200)

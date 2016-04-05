@@ -3986,4 +3986,221 @@ class AutoComplete_zu(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
+class ResultClickBase(models.Model):
+    keywords = models.TextField(unique=False)
+    search_id = models.IntegerField()
+    position = models.IntegerField()
+    ip = models.CharField(max_length=16, blank=True, null=True, unique=False)
+    url = models.TextField(blank=False, db_index=True)
+    click_time = models.DateTimeField(auto_now_add=True)
+    xpos = models.IntegerField(null=True, blank=True)
+    ypos = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        in_db = 'indexes'
+        abstract = True
+
+    def __unicode__(self):
+        return '{0} at position {1} in search {2}'.format(self.url, self.position, self.keywords)
+
+class ResultClick(ResultClickBase):
+    pass
+
+class ResultClick_af(ResultClickBase):
+    pass
+
+class ResultClick_ak(ResultClickBase):
+    pass
+
+class ResultClick_bm(ResultClickBase):
+    pass
+
+class ResultClick_br(ResultClickBase):
+    pass
+
+class ResultClick_ca(ResultClickBase):
+    pass
+
+class ResultClick_cs(ResultClickBase):
+    pass
+
+class ResultClick_cy(ResultClickBase):
+    pass
+
+class ResultClick_da(ResultClickBase):
+    pass
+
+class ResultClick_de(ResultClickBase):
+    pass
+
+class ResultClick_ee(ResultClickBase):
+    pass
+
+class ResultClick_el(ResultClickBase):
+    pass
+
+class ResultClick_eo(ResultClickBase):
+    pass
+
+class ResultClick_es(ResultClickBase):
+    pass
+
+class ResultClick_et(ResultClickBase):
+    pass
+
+class ResultClick_eu(ResultClickBase):
+    pass
+
+class ResultClick_ff(ResultClickBase):
+    pass
+
+class ResultClick_fi(ResultClickBase):
+    pass
+
+class ResultClick_fo(ResultClickBase):
+    pass
+
+class ResultClick_fr(ResultClickBase):
+    pass
+
+class ResultClick_fy(ResultClickBase):
+    pass
+
+class ResultClick_gl(ResultClickBase):
+    pass
+
+class ResultClick_ha(ResultClickBase):
+    pass
+
+class ResultClick_hr(ResultClickBase):
+    pass
+
+class ResultClick_hu(ResultClickBase):
+    pass
+
+class ResultClick_ig(ResultClickBase):
+    pass
+
+class ResultClick_is(ResultClickBase):
+    pass
+
+class ResultClick_it(ResultClickBase):
+    pass
+
+class ResultClick_kg(ResultClickBase):
+    pass
+
+class ResultClick_ki(ResultClickBase):
+    pass
+
+class ResultClick_la(ResultClickBase):
+    pass
+
+class ResultClick_lg(ResultClickBase):
+    pass
+
+class ResultClick_ln(ResultClickBase):
+    pass
+
+class ResultClick_lt(ResultClickBase):
+    pass
+
+class ResultClick_lv(ResultClickBase):
+    pass
+
+class ResultClick_nap(ResultClickBase):
+    pass
+
+class ResultClick_nl(ResultClickBase):
+    pass
+
+class ResultClick_no(ResultClickBase):
+    pass
+
+class ResultClick_nso(ResultClickBase):
+    pass
+
+class ResultClick_ny(ResultClickBase):
+    pass
+
+class ResultClick_oc(ResultClickBase):
+    pass
+
+class ResultClick_om(ResultClickBase):
+    pass
+
+class ResultClick_pl(ResultClickBase):
+    pass
+
+class ResultClick_pms(ResultClickBase):
+    pass
+
+class ResultClick_pt(ResultClickBase):
+    pass
+
+class ResultClick_rn(ResultClickBase):
+    pass
+
+class ResultClick_ro(ResultClickBase):
+    pass
+
+class ResultClick_rw(ResultClickBase):
+    pass
+
+class ResultClick_sk(ResultClickBase):
+    pass
+
+class ResultClick_sc(ResultClickBase):
+    pass
+
+class ResultClick_scn(ResultClickBase):
+    pass
+
+class ResultClick_sl(ResultClickBase):
+    pass
+
+class ResultClick_sn(ResultClickBase):
+    pass
+
+class ResultClick_so(ResultClickBase):
+    pass
+
+class ResultClick_ss(ResultClickBase):
+    pass
+
+class ResultClick_st(ResultClickBase):
+    pass
+
+class ResultClick_sv(ResultClickBase):
+    pass
+
+class ResultClick_sw(ResultClickBase):
+    pass
+
+class ResultClick_tn(ResultClickBase):
+    pass
+
+class ResultClick_tr(ResultClickBase):
+    pass
+
+class ResultClick_ts(ResultClickBase):
+    pass
+
+class ResultClick_ve(ResultClickBase):
+    pass
+
+class ResultClick_vec(ResultClickBase):
+    pass
+
+class ResultClick_wo(ResultClickBase):
+    pass
+
+class ResultClick_xh(ResultClickBase):
+    pass
+
+class ResultClick_yo(ResultClickBase):
+    pass
+
+class ResultClick_zu(ResultClickBase):
+    pass
 
