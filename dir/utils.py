@@ -332,6 +332,20 @@ def GetAutoCompleteModelFromLanguage(language):
     else:
         return AutoComplete
 
+def GetResultClickModelFromLanguage(language):
+    if not language or 'en' in language:
+        return ResultClick
+    if 'nn' in language or 'nb' in language:
+        language = 'no'
+    try:
+        model = get_model('dir', 'ResultClick_' + language)
+    except LookupError, e:
+        raise InvalidLanguageException(language)
+    if model:
+        return model
+    else:
+        return ResultClick
+
 def ReverseWWW(domain, rootonly=False):
     """
     If a domain starts with www., return the domain name without that prefix.
