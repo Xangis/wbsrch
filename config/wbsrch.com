@@ -47,7 +47,7 @@ server {
            }
          }
 
-        location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|pdf|zip|exe|wav|gz|bmp|tgz|gz|rar|txt|tar|rtf|otf|ttf|html)$ {
+        location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|pdf|zip|exe|wav|gz|bmp|tgz|gz|rar|txt|tar|rtf|otf|ttf|html|xml)$ {
             root /var/django/wbsrch/templates/;
             access_log off;
             expires 14d;
@@ -56,7 +56,7 @@ server {
         location / {
                 include /etc/nginx/uwsgi_params;
                 uwsgi_pass 127.0.0.1:9116;
-                uwsgi_read_timeout 180;
+                uwsgi_read_timeout 300;
         }
 
         error_page 502 503 =503 @maintenance;
