@@ -60,8 +60,8 @@ function autocomp() {
   req.send('q=' + val);
 }
 
-function go(url, keywords, pos, id) {
+function go(url, keywords, pos, id, lang) {
   if(document.images){
-    (new Image()).src = '/go/?keywords=' + keywords + '&url=' + url + '&pos=' + pos + '&id=' + id;
+    (new Image()).src = '/go/?keywords=' + keywords + '&url=' + url + '&pos=' + pos + '&id=' + id + '&lang=' + lang;
   }
 }

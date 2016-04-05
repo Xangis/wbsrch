@@ -1022,7 +1022,9 @@ def autocomplete(request):
         raise HttpResponse(status=404)
 
 def go(request):
-    click = ResultClick()
+    lang = request.GET.get('lang', None)
+    result_model = GetResultClickModelFromLanguage(lang)
+    click = result_model()
     click.keywords = request.GET.get('keywords', None)
     click.search_id = request.GET.get('id', None)
     click.url = request.GET.get('url', None)

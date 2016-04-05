@@ -59,10 +59,10 @@
 {% for result in search_results %}
 {% if allfromdomain %}
 {% for url in result.1.urls %}
-<h3><a href="{{ url.url }}" onclick="return go(this.href, '{{ searchterm }}', {{ forloop.counter }}, {% if log %}{{ log.id }}{% else %}0{% endif %})"><span class="sitetitle">{% if url.title %}{{ url.title|truncatewords:15 }}{% else %}(No Title){% endif %}</span></a></h3>
+<h3><a href="{{ url.url }}" onclick="return go(this.href, '{{ searchterm }}', {{ forloop.counter }}, {% if log %}{{ log.id }}{% else %}0{% endif %}, '{{ language_code }}')"><span class="sitetitle">{% if url.title %}{{ url.title|truncatewords:15 }}{% else %}(No Title){% endif %}</span></a></h3>
 <p class="site">
 {% if url.description %}<span class="sitedescription">{{ url.description|truncatewords:45 }}</span>{% else %}<em>{% trans "No page description." %}</em>{% endif %}<br />
-<em><a href="{{ url.url }}" onclick="return go(this.href, '{{ searchterm }}, {% if log %}{{ log.id }}{% else %}0{% endif %})', {{ forloop.counter }})">{{ url.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.0 }}"><img src="/images/Link.png" title="View domain details for {{ result.0 }}." alt="Domain" /></a><br />
+<em><a href="{{ url.url }}" onclick="return go(this.href, '{{ searchterm }}, {% if log %}{{ log.id }}{% else %}0{% endif %}, '{{ language_code }}')', {{ forloop.counter }})">{{ url.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.0 }}"><img src="/images/Link.png" title="View domain details for {{ result.0 }}." alt="Domain" /></a><br />
 {% if superuser %}<span class="smallertext"><a href="https://wbsrch.com/adminpanel/?crawlurl={{ result.1.urls.0.url }}">[recrawl]</a> 
 <a href="https://wbsrch.com/adminpanel/blocksite/?reason=8&site={{ result.1.urls.0.url }}">[block]</a> 
 <a href="https://wbsrch.com/adm/dir/siteinfo/?q={{ result.0 }}">[view domain pages in admin]</a>
@@ -70,10 +70,10 @@
 </p>
 {% endfor %}
 {% else %}
-<h3><a href="{{ result.1.urls.0.url }}" onclick="return go(this.href, '{{ searchterm }}', {{ forloop.counter }}, {% if log %}{{ log.id }}{% else %}0{% endif %})"><span class="sitetitle">{% if result.1.urls.0.title %}{{ result.1.urls.0.title|truncatewords:15 }}{% else %}(No Title){% endif %}</span></a></h3>
+<h3><a href="{{ result.1.urls.0.url }}" onclick="return go(this.href, '{{ searchterm }}', {{ forloop.counter }}, {% if log %}{{ log.id }}{% else %}0{% endif %}, '{{ language_code }}')"><span class="sitetitle">{% if result.1.urls.0.title %}{{ result.1.urls.0.title|truncatewords:15 }}{% else %}(No Title){% endif %}</span></a></h3>
 <p class="site">
 {% if result.1.urls.0.description %}<span class="sitedescription">{{ result.1.urls.0.description|truncatewords:45 }}</span>{% else %}<em>{% trans "No page description." %}</em>{% endif %}<br />
-<em><a href="{{ result.1.urls.0.url }}" onclick="return go(this.href, '{{ searchterm }}', {{ forloop.counter }}, {% if log %}{{ log.id }}{% else %}0{% endif %})">{{ result.1.urls.0.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.0 }}"><img src="/images/Link.png" title="View domain details for {{ result.0 }}." alt="Domain" /></a> <a href="/search/?q={{ searchterm }}&domain={{ result.0 }}">({{ result.1.urls|length }} from this site)</a><br />
+<em><a href="{{ result.1.urls.0.url }}" onclick="return go(this.href, '{{ searchterm }}', {{ forloop.counter }}, {% if log %}{{ log.id }}{% else %}0{% endif %}, '{{ language_code }}')">{{ result.1.urls.0.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.0 }}"><img src="/images/Link.png" title="View domain details for {{ result.0 }}." alt="Domain" /></a> <a href="/search/?q={{ searchterm }}&domain={{ result.0 }}">({{ result.1.urls|length }} from this site)</a><br />
 {% if superuser %}<span class="smallertext"><a href="https://wbsrch.com/adminpanel/?crawlurl={{ result.1.urls.0.url }}">[recrawl]</a> 
 <a href="https://wbsrch.com/adminpanel/blocksite/?reason=8&site={{ result.1.urls.0.url }}">[block]</a> 
 <a href="https://wbsrch.com/adm/dir/siteinfo/?q={{ result.0 }}">[view domain pages in admin]</a>
