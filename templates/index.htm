@@ -11,6 +11,7 @@
 <meta property="og:image" content="https://wbsrch.com/images/WbSrchLogo.png">
 <meta property="og:locale" content="{{ language_code }}" />
 <meta name=”twitter:creator” content=”@xangis“>
+{% if language_code == 'en' %}<link rel="search" href="https://wbsrch.com/opensearchdescription.xml" type="application/opensearchdescription+xml" title="WbSrch" />{% endif %}
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link href="https://twitter.com/xangis" rel="me">
 <link rel="canonical" href="https://{% if language_code != "en" %}{{ language_code }}.{% endif %}wbsrch.com" />

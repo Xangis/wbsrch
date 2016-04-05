@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+ <ShortName>WbSrch Web Search</ShortName>
+ <Description>Search the web with WbSrch</Description>
+ <InputEncoding>UTF-8</InputEncoding>
+ <Image width="16" height="16">data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABjov8AAAAAAAAKQRRFeJT/RXmY/0Z5l/9Ri6P/UYui/1GLo/9RiqL/UYyk/1KNpf9Tjqf/PGqP/0uBoP8xWoTvAAAAAAAAAAAACEIVTYOe/0yCn/9Tjqb/Zam6/2Squv9kqbn/Zam6/2aquv9mrL3/Zaq6/0Z7mv9Xkqv/OGOL8AAAAAAAAAAADiBTGEZ7mP9Sjqj/ZKq7/zxZYf84Vl3/Z6y9/2Wpuf9nrLz/JC4w/2ChsP9foLL/Uoyn/zdljvMAAAAAAAAAAAweVBpWkaj/Zam6/12Yp/8XFxb/GhcX/2ChsP9mrL3/O1ti/xgWFv9HcHn/Zqu7/2Wquv9Bc5fzAAAAAAAAAAAKHE4aVZCm/2Spuf9AZG3/GhkZ/zBHTf89Xmb/Y6e3/xMODf8ZGBj/JDE0/2mwwf9kqLn/QHCS8wAAAAAAAAAACRtMGlaTqf9pscL/ISUl/xgVFP9ipLT/NU1T/0Npcv8cGxr/Kzg8/xseH/9jpLT/Zqu8/0BxkvMAAAAAAAAAAAsdUhpWkaj/WZGe/xcVFP8lMTT/arDB/0t5hP8UEhH/GhkZ/zlVW/87V17/THyH/2eru/9BcpXzAAAAAAAAAAALIVsZVpOq/zxgZ/8WFRX/Q2lx/2Spuv9lp7f/HyUm/xcWFv9cm6r/U4eT/zhVXP9kqbr/QXOU8wAAAAAYGBj7GRsgkjxfa/8oNTj/GxkY/1uWo/9mq7r/Z6u7/z5eZf83TVL/aa6+/2mxw/8hJCX/arHC/z9wkvMAAAAAFRUVbRobHM8XFhX/FxUV/xwdHf9jpLT/aKy8/2aqu/9yrrz/gbPA/2usvP9nrr7/LD9D/2OktP9AcJLzAAAAAAAAAAAKK4ASUomb/09/if9PgIz/Zqy9/2aru/9mqrr/Zqq6/2msvP9lqrr/Z6y9/05/iv9MeYP/QXKT8wAAAAAAAAAADBxaFDBahv8zX4v/WZet/2aqu/9lqbn/ZKi5/2apuv9mqrr/Zam5/1SJlf8WExL/IS86/yxTg/EAAAAAAAAAAAAAQxJIgp7/S4il/1aRqP9nrLr/Z6y7/2eruv9mqrn/Z6y6/2aruv9nq7n/Sn2T/xsaGP8xVXX1AAAAAAAAAAAPI1cGFC5laRUvaWIkRnZpJkl5aiZJd2omSHdqJkl3aiZIdWolSHVqJkh2ah8+cmYXIC6cGBwnvQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABoaGt4AAAAA//8AAMABAADAAQAAwAEAAMABAADAAQAAwAEAAMABAADAAQAAAAEAAIABAADAAQAAwAEAAMABAAD/+QAA//0AAA==</Image>
+ <SearchForm>http://wbsrch.com/search/</SearchForm>
+ <Tags>wbsrch, search, engine, searchengine</Tags>
+ <Url type="text/html" method="GET" template="https://wbsrch.com/search/?q={searchTerms}" resultDomain="wbsrch.com"/>
+</OpenSearchDescription>
