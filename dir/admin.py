@@ -2145,6 +2145,14 @@ class ResultClickAdmin(admin.ModelAdmin):
     list_display = ('keywords', 'position', 'url', 'ip', 'search_id')
     search_fields = ('keywords',)
 
+class APISubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('user', 'monthly_calls', 'expires')
+    search_fields = ('user__username',)
+
+class APIUsageAdmin(admin.ModelAdmin):
+    list_display = ('user', 'month', 'year', 'calls_used')
+    search_fields = ('user__username',)
+
 admin.site.register(BlockedSite, ExcludedSiteAdmin)
 admin.site.register(SiteInfo, SiteInfoAdmin)
 admin.site.register(SiteInfoEndingInAD, SiteInfoEndingInADAdmin)
@@ -2871,3 +2879,5 @@ admin.site.register(ResultClick_wo, ResultClickAdmin)
 admin.site.register(ResultClick_xh, ResultClickAdmin)
 admin.site.register(ResultClick_yo, ResultClickAdmin)
 admin.site.register(ResultClick_zu, ResultClickAdmin)
+admin.site.register(APISubscription, APISubscriptionAdmin)
+admin.site.register(APIUsage, APIUsageAdmin)

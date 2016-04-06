@@ -6,6 +6,7 @@ from django.template.defaultfilters import truncatechars
 from django.db import IntegrityError, connection, transaction
 from django.utils.timezone import utc
 from django.utils import timezone
+from django.contrib.auth.models import User
 import random
 import urlparse
 import datetime
@@ -4203,4 +4204,23 @@ class ResultClick_yo(ResultClickBase):
 
 class ResultClick_zu(ResultClickBase):
     pass
+
+class APISubscription(models.Model):
+    user = models.ForeignKey(User)
+    monthly_calls = models.IntegerField(default=5000)
+    expires = models.DateField()
+
+    class Meta:
+        # Should be in indexes, but has relationship to auth.User in default
+        in_db = 'default'
+
+class APIUsage(models.Model):
+    user = models.ForeignKey(User)
+    month = models.IntegerField()
+    year = models.IntegerField()
+    calls_used = models.IntegerField(default=0)
+
+    class Meta:
+        # Should be in indexes, but has relationship to auth.User in default
+        in_db = 'default'
 
