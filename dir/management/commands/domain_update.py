@@ -69,7 +69,7 @@ class Command(BaseCommand):
                 except KeyError:
                     pass
                 try:
-                    domain.whois_country = info['country'][0:3]
+                    domain.whois_country = info['country'][0:16]
                 except TypeError:
                     pass
                 except KeyError:

@@ -609,7 +609,7 @@ class DomainInfo(models.Model):
     num_keywords_last_updated = models.DateField(null=True, blank=True)
     whois_name = models.CharField(max_length=60, null=True, blank=True)
     whois_city = models.CharField(max_length=40, null=True, blank=True)
-    whois_country = models.CharField(max_length=3, null=True, blank=True)
+    whois_country = models.CharField(max_length=16, null=True, blank=True)
     whois_state = models.CharField(max_length=10, null=True, blank=True)
     whois_address = models.CharField(max_length=80, null=True, blank=True)
     whois_org = models.CharField(max_length=60, null=True, blank=True)
