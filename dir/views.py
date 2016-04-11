@@ -242,7 +242,8 @@ def domain(request):
     if request.user and request.user.is_superuser:
         superuser = True
     domain = request.GET.get('q', None)
-    domain = domain.lower()
+    if domain:
+        domain = domain.lower()
     if domain:
         if BannedSearchString(domain):
             return HttpResponseForbidden('Only a bot would make this request. Denied.')
