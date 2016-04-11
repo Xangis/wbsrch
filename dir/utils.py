@@ -1329,7 +1329,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
-        if item.pagetext.startswith('Buy this domain.'):
+        if item.pagetext.startswith('Buy this domain.') or (u'This website is for sale' in item.pagetitle):
             if verbose:
                 rulematches.append('Lose half of points for parked domain.')
             value /= 2
