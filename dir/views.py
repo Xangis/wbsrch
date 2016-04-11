@@ -136,10 +136,11 @@ def index(request):
     recent_terms = cache.get('recent_terms_' + language_code)
     if not recent_terms:
         recent_terms = list(index_model.objects.filter(num_results__gt=9, actively_blocked=False, typo_for__isnull=True, is_language__isnull=True).order_by('-date_indexed')[:10])
-        # Cache for up to 60 seconds.
-        cache.set('recent_terms_' + language_code, recent_terms, 60)
+        # Cache for up to 180 seconds.
+        cache.set('recent_terms_' + language_code, recent_terms, 180)
     else:
         cached = True
+
     return render_to_response('index.htm', {'language_code': language_code, 'recent_terms': recent_terms, 'superuser': superuser, 'cached': cached }, context_instance=RequestContext(request))
 
 def policy(request):
@@ -239,6 +240,7 @@ def domain(request):
         raise Http404
     language_code = request.LANGUAGE_CODE
     superuser = False
+    cached = False
     if request.user and request.user.is_superuser:
         superuser = True
     domain = request.GET.get('q', None)
@@ -287,7 +289,16 @@ def domain(request):
             except ObjectDoesNotExist:
                 pass
         siteinfos = site_model.objects.filter(rooturl=domain)
-        rankings = ranking_model.objects.filter(rooturl=domain, rank__lte=200, show=True).order_by('rank', 'keywords')[0:100]
+
+        # Get cached keyword rankings if available, otherwise query and cache.
+        rankings = cache.get('rankings_' + domain)
+        if not rankings:
+            rankings = list(ranking_model.objects.filter(rooturl=domain, rank__lte=200, show=True).order_by('rank', 'keywords')[0:100])
+        # Cache for up to 3 days (in seconds).
+            cache.set('rankings_' + domain, rankings, 259200)
+        else:
+            cached = True
+
         num_records = siteinfos.count()
         siteinfos = siteinfos[:200]
         searchlog = DomainSearchLog()
@@ -318,7 +329,7 @@ def domain(request):
 
         return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
             'num_records': num_records, 'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
-            'link': link, 'parent': parent },
+            'link': link, 'parent': parent, 'cached': cached },
             context_instance=RequestContext(request))
     return render_to_response('domain.htm', {'language_code': language_code }, context_instance=RequestContext(request))
 
