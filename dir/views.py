@@ -291,11 +291,11 @@ def domain(request):
         siteinfos = site_model.objects.filter(rooturl=domain)
 
         # Get cached keyword rankings if available, otherwise query and cache.
-        rankings = cache.get('rankings_' + domain)
+        rankings = cache.get('rankings_' + language_code + '_' + domain)
         if not rankings:
             rankings = list(ranking_model.objects.filter(rooturl=domain, rank__lte=200, show=True).order_by('rank', 'keywords')[0:100])
         # Cache for up to 3 days (in seconds).
-            cache.set('rankings_' + domain, rankings, 259200)
+            cache.set('rankings_' + language_code + '_' + domain, rankings, 259200)
         else:
             cached = True
 
