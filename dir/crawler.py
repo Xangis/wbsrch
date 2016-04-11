@@ -766,11 +766,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
         except:
             print u'Retrieving URL'
         req = urllib2.Request(url)
-        try:
-            user_agent = Setting.objects.get(name='wbsrch_user_agent')
-            req.add_header('User-agent', user_agent.value)
-        except ObjectDoesNotExist:
-            req.add_header('User-agent', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0')
+        req.add_header('User-agent', 'Mozilla/5.0 (compatible; WbSrch/1.1 +http://wbsrch.com)')
         try:
             response = urllib2.urlopen(req, timeout=20)
             if ParseHtml(pendinglinks, url, response, descriptive, recrawl):

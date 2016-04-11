@@ -3,8 +3,10 @@
 <meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine.">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+{% if excluded %}<meta name="robots" content="noindex">{% endif %}
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>{% if domain %}{{ domain }} | {% endif %} {% trans "Domain" %} Details | WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }})</title>
+{% if domain %}<link rel="canonical" href="https://wbsrch.com/domain/?q={{ domain }}" />{% endif %}
 {% ssi '/var/django/wbsrch/templates/style.inc' %}
 {% ssi '/var/django/wbsrch/templates/analytics.inc' %}
 </head>
