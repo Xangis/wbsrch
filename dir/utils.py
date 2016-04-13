@@ -2178,6 +2178,7 @@ def GenerateIndexStats(save=False):
         stats.total_urls += langdata['count']
         stats.total_indexes += langdata['indexes']
         stats.total_pendingindexes += langdata['pending_indexes']
+        stats.most_linked_to_domains = json.dumps(list(DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in'))[0:100])
         langs.append(langdata)
     langs.sort(key=lambda item: item['lang'])
     stats.langs = json.dumps(langs)

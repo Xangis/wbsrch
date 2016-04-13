@@ -3318,6 +3318,7 @@ class IndexStats(models.Model):
     total_indexes = models.IntegerField()
     total_pendingindexes = models.IntegerField()
     create_date = models.DateField(auto_now_add=True)
+    most_linked_to_domains = models.TextField()
 
     def __unicode__(self):
         return 'Index Stats on ' + str(self.create_date)

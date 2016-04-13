@@ -974,13 +974,17 @@ def most_linked_domains(request):
     cached = False
     if language_code == 'en-us':
         language_code = 'en'
-    domains = cache.get('most_linked_domains')
-    if not domains:
-        domains = list(DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in'))[0:100]
-        # Cache for up to 10 days.
-        cache.set('most_linked_domains', domains, 864000)
-    else:
-        cached = True
+
+    try:
+        stats = IndexStats.objects.all()[0]
+    except:
+        # Will only happen with an empty database.
+        stats = GenerateIndexStats(True)
+    try:
+        domains = json.loads(stats.most_linked_to_domains)
+    except ValueError:
+        domains = []
+
     return render_to_response('mostlinked.htm', {'domains': domains, 'cached': cached, 'language_code': language_code})
 
 def popular_searches(request, year=None, month=None):
