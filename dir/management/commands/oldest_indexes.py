@@ -14,7 +14,7 @@ class Command(BaseCommand):
     Shows the oldest indexes and/or the oldest index items.
     """
     option_list = BaseCommand.option_list + (
-        make_option('-d', '--date', default=None, action='store', type='string', dest='date', help='Date to show old index counts from (default=do not show).'),
+        make_option('-d', '--date', default=None, action='store', type='string', dest='date', help='Date to show old index or url counts from (default=do not show).'),
         make_option('-o', '--oldest', default=False, action='store_true', dest='oldest', help='Show oldest indexes (dfault=False).'),
         make_option('-s', '--showempty', default=False, action='store_true', dest='showempty', help='Show empty index counts (use with -d).'),
         make_option('-u', '--urls', default=False, action='store_true', dest='showurls', help='Show oldest urls by language.'),
@@ -41,12 +41,18 @@ class Command(BaseCommand):
             if options['showurls']:
                 items = site_model.objects.order_by('lastcrawled')[0:1]
                 for item in items:
-                    msgs1.append(u'{0} oldest url is on {1} for url {2}'.format(language, item.lastcrawled, item.url))
+                    msgs1.append(u'{0} oldest url is on {1} for url id {2} - {3}'.format(language, item.lastcrawled, item.id, item.url))
             if sdate:
-                num_items = index_model.objects.filter(date_indexed__lt=sdate).count()
-                total_items += num_items
-                if num_items > 0 or showempty:
-                    msgs2.append(u'{0} has {1} indexes before {2}'.format(language, num_items, sdate))
+                if not options['showurls']:
+                    num_items = index_model.objects.filter(date_indexed__lt=sdate).count()
+                    total_items += num_items
+                    if num_items > 0 or showempty:
+                        msgs2.append(u'{0} has {1} indexes before {2}'.format(language, num_items, sdate))
+                else:
+                    num_items = site_model.objects.filter(lastcrawled__lt=sdate).count()
+                    total_items += num_items
+                    if num_items > 0 or showempty:
+                        msgs2.append(u'{0} has {1} pages last crawled before {2}'.format(language, num_items, sdate))
         # Do this so things are grouped.
         for message in msgs1:
             print message
