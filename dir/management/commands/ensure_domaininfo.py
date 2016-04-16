@@ -10,6 +10,10 @@ import time
 import codecs
 
 class Command(BaseCommand):
+    help = """
+    Due to redirects and other things, domains don't always have a DomainInfo record when they have URLs
+    in the database. This is used to fix that by creating DomainInfo records where they're missing.
+    """
     option_list = BaseCommand.option_list + (
         #make_option('-a', '--abbreviated', default=False, action='store_true', dest='abbreviated', help='Run in abbreviated mode, which does not scan page text.'),
         #make_option('-d', '--detailed', default=False, action='store_true', dest='verbose', help='Run in verbose mode.'),

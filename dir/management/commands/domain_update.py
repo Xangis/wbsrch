@@ -7,6 +7,8 @@ from dir.domain import GetDomainInfo
 import time
 
 class Command(BaseCommand):
+    help = "This command updates domain whois-related information such as expiration, registrar, etc."
+
     option_list = BaseCommand.option_list + (
         #make_option('-a', '--abbreviated', default=False, action='store_true', dest='abbreviated', help='Run in abbreviated mode, which does not scan page text.'),
         make_option('-d', '--detailed', default=False, action='store_true', dest='detailed', help='Run in verbose mode.'),

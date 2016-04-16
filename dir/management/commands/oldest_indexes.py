@@ -10,8 +10,8 @@ import dateutil.parser
 import pytz
 
 class Command(BaseCommand):
-    """
-    Shows the oldest indexes and/or the oldest index items.
+    help = """
+    Shows the oldest indexes and/or the oldest index items. Or shows the oldest crawled URLs.
     """
     option_list = BaseCommand.option_list + (
         make_option('-d', '--date', default=None, action='store', type='string', dest='date', help='Date to show old index or url counts from (default=do not show).'),

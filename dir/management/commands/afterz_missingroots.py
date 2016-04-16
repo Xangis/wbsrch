@@ -7,8 +7,9 @@ from dir.utils import GetRootUrl
 import dateutil.parser
 
 class Command(BaseCommand):
-    """
-    Shows the oldest indexes and/or the oldest index items.
+    help = """
+    Checks site infos after z, or with a particular extension, for missing root URLs so we can crawl them to be sure that
+    we make an informed language block decision.
     """
     option_list = BaseCommand.option_list + (
         make_option('-e', '--extension', action='store', dest='extension', help='Check files with this extension instead of afterz.'),

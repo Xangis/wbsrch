@@ -7,7 +7,7 @@ from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
 import codecs
 
 class Command(BaseCommand):
-    """
+    help = """
     This command processes a file containing a list of words. If those words are not already indexed for the specified
     language, it adds them to the pending index list so that the indexer will build an index term for them.
     """

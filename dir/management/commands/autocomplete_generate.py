@@ -8,8 +8,9 @@ from dir.views import language_list
 import datetime
 
 class Command(BaseCommand):
-    """
-    Shows the oldest indexes and/or the oldest index items.
+    help = """
+    Generates autocomplete data based on search popularity in the search logs for all languages. This takes a long time, and autocomplete
+    will be broken for the currently running languages because it deletes all existing autocompletes first.
     """
     #option_list = BaseCommand.option_list + (
     #    make_option('-d', '--date', default=None, action='store', type='string', dest='date', help='Date to show old index counts from (default=do not show).'),

@@ -9,9 +9,11 @@ import sys
 import operator
 
 class Command(BaseCommand):
-    """
-    This command processes a file containing a list of words. If those words are not already indexed for the specified
-    language, it adds them to the pending index list so that the indexer will build an index term for them.
+    help = """
+    This gets the words from the English index and checks them against the index for another language. If
+    there are more than X (threshold) results, it prompts you whether to tag that word as being in the target
+    language. Works based on the idea that if a word shows up a lot in a known-other-language, that word might
+    be in that language.
     """
     option_list = BaseCommand.option_list + (
         make_option('-l', '--language', default=None, action='store', type='string', dest='language', help='Language to use for pending indexes (required).'),

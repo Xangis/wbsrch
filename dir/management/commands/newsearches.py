@@ -8,6 +8,7 @@ from django.utils import timezone
 import datetime
 
 class Command(BaseCommand):
+    help = "Checks the search logs for new searches in all languages in the past X days and prints them."
     option_list = BaseCommand.option_list + (
         make_option('-d', '--days', default=1, action='store', type='int', dest='days', help='Number of days to query for. (default=1)'),
     )

@@ -7,6 +7,7 @@ from dir.models import DomainInfo, PageLink, BlockedSite
 import time
 
 class Command(BaseCommand):
+    help = "Checks link and block data to create a list of domains that are probably spam."
     option_list = BaseCommand.option_list + (
         make_option('-m', '--max', default=100, action='store', type='int', dest='max', help='Max number of domains to check. (default=100)'),
         make_option('-s', '--sleep', default=0, action='store', type='int', dest='sleep', help='Time to sleep between domain checks. (default=0)'),
