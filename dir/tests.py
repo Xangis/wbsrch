@@ -856,6 +856,81 @@ class InfixLanguageTestCase(TestCase):
         url = u'https://www.wbsrch.com/fr/welcome/index.php'
         self.assertEqual(u'fr', GetInfixLanguage(url))
 
+    # These are specific use cases that have failed in production in the past.
+
+    def test_tough_infix1(self):
+        url = u'http://www.myswitzerland.com/de-ch/empfehlungen/sommerferien.html'
+        self.assertEqual(u'de', GetInfixLanguage(url))
+
+    def test_tough_infix2(self):
+        url = u'https://www.xing.com/company/haufe-gruppe'
+        self.assertEqual(u'en', GetInfixLanguage(url))
+
+    def test_tough_infix3(self):
+        url = u'http://www.bloglovin.com/wolfj'
+        self.assertEqual(u'en', GetInfixLanguage(url))
+
+    def test_tough_infix4(self):
+        url = u'http://www.dell.com/co/empresas/p/latitude-laptops.aspx?s=bsd&c=co&%7Eck=mn&l=es'
+        self.assertEqual(u'es', GetUrlParameterLanguage(url))
+
+    def test_tough_infix5(self):
+        url = u'http://studybible.info/Hungarian/1%20Corinthians'
+        self.assertEqual(u'hu', GetInfixLanguage(url))
+
+    def test_tough_infix6(self):
+        url = u'http://studybible.info/Croatian/1%20Corinthians'
+        self.assertEqual(u'hr', GetInfixLanguage(url))
+
+    def test_tough_infix7(self):
+        url = u'http://studybible.info/Estonian/1%20Corinthians'
+        self.assertEqual(u'et', GetInfixLanguage(url))
+
+    def test_tough_infix8(self):
+        url = u'http://studybible.info/Danish/1%20Corinthians'
+        self.assertEqual(u'da', GetInfixLanguage(url))
+
+    def test_tough_infix9(self):
+        url = u'http://www.zomato.com/london/kings-cross-restaurants'
+        self.assertEqual(u'en', GetInfixLanguage(url))
+
+    def test_tough_infix10(self):
+        url = u'http://www.rhonealpesjob.com/wolseleyfrance'
+        self.assertEqual(u'en', GetInfixLanguage(url))
+
+    def test_tough_infix11(self):
+        url = u'http://subtitlesbank.com/cs/subtitles/language/fr/'
+        self.assertEqual(u'cs', GetInfixLanguage(url))
+
+    def test_tough_infix12(self):
+        url = u'http://subtitlesbank.com/el/subtitles/language/fr/'
+        self.assertEqual(u'el', GetInfixLanguage(url))
+
+    def test_tough_infix13(self):
+        url = u'http://www.bloglovin.com/littlecoltposts'
+        self.assertEqual(u'en', GetInfixLanguage(url))
+
+    def test_tough_infix14(self):
+        url = u'https://www.fedex.com/lite/lite-ship.html?locale=en_gb&cntry_code=gb'
+        self.assertEqual(u'en', GetUrlParameterLanguage(url))
+
+    def test_tough_infix15(self):
+        url = u'http://www.gmx.net/magazine/wirtschaft/haushalt-strom-sparen-18916260'
+        self.assertEqual(u'en', GetInfixLanguage(url))
+
+    def test_tough_infix16(self):
+        url = u'http://newpressrelease.com/finance/71851-how-to-choose-an-unsecured-line-of-credit'
+        self.assertEqual(u'en', GetInfixLanguage(url))
+
+    def test_tough_infix17(self):
+        url = u'http://www.adtech.com/products/lite.html'
+        self.assertEqual(u'en', GetInfixLanguage(url))
+
+    def test_tough_infix18(self):
+        url = u'http://www.directorioforuns.com/pt/tag/mundo/az'
+        self.assertEqual(u'pt', GetInfixLanguage(url))
+
+
 class PageLanguageTestCase(TestCase):
     def test_get_page_language(self):
         url = u'http://de.wbsrch.de/de/welcome.htm'
