@@ -2,12 +2,12 @@ from subprocess import call
 import time
 import random
 
-SLEEP_TIME = 2
+SLEEP_TIME = 1
 
 while True:
-    # Reindex one term for every 10 new terms being indexed.
-    call(['python', 'manage.py', 'domain_data_update', '-m', '250', '-s', str(SLEEP_TIME)])
+    # Update one existing domain for every 5 new domains being updated.
+    call(['python', 'manage.py', 'domain_data_update', '-m', '600', '-s', str(SLEEP_TIME)])
     time.sleep(SLEEP_TIME)
-    call(['python', 'manage.py', 'domain_data_update', '-r', '-m', '25', '-s', str(SLEEP_TIME)])
+    call(['python', 'manage.py', 'domain_data_update', '-r', '-m', '120', '-s', str(SLEEP_TIME)])
     time.sleep(SLEEP_TIME)
     
