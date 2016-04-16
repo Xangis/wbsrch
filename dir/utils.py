@@ -1439,24 +1439,27 @@ def CopySiteData(site, newsite):
 # language if it didn't have a language tag already.
 # If tag_as_subdir is true, we set "uses language subdirs" flag on that
 # domain. uses_language_subdirs is only checked if whole_domain is not true.
-def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False):
+def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=False):
     if whole_domain:
         # Set ranked keywords for that domain to reindex.
         existing_model = type(site)
-        print u'MoveSiteTo: Existing model is: {0}'.format(existing_model.__name__)
+        if verbose:
+            print u'MoveSiteTo: Existing model is: {0}'.format(existing_model.__name__)
         # Handle SiteInfo, SiteInfoAfterZ, SiteInfoBeforeZero
         if existing_model.__name__ == 'SiteInfo' or not '_' in existing_model.__name__:
             existlang = 'en'
         else:
             existlang = existing_model.__name__[-2:]
         ranking_model = GetKeywordRankingModelFromLanguage(existlang)
-        print u'MoveSiteTo: Ranking model is: {0}'.format(ranking_model)
+        if verbose:
+            print u'MoveSiteTo: Ranking model is: {0}'.format(ranking_model)
         keywords = ranking_model.objects.filter(rooturl=site.rooturl)
         for keyword in keywords:
-            try:
-                print u"MoveSiteTo: Keywords '{0}' added to {1} pending index.".format(keyword.keywords, existlang)
-            except:
-                print u"MoveSiteTo: Keywords added to {0} pending index.".format(existlang)
+            if verbose:
+                try:
+                    print u"MoveSiteTo: Keywords '{0}' added to {1} pending index.".format(keyword.keywords, existlang)
+                except:
+                    print u"MoveSiteTo: Keywords added to {0} pending index.".format(existlang)
             AddPendingTerm(keyword.keywords, existlang, u'Site {0} moved to {1} and it ranks {2} for {3}'.format(site, language, keyword.rank, keyword.keywords))
         # Set the domain's language. If we're moving a URL parameter or langid page, this is a noop.
         SetDomainLanguage(site.rooturl, language)
