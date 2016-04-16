@@ -3,7 +3,7 @@
 # The intent is to have a working server after this script has been run.
 # We are not there yet.
 echo Installing apt packages.
-sudo apt-get install lm-sensors python python-virtualenv virtualenvwrapper libpq-dev python-dev postgresql-9.3-postgis-2.1 git zip unzip bind9 bind9utils openssh-server nginx build-essential usbmount memcached aptitude sysstat pgtune automake libtool gdb uwsgi uwsgi-plugin-python libgeoip-dev
+sudo apt-get install lm-sensors python python-virtualenv virtualenvwrapper libpq-dev python-dev postgresql-9.3-postgis-2.1 git zip unzip bind9 bind9utils openssh-server nginx build-essential usbmount memcached aptitude sysstat pgtune automake libtool gdb uwsgi uwsgi-plugin-python libgeoip-dev gettext
 echo Copying Postgres pg_hba.conf.
 sudo cp pg_hba.conf /etc/postgresql/9.3/main/pg_hba.conf
 sudo chown postgres:postgres /etc/postgresql/9.3/main/pg_hba.conf
