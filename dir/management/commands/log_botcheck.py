@@ -24,6 +24,10 @@ def CheckLogsForBots(lang, options):
     print u'{0} of {1} log entries in {2} were checked. {3} newly marked as bots. Others were already bots or had no browser string.'.format(checked, total, lang, changed)
 
 class Command(BaseCommand):
+    help = """
+    This command examines the search logs for known bot user agent strings and marks searches as bot
+    searches. It should be run when we add new user agents to the bot list in utils.IsBotAgent.
+    """
     option_list = BaseCommand.option_list + (
         make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for search logs (default=en).'),
         make_option('-e', '--everything', default=False, action='store_true', dest='everything', help='Process everything, all languages.'),

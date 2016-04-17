@@ -11,9 +11,10 @@ import json
 from collections import Counter
 
 class Command(BaseCommand):
-    """
-    This command processes a file containing a list of words. If those words are not already indexed for the specified
-    language, it adds them to the pending index list so that the indexer will build an index term for them.
+    help = """
+    Checks all of the index terms tagged as a particular language, counting up the URLs from each domain that are
+    in the results for them. It uses this data to generate a score, with high scores meaning that a domain is
+    probably in that language, i.e. a score of 900 for DE means that domain is probably in German.
     """
     option_list = BaseCommand.option_list + (
         make_option('-l', '--language', default=None, action='store', type='string', dest='language', help='Language to use for pending indexes (required).'),

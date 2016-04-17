@@ -6,6 +6,8 @@ from dir.utils import *
 from dir.language import NLTKLanguageDetect, IdentifyPageLanguage, IdentifyLanguage
 
 class Command(BaseCommand):
+    help = "Performs semi-manual language categorization for domains."
+
     option_list = BaseCommand.option_list + (
         make_option('-m', '--maxurls', default=100000, action='store', type='int', dest='maxurls', help='Max number of URLs in domain to start with, in descending order. (default=100000)'),
         make_option('-i', '--items', default=100, action='store', type='int', dest='items', help='Number of items to process (default=100)'),

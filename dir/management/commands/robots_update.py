@@ -7,6 +7,7 @@ from dir.robots import GetRobotsFile
 import time
 
 class Command(BaseCommand):
+    help = "Daemon to query the robots.txt file for domains."
     option_list = BaseCommand.option_list + (
         #make_option('-a', '--abbreviated', default=False, action='store_true', dest='abbreviated', help='Run in abbreviated mode, which does not scan page text.'),
         #make_option('-d', '--detailed', default=False, action='store_true', dest='verbose', help='Run in verbose mode.'),

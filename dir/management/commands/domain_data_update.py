@@ -6,6 +6,8 @@ from dir.models import DomainInfo, PageLink
 import time
 
 class Command(BaseCommand):
+    help = "This command updates domain metadata. It's used for updating domain link counts and domain keyword counts."
+
     option_list = BaseCommand.option_list + (
         make_option('-m', '--max', default=5, action='store', type='int', dest='max', help='Max number of domains to update. (default=5)'),
         make_option('-s', '--sleep', default=5, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=5)'),

@@ -8,6 +8,7 @@ import time
 import codecs
 
 class Command(BaseCommand):
+    help = "Checks link and block data to create a list of domains that are probably porn."
     option_list = BaseCommand.option_list + (
         make_option('-m', '--max', default=100, action='store', type='int', dest='max', help='Max number of domains to check. (default=100)'),
         make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Check the URLs in the specified file.'),

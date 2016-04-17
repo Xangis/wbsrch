@@ -9,6 +9,7 @@ from pytz.exceptions import AmbiguousTimeError
 import time
 
 class Command(BaseCommand):
+    help = "Processes URL parameter rules for domains with specifically tagged URL parameters to ensure their URLs are clean."
     option_list = BaseCommand.option_list + (
         make_option('-m', '--max', default=5, action='store', type='int', dest='max', help='Max number of domains to update. (default=5)'),
         make_option('-u', '--urls', default=100000, action='store', type='int', dest='urls', help='Max number of URLs to process. (default=100000)'),

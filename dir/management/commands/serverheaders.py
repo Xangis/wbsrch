@@ -6,6 +6,7 @@ from dir.models import Setting
 import urllib2
 
 class Command(BaseCommand):
+    help = "Gets the web server headers for a URL."
     option_list = BaseCommand.option_list + (
         #make_option('-v', '--verbose', default=False, action='store_true', dest='verbose', help='Run in verbose mode.')
         make_option('-d', '--descriptive', default=False, action='store_true', dest='descriptive', help='Run in descriptive [verbose] mode. (default=False)'),
