@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-06 10:03-0800\n"
+"POT-Creation-Date: 2016-04-15 19:03-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: changelog.htm.py:22 contact.htm:5 criteria.htm:4 dmca.htm:4
 #: dmcanotices.htm:4 faq.htm:4 howto.htm:4 index.htm:3 indexstats.htm:4
 #: mostlinked.htm:6 philosophy.htm:4 policy.htm:4 policy.htm.py:16
-#: popular.htm:6 search.htm:3 terms.htm:4
+#: popular.htm:6 search.htm:3 search2.htm:3 terms.htm:4
 msgid "search"
 msgstr ""
 
@@ -31,48 +31,49 @@ msgstr ""
 #: article2.htm.py:14 changelog.htm:5 changelog.htm.py:9 changelog.htm.py:14
 #: contact.htm:16 criteria.htm:5 criteria.htm.py:9 criteria.htm.py:14
 #: dmca.htm:5 dmca.htm.py:14 dmcanotices.htm:5 dmcanotices.htm.py:14
-#: domain.htm:3 domain.htm.py:7 domain.htm.py:13 faq.htm:5 faq.htm.py:9
+#: domain.htm:3 domain.htm.py:8 domain.htm.py:15 faq.htm:5 faq.htm.py:9
 #: faq.htm.py:14 howto.htm:5 howto.htm.py:9 howto.htm.py:14 index.htm:4
-#: index.htm.py:17 index.htm.py:32 index.htm.py:41 ip.htm:3 ip.htm.py:7
+#: index.htm.py:18 index.htm.py:34 index.htm.py:43 ip.htm:3 ip.htm.py:7
 #: ip.htm.py:13 mostlinked.htm:17 philosophy.htm:5 philosophy.htm.py:9
 #: philosophy.htm.py:14 policy.htm:5 policy.htm.py:9 policy.htm.py:14
-#: popular.htm:17 privacy.htm:4 privacy.htm.py:11 search.htm:4 search.htm.py:8
-#: search.htm.py:15 search.htm.py:24 terms.htm:5 terms.htm.py:9
-#: terms.htm.py:14
+#: popular.htm:17 privacy.htm:4 privacy.htm.py:11 search.htm:4 search.htm.py:9
+#: search.htm.py:16 search.htm.py:25 search2.htm:4 search2.htm.py:8
+#: search2.htm.py:14 search2.htm.py:17 search2.htm:20 terms.htm:5
+#: terms.htm.py:9 terms.htm.py:14
 msgid "Search"
 msgstr ""
 
-#: adminpanel.htm:39
+#: adminpanel.htm:40
 msgid "Crawl a Single URL"
 msgstr ""
 
-#: adminpanel.htm:41
+#: adminpanel.htm:42
 msgid "Crawl"
 msgstr ""
 
-#: adminpanel.htm:49
+#: adminpanel.htm:50
 #, fuzzy
 #| msgid "Check a Domain"
 msgid "Block a Domain"
 msgstr "Ελέγξτε ένα τομέα"
 
-#: adminpanel.htm:57
+#: adminpanel.htm:58
 msgid "Block"
 msgstr ""
 
-#: adminpanel.htm:63 domain.htm:34 indexstats.htm:17 ip.htm:30
+#: adminpanel.htm:64 domain.htm:42 indexstats.htm:17 ip.htm:30
 msgid "Language"
 msgstr "γλώσσα"
 
-#: adminpanel.htm:72
+#: adminpanel.htm:73
 msgid "Get"
 msgstr ""
 
-#: adminpanel.htm:94
+#: adminpanel.htm:95
 msgid "Check keyword score for a page"
 msgstr ""
 
-#: adminpanel.htm:97
+#: adminpanel.htm:98
 msgid "Calculate"
 msgstr ""
 
@@ -85,13 +86,13 @@ msgstr ""
 msgid "Articles"
 msgstr ""
 
-#: article.htm:30 contact.htm:26 indexstats.htm:24 mostlinked.htm:27
+#: article.htm:30 contact.htm:26 indexstats.htm:24 mostlinked.htm:28
 #: popular.htm:33 privacy.htm:16
 msgid "Back to search form"
 msgstr ""
 
 #: contact.htm:5 index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6
-#: search.htm:3
+#: search.htm:3 search2.htm:3
 msgid "search engine"
 msgstr ""
 
@@ -112,7 +113,7 @@ msgid "terms"
 msgstr ""
 
 #: contact.htm:5 index.htm:3 indexstats.htm:4 mostlinked.htm:6 popular.htm:6
-#: search.htm:3
+#: search.htm:3 search2.htm:3
 msgid "directory"
 msgstr ""
 
@@ -131,8 +132,9 @@ msgstr ""
 msgid "Web Search"
 msgstr ""
 
-#: contact.htm:6 index.htm:4 index.htm.py:17 index.htm.py:33 indexstats.htm:5
-#: mostlinked.htm:7 popular.htm:7 search.htm:4 search.htm.py:16
+#: contact.htm:6 index.htm:4 index.htm.py:18 index.htm.py:35 indexstats.htm:5
+#: mostlinked.htm:7 popular.htm:7 search.htm:4 search.htm.py:17 search2.htm:4
+#: search2.htm.py:15
 msgid "The Independent Search Engine"
 msgstr ""
 
@@ -141,85 +143,89 @@ msgstr ""
 msgid "Contact Information"
 msgstr ""
 
-#: domain.htm:7 domain.htm.py:13 domain.htm.py:24 domain.htm.py:33
-#: domain.htm:58 domain.htm.py:77 ip.htm:29
+#: domain.htm:8 domain.htm.py:15 domain.htm.py:26 domain.htm.py:41
+#: domain.htm:67 domain.htm.py:86 ip.htm:29
 msgid "Domain"
 msgstr "γλώσσα"
 
-#: domain.htm:13 domain.htm.py:24 ip.htm:24
+#: domain.htm:15 domain.htm.py:26 ip.htm:24
 msgid "Info"
 msgstr ""
 
-#: domain.htm:16 index.htm:53
+#: domain.htm:18 index.htm:54
 msgid "Check a Domain"
 msgstr "Ελέγξτε ένα τομέα"
 
-#: domain.htm:19 index.htm:56
+#: domain.htm:21 index.htm:57
 msgid "Check Domain"
 msgstr "Ελέγξτε τομέα"
 
-#: domain.htm:24 domain.htm.py:58 domain.htm.py:62 domain.htm.py:77 ip.htm:24
-#: search.htm:8 search.htm.py:37
+#: domain.htm:26 domain.htm.py:67 domain.htm.py:71 domain.htm.py:86 ip.htm:24
+#: search.htm:9 search.htm.py:38 search2.htm:8 search2.htm.py:34
 msgid "for"
 msgstr "για"
 
-#: domain.htm:36
+#: domain.htm:37
+msgid "Move"
+msgstr ""
+
+#: domain.htm:44
 msgid "Created"
 msgstr ""
 
-#: domain.htm:47
+#: domain.htm:55
 msgid "We have"
 msgstr ""
 
-#: domain.htm:47
+#: domain.htm:55
 msgid "in the"
 msgstr ""
 
-#: domain.htm:47
+#: domain.htm:55
 msgid "database for that domain"
 msgstr ""
 
-#: domain.htm:51
+#: domain.htm:59
 msgid "No exact match for that domain name found"
 msgstr ""
 
-#: domain.htm:53
+#: domain.htm:61
 msgid "Enter a domain name to check"
 msgstr ""
 
-#: domain.htm:58
+#: domain.htm:67
 msgid "Top Keyword Rankings"
 msgstr ""
 
-#: domain.htm:58 domain.htm.py:77
+#: domain.htm:67 domain.htm.py:86
 msgid "this"
 msgstr ""
 
-#: domain.htm:62
+#: domain.htm:71
 msgid "Ranks"
 msgstr ""
 
-#: domain.htm:69
+#: domain.htm:78
 msgid "Related"
 msgstr ""
 
-#: domain.htm:69 index.htm:3
+#: domain.htm:78 index.htm:3
 msgid "domain"
 msgstr "γλώσσα"
 
-#: domain.htm:71
+#: domain.htm:80
 msgid "This domain is excluded from our index"
 msgstr ""
 
-#: domain.htm:78
+#: domain.htm:87
 msgid "Here is what is in our index"
 msgstr ""
 
-#: domain.htm:92
+#: domain.htm:101
 msgid "No URLs in the index for"
 msgstr ""
 
-#: domain.htm:97 ip.htm:41
+#: domain.htm:106 ip.htm:41
 msgid "Go to web search form"
 msgstr ""
 
@@ -273,19 +279,19 @@ msgstr ""
 msgid "Other languages"
 msgstr "γλώσσα"
 
-#: index.htm:3 indexstats.htm:4 search.htm:3
+#: index.htm:3 indexstats.htm:4 search.htm:3 search2.htm:3
 msgid "independent"
 msgstr ""
 
-#: index.htm:3 search.htm:3
+#: index.htm:3 search.htm:3 search2.htm:3
 msgid "engine"
 msgstr ""
 
-#: index.htm:4 search.htm:4
+#: index.htm:4 search.htm:4 search2.htm:4
 msgid "home"
 msgstr ""
 
-#: index.htm:45
+#: index.htm:47
 msgid "Most Recently Indexed Search Terms"
 msgstr ""
 
@@ -401,70 +407,71 @@ msgstr ""
 msgid "Current Month"
 msgstr ""
 
-#: search.htm:3
+#: search.htm:3 search2.htm:3
 msgid "results"
 msgstr ""
 
-#: search.htm:3
+#: search.htm:3 search2.htm:3
 msgid "internet"
 msgstr ""
 
-#: search.htm:8
+#: search.htm:9 search2.htm:8
 msgid "Search Results"
 msgstr ""
 
-#: search.htm:32
+#: search.htm:33 search2.htm:29
 msgid "Did you mean to search for"
 msgstr ""
 
-#: search.htm:33
+#: search.htm:34 search2.htm:30
 msgid "Did you mean to look up domain details for"
 msgstr ""
 
-#: search.htm:34
+#: search.htm:35 search2.htm:31
 msgid "Did you mean to look up details for the IP address"
 msgstr ""
 
-#: search.htm:35
+#: search.htm:36 search2.htm:32
 msgid "This search contains a word in the "
 msgstr ""
 
-#: search.htm:35 search.htm.py:36
+#: search.htm:36 search.htm.py:37 search2.htm:32 search2.htm.py:33
 #, fuzzy
 #| msgid "Language"
 msgid "language"
 msgstr "γλώσσα"
 
-#: search.htm:36
+#: search.htm:37 search2.htm:33
 msgid "This search mentions the "
 msgstr ""
 
-#: search.htm:37
+#: search.htm:38 search2.htm:34
 msgid "Results"
 msgstr ""
 
-#: search.htm:37
+#: search.htm:38 search2.htm:34
 #, fuzzy
 #| msgid "domain"
 msgid "from domain"
 msgstr "γλώσσα"
 
-#: search.htm:41
+#: search.htm:42 search2.htm:38
 msgid "No results were found for that search."
 msgstr "Δεν βρέθηκαν αποτελέσματα για αυτήν την αναζήτηση."
 
-#: search.htm:42
+#: search.htm:43 search2.htm:39
 msgid ""
 "Our robots are very embarrassed by their failure to find what you were "
 "looking for. They'll be on the hunt for new content and should have better "
 "results in a few days."
 msgstr ""
 
-#: search.htm:49 search.htm.py:63 search.htm.py:74
+#: search.htm:50 search.htm.py:64 search.htm.py:75 search2.htm:46
+#: search2.htm.py:60 search2.htm.py:71
 msgid "No page description."
 msgstr "Δεν υπάρχει περιγραφή της σελίδας."
 
-#: search.htm:87
+#: search.htm:88 search2.htm:84
 msgid ""
 "Note: The phrase you searched for is not fully indexed. We have queued it "
 "for indexing and will have better results available soon."
