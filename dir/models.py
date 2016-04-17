@@ -1849,6 +1849,11 @@ class SiteInfoAfterZEndingInCN(SiteInfo):
         proxy = True
         verbose_name_plural = 'Site Infos After Z ending in CN'
 
+class SiteInfoAfterZEndingInCOM(SiteInfo):
+    class Meta:
+        proxy = True
+        verbose_name_plural = 'Site Infos After Z ending in COM'
+
 class SiteInfoAfterZEndingInDZ(SiteInfo):
     class Meta:
         proxy = True
@@ -1984,6 +1989,11 @@ class SiteInfoAfterZEndingInMY(SiteInfo):
         proxy = True
         verbose_name_plural = 'Site Infos After Z ending in MY'
 
+class SiteInfoAfterZEndingInNET(SiteInfo):
+    class Meta:
+        proxy = True
+        verbose_name_plural = 'Site Infos After Z ending in NET'
+
 class SiteInfoAfterZEndingInOM(SiteInfo):
     class Meta:
         proxy = True
@@ -2083,6 +2093,11 @@ class SiteInfoAfterZEndingInUA(SiteInfo):
     class Meta:
         proxy = True
         verbose_name_plural = 'Site Infos After Z ending in UA'
+
+class SiteInfoAfterZEndingInUS(SiteInfo):
+    class Meta:
+        proxy = True
+        verbose_name_plural = 'Site Infos After Z ending in US'
 
 class SiteInfoAfterZEndingInUZ(SiteInfo):
     class Meta:

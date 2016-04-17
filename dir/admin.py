@@ -1925,6 +1925,10 @@ class SiteInfoAfterZEndingInCNAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.cn')
 
+class SiteInfoAfterZEndingInCOMAdmin(SiteInfoAdmin):
+    def get_queryset(self, request):
+        return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.com')
+
 class SiteInfoAfterZEndingInDZAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.dz')
@@ -2037,6 +2041,10 @@ class SiteInfoAfterZEndingInOMAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.om')
 
+class SiteInfoAfterZEndingInNETAdmin(SiteInfoAdmin):
+    def get_queryset(self, request):
+        return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.net')
+
 class SiteInfoAfterZEndingInPROAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.pro')
@@ -2112,6 +2120,10 @@ class SiteInfoAfterZEndingInTWAdmin(SiteInfoAdmin):
 class SiteInfoAfterZEndingInUAAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ua')
+
+class SiteInfoAfterZEndingInUSAdmin(SiteInfoAdmin):
+    def get_queryset(self, request):
+        return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.us')
 
 class SiteInfoAfterZEndingInUZAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
@@ -2406,6 +2418,7 @@ admin.site.register(SiteInfoAfterZEndingInBIZ, SiteInfoAfterZEndingInBIZAdmin)
 admin.site.register(SiteInfoAfterZEndingInBY, SiteInfoAfterZEndingInBYAdmin)
 admin.site.register(SiteInfoAfterZEndingInBZ, SiteInfoAfterZEndingInBZAdmin)
 admin.site.register(SiteInfoAfterZEndingInCN, SiteInfoAfterZEndingInCNAdmin)
+admin.site.register(SiteInfoAfterZEndingInCOM, SiteInfoAfterZEndingInCOMAdmin)
 admin.site.register(SiteInfoAfterZEndingInDZ, SiteInfoAfterZEndingInDZAdmin)
 admin.site.register(SiteInfoAfterZEndingInEE, SiteInfoAfterZEndingInEEAdmin)
 admin.site.register(SiteInfoAfterZEndingInEG, SiteInfoAfterZEndingInEGAdmin)
@@ -2433,6 +2446,7 @@ admin.site.register(SiteInfoAfterZEndingInME, SiteInfoAfterZEndingInMEAdmin)
 admin.site.register(SiteInfoAfterZEndingInMK, SiteInfoAfterZEndingInMKAdmin)
 admin.site.register(SiteInfoAfterZEndingInMOBI, SiteInfoAfterZEndingInMOBIAdmin)
 admin.site.register(SiteInfoAfterZEndingInMY, SiteInfoAfterZEndingInMYAdmin)
+admin.site.register(SiteInfoAfterZEndingInNET, SiteInfoAfterZEndingInNETAdmin)
 admin.site.register(SiteInfoAfterZEndingInOM, SiteInfoAfterZEndingInOMAdmin)
 admin.site.register(SiteInfoAfterZEndingInPRO, SiteInfoAfterZEndingInPROAdmin)
 admin.site.register(SiteInfoAfterZEndingInPS, SiteInfoAfterZEndingInPSAdmin)
@@ -2453,6 +2467,7 @@ admin.site.register(SiteInfoAfterZEndingInTO, SiteInfoAfterZEndingInTOAdmin)
 admin.site.register(SiteInfoAfterZEndingInTV, SiteInfoAfterZEndingInTVAdmin)
 admin.site.register(SiteInfoAfterZEndingInTW, SiteInfoAfterZEndingInTWAdmin)
 admin.site.register(SiteInfoAfterZEndingInUA, SiteInfoAfterZEndingInUAAdmin)
+admin.site.register(SiteInfoAfterZEndingInUS, SiteInfoAfterZEndingInUSAdmin)
 admin.site.register(SiteInfoAfterZEndingInUZ, SiteInfoAfterZEndingInUZAdmin)
 admin.site.register(SiteInfoAfterZEndingInVG, SiteInfoAfterZEndingInVGAdmin)
 admin.site.register(SiteInfoAfterZEndingInWS, SiteInfoAfterZEndingInWSAdmin)
