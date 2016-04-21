@@ -121,6 +121,30 @@ def MergeSearchResult(search_result, index_term, bonus_existing=False):
     search_result.search_results = new_result
     return search_result
 
+def RemoveWordFromSearchResults(search_result, word):
+    """
+    Removes any results from a search that have the specified word in their
+    title or description.
+    """
+    tmp_results = []
+    for idx, result in search_result.search_results:
+        tmp_urls = []
+        for page in result['urls']:
+            resultitems = page['description'].lower().split(' ')
+            titleitems = page['title'].lower().split(' ')
+            # TODO: Remove page-by-page instead of skipping entire result if one page matches.
+            if word in resultitems or word in titleitems:
+                print 'Word {0} found in page {1}, removing.'.format(word, page['url'])
+            else:
+                tmp_urls.append(page)
+        if len(tmp_urls) > 0:
+            result['urls'] = tmp_urls
+            tmp_results.append([id, result])
+        # NEED TO REPLACE THE ITEMS AND THE CURENT INDEX POINTER.
+    search_result.search_results = tmp_results
+    search_result.result_count = len(search_result.search_results)
+    return search_result
+
 def index(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
@@ -370,6 +394,7 @@ def ipaddry(request):
 
 def search(request):
     log = None
+    exclude = []
     start = timezone.now()
     result = SearchResult(request.LANGUAGE_CODE)
     # Handle language
@@ -394,6 +419,7 @@ def search(request):
             return HttpResponseForbidden('Only a bot would make this request. Denied.')
         if len(result.searchterm) > 240:
             result.searchterm = result.searchterm[0:240]
+        print u'Search term before processing: {0}'.format(result.searchterm)
         result.searchterm = result.searchterm.lower()
         # We get these mostly because of the way people link to us. We translate them back
         # to the actual characters they represent.
@@ -419,6 +445,17 @@ def search(request):
             multiword = True
         # Check for named language
         for piece in pieces:
+            if piece.startswith('-'):
+                if len(piece) > 1 and not piece[1].isdigit() and piece[1] != '-':
+                    exclude.append(piece[1:].lower())
+                    # This could create a problem in that the /printed/ searchterm will not match.
+                    # We solve this by passing exclude to the template and using that to display
+                    # the query string in addition to result.searchterm. Removed terms will always
+                    # appear at the end.
+                    result.searchterm = result.searchterm.replace(piece, '')
+                    result.searchterm = result.searchterm.replace('  ', ' ')
+                    if result.searchterm.endswith(' '):
+                        result.searchterm = result.searchterm[0:-1]
             if language_name_reverse.has_key(piece) and (language_name_reverse[piece] != request.LANGUAGE_CODE):
                 result.names_language = language_name_reverse[piece]
                 result.names_language_search = result.searchterm.replace(piece, '')
@@ -505,6 +542,7 @@ def search(request):
         #if question and result.searchterm.endswith('?'):
         #    result.searchterm = result.searchterm[:-1]
         # Retrieve the data.
+        print u'Search term after processing, before TrySearchTerm: {0}'.format(result.searchterm)
         term = TrySearchTerm(result.searchterm, result.language_code)
         if term:
             if term.date_indexed < (timezone.now() - timedelta(days=INDEX_TERM_STALE_DAYS)) and not term.actively_blocked and not term.refused and (len(term.keywords) > 2):
@@ -526,7 +564,11 @@ def search(request):
                 term = CreatePlaceholderIndexTerm(result.searchterm, result.language_code)
                 result = MergeSearchResult(result, term, bonus_existing=True)
         end_delta = timezone.now() - start
+        if len(exclude) > 0:
+            for excluded in exclude:
+                result = RemoveWordFromSearchResults(result, excluded)
         # Log the search, but only if it didn't come from the front page of a search engine.
+        print u'Search term before logging: {0}'.format(result.searchterm)
         if result.allfromdomain:
             pass
         else:
@@ -579,7 +621,7 @@ def search(request):
           'show_network_ad': result.show_network_ad, 'typo_for': result.typo_for, 'is_language': result.is_language,
           'is_language_name': is_language_name, 'superuser': superuser, 'refused': result.refused, 'is_domain': result.is_domain,
           'is_ip': result.is_ip, 'names_language': result.names_language, 'names_language_search': result.names_language_search,
-          'names_language_name': names_language_name, 'log': log },
+          'names_language_name': names_language_name, 'log': log, 'exclude': exclude },
         context_instance=RequestContext(request))
 
 @permission_required('is_superuser')

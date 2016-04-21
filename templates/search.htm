@@ -19,7 +19,9 @@
 {% if not searchterm %}<div class="centered">{% endif %}
 <br/>
 <p><form method="get" action="/search/">
-<input id="searchbox" type="text" name="q" maxlength="250" {% if searchterm %}value="{{ searchterm }}"{% endif %} onkeyup="autocomp();" list="autocompleteOptions"/>
+<input id="searchbox" type="text" name="q" maxlength="250" 
+{% if searchterm %}value="{{ searchterm }}{% if exclude%}{% for exc in exclude %} -{{ exc }}{% endfor %}{% endif %}"{% endif %} 
+onkeyup="autocomp();" list="autocompleteOptions"/>
 <datalist id="autocompleteOptions">
 </datalist>
 <input type="submit" value="{% trans "Search" %}">
@@ -35,7 +37,7 @@
 {% if is_ip %}<p><em>{% trans "Did you mean to look up details for the IP address" %} <a href="/ip/?q={{ is_ip }}">{{ is_ip }}</a>?</em></p>{% endif %}
 {% if is_language %}<p><em>{% trans "This search contains a word in the " %} {% trans is_language_name %} {% trans "language" %}. Do you want to <a href="https://{% if is_language != 'en' %}{{ is_language }}.{% endif %}wbsrch.com/search/?q={{ searchterm }}">search {{ searchterm }} in {% trans is_language_name %}</a>?</em></p>{% endif %}
 {% if names_language %}<p><em>{% trans "This search mentions the " %} {% trans names_language_name %} {% trans "language" %}. Do you want to <a href="https://{% if names_language != 'en' %}{{ names_language }}.{% endif %}wbsrch.com/search/{% if names_language_search %}?q={{ names_language_search }}{% endif %}">search {{ names_language_search }} in {% trans names_language_name %}</a>?</em></p>{% endif %}
-<p>{% trans "Results" %} {% trans "for" %} "{{ searchterm }}"{% if allfromdomain %} {% trans "from domain" %} "{{ allfromdomain }}"{% endif %}:</p>
+<p>{% trans "Results" %} {% trans "for" %} "{{ searchterm }}"{% if allfromdomain %} {% trans "from domain" %} "{{ allfromdomain }}"{% endif %}{% if exclude%} with {% for exc in exclude %} -{{ exc }}{% endfor %}{% endif %}:</p>
 {% if refused %}<p><strong>We refuse to show any search results for this query. If you want to look for that sort of thing you'll have to use a different search engine.</strong></p>
 {% elif actively_blocked %}<p>We have excluded many of the sites related to this search from our index. You may see fewer results than you expect.</p>{% endif %}
 {% if not results and not search_results and not refused %}
