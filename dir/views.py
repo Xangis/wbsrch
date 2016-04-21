@@ -446,7 +446,7 @@ def search(request):
         # Check for named language
         for piece in pieces:
             if piece.startswith('-'):
-                if len(piece) > 1 and not piece[1].isdigit() and piece[1] != '-':
+                if len(piece) > 2 and not piece[1].isdigit() and piece[1] != '-':
                     exclude.append(piece[1:].lower())
                     # This could create a problem in that the /printed/ searchterm will not match.
                     # We solve this by passing exclude to the template and using that to display
