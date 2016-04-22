@@ -142,14 +142,25 @@ def domain_pages_in_index(request):
     domain = NormalizeDomain(domain)
     altdomain = ReverseWWW(domain, False)
     print 'Domain: {0}'.format(domain)
-    pages = SiteInfo.objects.filter(rooturl=domain).count()
+    domainfound = False
+    try:
+        domaininfo = DomainInfo.objects.get(url=domain)
+        domainfound = True
+        site_model = GetSiteInfoModelFromLanguage(domaininfo.language_association)
+    except ObjectDoesNotExist:
+        site_model = SiteInfo
+        pass
+    pages = site_model.objects.filter(rooturl=domain).count()
     if altdomain:
-        added = SiteInfo.objects.filter(rooturl=altdomain).count()
+        added = site_model.objects.filter(rooturl=altdomain).count()
         print u'{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages+added)
         pages += added
     else:
         print u'{0} pages for domain {1}'.format(pages, domain)
-    return Response({'domain': domain, 'en': pages }, status=200)
+    if site_model == SiteInfo:
+        return Response({'domain': domain, 'total': pages, 'en': pages }, status=200)
+    else:
+        return Response({'domain': domain, 'total': pages, domaininfo.language_association: pages }, status=200)
 
 @api_view(['GET'])
 def domain_keywords_ranked(request):

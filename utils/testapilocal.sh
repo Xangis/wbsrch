@@ -19,7 +19,13 @@ curl -X GET http://localhost:8000/api/domain_pages_in_index/?domain=zetacentauri
 echo
 curl -X GET http://localhost:8000/api/domain_pages_in_index/?domain=freewavesamples.com -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
 echo
+curl -X GET http://localhost:8000/api/domain_pages_in_index/?domain=globo.es -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
+echo
 curl -X GET http://localhost:8000/api/domain_pages_in_index/?domain=stampscoinsnotes.com -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
+echo
+curl -X GET http://localhost:8000/api/domain_pages_in_index/?domain=sapo.com.br -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
+echo
+curl -X GET http://localhost:8000/api/domain_pages_in_index/?domain=asdfklkjioejfdlmvmjadf.com -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
 echo
 curl -X GET http://localhost:8000/api/domain_keywords_ranked/?domain=zetacentauri.com -H 'Authorization: Token e359fc54f273955db5a2d8db531fbd7b2767c65d'
 echo
