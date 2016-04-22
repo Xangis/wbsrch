@@ -2154,7 +2154,7 @@ class AutoCompleteAdmin(admin.ModelAdmin):
     search_fields = ('keywords',)
 
 class ResultClickAdmin(admin.ModelAdmin):
-    list_display = ('keywords', 'position', 'url', 'ip', 'search_id')
+    list_display = ('keywords', 'position', 'url', 'ip', 'search_id', 'click_time')
     search_fields = ('keywords',)
 
 class APISubscriptionAdmin(admin.ModelAdmin):
