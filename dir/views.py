@@ -419,7 +419,6 @@ def search(request):
             return HttpResponseForbidden('Only a bot would make this request. Denied.')
         if len(result.searchterm) > 240:
             result.searchterm = result.searchterm[0:240]
-        print u'Search term before processing: {0}'.format(result.searchterm)
         result.searchterm = result.searchterm.lower()
         # We get these mostly because of the way people link to us. We translate them back
         # to the actual characters they represent.
@@ -446,7 +445,7 @@ def search(request):
         # Check for named language
         for piece in pieces:
             if piece.startswith('-'):
-                if len(piece) > 1 and not piece[1].isdigit() and piece[1] != '-':
+                if len(piece) > 2 and not piece[1].isdigit() and piece[1] != '-':
                     exclude.append(piece[1:].lower())
                     # This could create a problem in that the /printed/ searchterm will not match.
                     # We solve this by passing exclude to the template and using that to display
@@ -542,7 +541,6 @@ def search(request):
         #if question and result.searchterm.endswith('?'):
         #    result.searchterm = result.searchterm[:-1]
         # Retrieve the data.
-        print u'Search term after processing, before TrySearchTerm: {0}'.format(result.searchterm)
         term = TrySearchTerm(result.searchterm, result.language_code)
         if term:
             if term.date_indexed < (timezone.now() - timedelta(days=INDEX_TERM_STALE_DAYS)) and not term.actively_blocked and not term.refused and (len(term.keywords) > 2):
@@ -568,7 +566,6 @@ def search(request):
             for excluded in exclude:
                 result = RemoveWordFromSearchResults(result, excluded)
         # Log the search, but only if it didn't come from the front page of a search engine.
-        print u'Search term before logging: {0}'.format(result.searchterm)
         if result.allfromdomain:
             pass
         else:

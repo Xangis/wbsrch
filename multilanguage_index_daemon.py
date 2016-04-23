@@ -26,7 +26,7 @@ while True:
         call(['python', 'manage.py', 'index', '-p', '-m', str(indexcount*2), '-s', '0', '-l', language])
         # Wait a few seconds between context switches
         time.sleep(1)
-        call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount*3), '-s', '0', '-l', language])
+        call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount*5), '-s', '0', '-l', language])
         # Wait a few seconds between cycles.
         time.sleep(1)
     
