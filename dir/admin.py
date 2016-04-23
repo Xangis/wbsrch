@@ -741,7 +741,17 @@ class IndexTermAdmin(admin.ModelAdmin):
     
     reindex_these_terms.short_description = "Reindex these term(s). (may time out)"
     
-    actions = [reindex_these_terms,]
+    def delete_these_index_terms(modeladmin, request, queryset):
+        for item in queryset:
+            ranking_model = KeywordRanking
+            if item.language_association:
+                ranking_model = GetKeywordRankingModelFromLanguage(item.language_association)
+                existing = ranking_model.objects.filter(keywords=item.keywords).delete()
+            item.delete()
+
+    delete_these_index_terms.short_description = "Delete these index terms and their keyword ranks."
+
+    actions = [delete_these_index_terms, reindex_these_terms]
 
 class EnglishIndexTermAdmin(IndexTermAdmin):
     list_display = ('keywords', 'date_indexed', 'num_results', 'index_time', 'actively_blocked', 'refused', 'show_ad', 'typo_for', 'is_language')
