@@ -744,9 +744,9 @@ class IndexTermAdmin(admin.ModelAdmin):
     def delete_these_index_terms(modeladmin, request, queryset):
         for item in queryset:
             ranking_model = KeywordRanking
-            if item.language_association:
-                ranking_model = GetKeywordRankingModelFromLanguage(item.language_association)
-                existing = ranking_model.objects.filter(keywords=item.keywords).delete()
+            if item.is_language:
+                ranking_model = GetKeywordRankingModelFromLanguage(item.is_language)
+            existing = ranking_model.objects.filter(keywords=item.keywords).delete()
             item.delete()
 
     delete_these_index_terms.short_description = "Delete these index terms and their keyword ranks."
