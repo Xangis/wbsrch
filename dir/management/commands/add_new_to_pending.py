@@ -47,6 +47,7 @@ class Command(BaseCommand):
                  if domains or printem:
                      try:
                          print u'{0}'.format(line)
+                         numadded = numadded + 1
                      except:
                          pass
                  else:
