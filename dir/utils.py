@@ -1329,7 +1329,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
-        if item.pagetext.startswith('Buy this domain.') or (u'This website is for sale' in item.pagetitle):
+        if item.pagetext.startswith('Buy this domain.') or (u'This website is for sale' in item.pagetitle) or (u'The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext):
             if verbose:
                 rulematches.append('Lose half of points for parked domain.')
             value /= 2
@@ -2516,11 +2516,21 @@ def RequeueRankedKeywordsForDomain(domain):
         pass
     ranking_model = GetKeywordRankingModelFromLanguage(lang)
     pending_model = GetPendingIndexModelFromLanguage(lang)
+    index_model = GetIndexModelFromLanguage(lang)
     ranks = ranking_model.objects.filter(rooturl=domain)
     for rank in ranks:
         # Don't flag items that don't show up in the top 200 results for reindex.
         if rank.rank > 200:
             continue
+        try:
+            keyword = index_model.objects.get(keywords=rank.keywords)
+            # Don't queue keywords for blocked search terms. No need to index porn
+            # search terms more frequently than non-blocked terms.
+            if keyword.actively_blocked:
+                continue
+        except ObjectDoesNotExist:
+            # This should actually never happen.
+            pass
         try:
             existing = pending_model.objects.get(keywords=rank.keywords)
         except ObjectDoesNotExist:
