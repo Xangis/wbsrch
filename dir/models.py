@@ -1999,6 +1999,11 @@ class SiteInfoAfterZEndingInOM(SiteInfo):
         proxy = True
         verbose_name_plural = 'Site Infos After Z ending in OM'
 
+class SiteInfoAfterZEndingInORG(SiteInfo):
+    class Meta:
+        proxy = True
+        verbose_name_plural = 'Site Infos After Z ending in ORG'
+
 class SiteInfoAfterZEndingInPRO(SiteInfo):
     class Meta:
         proxy = True

@@ -2041,6 +2041,10 @@ class SiteInfoAfterZEndingInOMAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.om')
 
+class SiteInfoAfterZEndingInORGAdmin(SiteInfoAdmin):
+    def get_queryset(self, request):
+        return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.org')
+
 class SiteInfoAfterZEndingInNETAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.net')
@@ -2448,6 +2452,7 @@ admin.site.register(SiteInfoAfterZEndingInMOBI, SiteInfoAfterZEndingInMOBIAdmin)
 admin.site.register(SiteInfoAfterZEndingInMY, SiteInfoAfterZEndingInMYAdmin)
 admin.site.register(SiteInfoAfterZEndingInNET, SiteInfoAfterZEndingInNETAdmin)
 admin.site.register(SiteInfoAfterZEndingInOM, SiteInfoAfterZEndingInOMAdmin)
+admin.site.register(SiteInfoAfterZEndingInORG, SiteInfoAfterZEndingInORGAdmin)
 admin.site.register(SiteInfoAfterZEndingInPRO, SiteInfoAfterZEndingInPROAdmin)
 admin.site.register(SiteInfoAfterZEndingInPS, SiteInfoAfterZEndingInPSAdmin)
 admin.site.register(SiteInfoAfterZEndingInQA, SiteInfoAfterZEndingInQAAdmin)
