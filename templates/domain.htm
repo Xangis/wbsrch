@@ -5,8 +5,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 {% if excluded %}<meta name="robots" content="noindex">{% endif %}
 <link rel="icon" type="image/png" href="/favicon.png" />
-<title>{% if domain %}{{ domain }} | {% endif %} {% trans "Domain" %} Details | WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }})</title>
-{% if domain %}<link rel="canonical" href="https://wbsrch.com/domain/?q={{ domain }}" />{% endif %}
+<title>{% if rawdomain %}{{ rawdomain }} | {% endif %} {% trans "Domain" %} Details | WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }})</title>
+{% if domain %}<link rel="canonical" href="https://wbsrch.com/domain/?q={{ rawdomain }}" />{% endif %}
 {% ssi '/var/django/wbsrch/templates/style.inc' %}
 {% ssi '/var/django/wbsrch/templates/analytics.inc' %}
 </head>
@@ -23,7 +23,7 @@
 <br />
 
 {% if domain %}
-<h2 class="left indented2 spacebelow">WbSrch {% trans "Domain" %} {% trans "Info" %} {% trans "for" %} {% trans "Domain" %} '{{ domain }}':</h2>
+<h2 class="left indented2 spacebelow">WbSrch {% trans "Domain" %} {% trans "Info" %} {% trans "for" %} {% trans "Domain" %} '{{ rawdomain }}':</h2>
 {% ssi '/var/django/wbsrch/templates/pw_leaderboard.inc' %}
 {% else %}
 {% endif %}

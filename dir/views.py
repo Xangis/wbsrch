@@ -290,6 +290,9 @@ def domain(request):
             parsedurl = urlparse(domain)
             domain = parsedurl.geturl()
             rawdomain = parsedurl.netloc
+        if u'/' in rawdomain:
+            pieces = rawdomain.split('/')
+            rawdomain = pieces[0]
         # Prevent crawling excluded sites.
         domains = DomainInfo.objects.filter(url=rawdomain)
         excluded = BlockedSite.objects.filter(url=rawdomain)
@@ -321,14 +324,14 @@ def domain(request):
                 extra = DomainInfo.objects.get(url=(rawdomain[4:]))
             except ObjectDoesNotExist:
                 pass
-        siteinfos = site_model.objects.filter(rooturl=domain)
+        siteinfos = site_model.objects.filter(rooturl=rawdomain)
 
         # Get cached keyword rankings if available, otherwise query and cache.
-        rankings = cache.get('rankings_' + language_code + '_' + domain)
+        rankings = cache.get('rankings_' + language_code + '_' + rawdomain)
         if not rankings:
-            rankings = list(ranking_model.objects.filter(rooturl=domain, rank__lte=200, show=True).order_by('rank', 'keywords')[0:100])
+            rankings = list(ranking_model.objects.filter(rooturl=rawdomain, rank__lte=200, show=True).order_by('rank', 'keywords')[0:100])
         # Cache for up to 3 days (in seconds).
-            cache.set('rankings_' + language_code + '_' + domain, rankings, 259200)
+            cache.set('rankings_' + language_code + '_' + rawdomain, rankings, 259200)
         else:
             cached = True
 
@@ -362,7 +365,7 @@ def domain(request):
 
         return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
             'num_records': num_records, 'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
-            'link': link, 'parent': parent, 'cached': cached },
+            'link': link, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain },
             context_instance=RequestContext(request))
     return render_to_response('domain.htm', {'language_code': language_code }, context_instance=RequestContext(request))
 
