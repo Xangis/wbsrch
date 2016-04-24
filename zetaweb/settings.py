@@ -213,6 +213,7 @@ INSTALLED_APPS = (
     'blog',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_q',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -392,4 +393,15 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     )
+}
+
+Q_CLUSTER = {
+    'name': 'wbsrch',
+    'workers': 8,
+    'compress': True,
+    'label': 'Django Q',
+    'redis': {
+        'host': '127.0.0.1',
+        'port': 6379,
+        'db': 0, }
 }

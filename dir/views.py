@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from models import *
 from utils import *
+from django_q.tasks import async
 from language import language_name_reverse
 from crawler import CrawlSingleUrl, Crawler
 from urlparse import urlparse
@@ -19,6 +20,14 @@ import itertools
 from django.contrib.gis.geoip import GeoIP
 
 INDEX_TERM_STALE_DAYS = 730
+
+def SaveLogEntry(log):
+    """
+    Save a search log entry, be it a domain search or regular search. Intended to
+    be called asynchronously to avoid making users wait for a search log to commit
+    before getting results.
+    """
+    log.save()
 
 def LanguageFromDomain(request):
     prefix = None
@@ -349,7 +358,7 @@ def domain(request):
             country = gi.country_code(searchlog.ip)
             if country:
                 searchlog.ip_country = country
-        searchlog.save()
+        async(SaveLogEntry, searchlog)
 
         return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
             'num_records': num_records, 'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
@@ -595,7 +604,7 @@ def search(request):
                     log.browserstring = log.browserstring[0:252] + '...'
                 if IsBotAgent(log.browserstring):
                     log.is_bot = True
-            log.save()
+            async(SaveLogEntry, log)
     is_language_name = None
     if result.is_language:
         is_language_name = language_names[result.is_language]

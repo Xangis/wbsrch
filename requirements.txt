@@ -1,6 +1,6 @@
 # Requires memached to be installed.
 python-memcached==1.57
-Django==1.8.11
+Django==1.8.12
 Fabric==1.10.2
 # If this fails, run sudo apt-get install python-dev libpq-dev
 psycopg2==2.6.1
@@ -32,3 +32,6 @@ future==0.15.2
 PyYAML==3.11
 six==1.10.0
 uwsgitop==0.9
+redis==2.10.5
+django-q==0.7.16
+hiredis==0.2.0
