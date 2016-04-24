@@ -9,6 +9,7 @@ from django.core.cache import cache
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import json
+import ujson
 from models import *
 from utils import *
 from django_q.tasks import async
@@ -82,7 +83,7 @@ def MergeSearchResult(search_result, index_term, bonus_existing=False):
     except:
         pass
 
-    tmp_result = json.loads(index_term.search_results)
+    tmp_result = ujson.loads(index_term.search_results)
     if search_result.allfromdomain:
         found = False
         for result in tmp_result:
@@ -257,14 +258,14 @@ def index_stats(request, realtime=False):
         language_code = 'en'
     if realtime:
         stats = GenerateIndexStats(False)
-        stats.langs = json.loads(stats.langs)
+        stats.langs = ujson.loads(stats.langs)
     else:
         try:
             stats = IndexStats.objects.all()[0]
         except:
             # Will only happen with an empty database.
             stats = GenerateIndexStats(True)
-        stats.langs = json.loads(stats.langs)
+        stats.langs = ujson.loads(stats.langs)
     return render_to_response('indexstats.htm', {'language_code': language_code, 'stats': stats})
 
 def domain(request):
@@ -1032,7 +1033,7 @@ def most_linked_domains(request):
         # Will only happen with an empty database.
         stats = GenerateIndexStats(True)
     try:
-        domains = json.loads(stats.most_linked_to_domains)
+        domains = ujson.loads(stats.most_linked_to_domains)
     except ValueError:
         domains = []
 
@@ -1064,7 +1065,7 @@ def popular_searches(request, year=None, month=None):
         else:
             cached = True
     month_name = month_names[report.month-1]
-    report.top_searches = json.loads(report.top_searches)
+    report.top_searches = ujson.loads(report.top_searches)
     others = MonthlySearchReport.objects.filter(language=language_code).exclude(month=month, year=year)
     return render_to_response('popular.htm', {'report': report, 'language_code': language_code, 'others': others, 'month_name': month_name, 'cached': cached})
 

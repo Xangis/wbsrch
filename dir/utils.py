@@ -10,6 +10,7 @@ from django.utils.timezone import utc
 from django.utils import timezone
 from operator import itemgetter, attrgetter
 import json
+import ujson
 from bs4 import BeautifulSoup
 from models import *
 from exceptions import InvalidLanguageException
@@ -2896,7 +2897,7 @@ def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=Fals
         print u'Term {0} value for {1} is {2}'.format(keywords, siteinfo.url, result)
         reasons = CalculateTermValue(siteinfo, keywords, lang=lang, verbose=True)
         print u'Term {0} reasons for {1} is {2}'.format(keywords, siteinfo.url, reasons)
-    search_results = json.loads(existing.search_results)
+    search_results = ujson.loads(existing.search_results)
     rank = 0
     for idx, item in enumerate(search_results):
         if verbose and idx == 0:
