@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 {% if actively_blocked %}<meta name="robots" content="noindex">{% endif %}
+{% if language_code == 'en' %}<link rel="search" href="https://wbsrch.com/opensearchdescription.xml" type="application/opensearchdescription+xml" title="WbSrch" />{% endif %}
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>{% if searchterm %}{% trans "Search Results" %} {% trans "for" %} {{ searchterm }} | {% endif %}WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }})</title>
 {% ssi '/var/django/wbsrch/templates/style.inc' %}
