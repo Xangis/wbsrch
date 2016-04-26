@@ -330,6 +330,12 @@ EXTRA_LANG_INFO = {
         'name': 'Kongo',
         'name_local': u'Kikongo'
     },
+    'ki': {
+        'bidi': False,
+        'code': 'ki',
+        'name': 'Kikuyu',
+        'name_local': u'Gikuyu'
+    },
     'ln': {
         'bidi': False,
         'code': 'ln',
@@ -353,6 +359,12 @@ EXTRA_LANG_INFO = {
         'code': 'so',
         'name': 'Somali',
         'name_local': u'Af-Soomaali'
+    },
+    'ts': {
+        'bidi': False,
+        'code': 'ts',
+        'name': 'Tsonga',
+        'name_local': u'Xitsonga'
     },
     'wo': {
         'bidi': False,
