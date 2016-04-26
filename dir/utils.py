@@ -1441,6 +1441,9 @@ def CopySiteData(site, newsite):
 # If tag_as_subdir is true, we set "uses language subdirs" flag on that
 # domain. uses_language_subdirs is only checked if whole_domain is not true.
 def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=False):
+    # Do this first so we can throw an invalid language exception if necessary and
+    # avoid tagging the site as an invalid language.
+    site_lang = GetSiteInfoModelFromLanguage(language)
     if whole_domain:
         # Set ranked keywords for that domain to reindex.
         existing_model = type(site)
@@ -1466,7 +1469,6 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
         SetDomainLanguage(site.rooturl, language)
     elif tag_as_subdir:
         SetDomainInfixLanguage(site.rooturl)
-    site_lang = GetSiteInfoModelFromLanguage(language)
     newsite = site_lang()
     newsite = CopySiteData(site, newsite)
     try:
