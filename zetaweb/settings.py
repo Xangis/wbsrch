@@ -360,6 +360,12 @@ EXTRA_LANG_INFO = {
         'name': 'Wolof',
         'name_local': u'Wolof'
     },
+    'xh': {
+        'bidi': False,
+        'code': 'xh',
+        'name': 'Xhosa',
+        'name_local': u'isiXhosa'
+    },
     'yo': {
         'bidi': False,
         'code': 'yo',
