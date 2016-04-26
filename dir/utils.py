@@ -841,8 +841,9 @@ def GetMimeTypeModifier(mimetype, language='en'):
     elif IsBadMimeType(mimetype):
         return -20.0
     else:
+        # Lose half a point for unrecognized MIME types, same as plain text.
         print u'Unrecognized MIME type: {0}'.format(mimetype)
-        return 0.0
+        return -0.5
 
 def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=False):
     """
