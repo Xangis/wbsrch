@@ -23,6 +23,7 @@ import re
 import ipaddr
 import whois
 from nltk.corpus import stopwords
+from unidecode import unidecode
 
 # This list is not exhaustive, nor can it be because new TLDs are being created all the time.
 top_level_domains = [
@@ -863,6 +864,8 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
     spacelesskeywords = spacelesskeywords.replace("'", '')
     spacelesskeywords = spacelesskeywords.replace(".", '')
     keywords = keywords.lower()
+    asciikeywords = unidecode(keywords)
+    spacelessasciikeywords = unidecode(spacelesskeywords)
     multiword = False
     keywordisdomain = False
     # Represents the words of the phrase separately.
@@ -888,14 +891,14 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('-{0} points for having more than 2 subdomains.'.format((numsub-2)*4))
     # Exact url match, matches "cheese.com" when the URL is "cheese.com".
-    if item.rooturl and keywords == item.rooturl.lower():
+    if item.rooturl and asciikeywords == item.rooturl.lower():
         keywordisdomain = True
         value += 50
         if verbose:
             rulematches.append('50 points for exact domain match.'.format((numsub-2)*4))
     # Matches "cheese.com" when the URL is cheese.com
-    elif item.rooturl and u'.' in keywords and keywords in item.rooturl and len(spliturl) > 1:
-        splitk = keywords.split(u'.')
+    elif item.rooturl and u'.' in asciikeywords and asciikeywords in item.rooturl and len(spliturl) > 1:
+        splitk = asciikeywords.split(u'.')
         # Exact match of "cheese.com" and "cheese.com".
         if len(spliturl) == 2 and splitk[0] == spliturl[0] and splitk[1] == spliturl[1]:
             value += 48
@@ -907,8 +910,8 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('34 points for subdomain match.')
             # Bonus points for exact match (being root). Matches http://www.cheese.com for "yahoo.com" keywords.
-            if ((u'http://www.' + keywords) == item.url or (u'http://www.' + keywords) == (item.url + u'/') or
-                (u'https://www.' + keywords) == item.url or (u'https://www.' + keywords) == (item.url + u'/')):
+            if ((u'http://www.' + asciikeywords) == item.url or (u'http://www.' + asciikeywords) == (item.url + u'/') or
+                (u'https://www.' + asciikeywords) == item.url or (u'https://www.' + asciikeywords) == (item.url + u'/')):
                 value += 12
                 if verbose:
                     rulematches.append('12 points for domain match with www prefix.')
@@ -918,7 +921,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('12 points for partial domain match.')
     # Matches "cheese" when the URL is cheese.com or cheese.net or cheese.au
-    elif item.rooturl and len(spliturl) == 2 and spliturl[0] == keywords:
+    elif item.rooturl and len(spliturl) == 2 and spliturl[0] == asciikeywords:
         keywordisdomain = True
         value += 32
         if verbose:
@@ -938,7 +941,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('4 points for .net/.org/.au/.mil/.ca domain match.')
     # Matches "cheese" when the URL is www.cheese.com.
-    elif item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) == 3 and spliturl[1] == keywords:
+    elif item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) == 3 and spliturl[1] == asciikeywords:
         keywordisdomain = True
         value += 30
         if verbose:
@@ -958,49 +961,49 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('4 points for .net/.org/.au/.mil/.ca domain match.')
     # Matches "cheese sandwich" when the URL is cheesesandwich.com.
-    elif multiword and item.rooturl and len(spliturl) == 2 and spliturl[0] == spacelesskeywords:
+    elif multiword and item.rooturl and len(spliturl) == 2 and spliturl[0] == spacelessasciikeywords:
         keywordisdomain = True
         value += 30
         if verbose:
             rulematches.append('30 points for two word domain match in order.')
     # Matches "cheese sandwich" when the URL is www.cheesesandwich.com. Also matches cheese.sandwich.
-    elif multiword and item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) == 3 and spliturl[1] == spacelesskeywords:
+    elif multiword and item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) == 3 and spliturl[1] == spacelessasciikeywords:
         keywordisdomain = True
         value += 24
         if verbose:
             rulematches.append('24 points for two word www domain match in order.')
     # Matches "cheese" when the URL is cheeseburger.com.
-    elif item.rooturl and len(spliturl) == 2 and keywords in spliturl[0]:
+    elif item.rooturl and len(spliturl) == 2 and asciikeywords in spliturl[0]:
         value += 20
         if verbose:
             rulematches.append('20 points for partial domain word match.')
     # Matches "cheese" when the URL is www.cheeseburger.com.
-    elif item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) > 1 and keywords in spliturl[1]:
+    elif item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) > 1 and asciikeywords in spliturl[1]:
         value += 18
         if verbose:
             rulematches.append('18 points for www partial domain word match.')
     # Matches "cheese sandwich" when the URL is cheesesandwichforsale.com.
-    elif multiword and item.rooturl and len(spliturl) == 2 and spacelesskeywords in spliturl[0]:
+    elif multiword and item.rooturl and len(spliturl) == 2 and spacelessasciikeywords in spliturl[0]:
         value += 16
         if verbose:
             rulematches.append('16 points for partial domain multi word match.')
     # Matches "cheese sandwich" when the URL is www.cheesesandwichforsale.com.
-    elif multiword and item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) > 1 and spacelesskeywords in spliturl[1]:
+    elif multiword and item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) > 1 and spacelessasciikeywords in spliturl[1]:
         value += 14
         if verbose:
             rulematches.append('14 points for partial www domain multi word match.')
     # Matches "cheese" when the URL is cheese.soup.com or yellow.cheeses.com.
-    elif item.rooturl and keywords in item.rooturl.lower():
+    elif item.rooturl and asciikeywords in item.rooturl.lower():
         value += 12
         if verbose:
             rulematches.append('12 points for subdomain partial word match.')
     # Matches the keywords in any part of the URL. Matches "cheese" when the URL is tacos.com/cheesesandwich.
-    elif item.rooturl and keywords in item.url.lower():
+    elif item.rooturl and asciikeywords in item.url.lower():
         value += 10
         if verbose:
             rulematches.append('10 points for partial url word match.')
     # Matches "cheese sandwich" when the URL is tacos.com/cheesesandwich/
-    elif multiword and item.rooturl and spacelesskeywords in item.url.lower():
+    elif multiword and item.rooturl and spacelessasciikeywords in item.url.lower():
         value += 8
         if verbose:
             rulematches.append('8 points for multiword partial url word match.')
@@ -1008,7 +1011,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
     elif multiword:
         numwordsfound = 0
         for keyword in splitkeywords:
-            if keyword in item.url.lower():
+            if unidecode(keyword) in item.url.lower():
                 numwordsfound += 1
         if numwordsfound:
             value += (20.0 * numwordsfound) / len(splitkeywords)
@@ -1056,15 +1059,15 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             value -= 1
             if verbose:
                 rulematches.append('-1 point for query longer than 25 chars.')
-    if parsed.netloc and keywords in parsed.netloc:
+    if parsed.netloc and asciikeywords in parsed.netloc:
         value += 5
         if verbose:
             rulematches.append('5 points for keywords in the netloc.')
-    elif parsed.path and keywords in parsed.path:
+    elif parsed.path and asciikeywords in parsed.path:
         value += 3
         if verbose:
             rulematches.append('3 points for keywords in the url path.')
-    elif parsed.query and keywords in parsed.query:
+    elif parsed.query and asciikeywords in parsed.query:
         value += 1
         if verbose:
             rulematches.append('1 point for keywords in the query.')

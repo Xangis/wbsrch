@@ -24,6 +24,7 @@ from utils import *
 import datetime
 import codecs
 import math
+from unidecode import unidecode
 
 def Indexer(options):
     print options
@@ -249,7 +250,6 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
             print u'BuildIndexForTerm: Search term is empty. Refusing to index.'
         return
     keywords = keywords.lower()
-    spacelesskeywords = keywords.replace(' ', '')
     term = None
     new = False
     term_model = GetIndexModelFromLanguage(lang)
@@ -269,7 +269,11 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     # However, leaving out pagetext saves a *lot* of effort and computation time.
     kp = '%' + keywords + '%' # Allow us to do raw ILIKE queries without formatting problems.
     spacelesskeywords = keywords.replace(' ', '%')
+    asciikeywords = unidecode(spacelesskeywords)
+    if spacelesskeywords != asciikeywords:
+        print u'Checking URL as {0}'.format(asciikeywords)
     skp = '%' + spacelesskeywords + '%'
+    akp = '%' + asciikeywords + '%'
     # Don't even bother selecting on page text, keywords, or description ILIKE for massive queries.
     # Since title, first head tag, and URL are most important. About 1.2% of queries fit this and
     # indexing them can be a multi-hour process on a slow server.
@@ -281,19 +285,19 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
                      site_model._meta.db_table +
                      u" WHERE (pagetitle ILIKE %s OR url ILIKE " +
                      u"%s OR pagefirstheadtag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, skp, kp])
+        index_items = site_model.objects.raw(sql_query, [kp, akp, kp])
     elif term.num_results > 40000:
         sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
                      u" WHERE (pagetitle ILIKE %s OR url ILIKE " +
                      u"%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, skp, kp, kp])
+        index_items = site_model.objects.raw(sql_query, [kp, akp, kp, kp])
     elif term.num_results > 10000:
         sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
                      u" WHERE (pagetitle ILIKE %s OR url ILIKE " +
                      u"%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, skp, kp, kp, kp])
+        index_items = site_model.objects.raw(sql_query, [kp, akp, kp, kp, kp])
     # If we have more than 3000 results, ignore the specific page text because we can get what we
     # need from the head tag, url, keywords, description, and title (mostly).
     elif abbreviated or term.num_results > 3000:
@@ -301,13 +305,13 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
                      site_model._meta.db_table +
                      u" WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR url ILIKE " +
                      u"%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, kp, kp, skp, kp, kp, kp])
+        index_items = site_model.objects.raw(sql_query, [kp, kp, kp, akp, kp, kp, kp])
     else:
         sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
                      site_model._meta.db_table +
                      u" WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR pagetext ILIKE " +
                      u"%s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, kp, kp, kp, skp, kp, kp, kp])
+        index_items = site_model.objects.raw(sql_query, [kp, kp, kp, kp, akp, kp, kp, kp])
     if verbose:
         print sql_query.replace("%s", ("'" + kp + "'"))
     ratings = []
