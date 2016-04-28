@@ -312,6 +312,12 @@ EXTRA_LANG_INFO = {
         'name': 'Akan',
         'name_local': u'Akan'
     },
+    'ff': {
+        'bidi': False,
+        'code': 'ff',
+        'name': 'Fulani',
+        'name_local': u'Fufulde'
+    },
     'ha': {
         'bidi': False,
         'code': 'ha',
