@@ -342,6 +342,12 @@ EXTRA_LANG_INFO = {
         'name': 'Lingala',
         'name_local': u'Ngala'
     },
+    'ny': {
+        'bidi': False,
+        'code': 'ny',
+        'name': 'Nyanja',
+        'name_local': u'Chinyanja'
+    },
     'rw': {
         'bidi': False,
         'code': 'rw',
