@@ -30,9 +30,6 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% if not searchterm %}</div>{% endif %}
 
 {% if searchterm %}
-{% if show_network_ad %}
-{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
-{% endif %}
 {% if typo_for %}<p><em>{% trans "Did you mean to search for" %} <a href="/search/?q={{ typo_for }}">{{ typo_for }}</a>?</em></p>{% endif %}
 {% if is_domain %}<p><em>{% trans "Did you mean to look up domain details for" %} <a href="/domain/?q={{ is_domain }}">{{ is_domain }}</a>?</em></p>{% endif %}
 {% if is_ip %}<p><em>{% trans "Did you mean to look up details for the IP address" %} <a href="/ip/?q={{ is_ip }}">{{ is_ip }}</a>?</em></p>{% endif %}
@@ -43,8 +40,14 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% elif actively_blocked %}<p>We have excluded many of the sites related to this search from our index. You may see fewer results than you expect.</p>{% endif %}
 {% if not results and not search_results and not refused %}
 <p>{% trans "No results were found for that search." %}</p>
+{% if show_network_ad %}
+{% include "pw_search_leaderboard.inc" %}
+{% endif %}
 <p>{% trans "Our robots are very embarrassed by their failure to find what you were looking for. They'll be on the hunt for new content and should have better results in a few days." %}</p>
 {% else %}
+{% if show_network_ad %}
+{% include "pw_search_leaderboard.inc" %}
+{% endif %}
 <table><tr><td>
 {% for result, value in results %}
 <h3><a href="{{ result.url }}"><span class="sitetitle">{% if result.pagetitle %}{{ result.pagetitle|truncatewords:15 }}{% else %}(No Title){% endif %}</span></a></h3>
@@ -93,6 +96,9 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% ssi '/var/django/wbsrch/templates/adsense.inc' %}
 {% endif %}
 {% else %}
+{% if show_network_ad %}
+<div class="centered">{% include "pw_search_leaderboard.inc" %}</div>
+{% endif %}
 <br/><br/>
 {% endif %}
 <div class="footer">
