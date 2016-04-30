@@ -312,6 +312,12 @@ EXTRA_LANG_INFO = {
         'name': 'Akan',
         'name_local': u'Akan'
     },
+    'bm': {
+        'bidi': False,
+        'code': 'bm',
+        'name': 'Bambara',
+        'name_local': u'Bamanankan'
+    },
     'ff': {
         'bidi': False,
         'code': 'ff',
