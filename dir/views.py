@@ -275,6 +275,7 @@ def domain(request):
     language_code = request.LANGUAGE_CODE
     superuser = False
     cached = False
+    notdomain = False
     if request.user and request.user.is_superuser:
         superuser = True
     domain = request.GET.get('q', None)
@@ -294,6 +295,8 @@ def domain(request):
         if u'/' in rawdomain:
             pieces = rawdomain.split('/')
             rawdomain = pieces[0]
+        if not u'.' in domain or u' ' in domain:
+            notdomain = True
         # Prevent crawling excluded sites.
         domains = DomainInfo.objects.filter(url=rawdomain)
         excluded = BlockedSite.objects.filter(url=rawdomain)
@@ -366,7 +369,7 @@ def domain(request):
 
         return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
             'num_records': num_records, 'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
-            'link': link, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain },
+            'link': link, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain, 'notdomain': notdomain },
             context_instance=RequestContext(request))
     return render_to_response('domain.htm', {'language_code': language_code }, context_instance=RequestContext(request))
 

@@ -57,6 +57,9 @@
 {% else %}
 {% if domain %}
 <p>{% trans 'No exact match for that domain name found' %}.</p>
+{% if notdomain %}
+<p>{% trans 'Do you want to' %} <a href="/search/?q={{ domain|urlencode }}">{% trans 'search for' %} {{ domain }} {% trans 'instead' %}</a>?</p>
+{% endif %}
 {% else %}
 <p>{% trans 'Enter a domain name to check' %}.</p>
 {% ssi '/var/django/wbsrch/templates/pw_leaderboard.inc' %}
