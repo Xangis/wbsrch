@@ -714,7 +714,7 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html; charset=LATIN1', u'text/html; charset=latin-1', u'text/html; UTF-8;charset=ISO-8859-1',
                       u'text/html; charset=ISO-8859-1, text/html', u'text/html; charset="iso-8859-1"', u'text/html; Charset=windows-28591',
                       u"text/html; charset='iso-8859-1'", u'text/html; profile=xhtml;charset=ISO-8859-1', u'text/HTML; Charset=ISO-8859-1',
-                      u'text/HTML;charset=ISO-8859-1', u'text/HTML; charset=iso-8859-1']:
+                      u'text/HTML;charset=ISO-8859-1', u'text/HTML; charset=iso-8859-1', u'text/html; charset=LATIN-1']:
         return 0.5
     # Quarter point for ISO-8859-15 or Windows-1252. They're not UTF-8, but they're latin text at least.
     elif mimetype in [u'text/html; charset=Windows-1252', u'text/html; charset=windows-1252', u'text/html; charset=ISO-8859-15',
@@ -722,7 +722,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html;charset=ISO-8859-15', u'text/html; charset= iso-8859-15', u'text/html; charset=WINDOWS-1252',
                       u'text/html; Charset=ISO-8859-15', u'text/html;charset=iso-8859-15', u'text/html; charset=iso8859-15',
                       u'text/html, charset=iso-8859-15', u'text/html; charset=iso-8859-15;', u'text/html;charset=Windows-1252',
-                      u'text/html; Charset=Windows-1252', u'text/HTML; Charset=windows-1252', u'text/html; Charset=iso-8859-15']:
+                      u'text/html; Charset=Windows-1252', u'text/HTML; Charset=windows-1252', u'text/html; Charset=iso-8859-15',
+                      u'text/html; charset=ISO8859-15']:
         return 0.25
     # No point modifier for unknown or undeclared charset.
     elif mimetype in [u'text/html; charset=_CHARSET',]:
