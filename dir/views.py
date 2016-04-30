@@ -374,6 +374,7 @@ def domain(request):
     return render_to_response('domain.htm', {'language_code': language_code }, context_instance=RequestContext(request))
 
 def ipaddry(request):
+    start = timezone.now()
     if request.method != 'GET':
         raise Http404
     language_code = request.LANGUAGE_CODE
@@ -400,6 +401,34 @@ def ipaddry(request):
         #siteinfos = site_model.objects.filter(ip=ip)
         siteinfos = None
         num_siteinfos = site_model.objects.filter(ip=ip).count()
+
+        searchlog = IPSearchLog()
+        searchlog.keywords = ip
+        searchlog.result_count = domains.count()
+        searchlog.indexed = False
+        if request.META.has_key('HTTP_REFERER'):
+            searchlog.referer = request.META['HTTP_REFERER']
+            if len(searchlog.referer) > 255:
+                searchlog.referer = searchlog.referer[0:252] + '...'
+        if request.META.has_key('REMOTE_ADDR'):
+            searchlog.ip = request.META['REMOTE_ADDR']
+        if request.META.has_key('HTTP_USER_AGENT'):
+            searchlog.browserstring = request.META['HTTP_USER_AGENT']
+            if len(searchlog.browserstring) > 255:
+                searchlog.browserstring = searchlog.browserstring[0:252] + '...'
+            if IsBotAgent(searchlog.browserstring):
+                searchlog.is_bot = True
+        searchlog.language = language_code
+        end_delta = timezone.now() - start
+        searchlog.search_time = end_delta.total_seconds()
+        if searchlog.ip:
+            gi = GeoIP()
+            country = gi.country_code(searchlog.ip)
+            if country:
+                searchlog.ip_country = country
+        # This appears to be non-functional for some reason.
+        #async(SaveLogEntry, searchlog)
+        SaveLogEntry(searchlog)
 
         return render_to_response('ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
                 'num_siteinfos': num_siteinfos },

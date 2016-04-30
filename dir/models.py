@@ -1023,6 +1023,13 @@ class DomainSearchLog(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
+class IPSearchLog(SearchLogBase):
+    # What language site was this domain searched from?
+    language = models.CharField(max_length=6)
+
+    def __unicode__(self):
+        return self.keywords
+
 class PendingIndexBase(models.Model):
     keywords = models.CharField(max_length=240, unique=True)
     date_added = models.DateField(auto_now_add=True)
