@@ -792,8 +792,22 @@ class PendingIndexAdmin(admin.ModelAdmin):
             item.delete()
     
     block_these_terms.short_description = "Add terms to bad query list and delete."
-    
-    actions = [index_these_terms, block_these_terms]
+
+    def delete_all_moved_terms(modeladmin, request, queryset):
+        for item in queryset:
+            if ' moved to ' in item.reason:
+                item.delete()
+
+    delete_all_moved_terms.short_description = "Delete all of these terms with 'moved to' as a reason."
+
+    def delete_all_blocked_terms(modeladmin, request, queryset):
+        for item in queryset:
+            if ' blocked and it ' in item.reason:
+                item.delete()
+
+    delete_all_blocked_terms.short_description = "Delete all of these terms with 'blocked' as a reason."
+
+    actions = [index_these_terms, block_these_terms, delete_all_moved_terms, delete_all_blocked_terms]
 
 class FeedbackItemAdmin(admin.ModelAdmin):
     list_display = ('keywords', 'num_search_results', 'date_added', 'language', 'processed', 'ip')
