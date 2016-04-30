@@ -342,6 +342,12 @@ EXTRA_LANG_INFO = {
         'name': 'Kikuyu',
         'name_local': u'Gikuyu'
     },
+    'la': {
+        'bidi': False,
+        'code': 'la',
+        'name': 'Latin',
+        'name_local': u'Latina'
+    },
     'ln': {
         'bidi': False,
         'code': 'ln',
