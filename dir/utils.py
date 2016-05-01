@@ -2176,6 +2176,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
     return term
 
 def GenerateIndexStats(save=False):
+    start = timezone.now()
     stats = IndexStats(total_urls=0, total_indexes=0, total_pendingindexes=0)
     stats.num_excluded = BlockedSite.objects.count()
 
@@ -2196,6 +2197,8 @@ def GenerateIndexStats(save=False):
         langs.append(langdata)
     langs.sort(key=lambda item: item['lang'])
     stats.langs = json.dumps(langs)
+    end_delta = timezone.now() - start
+    stats.generation_time = end_delta.total_seconds()
     if save:
         stats.save()
     return stats
