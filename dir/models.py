@@ -677,7 +677,7 @@ class SearchLogBase(models.Model):
     ip_country = models.CharField(max_length=3, null=True, blank=True)
     browserstring = models.CharField(max_length=255, null=True, blank=True)
     is_bot = models.BooleanField(default=False, blank=True)
-    search_id = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
+    search_id = models.UUIDField(null=True, default=uuid.uuid4, editable=False, db_index=True)
 
     class Meta:
         in_db = 'indexes'
