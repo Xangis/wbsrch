@@ -437,9 +437,7 @@ def ipaddry(request):
             country = gi.country_code(searchlog.ip)
             if country:
                 searchlog.ip_country = country
-        # This appears to be non-functional for some reason.
-        #async(SaveLogEntry, searchlog)
-        SaveLogEntry(searchlog)
+        async(SaveLogEntry, searchlog)
 
         return render_to_response('ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
                 'num_siteinfos': num_siteinfos, 'cached': cached },
