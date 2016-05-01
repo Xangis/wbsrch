@@ -18,6 +18,7 @@ from crawler import CrawlSingleUrl, Crawler
 from urlparse import urlparse
 from datetime import datetime, date, timedelta
 import itertools
+import uuid
 from django.contrib.gis.geoip import GeoIP
 
 INDEX_TERM_STALE_DAYS = 730
@@ -342,6 +343,7 @@ def domain(request):
         num_records = siteinfos.count()
         siteinfos = siteinfos[:200]
         searchlog = DomainSearchLog()
+        searchlog.search_id = uuid.uuid4()
         searchlog.keywords = domain
         searchlog.result_count = domains.count()
         searchlog.indexed = False
@@ -375,6 +377,7 @@ def domain(request):
 
 def ipaddry(request):
     start = timezone.now()
+    cached = False
     if request.method != 'GET':
         raise Http404
     language_code = request.LANGUAGE_CODE
@@ -398,11 +401,19 @@ def ipaddry(request):
             raise Http404
         site_model = GetSiteInfoModelFromLanguage(language_code)
         domains = DomainInfo.objects.filter(robots_ip=ip)
-        #siteinfos = site_model.objects.filter(ip=ip)
         siteinfos = None
-        num_siteinfos = site_model.objects.filter(ip=ip).count()
+
+        num_siteinfos_cache = cache.get('pages_at_ip_' + ip)
+        if not num_siteinfos_cache:
+            num_siteinfos = site_model.objects.filter(ip=ip).count()
+            # Cache for up to 1 week
+            cache.set('pages_at_ip_' + ip, num_siteinfos, 604800)
+        else:
+            cached = True
+            num_siteinfos = int(num_siteinfos_cache)
 
         searchlog = IPSearchLog()
+        searchlog.search_id = uuid.uuid4()
         searchlog.keywords = ip
         searchlog.result_count = domains.count()
         searchlog.indexed = False
@@ -431,11 +442,11 @@ def ipaddry(request):
         SaveLogEntry(searchlog)
 
         return render_to_response('ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
-                'num_siteinfos': num_siteinfos },
+                'num_siteinfos': num_siteinfos, 'cached': cached },
             context_instance=RequestContext(request))
     #except:
     #    pass
-    return render_to_response('ip.htm', {'language_code': language_code }, context_instance=RequestContext(request))
+    return render_to_response('ip.htm', {'language_code': language_code, 'cached': cached }, context_instance=RequestContext(request))
 
 def search(request):
     log = None
@@ -615,6 +626,7 @@ def search(request):
             pass
         else:
             log = searchlog_model()
+            log.search_id = uuid.uuid4()
             # Prevent 'value too long' errors.
             if len(result.searchterm) > 255:
                 log.keywords = result.searchterm[0:252] + '...'

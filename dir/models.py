@@ -12,6 +12,7 @@ import urlparse
 import datetime
 import time
 import re
+import uuid
 
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
@@ -676,6 +677,7 @@ class SearchLogBase(models.Model):
     ip_country = models.CharField(max_length=3, null=True, blank=True)
     browserstring = models.CharField(max_length=255, null=True, blank=True)
     is_bot = models.BooleanField(default=False, blank=True)
+    search_id = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
 
     class Meta:
         in_db = 'indexes'
@@ -4017,7 +4019,7 @@ class AutoComplete_zu(AutoCompleteBase):
 
 class ResultClickBase(models.Model):
     keywords = models.TextField(unique=False)
-    search_id = models.IntegerField()
+    search_id = models.UUIDField(null=True, editable=False, db_index=True)
     position = models.IntegerField()
     ip = models.CharField(max_length=16, blank=True, null=True, unique=False)
     url = models.TextField(blank=False, db_index=True)

@@ -64,6 +64,7 @@ function go(url, keywords, pos, id, lang) {
   if(document.images){
     var img = new Image(1,1);
     img.src = '/go/?keywords=' + keywords + '&url=' + url + '&pos=' + pos + '&id=' + id + '&lang=' + lang;
-    document.body.insertAfter(img, document.body.firstChild);
+    var body = document.getElementsByTagName("body")[0];
+    body.insertBefore(img, body.firstChild);
   }
 }
