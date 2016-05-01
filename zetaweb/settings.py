@@ -402,6 +402,12 @@ EXTRA_LANG_INFO = {
         'name': 'Tsonga',
         'name_local': u'Xitsonga'
     },
+    've': {
+        'bidi': False,
+        'code': 've',
+        'name': 'Venda',
+        'name_local': u'Tshivenda'
+    },
     'wo': {
         'bidi': False,
         'code': 'wo',
