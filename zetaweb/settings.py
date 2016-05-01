@@ -372,6 +372,12 @@ EXTRA_LANG_INFO = {
         'name': 'Rwanda',
         'name_local': u'Kinyarwanda'
     },
+    'scn': {
+        'bidi': False,
+        'code': 'scn',
+        'name': 'Sicilian',
+        'name_local': u'Sicilianu'
+    },
     'sn': {
         'bidi': False,
         'code': 'sn',
