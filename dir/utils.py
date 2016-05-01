@@ -1088,10 +1088,10 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         value -= 8
         if verbose:
             rulematches.append('-8 points for root domain .xyz/.kim/.review/.cricket/.link/.science/.work/.gq/.party/.country')
-    elif item.rooturl.endswith(u'.info') or item.rooturl.endswith(u'.cn') or item.rooturl.endswith(u'.ru') or item.rooturl.endswith(u'.su') :
+    elif item.rooturl.endswith(u'.info') or item.rooturl.endswith(u'.cn') or item.rooturl.endswith(u'.ru') or item.rooturl.endswith(u'.su') or item.rooturl.endswith(u'.biz') or item.rooturl.endswith(u'.mobi'):
         value -= 6
         if verbose:
-            rulematches.append('-6 points for root domain .info/.cn/.ru/.su.')
+            rulematches.append('-6 points for root domain .info/.cn/.ru/.su./.biz/.mobi')
     # Differing scores for language-centric top-level domains.
     elif item.rooturl.endswith(u'.casa'):
         if lang == 'es':
@@ -1102,22 +1102,18 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             value -= 3
             if verbose:
                 rulematches.append('-3 points for .casa and not language es.')
-    elif item.rooturl.endswith(u'.club') or item.rooturl.endswith(u'.guru') or item.rooturl.endswith(u'.ninja') or item.rooturl.endswith(u'.kr') or item.rooturl.endswith(u'.jp') or item.rooturl.endswith(u'.az') or item.rooturl.endswith(u'.iq') or item.rooturl.endswith(u'.ir') or item.rooturl.endswith(u'.name'):
+    elif item.rooturl.endswith(u'.club') or item.rooturl.endswith(u'.guru') or item.rooturl.endswith(u'.ninja') or item.rooturl.endswith(u'.kr') or item.rooturl.endswith(u'.jp') or item.rooturl.endswith(u'.az') or item.rooturl.endswith(u'.iq') or item.rooturl.endswith(u'.ir') or item.rooturl.endswith(u'.name') or item.rooturl.endswith(u'.pro'):
         value -= 4
         if verbose:
-            rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir/.name')
-    elif item.rooturl.endswith(u'.me') or item.rooturl.endswith(u'.biz'):
-        value -= 3
-        if verbose:
-            rulematches.append('-3 points for domain .me/.biz')
-    elif item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith('.mobi') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or item.rooturl.endswith(u'.om') or item.rooturl.endswith(u'.kw') or item.rooturl.endswith(u'.th') or item.rooturl.endswith(u'.bn') or item.rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae'):
+            rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir/.name/.pro')
+    elif item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or item.rooturl.endswith(u'.om') or item.rooturl.endswith(u'.kw') or item.rooturl.endswith(u'.th') or item.rooturl.endswith(u'.bn') or item.rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae'):
         value -= 2
         if verbose:
             rulematches.append('-2 points for domain .in/.sg/.tw/.mobi/.biz/.ng/.my/.id/.ph/.tw/.sg/.in/.lk/.ae/.ws/.om/.kw/.th/.bn/.am/.ge/.mn/.jo/.by/.la/.bt/.ae')
-    elif item.rooturl.endswith(u'.tv') or item.rooturl.endswith(u'.vi') or item.rooturl.endswith(u'.vg') or item.rooturl.endswith(u'.sc') or item.rooturl.endswith(u'.vu') or item.rooturl.endswith(u'.to') or item.rooturl.endswith(u'.tl') or item.rooturl.endswith(u'.nr') or item.rooturl.endswith(u'.sh') or item.rooturl.endswith(u'.pn') or item.rooturl.endswith(u'.tk') or item.rooturl.endswith(u'.tc'):
+    elif item.rooturl.endswith(u'.tv') or item.rooturl.endswith(u'.vi') or item.rooturl.endswith(u'.vg') or item.rooturl.endswith(u'.sc') or item.rooturl.endswith(u'.vu') or item.rooturl.endswith(u'.to') or item.rooturl.endswith(u'.tl') or item.rooturl.endswith(u'.nr') or item.rooturl.endswith(u'.sh') or item.rooturl.endswith(u'.pn') or item.rooturl.endswith(u'.tk') or item.rooturl.endswith(u'.tc') or item.rooturl.endswith(u'.us'):
         value -= 1
         if verbose:
-            rulematches.append('-1 points for domain .tv/.vi/.vg/.sc/.vu/.to/.tl/.nr/.sh/.pn/.tk/.tc')
+            rulematches.append('-1 points for domain .tv/.vi/.vg/.sc/.vu/.to/.tl/.nr/.sh/.pn/.tk/.tc/.us')
     elif item.rooturl.endswith(u'.net') or item.rooturl.endswith(u'.org') or item.rooturl.endswith(u'.ca') or item.rooturl.endswith(u'.mil') or item.rooturl.endswith(u'.au') or item.rooturl.endswith(u'.uk'):
         value += 1
         if verbose:
@@ -1166,9 +1162,9 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if verbose:
             rulematches.append('8 points for spaceless keyword in page title.')
     elif not item.pagetitle:
-        value -= 10
+        value -= 12
         if verbose:
-            rulematches.append('-10 points for no page title.')
+            rulematches.append('-12 points for no page title.')
     # For multiword search terms, give a percentage of 10 points for each keyword found.
     elif item.pagetitle and multiword:
         numwordsfound = 0
@@ -1335,12 +1331,19 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
-        if item.pagetext.startswith('Buy this domain.') or (u'This website is for sale' in item.pagetitle) or (u'The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext):
+        if item.pagetext.startswith('Buy this domain.') or (u'This website is for sale' in item.pagetitle) or (u'This website is for sale' in item.pagetext) or (u'The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext):
             if verbose:
                 rulematches.append('Lose half of points for parked domain.')
             value /= 2
-    # Short pages, i.e. without much real content, are penalized. Half off under 250 bytes, 1/4 off
-    # under 500, no -2 points for 500-1000, and a 1 point bonus for 2000+.
+        # These phrases mean that a site is possibly parked, but almost definitely garbage.
+        if (u'Resources and Information.' in item.pagetitle) or (u'For search results please CLICK HERE' in pagetext):
+            value -= 8
+    # Empty pages without much real content, are penalized severely.
+    if not item.pagetext or (len(item.text) < 3):
+        value -= 20
+        if verbose:
+            rulematches.append('Lose 20 points for page text length less than 3.')
+    # Check actual page data -- it may have been all JavaScript.
     if item.pagesize < 250:
         value /= 4
         if verbose:
