@@ -2884,6 +2884,8 @@ def IsBotAgent(text):
     # WikiDo/1.1 (http://wikido.com; crawler@wikido.com)
     if u'WikiDo' in text:
         return True
+    if u'bhcBot' in text:
+        return True
     return False
 
 def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=False):
