@@ -701,8 +701,8 @@ class PendingUrlAdmin(admin.ModelAdmin):
     actions = [recrawl_this_url,]
 
 class SearchLogAdmin(admin.ModelAdmin):
-    list_display = ('keywords', 'result_count', 'search_time', 'ip', 'last_search', 'indexed', 'is_bot')
-    search_fields = ('keywords', 'ip')
+    list_display = ('keywords', 'result_count', 'search_time', 'ip', 'last_search', 'search_id', 'indexed', 'is_bot')
+    search_fields = ('keywords', 'ip', 'search_id')
 
     def block_these_terms(modeladmin, request, queryset):
         for item in queryset:
