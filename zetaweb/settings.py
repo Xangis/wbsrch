@@ -366,6 +366,12 @@ EXTRA_LANG_INFO = {
         'name': 'Nyanja',
         'name_local': u'Chinyanja'
     },
+    'om': {
+        'bidi': False,
+        'code': 'om',
+        'name': 'Oromo',
+        'name_local': u'Afaan Oromoo'
+    },
     'rw': {
         'bidi': False,
         'code': 'rw',
