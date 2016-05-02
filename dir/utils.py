@@ -2884,10 +2884,35 @@ def IsBotAgent(text):
     # istellabot/Nutch-1.10
     if u'istellabot' in text:
         return True
+    # knil (no idea what it is, but assuming a bot)
+    if u'knil' in text:
+        return True
     # WikiDo/1.1 (http://wikido.com; crawler@wikido.com)
     if u'WikiDo' in text:
         return True
+    # bhcBot
     if u'bhcBot' in text:
+        return True
+    # AppEngine-Google; (+http://code.google.com/appengine; appid: s~repcore-prod)
+    if u'AppEngine-Google' in text:
+        return True
+    # QCrawl
+    if u'QCrawl' in text:
+        return True
+    # gooblog/2.0 (http://help.goo.ne.jp/contact/)
+    if u'gooblog' in text:
+        return True
+    # Mozilla/5.0 (TweetmemeBot/4.0; +http://datasift.com/bot.html) Gecko/20100101 Firefox/31.0
+    if u'TweetmemeBot' in text:
+        return True
+    # wonderbot/JS 1.0
+    if u'wonderbot' in text:
+        return True
+    # Curl/PHP 5.4.45 (http://github.com/shuber/curl)
+    if u'Curl/PHP' in text:
+        return True
+    # AHC/1.0
+    if u'AHC/' in text:
         return True
     return False
 

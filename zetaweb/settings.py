@@ -324,6 +324,12 @@ EXTRA_LANG_INFO = {
         'name': 'Fulani',
         'name_local': u'Fufulde'
     },
+    'fo': {
+        'bidi': False,
+        'code': 'fo',
+        'name': 'Faroese',
+        'name_local': u'Føroyskt'
+    },
     'ha': {
         'bidi': False,
         'code': 'ha',
@@ -365,6 +371,12 @@ EXTRA_LANG_INFO = {
         'code': 'ny',
         'name': 'Nyanja',
         'name_local': u'Chinyanja'
+    },
+    'om': {
+        'bidi': False,
+        'code': 'om',
+        'name': 'Oromo',
+        'name_local': u'Afaan Oromoo'
     },
     'rw': {
         'bidi': False,
