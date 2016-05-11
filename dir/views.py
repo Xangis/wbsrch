@@ -346,6 +346,12 @@ def domain(request):
         searchlog.search_id = uuid.uuid4()
         searchlog.keywords = domain
         searchlog.result_count = domains.count()
+        # Enforce domain info if it doesn't exist and we have pages.
+        if searchlog.result_count < 1 and (len(rankings) > 0 or len(siteinfos) > 0):
+            dominfo = DomainInfo()
+            dominfo.url = rawdomain
+            dominfo.save()
+            domains = [dominfo,]
         searchlog.indexed = False
         if request.META.has_key('HTTP_REFERER'):
             searchlog.referer = request.META['HTTP_REFERER']
