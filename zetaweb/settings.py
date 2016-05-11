@@ -384,6 +384,12 @@ EXTRA_LANG_INFO = {
         'name': 'Rwanda',
         'name_local': u'Kinyarwanda'
     },
+    'sc': {
+        'bidi': False,
+        'code': 'sc',
+        'name': 'Sardinian',
+        'name_local': u'Sardinian'
+    },
     'scn': {
         'bidi': False,
         'code': 'scn',
