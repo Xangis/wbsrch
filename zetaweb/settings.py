@@ -360,6 +360,12 @@ EXTRA_LANG_INFO = {
         'name': 'Latin',
         'name_local': u'Latina'
     },
+    'lg': {
+        'bidi': False,
+        'code': 'lg',
+        'name': 'Luganda',
+        'name_local': u'Oluganda'
+    },
     'ln': {
         'bidi': False,
         'code': 'ln',
