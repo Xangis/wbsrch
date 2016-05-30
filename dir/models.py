@@ -116,6 +116,8 @@ EXCLUDED_SITE_REASONS = (
         (12, 'URL Shortener'),
         # No content. Not any actual content on this site.
         (13, 'No Content'),
+        # No content. Not any actual content on this site.
+        (14, 'Malware'),
         # BEGIN SITE RANK INCREASE REASONS - DON'T USE FOR BLOCKING
         # High-Quality Content
         (200, 'Quality Content'),
