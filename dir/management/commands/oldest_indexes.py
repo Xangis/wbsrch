@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
 from zetaweb import settings
 from optparse import make_option
-from dir.models import PendingIndex, IndexTerm
+from dir.models import PendingIndex, IndexTerm, DomainInfo
 from dir.utils import GetIndexModelFromLanguage, GetSiteInfoModelFromLanguage
 from dir.views import language_list
 import dateutil.parser
@@ -41,7 +41,12 @@ class Command(BaseCommand):
             if options['showurls']:
                 items = site_model.objects.order_by('lastcrawled')[0:1]
                 for item in items:
-                    msgs1.append(u'{0} oldest url is on {1} for url id {2} - {3}'.format(language, item.lastcrawled, item.id, item.url))
+                    try:
+                        di = DomainInfo.objects.get(url=item.rooturl)
+                        msgs1.append(u'{0} oldest url is on {1} for url id {2} (Lang {3} I{4} Q{5} L{6}) - {7}'.format(language, item.lastcrawled, 
+                            item.id, di.language_association, di.uses_language_subdirs, di.uses_language_query_parameter, di.uses_langid, item.url))
+                    except ObjectDoesNotExist:
+                        msgs1.append(u'{0} oldest url is on {1} for url id {2} - {3}'.format(language, item.lastcrawled, item.id, item.url))
             if sdate:
                 if not options['showurls']:
                     num_items = index_model.objects.filter(date_indexed__lt=sdate).count()
