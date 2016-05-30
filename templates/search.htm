@@ -43,12 +43,12 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% if not results and not search_results and not refused %}
 <p>{% trans "No results were found for that search." %}</p>
 {% if show_network_ad %}
-{% include "pw_search_leaderboard.inc" %}
+{% include "yllix_search_leaderboard.inc" %}
 {% endif %}
 <p>{% trans "Our robots are very embarrassed by their failure to find what you were looking for. They'll be on the hunt for new content and should have better results in a few days." %}</p>
 {% else %}
 {% if show_network_ad %}
-{% include "pw_search_leaderboard.inc" %}
+{% include "yllix_search_leaderboard.inc" %}
 {% endif %}
 <table><tr><td>
 {% for result, value in results %}
@@ -99,7 +99,7 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% endif %}
 {% else %}
 {% if show_network_ad %}
-<div class="centered">{% include "pw_search_leaderboard.inc" %}</div>
+<div class="centered">{% include "yllix_search_leaderboard.inc" %}</div>
 {% endif %}
 <br/><br/>
 {% endif %}
