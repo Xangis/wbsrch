@@ -414,6 +414,12 @@ EXTRA_LANG_INFO = {
         'name': 'Somali',
         'name_local': u'Af-Soomaali'
     },
+    'ss': {
+        'bidi': False,
+        'code': 'ss',
+        'name': 'Swazi',
+        'name_local': u'SiSwati'
+    },
     'tn': {
         'bidi': False,
         'code': 'tn',
