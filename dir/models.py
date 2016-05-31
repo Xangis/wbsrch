@@ -239,7 +239,7 @@ class URLInfo(models.Model):
     def save(self, *args, **kwargs):
         # Sets a new random value every time the link is saved.
         if len(self.pagetext) > 0:
-            hashval = Simhash(self.pagetext, f=128)
+            hashval = Simhash(self.pagetext, f=128).value
         else:
             hashval = 0
         self.simhash_value = '{:0128b}'.format(hashval)      
