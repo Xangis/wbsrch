@@ -8,7 +8,6 @@ import os
 environment = os.getenv('DJANGO_ENVIRONMENT')
 if environment == 'debug' or environment == 'development':
     DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Jason Champion', 'jchampion@zetacentauri.com'),
@@ -94,14 +93,6 @@ else:
 
 DATABASE_ROUTERS = ['zetaweb.dbrouter.ModelDatabaseRouter',]
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-"django.contrib.auth.context_processors.auth",
-"django.core.context_processors.debug",
-"django.core.context_processors.i18n",
-"django.core.context_processors.media",
-"django.core.context_processors.tz",
-"django.contrib.messages.context_processors.messages")
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -138,8 +129,6 @@ MEDIA_ROOT = '/var/django/wbsrch/templates/'
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = ''
 
-ALLOWED_INCLUDE_ROOTS = ('/var/django/wbsrch/templates',)
-
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -175,6 +164,34 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['/var/django/wbsrch/templates/',],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                "django.contrib.auth.context_processors.auth",
+                "django.core.context_processors.debug",
+                "django.core.context_processors.i18n",
+                "django.core.context_processors.media",
+                "django.core.context_processors.tz",
+                "django.contrib.messages.context_processors.messages"],
+            'allowed_include_roots': ['/var/django/wbsrch/templates/',],
+            'debug': DEBUG,
+        },
+    },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': ['/var/django/wbsrch/jinjatemplates/',],
+        'APP_DIRS': False,
+        'OPTIONS': {
+            'debug': DEBUG,
+        },
+    },
+]
+
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -191,13 +208,6 @@ ROOT_URLCONF = 'zetaweb.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'zetaweb.wsgi.application'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    '/var/django/wbsrch/templates/',
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',

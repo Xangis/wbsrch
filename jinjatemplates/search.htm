@@ -1,0 +1,116 @@
+{% load i18n %}<!DOCTYPE html>
+<html lang="{{ language_code }}"><head>
+<meta name="keywords" content="{% trans "search engine" %}, wbsrch, web, {% trans "independent" %}, {% trans "directory" %}, {% trans "search" %}, {% trans "engine" %}, {% trans "results" %}, {% trans "internet" %}" lang="{{ language_code }}">
+<meta name="description" content="WbSrch Web {% trans "Search" %}, {% trans "home" %} of {% trans "The Independent Search Engine" %}." lang="{{ language_code }}">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+{% if actively_blocked %}<meta name="robots" content="noindex">{% endif %}
+{% if language_code == 'en' %}<link rel="search" href="https://wbsrch.com/opensearchdescription.xml" type="application/opensearchdescription+xml" title="WbSrch" />{% endif %}
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% if searchterm %}{% trans "Search Results" %} {% trans "for" %} {{ searchterm }} | {% endif %}WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }})</title>
+{% include '../templates/style.inc' %}
+{% include '../templates/analytics.inc' %}
+<script src="/wbsrch.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="floatright"><a href="http://musicsrch.com" title="MusicSrch - The Music Search Engine">MusicSrch</a>
+<a href="http://videosrch.com" title="VideoSrch - The Video Search Engine">VideoSrch</a></div>
+<div class="clear head">
+<h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %}</h1>
+<h2>{% trans "The Independent Search Engine" %}</h2>
+</div>
+{% if not searchterm %}<div class="centered">{% endif %}
+<br/>
+<p><form method="get" action="/search/">
+<input id="searchbox" type="text" name="q" maxlength="250" 
+{% if searchterm %}value="{{ searchterm }}{% if exclude%}{% for exc in exclude %} -{{ exc }}{% endfor %}{% endif %}"{% endif %} 
+onkeyup="autocomp();" list="autocompleteOptions"/>
+<datalist id="autocompleteOptions">
+</datalist>
+<input type="submit" value="{% trans "Search" %}">
+</form></p>
+{% if not searchterm %}</div>{% endif %}
+
+{% if searchterm %}
+{% if typo_for %}<p><em>{% trans "Did you mean to search for" %} <a href="/search/?q={{ typo_for }}">{{ typo_for }}</a>?</em></p>{% endif %}
+{% if is_domain %}<p><em>{% trans "Did you mean to look up domain details for" %} <a href="/domain/?q={{ is_domain }}">{{ is_domain }}</a>?</em></p>{% endif %}
+{% if is_ip %}<p><em>{% trans "Did you mean to look up details for the IP address" %} <a href="/ip/?q={{ is_ip }}">{{ is_ip }}</a>?</em></p>{% endif %}
+{% if is_language %}<p><em>{% trans "This search contains a word in the " %} {% trans is_language_name %} {% trans "language" %}. Do you want to <a href="https://{% if is_language != 'en' %}{{ is_language }}.{% endif %}wbsrch.com/search/?q={{ searchterm }}">search {{ searchterm }} in {% trans is_language_name %}</a>?</em></p>{% endif %}
+{% if names_language %}<p><em>{% trans "This search mentions the " %} {% trans names_language_name %} {% trans "language" %}. Do you want to <a href="https://{% if names_language != 'en' %}{{ names_language }}.{% endif %}wbsrch.com/search/{% if names_language_search %}?q={{ names_language_search }}{% endif %}">search {{ names_language_search }} in {% trans names_language_name %}</a>?</em></p>{% endif %}
+<p>{% trans "Results" %} {% trans "for" %} "{{ searchterm }}"{% if allfromdomain %} {% trans "from domain" %} "{{ allfromdomain }}"{% endif %}{% if exclude%} with {% for exc in exclude %} -{{ exc }}{% endfor %}{% endif %}:</p>
+{% if refused %}<p><strong>We refuse to show any search results for this query. If you want to look for that sort of thing you'll have to use a different search engine.</strong></p>
+{% elif actively_blocked %}<p>We have excluded many of the sites related to this search from our index. You may see fewer results than you expect.</p>{% endif %}
+{% if not results and not search_results and not refused %}
+<p>{% trans "No results were found for that search." %}</p>
+{% if show_network_ad %}
+{% include "yllix_search_leaderboard.inc" %}
+{% endif %}
+<p>{% trans "Our robots are very embarrassed by their failure to find what you were looking for. They'll be on the hunt for new content and should have better results in a few days." %}</p>
+{% else %}
+{% if show_network_ad %}
+{% include "yllix_search_leaderboard.inc" %}
+{% endif %}
+<table><tr><td>
+{% for result, value in results %}
+<h3><a href="{{ result.url }}"><span class="sitetitle">{% if result.pagetitle %}{{ result.pagetitle|truncatewords:15 }}{% else %}(No Title){% endif %}</span></a></h3>
+<p class="site">
+{% if result.pagedescription %}<span class="sitedescription">{{ result.pagedescription|truncatewords:45 }}</span>
+{% else %}<em>{% trans "No page description." %}</em>{% if result.pagetext %}<br />{{ result.pagetext|truncatechars:100 }}{% endif %}{% endif %}<br />
+<em><a href="{{ result.url }}">{{ result.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.rooturl }}"><img src="/images/Link.png" title="View domain details for {{ result.rooturl }}." alt="Domain" /></a><br />
+</p>
+{% endfor %}
+</td><td>
+</td></tr></table>
+{% endif %}
+{% if search_results %}
+<div class="results">
+{% for result in search_results %}
+{% if allfromdomain %}
+{% for url in result.1.urls %}
+<h3><a href="{{ url.url }}" onclick="return go(this.href, '{{ searchterm }}', {{ loop.counter }}, {% if log %}'{{ log.search_id }}'{% else %}0{% endif %}, '{{ language_code }}')"><span class="sitetitle">{% if url.title %}{{ url.title|truncatewords:15 }}{% else %}(No Title){% endif %}</span></a></h3>
+<p class="site">
+{% if url.description %}<span class="sitedescription">{{ url.description|truncatewords:45 }}</span>{% else %}<em>{% trans "No page description." %}</em>{% endif %}<br />
+<em><a href="{{ url.url }}" onclick="return go(this.href, '{{ searchterm }}, {% if log %}'{{ log.search_id }}'{% else %}0{% endif %}, '{{ language_code }}')', {{ loop.counter }})">{{ url.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.0 }}"><img src="/images/Link.png" title="View domain details for {{ result.0 }}." alt="Domain" /></a><br />
+{% if superuser %}<span class="smallertext"><a href="https://wbsrch.com/adminpanel/?crawlurl={{ result.1.urls.0.url }}">[recrawl]</a> 
+<a href="https://wbsrch.com/adminpanel/blocksite/?reason=8&site={{ result.1.urls.0.url }}">[block]</a> 
+<a href="https://wbsrch.com/adm/dir/siteinfo/?q={{ result.0 }}">[view domain pages in admin]</a>
+<a href="https://wbsrch.com/adm/dir/siteinfo/{{ url.id }}/">[view this page in admin]</a></span> <br/>{% endif %}
+</p>
+{% endfor %}
+{% else %}
+<h3><a href="{{ result.1.urls.0.url }}" onclick="return go(this.href, '{{ searchterm }}', {{ loop.counter }}, {% if log %}'{{ log.search_id }}'{% else %}0{% endif %}, '{{ language_code }}')"><span class="sitetitle">{% if result.1.urls.0.title %}{{ result.1.urls.0.title|truncatewords:15 }}{% else %}(No Title){% endif %}</span></a></h3>
+<p class="site">
+{% if result.1.urls.0.description %}<span class="sitedescription">{{ result.1.urls.0.description|truncatewords:45 }}</span>{% else %}<em>{% trans "No page description." %}</em>{% endif %}<br />
+<em><a href="{{ result.1.urls.0.url }}" onclick="return go(this.href, '{{ searchterm }}', {{ loop.counter }}, {% if log %}'{{ log.search_id }}'{% else %}0{% endif %}, '{{ language_code }}')">{{ result.1.urls.0.url|truncatechars:150 }}</a></em> <a href="/domain/?q={{ result.0 }}"><img src="/images/Link.png" title="View domain details for {{ result.0 }}." alt="Domain" /></a> <a href="/search/?q={{ searchterm }}&domain={{ result.0 }}">({{ result.1.urls|length }} from this site)</a><br />
+{% if superuser %}<span class="smallertext"><a href="https://wbsrch.com/adminpanel/?crawlurl={{ result.1.urls.0.url }}">[recrawl]</a> 
+<a href="https://wbsrch.com/adminpanel/blocksite/?reason=8&site={{ result.1.urls.0.url }}">[block]</a> 
+<a href="https://wbsrch.com/adm/dir/siteinfo/?q={{ result.0 }}">[view domain pages in admin]</a>
+<a href="https://wbsrch.com/adm/dir/siteinfo/{{ result.1.urls.0.id }}/">[view this page in admin]</a></span> <br/>{% endif %}
+</p>
+{% endif %}
+{% endfor %}
+</div>
+{% endif %}
+<p>{{ result_count }} results found{% if allfromdomain %} from this domain{% endif %}.</p>
+{% if allfromdomain %}<p><a href="/search/?q={{ searchterm }}">Back to search for "{{ searchterm }}" from all domains.</a></p>{% endif %}
+{% if not indexed and not refused %}<p><em>{% trans "Note: The phrase you searched for is not fully indexed. We have queued it for indexing and will have better results available soon." %}</em></p>{% endif %}
+{% if show_network_ad %}
+{% include '../templates/adsense.inc' %}
+{% endif %}
+{% else %}
+{% if show_network_ad %}
+<div class="centered">{% include "yllix_search_leaderboard.inc" %}</div>
+{% endif %}
+<br/><br/>
+{% endif %}
+<div class="footer">
+{% include '../templates/footerwithoutcopyright.inc' parsed %}
+{% include '../templates/copyright.inc' %}
+{% if searchterm %}
+<script>
+highlightText('{{ searchterm }}');
+</script>
+{% endif %}
+</div>
+</body>
+</html>
