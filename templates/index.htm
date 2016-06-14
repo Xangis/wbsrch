@@ -52,18 +52,7 @@
 </p>
 <p>&nbsp;</p>
 <br/>
-<div class="centered">
-<script type="text/javascript">
-  ( function() {
-    if (window.CHITIKA === undefined) { window.CHITIKA = { 'units' : [] }; };
-    var unit = {"calltype":"async[2]","publisher":"Xangis","width":728,"height":90,"sid":"Wbsrch Front Page","color_site_link":"3366aa","color_text":"212121","color_bg":"f9f9f9"};
-    var placement_id = window.CHITIKA.units.length;
-    window.CHITIKA.units.push(unit);
-    document.write('<div id="chitikaAdBlock-' + placement_id + '"></div>');
-}());
-</script>
-<script type="text/javascript" src="//cdn.chitika.net/getads.js" async></script>
-</div>
+{% include 'bidvertiser_search_bigrect.inc' %}
 <br/>
 <p>{% trans "Check a Domain" %}:</p>
 <form method="get" action="/domain/">
