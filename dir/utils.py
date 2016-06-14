@@ -2199,7 +2199,7 @@ def GenerateIndexStats(save=False):
         stats.total_indexes += langdata['indexes']
         stats.total_pendingindexes += langdata['pending_indexes']
         langs.append(langdata)
-    if (not newest_stats) or (newest_stats.create_date < (timezone.now() - timedelta(days=30)).date):
+    if (not newest_stats) or (newest_stats.create_date < (timezone.now() - timedelta(days=30)).date()):
         print 'Most linked to domain list is older than 30 days, need to recalculate.'
         stats.most_linked_to_domains = json.dumps(list(DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in'))[0:100])
         stats.last_most_linked_to = timezone.now()
