@@ -2568,6 +2568,9 @@ class KeywordRank(models.Model):
 class KeywordRanking(KeywordRank):
     pass
 
+class KeywordRanking_ca(KeywordRank):
+    pass
+
 class KeywordRanking_cs(KeywordRank):
     pass
 
