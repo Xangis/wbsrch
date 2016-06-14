@@ -3351,6 +3351,7 @@ class IndexStats(models.Model):
     total_pendingindexes = models.IntegerField()
     create_date = models.DateField(auto_now_add=True)
     most_linked_to_domains = models.TextField()
+    last_most_linked_to = models.DateField(null=True, blank=True)
     generation_time = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=8)
 
     def __unicode__(self):

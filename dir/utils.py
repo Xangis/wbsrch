@@ -2180,6 +2180,11 @@ def GenerateIndexStats(save=False):
     stats = IndexStats(total_urls=0, total_indexes=0, total_pendingindexes=0)
     stats.num_excluded = BlockedSite.objects.count()
 
+    try:
+        newest_stats = IndexStats.objects.all().order_by('-create_date')[0]
+    except IndexError:
+        newest_stats = None
+
     langs = []
     for lang in language_list:
         langdata = {}
@@ -2193,8 +2198,14 @@ def GenerateIndexStats(save=False):
         stats.total_urls += langdata['count']
         stats.total_indexes += langdata['indexes']
         stats.total_pendingindexes += langdata['pending_indexes']
-        stats.most_linked_to_domains = json.dumps(list(DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in'))[0:100])
         langs.append(langdata)
+    if (not newest_stats) or (newest_stats.create_date < (timezone.now() - timedelta(days=30))):
+        print 'Most linked to domain list is older than 30 days, need to recalculate.'
+        stats.most_linked_to_domains = json.dumps(list(DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in'))[0:100])
+        stats.last_most_linked_to = timezone.now()
+    else:
+        stats.most_linked_to_domains = newest_stats.most_linked_to_domains
+        stats.last_most_linked_to = newest_stats.last_most_linked_to
     langs.sort(key=lambda item: item['lang'])
     stats.langs = json.dumps(langs)
     end_delta = timezone.now() - start
