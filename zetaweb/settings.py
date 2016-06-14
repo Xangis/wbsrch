@@ -178,7 +178,7 @@ TEMPLATES = [
                 "django.core.context_processors.tz",
                 "django.contrib.messages.context_processors.messages"],
             'allowed_include_roots': ['/var/django/wbsrch/templates/',],
-            'debug': DEBUG,
+            #'debug': DEBUG,
         },
     },
     {
@@ -186,7 +186,7 @@ TEMPLATES = [
         'DIRS': ['/var/django/wbsrch/jinjatemplates/',],
         'APP_DIRS': False,
         'OPTIONS': {
-            'debug': DEBUG,
+            #'debug': DEBUG,
         },
     },
 ]
