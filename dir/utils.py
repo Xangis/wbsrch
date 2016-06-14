@@ -2,7 +2,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import truncatewords
 from django.db import models
-from django.db.models import Q, get_model, Count
+from django.db.models import Q, Count
+from django.db.models.loading import get_model
 from django.db.utils import DatabaseError
 from django.template.defaultfilters import truncatechars
 from django.db import IntegrityError, connection

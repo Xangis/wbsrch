@@ -260,37 +260,12 @@ class SiteInfo(URLInfo):
     def __unicode__(self):
         return self.url
 
-class SiteInfo_af(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_ak(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_bm(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_br(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_ca(URLInfo):
 
     def __unicode__(self):
         return self.url
 
 class SiteInfo_cs(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_cy(URLInfo):
 
     def __unicode__(self):
         return self.url
@@ -310,32 +285,7 @@ class SiteInfo_el(URLInfo):
     def __unicode__(self):
         return self.url
 
-class SiteInfo_ee(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_eo(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_es(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_et(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_eu(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_ff(URLInfo):
 
     def __unicode__(self):
         return self.url
@@ -345,32 +295,7 @@ class SiteInfo_fi(URLInfo):
     def __unicode__(self):
         return self.url
 
-class SiteInfo_fo(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_fr(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_fy(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_gl(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_ha(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_hr(URLInfo):
 
     def __unicode__(self):
         return self.url
@@ -380,57 +305,7 @@ class SiteInfo_hu(URLInfo):
     def __unicode__(self):
         return self.url
 
-class SiteInfo_ig(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_is(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_it(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_kg(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_ki(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_la(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_lg(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_ln(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_lt(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_lv(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_nap(URLInfo):
 
     def __unicode__(self):
         return self.url
@@ -445,32 +320,7 @@ class SiteInfo_no(URLInfo):
     def __unicode__(self):
         return self.url
 
-class SiteInfo_nso(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_ny(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_oc(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_om(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_pl(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_pms(URLInfo):
 
     def __unicode__(self):
         return self.url
@@ -480,27 +330,7 @@ class SiteInfo_pt(URLInfo):
     def __unicode__(self):
         return self.url
 
-class SiteInfo_rn(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_ro(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_rw(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_sc(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_scn(URLInfo):
 
     def __unicode__(self):
         return self.url
@@ -525,67 +355,12 @@ class SiteInfo_so(URLInfo):
     def __unicode__(self):
         return self.url
 
-class SiteInfo_ss(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_st(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_sv(URLInfo):
 
     def __unicode__(self):
         return self.url
 
-class SiteInfo_sw(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_tn(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_tr(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_ts(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_ve(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_vec(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_wo(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_xh(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_yo(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_zu(URLInfo):
 
     def __unicode__(self):
         return self.url
@@ -702,37 +477,12 @@ class SearchLog(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_af(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_ak(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_bm(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_br(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_ca(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
 
 class SearchLog_cs(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_cy(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -757,27 +507,7 @@ class SearchLog_el(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_eo(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_es(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_et(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_eu(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_ff(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -787,22 +517,7 @@ class SearchLog_fi(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_fo(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_fr(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_fy(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_gl(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -822,42 +537,12 @@ class SearchLog_hu(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_ig(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_is(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
 
 class SearchLog_it(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_kg(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_ki(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_la(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_lg(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_ln(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -872,11 +557,6 @@ class SearchLog_lv(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_nap(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_nl(SearchLogBase):
 
     def __unicode__(self):
@@ -887,42 +567,12 @@ class SearchLog_no(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_nso(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_ny(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_oc(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_om(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_pl(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_pms(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_pt(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_rn(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -942,16 +592,6 @@ class SearchLog_sk(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_sc(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_scn(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_sl(SearchLogBase):
 
     def __unicode__(self):
@@ -967,16 +607,6 @@ class SearchLog_so(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_ss(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_st(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_sv(SearchLogBase):
 
     def __unicode__(self):
@@ -987,27 +617,7 @@ class SearchLog_sw(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_tn(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_tr(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_ts(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_ve(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_vec(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1017,17 +627,7 @@ class SearchLog_wo(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_xh(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_yo(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_zu(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1064,37 +664,12 @@ class PendingIndex(PendingIndexBase):
         in_db = 'indexes'
         verbose_name_plural = "pending indexes"
 
-class PendingIndex_af(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_ak(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_ca(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
 
 class PendingIndex_cs(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_cy(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_bm(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_br(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1114,42 +689,12 @@ class PendingIndex_el(PendingIndexBase):
     def __unicode__(self):
         return self.keywords
 
-class PendingIndex_ee(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_eo(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_es(PendingIndexBase):
     
     def __unicode__(self):
         return self.keywords
 
-class PendingIndex_et(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_eu(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_ff(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_fi(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_fo(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1159,82 +704,12 @@ class PendingIndex_fr(PendingIndexBase):
     def __unicode__(self):
         return self.keywords
 
-class PendingIndex_fy(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_gl(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_ha(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_hr(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_hu(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
 
-class PendingIndex_ig(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_is(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_it(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_kg(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_ki(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_la(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_lg(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_ln(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_lt(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_lv(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_nap(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1249,32 +724,7 @@ class PendingIndex_no(PendingIndexBase):
     def __unicode__(self):
         return self.keywords
 
-class PendingIndex_nso(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_ny(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_oc(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_om(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_pl(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_pms(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1284,27 +734,7 @@ class PendingIndex_pt(PendingIndexBase):
     def __unicode__(self):
         return self.keywords
 
-class PendingIndex_rn(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_ro(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_rw(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_sc(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_scn(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1329,67 +759,12 @@ class PendingIndex_so(PendingIndexBase):
     def __unicode__(self):
         return self.keywords
 
-class PendingIndex_ss(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_st(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_sv(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
 
-class PendingIndex_sw(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_tn(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_tr(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_ts(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_ve(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_vec(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_wo(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_xh(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_yo(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_zu(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1425,37 +800,12 @@ class IndexTerm(IndexTermBase):
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_af(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_ak(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_bm(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_br(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_ca(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
 
 class IndexTerm_cs(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_cy(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1470,17 +820,7 @@ class IndexTerm_de(IndexTermBase):
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_ee(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_el(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_eo(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1490,27 +830,7 @@ class IndexTerm_es(IndexTermBase):
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_et(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_eu(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_ff(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_fi(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_fo(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1520,77 +840,12 @@ class IndexTerm_fr(IndexTermBase):
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_fy(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_gl(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_ha(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_hr(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_hu(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_ig(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_is(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_it(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_kg(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_ki(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_la(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_lg(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_ln(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_lt(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_lv(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1605,37 +860,7 @@ class IndexTerm_no(IndexTermBase):
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_nso(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_ny(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_oc(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_om(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_nap(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_pl(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_pms(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1645,27 +870,7 @@ class IndexTerm_pt(IndexTermBase):
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_rn(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_ro(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_rw(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_sc(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_scn(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
@@ -1690,67 +895,12 @@ class IndexTerm_so(IndexTermBase):
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_ss(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_st(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_sv(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_sw(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_tn(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_tr(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_ts(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_ve(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_vec(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_wo(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_xh(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_yo(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_zu(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
@@ -3418,25 +2568,7 @@ class KeywordRank(models.Model):
 class KeywordRanking(KeywordRank):
     pass
 
-class KeywordRanking_af(KeywordRank):
-    pass
-
-class KeywordRanking_ak(KeywordRank):
-    pass
-
-class KeywordRanking_bm(KeywordRank):
-    pass
-
-class KeywordRanking_br(KeywordRank):
-    pass
-
-class KeywordRanking_ca(KeywordRank):
-    pass
-
 class KeywordRanking_cs(KeywordRank):
-    pass
-
-class KeywordRanking_cy(KeywordRank):
     pass
 
 class KeywordRanking_da(KeywordRank):
@@ -3448,40 +2580,13 @@ class KeywordRanking_de(KeywordRank):
 class KeywordRanking_el(KeywordRank):
     pass
 
-class KeywordRanking_ee(KeywordRank):
-    pass
-
-class KeywordRanking_eo(KeywordRank):
-    pass
-
 class KeywordRanking_es(KeywordRank):
-    pass
-
-class KeywordRanking_et(KeywordRank):
-    pass
-
-class KeywordRanking_eu(KeywordRank):
-    pass
-
-class KeywordRanking_ff(KeywordRank):
     pass
 
 class KeywordRanking_fi(KeywordRank):
     pass
 
-class KeywordRanking_fo(KeywordRank):
-    pass
-
 class KeywordRanking_fr(KeywordRank):
-    pass
-
-class KeywordRanking_fy(KeywordRank):
-    pass
-
-class KeywordRanking_gl(KeywordRank):
-    pass
-
-class KeywordRanking_ha(KeywordRank):
     pass
 
 class KeywordRanking_hr(KeywordRank):
@@ -3490,37 +2595,7 @@ class KeywordRanking_hr(KeywordRank):
 class KeywordRanking_hu(KeywordRank):
     pass
 
-class KeywordRanking_ig(KeywordRank):
-    pass
-
-class KeywordRanking_is(KeywordRank):
-    pass
-
 class KeywordRanking_it(KeywordRank):
-    pass
-
-class KeywordRanking_kg(KeywordRank):
-    pass
-
-class KeywordRanking_ki(KeywordRank):
-    pass
-
-class KeywordRanking_la(KeywordRank):
-    pass
-
-class KeywordRanking_lg(KeywordRank):
-    pass
-
-class KeywordRanking_ln(KeywordRank):
-    pass
-
-class KeywordRanking_lt(KeywordRank):
-    pass
-
-class KeywordRanking_lv(KeywordRank):
-    pass
-
-class KeywordRanking_nap(KeywordRank):
     pass
 
 class KeywordRanking_nl(KeywordRank):
@@ -3529,40 +2604,13 @@ class KeywordRanking_nl(KeywordRank):
 class KeywordRanking_no(KeywordRank):
     pass
 
-class KeywordRanking_nso(KeywordRank):
-    pass
-
-class KeywordRanking_ny(KeywordRank):
-    pass
-
-class KeywordRanking_oc(KeywordRank):
-    pass
-
-class KeywordRanking_om(KeywordRank):
-    pass
-
 class KeywordRanking_pl(KeywordRank):
-    pass
-
-class KeywordRanking_pms(KeywordRank):
     pass
 
 class KeywordRanking_pt(KeywordRank):
     pass
 
-class KeywordRanking_rn(KeywordRank):
-    pass
-
 class KeywordRanking_ro(KeywordRank):
-    pass
-
-class KeywordRanking_rw(KeywordRank):
-    pass
-
-class KeywordRanking_sc(KeywordRank):
-    pass
-
-class KeywordRanking_scn(KeywordRank):
     pass
 
 class KeywordRanking_sk(KeywordRank):
@@ -3577,43 +2625,10 @@ class KeywordRanking_sn(KeywordRank):
 class KeywordRanking_so(KeywordRank):
     pass
 
-class KeywordRanking_ss(KeywordRank):
-    pass
-
-class KeywordRanking_st(KeywordRank):
-    pass
-
 class KeywordRanking_sv(KeywordRank):
     pass
 
-class KeywordRanking_sw(KeywordRank):
-    pass
-
-class KeywordRanking_tn(KeywordRank):
-    pass
-
 class KeywordRanking_tr(KeywordRank):
-    pass
-
-class KeywordRanking_ts(KeywordRank):
-    pass
-
-class KeywordRanking_ve(KeywordRank):
-    pass
-
-class KeywordRanking_vec(KeywordRank):
-    pass
-
-class KeywordRanking_wo(KeywordRank):
-    pass
-
-class KeywordRanking_xh(KeywordRank):
-    pass
-
-class KeywordRanking_yo(KeywordRank):
-    pass
-
-class KeywordRanking_zu(KeywordRank):
     pass
 
 class QueryParameter(models.Model):
@@ -3703,37 +2718,12 @@ class AutoComplete(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_af(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_ak(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_bm(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_br(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_ca(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
 
 class AutoComplete_cs(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_cy(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
@@ -3748,17 +2738,7 @@ class AutoComplete_de(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_ee(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_el(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_eo(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
@@ -3768,47 +2748,12 @@ class AutoComplete_es(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_et(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_eu(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_ff(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_fi(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_fo(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_fr(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_fy(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_gl(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_ha(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
@@ -3823,57 +2768,7 @@ class AutoComplete_hu(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_ig(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_is(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_it(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_kg(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_ki(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_la(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_lg(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_ln(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_lt(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_lv(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_nap(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
@@ -3888,32 +2783,7 @@ class AutoComplete_no(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_nso(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_ny(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_oc(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_om(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_pl(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_pms(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
@@ -3923,32 +2793,12 @@ class AutoComplete_pt(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_rn(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_ro(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_rw(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_sk(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_sc(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_scn(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
@@ -3968,67 +2818,12 @@ class AutoComplete_so(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_ss(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_st(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_sv(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_sw(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_tn(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_tr(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_ts(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_ve(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_vec(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_wo(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_xh(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_yo(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_zu(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
@@ -4053,25 +2848,10 @@ class ResultClickBase(models.Model):
 class ResultClick(ResultClickBase):
     pass
 
-class ResultClick_af(ResultClickBase):
-    pass
-
-class ResultClick_ak(ResultClickBase):
-    pass
-
-class ResultClick_bm(ResultClickBase):
-    pass
-
-class ResultClick_br(ResultClickBase):
-    pass
-
 class ResultClick_ca(ResultClickBase):
     pass
 
 class ResultClick_cs(ResultClickBase):
-    pass
-
-class ResultClick_cy(ResultClickBase):
     pass
 
 class ResultClick_da(ResultClickBase):
@@ -4086,34 +2866,13 @@ class ResultClick_ee(ResultClickBase):
 class ResultClick_el(ResultClickBase):
     pass
 
-class ResultClick_eo(ResultClickBase):
-    pass
-
 class ResultClick_es(ResultClickBase):
-    pass
-
-class ResultClick_et(ResultClickBase):
-    pass
-
-class ResultClick_eu(ResultClickBase):
-    pass
-
-class ResultClick_ff(ResultClickBase):
     pass
 
 class ResultClick_fi(ResultClickBase):
     pass
 
-class ResultClick_fo(ResultClickBase):
-    pass
-
 class ResultClick_fr(ResultClickBase):
-    pass
-
-class ResultClick_fy(ResultClickBase):
-    pass
-
-class ResultClick_gl(ResultClickBase):
     pass
 
 class ResultClick_ha(ResultClickBase):
@@ -4125,28 +2884,10 @@ class ResultClick_hr(ResultClickBase):
 class ResultClick_hu(ResultClickBase):
     pass
 
-class ResultClick_ig(ResultClickBase):
-    pass
-
 class ResultClick_is(ResultClickBase):
     pass
 
 class ResultClick_it(ResultClickBase):
-    pass
-
-class ResultClick_kg(ResultClickBase):
-    pass
-
-class ResultClick_ki(ResultClickBase):
-    pass
-
-class ResultClick_la(ResultClickBase):
-    pass
-
-class ResultClick_lg(ResultClickBase):
-    pass
-
-class ResultClick_ln(ResultClickBase):
     pass
 
 class ResultClick_lt(ResultClickBase):
@@ -4155,37 +2896,16 @@ class ResultClick_lt(ResultClickBase):
 class ResultClick_lv(ResultClickBase):
     pass
 
-class ResultClick_nap(ResultClickBase):
-    pass
-
 class ResultClick_nl(ResultClickBase):
     pass
 
 class ResultClick_no(ResultClickBase):
     pass
 
-class ResultClick_nso(ResultClickBase):
-    pass
-
-class ResultClick_ny(ResultClickBase):
-    pass
-
-class ResultClick_oc(ResultClickBase):
-    pass
-
-class ResultClick_om(ResultClickBase):
-    pass
-
 class ResultClick_pl(ResultClickBase):
     pass
 
-class ResultClick_pms(ResultClickBase):
-    pass
-
 class ResultClick_pt(ResultClickBase):
-    pass
-
-class ResultClick_rn(ResultClickBase):
     pass
 
 class ResultClick_ro(ResultClickBase):
@@ -4197,12 +2917,6 @@ class ResultClick_rw(ResultClickBase):
 class ResultClick_sk(ResultClickBase):
     pass
 
-class ResultClick_sc(ResultClickBase):
-    pass
-
-class ResultClick_scn(ResultClickBase):
-    pass
-
 class ResultClick_sl(ResultClickBase):
     pass
 
@@ -4212,43 +2926,19 @@ class ResultClick_sn(ResultClickBase):
 class ResultClick_so(ResultClickBase):
     pass
 
-class ResultClick_ss(ResultClickBase):
-    pass
-
-class ResultClick_st(ResultClickBase):
-    pass
-
 class ResultClick_sv(ResultClickBase):
     pass
 
 class ResultClick_sw(ResultClickBase):
     pass
 
-class ResultClick_tn(ResultClickBase):
-    pass
-
 class ResultClick_tr(ResultClickBase):
-    pass
-
-class ResultClick_ts(ResultClickBase):
-    pass
-
-class ResultClick_ve(ResultClickBase):
-    pass
-
-class ResultClick_vec(ResultClickBase):
     pass
 
 class ResultClick_wo(ResultClickBase):
     pass
 
-class ResultClick_xh(ResultClickBase):
-    pass
-
 class ResultClick_yo(ResultClickBase):
-    pass
-
-class ResultClick_zu(ResultClickBase):
     pass
 
 class APISubscription(models.Model):
