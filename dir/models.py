@@ -7,6 +7,7 @@ from django.db import IntegrityError, connection, transaction
 from django.utils.timezone import utc
 from django.utils import timezone
 from django.contrib.auth.models import User
+from simhash import Simhash
 import random
 import urlparse
 import datetime
@@ -213,6 +214,7 @@ class URLInfo(models.Model):
     image_alt_tags = models.TextField(null=True, blank=True)
     image_title_tags = models.TextField(null=True, blank=True)
     image_filenames = models.TextField(null=True, blank=True)
+    simhash_value = models.CharField(max_length=128, null=True, blank=True, db_index=True)
 
     def delete(self, keep_links=False):
         """
@@ -233,6 +235,15 @@ class URLInfo(models.Model):
             for link in links:
                 link.delete()
         super(URLInfo, self).delete()
+
+    def save(self, *args, **kwargs):
+        # Sets a new random value every time the link is saved.
+        if len(self.pagetext) > 0:
+            hashval = Simhash(self.pagetext, f=128).value
+        else:
+            hashval = 0
+        self.simhash_value = '{:0128b}'.format(hashval)      
+        super(URLInfo, self).save(*args, **kwargs)
 
     @property
     def short_url(self):

@@ -351,7 +351,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
     # By not reading the entire page we save some bandwidth, but we also truncate links at
     # the bottom of a page and fail to find them. This means that the footers of large pages
     # are effectively invisible to us. This may or may not ever be a problem.
-    html = response.read(40000)
+    html = response.read(65536)
     realurl = response.geturl()
     ipaddr = None
     print u'Real URL is: ' + realurl
