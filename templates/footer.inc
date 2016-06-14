@@ -19,31 +19,21 @@
 <li><a href="https://de.wbsrch.com/" alt="Deutsch" title="Deutsch" />Deutsch (DE)</a></li>
 <li><a href="https://el.wbsrch.com/" alt="ελληνικά" title="ελληνικά" />ελληνικά (EL)</a></li>
 <li><a href="https://es.wbsrch.com/" alt="España" title="España" />España (ES)</a></li>
-<li><a href="https://et.wbsrch.com/" alt="Eesti" title="Eesti" />Eesti (ET)</a></li>
 <li><a href="https://fi.wbsrch.com/" alt="Suomalais" title="Suomalais" />Suomolais (FI)</a></li>
 <li><a href="https://fr.wbsrch.com/" alt="Français" title="Français" />Français (FR)</a></li>
-<li><a href="https://ha.wbsrch.com/" alt="Hausa" title="Hausa" />Hausa (HA)</a></li> 
-<li><a href="https://hr.wbsrch.com/" alt="Hrvatski" title="Hrvatski" />Hrvatski (HR)</a></li>
 <li><a href="https://hu.wbsrch.com/" alt="Magyar" title="Magyar" />Magyar (HU)</a></li>
-<li><a href="https://is.wbsrch.com/" alt="Íslenska" title="Íslenska" />Íslenska (IS)</a></li>
 <li><a href="https://it.wbsrch.com/" alt="Italiano" title="Italiano" />Italiano (IT)</a></li>
-<li><a href="https://lt.wbsrch.com/" alt="Lietuvių" title="Lietuvių" />Lietuvių (LT)</a></li> 
-<li><a href="https://lv.wbsrch.com/" alt="Latviešu" title="Latviešu" />Latviešu (LV)</a></li>
 <li><a href="https://nl.wbsrch.com/" alt="Nederlands" title="Nederlands" />Nederlands (NL)</a></li>
 <li><a href="https://no.wbsrch.com/" alt="Norsk" title="Norsk" />Norsk (NO)</a></li>
 <li><a href="https://pl.wbsrch.com/" alt="Polski" title="Polski" />Polski (PL)</a></li>
 <li><a href="https://pt.wbsrch.com/" alt="Português" title="Português" />Português (PT)</a></li>
 <li><a href="https://ro.wbsrch.com/" alt="Română" title="Română" />Română (RO)</a></li>
-<li><a href="https://rw.wbsrch.com/" alt="Kinyarwanda" title="Kinyarwanda" />Kinyarwanda (RW)</a></li> 
 <li><a href="https://sk.wbsrch.com/" alt="Slovenský" title="Slovenský" />Slovenský (SK)</a></li>
 <li><a href="https://sl.wbsrch.com/" alt="Slovenščina" title="Slovenščina" />Slovenščina (SL)</a></li>
 <li><a href="https://sn.wbsrch.com/" alt="chiShona" title="chiShona" />chiShona (SN)</a></li>
 <li><a href="https://so.wbsrch.com/" alt="Soomaali" title="Soomaali" />Soomaali (SO)</a></li>
 <li><a href="https://sv.wbsrch.com/" alt="Svenska" title="Svenska" />Svenska (SV)</a></li>
-<li><a href="https://sw.wbsrch.com/" alt="Kiswahili" title="Kiswahili" />Kiswahili (SW)</a></li>
 <li><a href="https://tr.wbsrch.com/" alt="Türkçe" title="Türkçe" />Türkçe (TR)</a></li> 
-<li><a href="https://wo.wbsrch.com/" alt="Wolof" title="Wolof" />Wolof (WO)</a></li>
-<li><a href="https://yo.wbsrch.com/" alt="Yorùbá" title="Yorùbá" />Yorùbá (YO)</a></li>
 </ul>
 </nav>
 <br/>
