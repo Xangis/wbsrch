@@ -23,7 +23,7 @@ server {
 server {
 	listen 80;
         listen 443 ssl;
-        server_name et.wbsrch.com ha.wbsrch.com hr.wbsrch.com is.wbsrch.com lt.wbsrch.com lv.wbsrch.com rw.wbsrch.com sw.wbsrch.com wo.wbsrch.com yo.wbsrch.com;
+        server_name et.wbsrch.com ha.wbsrch.com hr.wbsrch.com is.wbsrch.com lt.wbsrch.com lv.wbsrch.com rw.wbsrch.com sn.wbsrch.com so.wbsrch.com sw.wbsrch.com wo.wbsrch.com yo.wbsrch.com;
         ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
         ssl_certificate /etc/nginx/certs/wbsrch.crt;
         ssl_certificate_key /etc/nginx/certs/wbsrch.key;
