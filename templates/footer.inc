@@ -13,7 +13,6 @@
 <nav class="language">
 <ul name="language" id="language">
 <li><a href="https://wbsrch.com/" alt="English" title="English" />English (EN)</a></li>
-<li><a href="https://ca.wbsrch.com/" alt="Català" title="Català" />Català (CA)</a></li>
 <li><a href="https://cs.wbsrch.com/" alt="Česká" title="Česká" />Česká (CS)</a></li>
 <li><a href="https://da.wbsrch.com/" alt="Dansk" title="Dansk" />Dansk (DA)</a></li>
 <li><a href="https://de.wbsrch.com/" alt="Deutsch" title="Deutsch" />Deutsch (DE)</a></li>
