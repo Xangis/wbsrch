@@ -732,7 +732,7 @@ def GetMimeTypeModifier(mimetype, language='en'):
     # Lose half a point for plain text. It's not HTML, but it may still be readable. Also lose half a point for text/html with no charset.
     elif mimetype in [u'text/plain', u'text/plain; charset=UTF-8', u'text/html; charset=none', u'text/plain;charset=ISO-8859-1',
                       u'text/html; charset=0', u'text/html; charset=NONE', u'text/plain; charset=utf-8', u'text/plain; charset=ISO-8859-1',
-                      u'text/html; charset=None']:
+                      u'text/html; charset=None', u'text/plain;charset=UTF-8']:
         return -0.5
     # Eastern European encodings ISO-8859-2 and Windows-1250. Lose a point in the English index, gain a quarter point in a few languages
     # just as if it's Windows-1252, otherwise neutral.
