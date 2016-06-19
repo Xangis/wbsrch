@@ -29,7 +29,6 @@
 <li><a href="https://pt.wbsrch.com/" alt="Português" title="Português">Português (PT)</a></li>
 <li><a href="https://ro.wbsrch.com/" alt="Română" title="Română">Română (RO)</a></li>
 <li><a href="https://sk.wbsrch.com/" alt="Slovenský" title="Slovenský">Slovenský (SK)</a></li>
-<li><a href="https://sl.wbsrch.com/" alt="Slovenščina" title="Slovenščina">Slovenščina (SL)</a></li>
 <li><a href="https://sv.wbsrch.com/" alt="Svenska" title="Svenska">Svenska (SV)</a></li>
 <li><a href="https://tr.wbsrch.com/" alt="Türkçe" title="Türkçe">Türkçe (TR)</a></li> 
 </ul>
