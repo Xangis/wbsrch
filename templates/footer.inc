@@ -14,7 +14,6 @@
 <ul name="language" id="language">
 <li><a href="https://wbsrch.com/" alt="English" title="English" />English (EN)</a></li>
 <li><a href="https://cs.wbsrch.com/" alt="Česká" title="Česká" />Česká (CS)</a></li>
-<li><a href="https://da.wbsrch.com/" alt="Dansk" title="Dansk" />Dansk (DA)</a></li>
 <li><a href="https://de.wbsrch.com/" alt="Deutsch" title="Deutsch" />Deutsch (DE)</a></li>
 <li><a href="https://el.wbsrch.com/" alt="ελληνικά" title="ελληνικά" />ελληνικά (EL)</a></li>
 <li><a href="https://es.wbsrch.com/" alt="España" title="España" />España (ES)</a></li>
@@ -23,7 +22,6 @@
 <li><a href="https://hu.wbsrch.com/" alt="Magyar" title="Magyar" />Magyar (HU)</a></li>
 <li><a href="https://it.wbsrch.com/" alt="Italiano" title="Italiano" />Italiano (IT)</a></li>
 <li><a href="https://nl.wbsrch.com/" alt="Nederlands" title="Nederlands" />Nederlands (NL)</a></li>
-<li><a href="https://no.wbsrch.com/" alt="Norsk" title="Norsk" />Norsk (NO)</a></li>
 <li><a href="https://pl.wbsrch.com/" alt="Polski" title="Polski" />Polski (PL)</a></li>
 <li><a href="https://pt.wbsrch.com/" alt="Português" title="Português" />Português (PT)</a></li>
 <li><a href="https://sv.wbsrch.com/" alt="Svenska" title="Svenska" />Svenska (SV)</a></li>
