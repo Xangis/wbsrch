@@ -256,6 +256,10 @@ def GetPendingIndexModelFromLanguage(language):
         return PendingIndex
     if 'nn' in language or 'nb' in language:
         language = 'no'
+    #if 'da' in language or 'no' in language:
+    #    language = 'sv'
+    if 'sk' in language:
+        language = 'cs'
     try:
         model = get_model('dir', 'PendingIndex_' + language)
     except LookupError, e:
@@ -270,6 +274,10 @@ def GetIndexModelFromLanguage(language):
         return IndexTerm
     if 'nn' in language or 'nb' in language:
         language = 'no'
+    #if 'da' in language or 'no' in language:
+    #    language = 'sv'
+    if 'sk' in language:
+        language = 'cs'
     try:
         model = get_model('dir', 'IndexTerm_' + language)
     except LookupError, e:
@@ -284,6 +292,10 @@ def GetSiteInfoModelFromLanguage(language):
         return SiteInfo
     if 'nn' in language or 'nb' in language:
         language = 'no'
+    #if 'da' in language or 'no' in language:
+    #    language = 'sv'
+    if 'sk' in language:
+        language = 'cs'
     try:
         model = get_model('dir', 'SiteInfo_' + language)
     except LookupError, e:
@@ -298,6 +310,10 @@ def GetSearchLogModelFromLanguage(language):
         return SearchLog
     if 'nn' in language or 'nb' in language:
         language = 'no'
+    #if 'da' in language or 'no' in language:
+    #    language = 'sv'
+    if 'sk' in language:
+        language = 'cs'
     try:
         model = get_model('dir', 'SearchLog_' + language)
     except LookupError, e:
@@ -312,6 +328,10 @@ def GetKeywordRankingModelFromLanguage(language):
         return KeywordRanking
     if 'nn' in language or 'nb' in language:
         language = 'no'
+    #if 'da' in language or 'no' in language:
+    #    language = 'sv'
+    if 'sk' in language:
+        language = 'cs'
     try:
         model = get_model('dir', 'KeywordRanking_' + language)
     except LookupError, e:
@@ -326,6 +346,10 @@ def GetAutoCompleteModelFromLanguage(language):
         return AutoComplete
     if 'nn' in language or 'nb' in language:
         language = 'no'
+    #if 'da' in language or 'no' in language:
+    #    language = 'sv'
+    if 'sk' in language:
+        language = 'cs'
     try:
         model = get_model('dir', 'AutoComplete_' + language)
     except LookupError, e:
@@ -340,6 +364,10 @@ def GetResultClickModelFromLanguage(language):
         return ResultClick
     if 'nn' in language or 'nb' in language:
         language = 'no'
+    #if 'da' in language or 'no' in language:
+    #    language = 'sv'
+    if 'sk' in language:
+        language = 'cs'
     try:
         model = get_model('dir', 'ResultClick_' + language)
     except LookupError, e:

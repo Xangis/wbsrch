@@ -46,7 +46,10 @@ class Command(BaseCommand):
                     numitems = numitems + 1
                     indexage = (nowtime - dateindexed).days
                     totalage += indexage
-                averageage = totalage / numitems
+                if numitems > 0:
+                    averageage = totalage / numitems
+                else:
+                    averageage = 0
                 if sdate:
                     minage = (nowtime - sdate.date()).days
                     if averageage < minage:

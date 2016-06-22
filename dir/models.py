@@ -18,7 +18,7 @@ import uuid
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
 
-language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'el', 'sv', 'da', 'hu', 'sk', 'no', 'fi']
+language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'el', 'sv', 'hu', 'fi']
 #language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'ro', 'el', 'sv', 'da', 'hu', 'hr', 'sk', 'lt', 'no', 'fi', 'et', 'lv', 'sl', 'is', 'sw', 'yo', 'so', 'wo', 'ha', 'rw', 'sn', 'ca']
 
 # Only including languages that aren't also a valid country. This means that "ar", which could be argentina,
@@ -260,17 +260,7 @@ class SiteInfo(URLInfo):
     def __unicode__(self):
         return self.url
 
-class SiteInfo_ca(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_cs(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_da(URLInfo):
 
     def __unicode__(self):
         return self.url
@@ -315,42 +305,12 @@ class SiteInfo_nl(URLInfo):
     def __unicode__(self):
         return self.url
 
-class SiteInfo_no(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
 class SiteInfo_pl(URLInfo):
 
     def __unicode__(self):
         return self.url
 
 class SiteInfo_pt(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_ro(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_sk(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_sl(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_sn(URLInfo):
-
-    def __unicode__(self):
-        return self.url
-
-class SiteInfo_so(URLInfo):
 
     def __unicode__(self):
         return self.url
@@ -664,17 +624,7 @@ class PendingIndex(PendingIndexBase):
         in_db = 'indexes'
         verbose_name_plural = "pending indexes"
 
-class PendingIndex_ca(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_cs(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_da(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
@@ -719,42 +669,12 @@ class PendingIndex_nl(PendingIndexBase):
     def __unicode__(self):
         return self.keywords
 
-class PendingIndex_no(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class PendingIndex_pl(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
 
 class PendingIndex_pt(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_ro(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_sk(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_sl(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_sn(PendingIndexBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class PendingIndex_so(PendingIndexBase):
 
     def __unicode__(self):
         return self.keywords
@@ -800,17 +720,7 @@ class IndexTerm(IndexTermBase):
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_ca(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_cs(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_da(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
@@ -855,42 +765,12 @@ class IndexTerm_nl(IndexTermBase):
     def __unicode__(self):
         return self.keywords
 
-class IndexTerm_no(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class IndexTerm_pl(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
 
 class IndexTerm_pt(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_ro(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_sk(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_sl(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_sn(IndexTermBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class IndexTerm_so(IndexTermBase):
 
     def __unicode__(self):
         return self.keywords
@@ -2568,13 +2448,7 @@ class KeywordRank(models.Model):
 class KeywordRanking(KeywordRank):
     pass
 
-class KeywordRanking_ca(KeywordRank):
-    pass
-
 class KeywordRanking_cs(KeywordRank):
-    pass
-
-class KeywordRanking_da(KeywordRank):
     pass
 
 class KeywordRanking_de(KeywordRank):
@@ -2604,28 +2478,10 @@ class KeywordRanking_it(KeywordRank):
 class KeywordRanking_nl(KeywordRank):
     pass
 
-class KeywordRanking_no(KeywordRank):
-    pass
-
 class KeywordRanking_pl(KeywordRank):
     pass
 
 class KeywordRanking_pt(KeywordRank):
-    pass
-
-class KeywordRanking_ro(KeywordRank):
-    pass
-
-class KeywordRanking_sk(KeywordRank):
-    pass
-
-class KeywordRanking_sl(KeywordRank):
-    pass
-
-class KeywordRanking_sn(KeywordRank):
-    pass
-
-class KeywordRanking_so(KeywordRank):
     pass
 
 class KeywordRanking_sv(KeywordRank):
@@ -2721,17 +2577,7 @@ class AutoComplete(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_ca(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_cs(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_da(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
@@ -2761,11 +2607,6 @@ class AutoComplete_fr(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_hr(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_hu(AutoCompleteBase):
 
     def __unicode__(self):
@@ -2781,42 +2622,12 @@ class AutoComplete_nl(AutoCompleteBase):
     def __unicode__(self):
         return self.keywords
 
-class AutoComplete_no(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class AutoComplete_pl(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords
 
 class AutoComplete_pt(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_ro(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_sk(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_sl(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_sn(AutoCompleteBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class AutoComplete_so(AutoCompleteBase):
 
     def __unicode__(self):
         return self.keywords

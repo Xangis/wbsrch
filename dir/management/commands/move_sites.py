@@ -2,8 +2,8 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
 from optparse import make_option
-from dir.models import SiteInfo, DomainInfo
-from dir.utils import MoveSiteTo
+from dir.models import SiteInfo, DomainInfo, SiteInfoAfterZ, BlockedSite
+from dir.utils import MoveSiteTo, GetSiteInfoModelFromLanguage, RemoveURLsForDomain
 import dateutil.parser
 
 class Command(BaseCommand):
@@ -13,22 +13,30 @@ class Command(BaseCommand):
     as an infix or url parameter language will only be moved if they fit those rules.
     """
     option_list = BaseCommand.option_list + (
+        make_option('-s', '--source', action='store', default='en', dest='source', help='Source language to use (default=en)'),
         make_option('-e', '--extension', action='store', dest='extension', help='Check domains with this extension.'),
         make_option('-l', '--language', action='store', dest='language', help='Move domain pages to this language.'),
         make_option('-m', '--max', default=10, action='store', type='int', dest='max', help='Max number of domains to process. (default=10)'),
         make_option('-n', '--domaininfo', default=True, action='store_false', dest='domaininfo', help='Do not create DomainInfo records for domains that lack them. (default=Yes)'),
+        make_option('-b', '--block', default=False, action='store_true', dest='block', help='Do not move sites. Block after Z sites with this extension instead. (default=No)'),
     )
 
     def handle(self, *args, **options):
         extension = options.get('extension', None)
+        sourcelang = options.get('source', 'en')
         lang = options.get('language', None)
         createinfo = options.get('domaininfo', True)
+        block = options.get('block', False)
         max = options.get('max', None)
-        if not lang:
+        if not lang and not block:
             raise ValueError('Target language must be provided')
         if not extension:
             raise ValueError('Extension is required.')
-        items = SiteInfo.objects.filter(rooturl__endswith=extension).values('rooturl').distinct().order_by('rooturl')
+        if block:
+            site_model = SiteInfoAfterZ
+        else:
+            site_model = GetSiteInfoModelFromLanguage(sourcelang)
+        items = site_model.objects.filter(rooturl__endswith=extension).values('rooturl').distinct().order_by('rooturl')
         print u'Num domains to check: {0}'.format(items.count())
         processed = 0
         pagesmoved = 0
@@ -37,20 +45,49 @@ class Command(BaseCommand):
             processed = processed + 1
             if max and (processed > max):
                 break
+            if block:
+                try:
+                    domain = DomainInfo.objects.get(url=item['rooturl'])
+                    if domain.is_unblockable:
+                        continue
+                except ObjectDoesNotExist:
+                    # Always create domain info if the domain doesn't exist yet.
+                    domain = DomainInfo()
+                    domain.url = item['rooturl']
+                    domain.save()
+                print u'Blocking {0}'.format(item['rooturl'])
+                try:
+                    existing = BlockedSite.objects.get(url=item['rooturl'])
+                    # If the domain is already blocked, the URL must have been added erroneously.
+                    # in that case, just delete it.
+                    RemoveURLsForDomain(item.rooturl)
+                except ObjectDoesNotExist:
+                    site = BlockedSite()
+                    site.url = item['rooturl']
+                    site.reason = 8
+                    site.save()
+                    domainsmoved = domainsmoved + 1
+                continue
             try:
                 di = DomainInfo.objects.get(url = item['rooturl'])
-                if di.language_association and (di.language_association != lang):
-                    continue
-                elif di.language_association or di.uses_language_subdirs or di.uses_langid:
+                if di.uses_language_subdirs or di.uses_langid:
                     print 'Domain {0} uses a language categorization scheme but we do not handle those yet. Skipping.'.format(item['rooturl'])
                     continue
+                elif di.language_association and (di.language_association != lang):
+                    if di.language_association != 'en' and lang != 'en':
+                        # Moving one language's items to another's table
+                        print u'Language association changed to {0}'.format(lang)
+                        di.language_association = lang
+                        di.save()
+                    else:
+                        continue
             except ObjectDoesNotExist:
                 if createinfo:
                     di = DomainInfo()
                     di.url = item['rooturl']
                     print u'Added domain entry for {0}'.format(di.url)
                     di.save()
-            pages = SiteInfo.objects.filter(rooturl=item['rooturl'])
+            pages = site_model.objects.filter(rooturl=item['rooturl'])
             domainpages = 0
             for page in pages:
                 MoveSiteTo(page, lang, True)

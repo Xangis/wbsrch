@@ -311,12 +311,6 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     move_to_finnish.short_description = "Move these to Finnish."
 
-    def move_to_icelandic(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'is')
-
-    move_to_icelandic.short_description = "Move these to Icelandic."
-
     def move_to_dutch(modeladmin, request, queryset):
         for item in queryset:
             MoveSiteTo(item, 'nl')
@@ -328,24 +322,6 @@ class SiteInfoAdmin(admin.ModelAdmin):
             MoveSiteTo(item, 'cs')
 
     move_to_czech.short_description = "Move these to Czech."
-
-    def move_to_swahili(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'sw')
-
-    move_to_swahili.short_description = "Move these to Swahili."
-
-    def move_to_romanian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ro')
-
-    move_to_romanian.short_description = "Move these to Romanian."
-
-    def move_to_danish(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'da')
-
-    move_to_danish.short_description = "Move these to Danish."
 
     def move_to_greek(modeladmin, request, queryset):
         for item in queryset:
@@ -359,299 +335,11 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     move_to_hungarian.short_description = "Move these to Hungarian."
 
-    def move_to_croatian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'hr')
-
-    move_to_croatian.short_description = "Move these to Croatian."
-
     def move_to_turkish(modeladmin, request, queryset):
         for item in queryset:
             MoveSiteTo(item, 'tr')
 
     move_to_turkish.short_description = "Move these to Turkish."
-
-    def move_to_lithuanian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'lt')
-
-    move_to_lithuanian.short_description = "Move these to Lithuanian."
-
-    def move_to_latvian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'lv')
-
-    move_to_latvian.short_description = "Move these to Latvian."
-
-    def move_to_slovak(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'sk')
-
-    move_to_slovak.short_description = "Move these to Slovak."
-
-    def move_to_estonian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'et')
-
-    move_to_estonian.short_description = "Move these to Estonian."
-
-    def move_to_esperanto(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'eo')
-
-    move_to_esperanto.short_description = "Move these to Esperanto."
-
-    def move_to_basque(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'eu')
-
-    move_to_basque.short_description = "Move these to Basque."
-
-    def move_to_slovene(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'sl')
-
-    move_to_slovene.short_description = "Move these to Slovene."
-
-    def move_to_yoruba(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'yo')
-
-    move_to_yoruba.short_description = "Move these to Yoruba."
-
-    def move_to_rwandan(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'rw')
-
-    move_to_rwandan.short_description = "Move these to Rwandan."
-
-    def move_to_zulu(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'zu')
-
-    move_to_zulu.short_description = "Move these to Zulu."
-
-    def move_to_shona(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'sn')
-
-    move_to_shona.short_description = "Move these to Shona."
-
-    def move_to_afrikaans(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'af')
-
-    move_to_afrikaans.short_description = "Move these to Afrikaans."
-
-    def move_to_akan(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ak')
-
-    move_to_akan.short_description = "Move these to Akan."
-
-    def move_to_igbo(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ig')
-
-    move_to_igbo.short_description = "Move these to Igbo."
-
-    def move_to_lingala(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ln')
-
-    move_to_lingala.short_description = "Move these to Lingala."
-
-    def move_to_wolof(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'wo')
-
-    move_to_wolof.short_description = "Move these to Wolof."
-
-    def move_to_kongo(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'kg')
-
-    move_to_kongo.short_description = "Move these to Kongo."
-
-    def move_to_bambara(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'bm')
-
-    move_to_bambara.short_description = "Move these to Bambara."
-
-    def move_to_breton(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'br')
-
-    move_to_breton.short_description = "Move these to Breton."
-
-    def move_to_ewe(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ee')
-
-    move_to_ewe.short_description = "Move these to Ewe."
-
-    def move_to_fulani(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ff')
-
-    move_to_fulani.short_description = "Move these to Fulani."
-
-    def move_to_hausa(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ha')
-
-    move_to_hausa.short_description = "Move these to Hausa."
-
-    def move_to_kikuyu(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ki')
-
-    move_to_kikuyu.short_description = "Move these to Kikuyu."
-
-    def move_to_luganda(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'lg')
-
-    move_to_luganda.short_description = "Move these to Luganda."
-
-    def move_to_northernsotho(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'nso')
-
-    move_to_northernsotho.short_description = "Move these to Northern Sotho."
-
-    def move_to_nyanja(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ny')
-
-    move_to_nyanja.short_description = "Move these to Nyanja."
-
-    def move_to_oromo(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'om')
-
-    move_to_oromo.short_description = "Move these to Oromo."
-
-    def move_to_kirundi(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'rn')
-
-    move_to_kirundi.short_description = "Move these to Kirundi."
-
-    def move_to_somali(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'so')
-
-    move_to_somali.short_description = "Move these to Somali."
-
-    def move_to_swati(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ss')
-
-    move_to_swati.short_description = "Move these to Swati."
-
-    def move_to_sesotho(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'st')
-
-    move_to_sesotho.short_description = "Move these to Sesotho."
-
-    def move_to_tswana(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'tn')
-
-    move_to_tswana.short_description = "Move these to Tswana."
-
-    def move_to_tsonga(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ts')
-
-    move_to_tsonga.short_description = "Move these to Tsonga."
-
-    def move_to_venda(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 've')
-
-    move_to_venda.short_description = "Move these to Venda."
-
-    def move_to_xhosa(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'xh')
-
-    move_to_xhosa.short_description = "Move these to Xhosa."
-
-    def move_to_occitan(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'oc')
-
-    move_to_occitan.short_description = "Move these to Occitan."
-
-    def move_to_neapolitan(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'nap')
-
-    move_to_neapolitan.short_description = "Move these to Neapolitan."
-
-    def move_to_frisian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'fy')
-
-    move_to_frisian.short_description = "Move these to West Frisian."
-
-    def move_to_faroese(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'fo')
-
-    move_to_faroese.short_description = "Move these to Faroese."
-
-    def move_to_piedmontese(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'pms')
-
-    move_to_piedmontese.short_description = "Move these to Piedmontese."
-
-    def move_to_sardinian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'sc')
-
-    move_to_sardinian.short_description = "Move these to Sardinian."
-
-    def move_to_sicilian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'scn')
-
-    move_to_sicilian.short_description = "Move these to Sicilian."
-
-    def move_to_venetian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'vec')
-
-    move_to_venetian.short_description = "Move these to Venetian."
-
-    def move_to_cymraeg(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'cy')
-
-    move_to_cymraeg.short_description = "Move these to Cymraeg (Welsh)."
-
-    def move_to_latin(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'la')
-
-    move_to_latin.short_description = "Move these to Latin."
-
-    def move_to_galician(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'gl')
-
-    move_to_galician.short_description = "Move these to Galician."
-
-    def move_to_catalan(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'ca')
-
-    move_to_catalan.short_description = "Move these to Catalan."
 
     def move_to_english(modeladmin, request, queryset):
         for item in queryset:
@@ -662,17 +350,10 @@ class SiteInfoAdmin(admin.ModelAdmin):
     actions = [block_domain_wrong_language, block_domain_porn, block_domain_gambling, block_domain_piracy, block_domain_shortener, 
                block_domain_adserver, block_domain_nocontent, block_domain_spam, block_domain_social, tag_as_english, tag_as_language_infix, 
                recrawl_this_url, move_to_german,
-               move_to_spanish, move_to_french, move_to_italian, move_to_portuguese, move_to_polish, move_to_swedish, move_to_norwegian,
-               move_to_finnish, move_to_icelandic, move_to_dutch, move_to_czech, move_to_swahili, move_to_romanian, move_to_danish,
-               move_to_greek, move_to_hungarian, move_to_croatian, move_to_turkish, move_to_lithuanian, move_to_latvian, move_to_slovak,
-               move_to_estonian, move_to_slovene, move_to_yoruba, move_to_rwandan, move_to_zulu, move_to_shona, move_to_afrikaans,
-               move_to_akan, move_to_igbo, move_to_lingala, move_to_wolof, move_to_kongo, 
-               move_to_bambara, move_to_breton, move_to_ewe, move_to_fulani, move_to_hausa, move_to_kikuyu,
-               move_to_luganda, move_to_northernsotho, move_to_nyanja, move_to_oromo, move_to_kirundi, move_to_somali, move_to_swati,
-               move_to_sesotho, move_to_tswana, move_to_tsonga, move_to_venda, move_to_xhosa, move_to_basque, 
-               move_to_occitan, move_to_neapolitan, move_to_frisian, move_to_faroese, move_to_piedmontese, move_to_sardinian,
-               move_to_esperanto, move_to_sicilian, move_to_venetian, move_to_cymraeg, move_to_latin, 
-               move_to_galician, move_to_catalan, move_to_english]
+               move_to_spanish, move_to_french, move_to_italian, move_to_portuguese, move_to_polish, move_to_swedish,
+               move_to_finnish, move_to_dutch, move_to_czech,
+               move_to_greek, move_to_hungarian, move_to_turkish,
+               move_to_english]
 
 class SearchReportAdmin(admin.ModelAdmin):
     list_display = ('year', 'month', 'language', 'total_searches')
@@ -2506,9 +2187,7 @@ admin.site.register(SiteInfoBeforeZero, SiteInfoBeforeZeroAdmin)
 admin.site.register(SiteInfoH1BeforeZero, SiteInfoH1BeforeZeroAdmin)
 admin.site.register(SiteInfoH2BeforeZero, SiteInfoH2BeforeZeroAdmin)
 admin.site.register(SiteInfoH3BeforeZero, SiteInfoH3BeforeZeroAdmin)
-admin.site.register(SiteInfo_ca, SiteInfoAdmin)
 admin.site.register(SiteInfo_cs, SiteInfoAdmin)
-admin.site.register(SiteInfo_da, SiteInfoAdmin)
 admin.site.register(SiteInfo_de, SiteInfoAdmin)
 admin.site.register(SiteInfo_el, SiteInfoAdmin)
 admin.site.register(SiteInfo_es, SiteInfoAdmin)
@@ -2517,19 +2196,12 @@ admin.site.register(SiteInfo_fr, SiteInfoAdmin)
 admin.site.register(SiteInfo_hu, SiteInfoAdmin)
 admin.site.register(SiteInfo_it, SiteInfoAdmin)
 admin.site.register(SiteInfo_nl, SiteInfoAdmin)
-admin.site.register(SiteInfo_no, SiteInfoAdmin)
 admin.site.register(SiteInfo_pl, SiteInfoAdmin)
 admin.site.register(SiteInfo_pt, SiteInfoAdmin)
-admin.site.register(SiteInfo_ro, SiteInfoAdmin)
-admin.site.register(SiteInfo_sk, SiteInfoAdmin)
-admin.site.register(SiteInfo_sl, SiteInfoAdmin)
-admin.site.register(SiteInfo_sn, SiteInfoAdmin)
-admin.site.register(SiteInfo_so, SiteInfoAdmin)
 admin.site.register(SiteInfo_sv, SiteInfoAdmin)
 admin.site.register(SiteInfo_tr, SiteInfoAdmin)
 admin.site.register(DomainInfo, DomainInfoAdmin)
 admin.site.register(SearchLog, SearchLogAdmin)
-admin.site.register(SearchLog_ca, SearchLogAdmin)
 admin.site.register(SearchLog_cs, SearchLogAdmin)
 admin.site.register(SearchLog_da, SearchLogAdmin)
 admin.site.register(SearchLog_de, SearchLogAdmin)
@@ -2561,9 +2233,7 @@ admin.site.register(SearchLog_tr, SearchLogAdmin)
 admin.site.register(SearchLog_wo, SearchLogAdmin)
 admin.site.register(SearchLog_yo, SearchLogAdmin)
 admin.site.register(PendingIndex, PendingIndexAdmin)
-admin.site.register(PendingIndex_ca, PendingIndexAdmin)
 admin.site.register(PendingIndex_cs, PendingIndexAdmin)
-admin.site.register(PendingIndex_da, PendingIndexAdmin)
 admin.site.register(PendingIndex_de, PendingIndexAdmin)
 admin.site.register(PendingIndex_el, PendingIndexAdmin)
 admin.site.register(PendingIndex_es, PendingIndexAdmin)
@@ -2572,20 +2242,12 @@ admin.site.register(PendingIndex_fr, PendingIndexAdmin)
 admin.site.register(PendingIndex_hu, PendingIndexAdmin)
 admin.site.register(PendingIndex_it, PendingIndexAdmin)
 admin.site.register(PendingIndex_nl, PendingIndexAdmin)
-admin.site.register(PendingIndex_no, PendingIndexAdmin)
 admin.site.register(PendingIndex_pl, PendingIndexAdmin)
 admin.site.register(PendingIndex_pt, PendingIndexAdmin)
-admin.site.register(PendingIndex_ro, PendingIndexAdmin)
-admin.site.register(PendingIndex_sk, PendingIndexAdmin)
-admin.site.register(PendingIndex_sl, PendingIndexAdmin)
-admin.site.register(PendingIndex_sn, PendingIndexAdmin)
-admin.site.register(PendingIndex_so, PendingIndexAdmin)
 admin.site.register(PendingIndex_sv, PendingIndexAdmin)
 admin.site.register(PendingIndex_tr, PendingIndexAdmin)
 admin.site.register(IndexTerm, EnglishIndexTermAdmin)
-admin.site.register(IndexTerm_ca, IndexTermAdmin)
 admin.site.register(IndexTerm_cs, IndexTermAdmin)
-admin.site.register(IndexTerm_da, IndexTermAdmin)
 admin.site.register(IndexTerm_de, IndexTermAdmin)
 admin.site.register(IndexTerm_el, IndexTermAdmin)
 admin.site.register(IndexTerm_es, IndexTermAdmin)
@@ -2594,14 +2256,8 @@ admin.site.register(IndexTerm_fr, IndexTermAdmin)
 admin.site.register(IndexTerm_hu, IndexTermAdmin)
 admin.site.register(IndexTerm_it, IndexTermAdmin)
 admin.site.register(IndexTerm_nl, IndexTermAdmin)
-admin.site.register(IndexTerm_no, IndexTermAdmin)
 admin.site.register(IndexTerm_pl, IndexTermAdmin)
 admin.site.register(IndexTerm_pt, IndexTermAdmin)
-admin.site.register(IndexTerm_ro, IndexTermAdmin)
-admin.site.register(IndexTerm_sk, IndexTermAdmin)
-admin.site.register(IndexTerm_sl, IndexTermAdmin)
-admin.site.register(IndexTerm_sn, IndexTermAdmin)
-admin.site.register(IndexTerm_so, IndexTermAdmin)
 admin.site.register(IndexTerm_sv, IndexTermAdmin)
 admin.site.register(IndexTerm_tr, IndexTermAdmin)
 admin.site.register(FeedbackItem, FeedbackItemAdmin)
@@ -2621,9 +2277,7 @@ admin.site.register(DomainSearchLog, SearchLogAdmin)
 admin.site.register(IPSearchLog, SearchLogAdmin)
 admin.site.register(NewsSite)
 admin.site.register(AutoComplete, AutoCompleteAdmin)
-admin.site.register(AutoComplete_ca, AutoCompleteAdmin)
 admin.site.register(AutoComplete_cs, AutoCompleteAdmin)
-admin.site.register(AutoComplete_da, AutoCompleteAdmin)
 admin.site.register(AutoComplete_de, AutoCompleteAdmin)
 admin.site.register(AutoComplete_el, AutoCompleteAdmin)
 admin.site.register(AutoComplete_es, AutoCompleteAdmin)
@@ -2632,15 +2286,8 @@ admin.site.register(AutoComplete_fr, AutoCompleteAdmin)
 admin.site.register(AutoComplete_hu, AutoCompleteAdmin)
 admin.site.register(AutoComplete_it, AutoCompleteAdmin)
 admin.site.register(AutoComplete_nl, AutoCompleteAdmin)
-admin.site.register(AutoComplete_no, AutoCompleteAdmin)
 admin.site.register(AutoComplete_pl, AutoCompleteAdmin)
 admin.site.register(AutoComplete_pt, AutoCompleteAdmin)
-admin.site.register(AutoComplete_ro, AutoCompleteAdmin)
-admin.site.register(AutoComplete_sk, AutoCompleteAdmin)
-admin.site.register(AutoComplete_sl, AutoCompleteAdmin)
-admin.site.register(AutoComplete_sn, AutoCompleteAdmin)
-admin.site.register(AutoComplete_so, AutoCompleteAdmin)
-admin.site.register(AutoComplete_sv, AutoCompleteAdmin)
 admin.site.register(AutoComplete_tr, AutoCompleteAdmin)
 admin.site.register(ResultClick, ResultClickAdmin)
 admin.site.register(ResultClick_ca, ResultClickAdmin)
