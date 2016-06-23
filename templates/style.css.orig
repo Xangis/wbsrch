@@ -17,6 +17,9 @@ text-align: center;
 
 table {
 padding: 6px;
+text-align: center;
+margin-left: auto;
+margin-right: auto;
 }
 
 th {
@@ -33,6 +36,12 @@ border: 0;
 vertical-align: middle;
 margin-left: 3px;
 margin-right: 3px;
+}
+
+td > img {
+margin-left: auto;
+margin-right: auto;
+text-align: center;
 }
 
 .smallertext {

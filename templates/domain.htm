@@ -24,7 +24,6 @@
 
 {% if domain %}
 <h2 class="left indented2 spacebelow">WbSrch {% trans "Domain" %} {% trans "Info" %} {% trans "for" %} {% trans "Domain" %} '{{ rawdomain }}':</h2>
-{% ssi '/var/django/wbsrch/templates/pw_leaderboard.inc' %}
 {% else %}
 {% endif %}
 
@@ -63,7 +62,6 @@
 {% endif %}
 {% else %}
 <p>{% trans 'Enter a domain name to check' %}.</p>
-{% ssi '/var/django/wbsrch/templates/pw_leaderboard.inc' %}
 {% endif %}
 {% endif %}
 
