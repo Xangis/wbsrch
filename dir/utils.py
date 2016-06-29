@@ -2954,6 +2954,15 @@ def IsBotAgent(text):
     # AHC/1.0
     if u'AHC/' in text:
         return True
+    # looksystems.net
+    if u'looksystems.net' in text:
+        return True
+    # crawler4j (http://code.google.com/p/crawler4j/)
+    if u'crawler4j' in text:
+        return True
+    # VerticalLeap-BacklinkChecker
+    if u'VerticalLeap-BacklinkChecker' in text:
+        return True
     return False
 
 def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=False):
