@@ -1,2 +1,37 @@
 # wbsrch
 The WbSrch search engine.
+
+# Setup
+Create a python virtual environment. I like virtualenvwrapper, which lets you do something like:
+
+mkvirtualenv wbsrch
+
+Then, install the requirements.
+
+pip install -r requirements.txt
+
+# Database
+
+WbSrch requires 3 databases. They can be on the same server, or on different servers. They are:
+
+urls - Tracks the URLs to be crawled and the page-to-page links.
+
+indexes - Contains the compiled indexes and search logs. This is for the user-facing search website.
+
+zetaweb - Contains the page data.
+
+# Crawling and Indexing
+
+Everything runs based on daemons. The crawler and indexer daemons are most important, and any number
+of daemons can run. It should depend on how much RAM, how many processor cores, and how much disk
+space the system has.
+
+The system was originally designed with three different machines - a crawler, an indexer, and a web
+server. The crawler ran on the same system as the urls database, the indexer on the same system as
+the "zetaweb" page database, and the web server runs on the same system as the indexes.
+
+A rule of thumb (at least for older servers) is to have 4 crawlers per core or one indexer per core.
+
+Other daemons, the domain_update, domain_data_update, robots_update, and recrawl_daemon may or may not
+be necessary (a lot of things exist to update existing data, which you may or may not want to do). Some
+things, like the robots daemon, exist to update data that wasn't originally collected, but is now.
