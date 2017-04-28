@@ -2,23 +2,45 @@
 The WbSrch search engine.
 
 # Setup
+
+Linux is required. It doesn't matter which version, but it has only been tested with Ubuntu Server.
+
+WbSrch requires PostgreSQL. The version doesn't matter as long as it's 9.x or higher. If you don't
+have it yet, install it with:
+
+sudo apt-get install postgresql-client-9.5 postgresql-9.5 libpq-dev
+
+(or whatever version your Linux distro has available)
+
+Postgresql should be set up for local password authentication rather than peer. If that doesn't mean
+anything to you, look up what the pg_hba.conf file is and how to configure it.
+
 Create a python virtual environment. I like virtualenvwrapper, which lets you do something like:
 
 mkvirtualenv wbsrch
 
-Then, install the requirements.
+Then, install the requirements. Note that python-dev, libgeoip-dev and libpq-dev have to be 
+installed for the requirements.txt to grab everything correctly.
 
 pip install -r requirements.txt
 
 # Database
 
-WbSrch requires 3 databases. They can be on the same server, or on different servers. They are:
+WbSrch requires 4 PostgreSQL databases. They can be on the same server, or on different servers. They are:
 
 urls - Tracks the URLs to be crawled and the page-to-page links.
 
 indexes - Contains the compiled indexes and search logs. This is for the user-facing search website.
 
 zetaweb - Contains the page data.
+
+news - For news site crawling. Not fully implemented.
+
+Database configuration is stored in zetaweb/settings.py. Once you've created the databases, update that
+file with username and password information.
+
+When that's done you can run "python manage.py migrate" in the root of the application directory
+(with your virtual environment activated, of course).
 
 # Crawling and Indexing
 
