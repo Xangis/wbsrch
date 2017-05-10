@@ -45,7 +45,11 @@ Database configuration is stored in zetaweb/settings.py. Once you've created the
 file with username and password information.
 
 When that's done you can run "python manage.py migrate" in the root of the application directory
-(with your virtual environment activated, of course).
+(with your virtual environment activated, of course). You have to run this once for each database, like so:
+
+python manage.py migrate
+python manage.py migrate --database indexes
+python manage.py migrate --database urls
 
 # Crawling and Indexing
 
