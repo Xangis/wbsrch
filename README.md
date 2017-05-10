@@ -15,6 +15,11 @@ sudo apt-get install postgresql-client-9.5 postgresql-9.5 libpq-dev
 Postgresql should be set up for local password authentication rather than peer. If that doesn't mean
 anything to you, look up what the pg_hba.conf file is and how to configure it.
 
+Redis is used for cache. It's not strictly required -- without it, there will be no caching and 
+the user experience will run much slower. You should install it with:
+
+sudo apt-get intsall redis-server
+
 Create a python virtual environment. I like virtualenvwrapper, which lets you do something like:
 
 mkvirtualenv wbsrch
