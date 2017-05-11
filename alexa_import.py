@@ -32,7 +32,6 @@ import datetime
 import csv
 
 def LoadAlexaFile(filename):
-    processed = 0
     added_to_pending = 0
     added_domains = 0
     blocked_domains = 0
@@ -40,6 +39,7 @@ def LoadAlexaFile(filename):
     crawl_needed = []
     crawl_blocked = []
     skipped = []
+    processed = []
     with open(filename, 'rb') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         # Set all Alexa results as old.
@@ -69,7 +69,7 @@ def LoadAlexaFile(filename):
                         crawl_blocked.append(row[1])
                     else:
                         crawl_needed.append(row[1])
-                processed = processed + 1
+                processed.append(row[1])
     with open("alexa_new.txt", 'w') as outfile:
         for item in crawl_needed:
             outfile.write('%s\n' % item)
@@ -82,7 +82,11 @@ def LoadAlexaFile(filename):
         for item in crawl_blocked:
             outfile.write('%s\n' % item)
         outfile.close()
-    print 'Updated ' + str(processed) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.'
+    with open("alexa_processed.txt", 'w') as outfile:
+        for item in processed:
+            outfile.write('%s\n' % item)
+        outfile.close()
+    print 'Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.'
 
 if not os.path.isfile('top-1m.csv'):
     print u'File top-1m.csv does not exist. Retrieving.'
