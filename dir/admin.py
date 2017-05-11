@@ -9,6 +9,38 @@ from urlparse import urlparse
 from indexer import BuildIndexForTerm
 from django.core.exceptions import ObjectDoesNotExist
 
+def LanguageBlock(siteinfo, language=None):
+    parsedurl = urlparse(siteinfo.url)
+    # If you try to language block an unblockable domain (i.e. YouTube), it just deletes the URL
+    # and continues on its way.
+    try:
+        domain = DomainInfo.objects.get(url=parsedurl.netloc)
+        if domain.is_unblockable:
+            siteinfo.delete()
+            return
+    except ObjectDoesNotExist:
+        # Always create domain info if the domain doesn't exist yet.
+        domain = DomainInfo()
+        domain.url = parsedurl.netloc
+        domain.save()
+    try:
+        existing = BlockedSite.objects.get(url=parsedurl.netloc)
+        # If the domain is already blocked, the URL must have been added erroneously.
+        # in that case, just delete it.
+        RemoveURLsForDomain(siteinfo.rooturl)
+    except ObjectDoesNotExist:
+        site = BlockedSite()
+        site.url = parsedurl.netloc
+        site.reason = 8
+        site.save()
+
+    RequeueRankedKeywordsForDomain(parsedurl.netloc)
+
+    if language is not None:
+        domain.language_association = language
+        domain.save()
+
+
 class QueryParameterAdmin(admin.ModelAdmin):
     list_display = ('domain', 'parameter', 'remove_before_crawl')
     search_fields = ('domain', 'parameter')
@@ -33,33 +65,45 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     def block_domain_wrong_language(modeladmin, request, queryset):
         for item in queryset:
-            parsedurl = urlparse(item.url)
-            # If you try to language block an unblockable domain (i.e. YouTube), it just deletes the URL
-            # and continues on its way.
-            try:
-                domain = DomainInfo.objects.get(url=parsedurl.netloc)
-                if domain.is_unblockable:
-                    item.delete()
-                    continue
-            except ObjectDoesNotExist:
-                # Always create domain info if the domain doesn't exist yet.
-                domain = DomainInfo()
-                domain.url = parsedurl.netloc
-                domain.save()
-            try:
-                existing = BlockedSite.objects.get(url=parsedurl.netloc)
-                # If the domain is already blocked, the URL must have been added erroneously.
-                # in that case, just delete it.
-                RemoveURLsForDomain(item.rooturl)
-            except ObjectDoesNotExist:
-                site = BlockedSite()
-                site.url = parsedurl.netloc
-                site.reason = 8
-                site.save()
+            LanguageBlock(item)
 
-            RequeueRankedKeywordsForDomain(parsedurl.netloc)
+    block_domain_wrong_language.short_description = "Block the selected domains due to unindexed language."
 
-    block_domain_wrong_language.short_description = "Block the selected domains (lang)."
+    def block_domain_language_ar(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'ar')
+
+    block_domain_language_ar.short_description = "Block the selected domains (Arabic language)."
+
+    def block_domain_language_cn(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'zh')
+
+    block_domain_language_cn.short_description = "Block the selected domains (Chinese language)."
+
+    def block_domain_language_ru(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'ru')
+
+    block_domain_language_ru.short_description = "Block the selected domains (Russian language)."
+
+    def block_domain_language_ko(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'ko')
+
+    block_domain_language_ko.short_description = "Block the selected domains (Korean language)."
+
+    def block_domain_language_ja(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'ja')
+
+    block_domain_language_ja.short_description = "Block the selected domains (Japanese language)."
+
+    def block_domain_language_vn(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'vn')
+
+    block_domain_language_vn.short_description = "Block the selected domains (Vietnamese language)."
 
     def block_domain_porn(modeladmin, request, queryset):
         for item in queryset:
@@ -352,7 +396,8 @@ class SiteInfoAdmin(admin.ModelAdmin):
                recrawl_this_url, move_to_german,
                move_to_spanish, move_to_french, move_to_italian, move_to_portuguese, move_to_polish, move_to_swedish,
                move_to_finnish, move_to_dutch, move_to_czech,
-               move_to_greek, move_to_hungarian, move_to_turkish,
+               move_to_greek, move_to_hungarian, move_to_turkish, block_domain_language_ar, 
+               block_domain_language_cn, block_domain_language_ja, block_domain_language_ko, block_domain_language_ru, block_domain_language_vn,
                move_to_english]
 
 class SearchReportAdmin(admin.ModelAdmin):
