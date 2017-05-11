@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import truncatewords
 from django.db import models
 from django.db.models import Q, Count
-from django.db.models.loading import get_model
+from django.apps import apps
 from django.db.utils import DatabaseError
 from django.template.defaultfilters import truncatechars
 from django.db import IntegrityError, connection
@@ -261,7 +261,7 @@ def GetPendingIndexModelFromLanguage(language):
     if 'sk' in language:
         language = 'cs'
     try:
-        model = get_model('dir', 'PendingIndex_' + language)
+        model = apps.get_model('dir', 'PendingIndex_' + language)
     except LookupError, e:
         raise InvalidLanguageException(language)
     if model:
@@ -279,7 +279,7 @@ def GetIndexModelFromLanguage(language):
     if 'sk' in language:
         language = 'cs'
     try:
-        model = get_model('dir', 'IndexTerm_' + language)
+        model = apps.get_model('dir', 'IndexTerm_' + language)
     except LookupError, e:
         raise InvalidLanguageException(language)
     if model:
@@ -297,7 +297,7 @@ def GetSiteInfoModelFromLanguage(language):
     if 'sk' in language:
         language = 'cs'
     try:
-        model = get_model('dir', 'SiteInfo_' + language)
+        model = apps.get_model('dir', 'SiteInfo_' + language)
     except LookupError, e:
         raise InvalidLanguageException(language)
     if model:
@@ -315,7 +315,7 @@ def GetSearchLogModelFromLanguage(language):
     if 'sk' in language:
         language = 'cs'
     try:
-        model = get_model('dir', 'SearchLog_' + language)
+        model = apps.get_model('dir', 'SearchLog_' + language)
     except LookupError, e:
         raise InvalidLanguageException(language)
     if model:
@@ -333,7 +333,7 @@ def GetKeywordRankingModelFromLanguage(language):
     if 'sk' in language:
         language = 'cs'
     try:
-        model = get_model('dir', 'KeywordRanking_' + language)
+        model = apps.get_model('dir', 'KeywordRanking_' + language)
     except LookupError, e:
         raise InvalidLanguageException(language)
     if model:
@@ -351,7 +351,7 @@ def GetAutoCompleteModelFromLanguage(language):
     if 'sk' in language:
         language = 'cs'
     try:
-        model = get_model('dir', 'AutoComplete_' + language)
+        model = apps.get_model('dir', 'AutoComplete_' + language)
     except LookupError, e:
         raise InvalidLanguageException(language)
     if model:
@@ -369,7 +369,7 @@ def GetResultClickModelFromLanguage(language):
     if 'sk' in language:
         language = 'cs'
     try:
-        model = get_model('dir', 'ResultClick_' + language)
+        model = apps.get_model('dir', 'ResultClick_' + language)
     except LookupError, e:
         raise InvalidLanguageException(language)
     if model:
