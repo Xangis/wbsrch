@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Q, get_model
+from django.db.models import Q
 from django.template.defaultfilters import truncatechars
 from django.db import IntegrityError, connection, transaction
 from django.utils.timezone import utc

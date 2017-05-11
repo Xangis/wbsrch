@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
 from django.template import Context, loader, RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import get_model, Count
+from django.apps import apps
 from django.db import connection
 from django.core.cache import cache
 from django.utils import timezone
@@ -826,7 +826,7 @@ def adminpanel_urlrange(request):
     if not model:
         site_model = GetSiteInfoModelFromLanguage(language_code)
     else:
-        site_model = get_model('dir', model)
+        site_model = apps.get_model('dir', model)
         if not site_model:
             return HttpResponse(status=404)
     term_model = GetIndexModelFromLanguage(language_code)
@@ -861,7 +861,7 @@ def adminpanel_siteinfoendingin(request):
 
     if suffix:
         start = timezone.now()
-        site_model = get_model('dir', 'SiteInfoEndingIn' + suffix.upper())
+        site_model = apps.get_model('dir', 'SiteInfoEndingIn' + suffix.upper())
         if not site_model:
             return HttpResponse(status=404)
         #term_model = GetIndexModelFromLanguage(language_code)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect, Http404, HttpResponseForbidden, HttpResponseBadRequest
-from django.db.models import get_model, Count
+from django.db.models import Count
 from django.db import connection
 from django.core.cache import cache
 from django.utils import timezone
