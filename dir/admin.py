@@ -77,7 +77,7 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     def block_domain_language_il(modeladmin, request, queryset):
         for item in queryset:
-            LanguageBlock(item, 'il')
+            LanguageBlock(item, 'he')
 
     block_domain_language_il.short_description = "Block the selected domains (Israeli language)."
 

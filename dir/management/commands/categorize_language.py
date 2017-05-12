@@ -128,9 +128,12 @@ class Command(BaseCommand):
                     print u'Auto-Blocking {0} as unindexed language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1])
                     input = 'del'
                 elif autotag and onlyautotag:
-                    print u'Skipping {0} because we are in only-auto-tag mode and it could not be automatically tagged.'
+                    print u'Skipping {0} because we are in only-auto-tag mode and it could not be automatically tagged.'.format(domain)
                     input = 's'
-                else:                    
+                elif autoblock and onlyautotag:
+                    print u'Skipping {0} because we are in only-auto-tag mode and it could not be automatically blocked.'.format(domain)
+                    input = 's'
+                else:
                     input = raw_input(u'Tag {0} as: [q]uit/[s]kip/[i]nfix-tag/[u]rlparam-tag/[del]ete/[xx] lang ({1}/{2} En, {3}/{2} {4})]? '.format(total, english, total, scores[0][1], scores[0][0]))
                 input = input.lower()
             if input == 'q':

@@ -83,3 +83,36 @@ A rule of thumb (at least for older servers) is to have 4 crawlers per core or o
 Other daemons, the domain_update, domain_data_update, robots_update, and recrawl_daemon may or may not
 be necessary (a lot of things exist to update existing data, which you may or may not want to do). Some
 things, like the robots daemon, exist to update data that wasn't originally collected, but is now.
+
+# Language Categorization
+
+The engine does not analyze page language at crawl-time. That's a semi-manual process handled by the
+categorize_language admin command. To auto-tag page languages that the detector finds with high confidence,
+run a command something like this:
+
+python manage.py categorize_language -o -c -a en,de,es,it,fr,pt,pl,sv,fi,nl,cs,el,hu,tr -i 9999
+
+Other variants let you manually review sites. This is complicated, because there are many multilinguals sites
+and many of them use different methods of language switching. The more pages you have from a site, the better
+that language classification will be.
+
+To block and remove sites/pages in languages you don't want to index, a command like this can be used:
+
+python manage.py categorize_language -o -c -b id,zh,ru,ar,bg,ja,ko,vi,lt,lv,ta,he -i 9999
+
+The meta content-language and html lang tags are NOT reliable for the web. Many frameworks default to
+lang="en", while others have content-language default settings that users never change. Webites exist that
+have lang="en", content-language="es" and are actually in catalan.
+
+In addition, multilingual sites use many schemes, including subdomains, subdirectories, etc. All of these are
+common:
+
+http://de.example.com/page.htm
+http://example.com/de/page.htm
+http://example.com/de-de/page.htm
+http://example.com/page.htm?lang=de
+http://example.com/page.htm?hl=de_de
+http://example.com/page_de.htm
+http://de.example.com/page.htm?lang=en-us
+
+Some, but not all of these, are obvious and easy to detect.
