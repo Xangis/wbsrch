@@ -75,6 +75,12 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     block_domain_language_ar.short_description = "Block the selected domains (Arabic language)."
 
+    def block_domain_language_il(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'il')
+
+    block_domain_language_il.short_description = "Block the selected domains (Israeli language)."
+
     def block_domain_language_cn(modeladmin, request, queryset):
         for item in queryset:
             LanguageBlock(item, 'zh')
@@ -397,7 +403,8 @@ class SiteInfoAdmin(admin.ModelAdmin):
                move_to_spanish, move_to_french, move_to_italian, move_to_portuguese, move_to_polish, move_to_swedish,
                move_to_finnish, move_to_dutch, move_to_czech,
                move_to_greek, move_to_hungarian, move_to_turkish, block_domain_language_ar, 
-               block_domain_language_cn, block_domain_language_ja, block_domain_language_ko, block_domain_language_ru, block_domain_language_vn,
+               block_domain_language_cn, block_domain_language_il, block_domain_language_ja, block_domain_language_ko, 
+               block_domain_language_ru, block_domain_language_vn,
                move_to_english]
 
 class SearchReportAdmin(admin.ModelAdmin):
