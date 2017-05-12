@@ -116,3 +116,18 @@ http://example.com/page_de.htm
 http://de.example.com/page.htm?lang=en-us
 
 Some, but not all of these, are obvious and easy to detect.
+
+# Maintenance
+
+This is a very high-maintenance search engine.
+
+- Domain Links
+
+The python manage.py domain_link_update command needs to run in order for incoming links to a domain to be counted.
+This will influence how well that site ranks. Typically this is run as a daemon via python domain_link_daemon.py
+
+- Index Stats
+
+The index stats page is fairly database intensive, since it has to count page and index totals for all languages.
+Python manage.py generate_index_stats will create a static version of that page. You should run it daily, weekly, or
+monthly depending on how much your index changes.
