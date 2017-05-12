@@ -51,6 +51,12 @@ python manage.py migrate
 python manage.py migrate --database indexes
 python manage.py migrate --database urls
 
+The system uses the MaxMind data for GeoIP. geoip_update.sh must be run at least once to get this data.
+It should be run periodically to refresh the GeoIP data.
+
+The system also use NLTK and needs to download module for it and install additional stopwords files.
+Run nltk_download.sh to do that (be sure your virtualenv is active).
+
 # Crawling and Indexing
 
 Everything runs based on daemons. The crawler and indexer daemons are most important, and any number
