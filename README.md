@@ -18,7 +18,7 @@ anything to you, look up what the pg_hba.conf file is and how to configure it.
 Redis is used for cache. It's not strictly required -- without it, there will be no caching and 
 the user experience will run much slower. You should install it with:
 
-sudo apt-get intsall redis-server
+sudo apt-get install redis-server
 
 Create a python virtual environment. I like virtualenvwrapper, which lets you do something like:
 
@@ -56,6 +56,17 @@ It should be run periodically to refresh the GeoIP data.
 
 The system also use NLTK and needs to download module for it and install additional stopwords files.
 Run nltk_download.sh to do that (be sure your virtualenv is active).
+
+# Deployment
+
+There are a few things to be done when the site is deployed.
+
+- Minify the Javascript: Run ./minifyjs.sh to minify JavaScript code. Requires uglifyjs. If you don't
+have it, sudo apt-get install node-uglify.
+
+- Minify the CSS: Run ./minifycss.sh to minify CSS files.
+
+- Compile language translations: Run ./languages.sh to compile language translations.
 
 # Crawling and Indexing
 
