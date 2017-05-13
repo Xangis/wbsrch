@@ -5,6 +5,10 @@ from optparse import make_option
 from dir.models import PendingIndex, IndexTerm, DomainInfo
 from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
 import codecs
+import sys
+
+UTF8Writer = codecs.getwriter('utf8')
+sys.stdout = UTF8Writer(sys.stdout)
 
 class Command(BaseCommand):
     help = """
