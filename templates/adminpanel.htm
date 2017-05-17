@@ -131,7 +131,7 @@ KW: <input type="text" class="narrowText" name="keyword" maxlength="250" value="
 {% if urls %}
 {% if lang %}<p>Language is set to {{ lang }}. Use URL parameter "lang=xx" to change it.</p>{% endif %}
 {% for url in urls %}
-[<a href="/adm/dir/siteinfo{% if lang %}_{{ lang }}{% endif %}/{{ url.0 }}/">{{ url.0 }}</a>] [<a href="https://wbsrch.com/adminpanel/?crawlurl={{ url.2 }}">recrawl</a>] ({{ url.1 }}) <a href="/adminpanel/?crawlurl={{ url.2 }}">{{ url.2 }}</a><br />
+[<a href="/adm/dir/siteinfo{% if lang %}_{{ lang }}{% endif %}/{{ url.0 }}/">{{ url.0 }}</a>] [<a href="/adminpanel/?crawlurl={{ url.2 }}">recrawl</a>] ({{ url.1 }}) <a href="/adminpanel/?crawlurl={{ url.2 }}">{{ url.2 }}</a><br />
 {% endfor %}
 {% endif %}
 <p><a href="/search/">Back to search form.</a></p>
