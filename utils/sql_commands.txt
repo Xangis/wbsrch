@@ -9,3 +9,13 @@ time pg_dump -f /media/usb/<dirname> -j 8 -F d zetaweb
 time pg_restore -d zetaweb --format=d -j 8 /media/usb/<dirname>
 
 <dirname> is typically the db name with the date: zetaweb_2016-03-10
+
+# Show database sizes:
+
+psql < dbsizes.sql
+
+# Show table sizes for databases:
+
+psql indexes < tablesizes.sql
+psql zetaweb < tablesizes.sql
+psql urls < tablesizes.sql
