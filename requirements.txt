@@ -1,13 +1,13 @@
 # Requires memached to be installed.
 python-memcached==1.57
-Django==1.8.12
+Django==1.8.18
 Fabric==1.10.2
 # If this fails, run sudo apt-get install python-dev libpq-dev
 psycopg2==2.6.1
 beautifulsoup4==4.3.2
 coverage==3.7.1
 flup==1.0.2
-nltk==2.0.5
+nltk==3.2.5
 ipaddr==2.1.11
 newrelic==2.56.0.42
 python-whois==0.6.1

@@ -34,6 +34,10 @@ Create a python virtual environment. I like virtualenvwrapper, which lets you do
 
 mkvirtualenv wbsrch
 
+You'll probably need to upgrade setuptools. To do so run:
+
+pip install --upgrade setuptools
+
 Then, install the requirements. Note that python-dev, libgeoip-dev and libpq-dev have to be 
 installed for the requirements.txt to grab everything correctly.
 
