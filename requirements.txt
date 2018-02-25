@@ -38,3 +38,4 @@ Unidecode==0.04.19
 django-memcachedkeys==0.1.0
 simhash==1.7.0
 Jinja2==2.8
+backports.functools-lru-cache==1.5
