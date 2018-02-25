@@ -30,13 +30,17 @@ the user experience will run much slower. You should install it with:
 
 sudo apt-get install redis-server
 
+You need the gettext tools for language translations. Get them with:
+
+sudo apt-get install gettext
+
 Create a python virtual environment. I like virtualenvwrapper, which lets you do something like:
 
 mkvirtualenv wbsrch
 
-You'll probably need to upgrade setuptools. To do so run:
+You'll probably need to upgrade setuptools and pip. To do so run:
 
-pip install --upgrade setuptools
+pip install --upgrade setuptools pip wheel
 
 Then, install the requirements. Note that python-dev, libgeoip-dev and libpq-dev have to be 
 installed for the requirements.txt to grab everything correctly.
@@ -73,8 +77,14 @@ When that's done you can run "python manage.py migrate" in the root of the appli
 (with your virtual environment activated, of course). You have to run this once for each database, like so:
 
 python manage.py migrate
+
 python manage.py migrate --database indexes
+
 python manage.py migrate --database urls
+
+python manage.py migrate --database news
+
+This will probably take a while the first time.
 
 You should absolutely not use the default settings on Postgres because they don't take advange of enough
 RAM. The pgtune utility does a good job of choosing initial settings. The important thing is giving it
