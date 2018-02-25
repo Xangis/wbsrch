@@ -63,6 +63,9 @@ zetaweb - Contains the page data.
 
 news - For news site crawling. Not fully implemented.
 
+There is a config/createdb.sql file that lists the commands needed to create the databases and user with
+permissions. Change the password in there to something different.
+
 Database configuration is stored in zetaweb/settings.py. Once you've created the databases, update that
 file with username and password information.
 

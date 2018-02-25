@@ -3,6 +3,10 @@ This folder contains config files used with WbSrch.
 blockips.conf
   IP block list. Goes in /etc/nginx/
 
+createdb.sql
+  SQL commands to create all required databases, user, and permissions. You will want to
+  choose a different password and enter that into zetaweb/settings.py.
+
 django-wbsrch
   init.d script, goes in /etc/init.d/
 
