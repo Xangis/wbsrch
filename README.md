@@ -71,7 +71,10 @@ There is a config/createdb.sql file that lists the commands needed to create the
 permissions. Change the password in there to something different.
 
 Database configuration is stored in zetaweb/settings.py. Once you've created the databases, update that
-file with username and password information.
+file with username and password information. Note that it relies on a DJANGO_ENVIRONMENT variable that
+you can set on your server in /etc/environment. That's just one way of doing things. Feel free to create
+sections for whatever environments you want, like "development", "test", "qa", "demo", "staging", etc.
+Or just use one config for everything without environment settings.
 
 When that's done you can run "python manage.py migrate" in the root of the application directory
 (with your virtual environment activated, of course). You have to run this once for each database, like so:
