@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-12 12:01-0700\n"
+"POT-Creation-Date: 2018-02-25 12:22-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,10 +36,10 @@ msgstr ""
 #: index.htm.py:20 index.htm.py:37 index.htm.py:46 ip.htm:4 ip.htm.py:8
 #: ip.htm.py:14 mostlinked.htm:17 philosophy.htm:5 philosophy.htm.py:9
 #: philosophy.htm.py:14 policy.htm:5 policy.htm.py:9 policy.htm.py:14
-#: popular.htm:17 privacy.htm:4 privacy.htm.py:11 search.htm:4 search.htm.py:10
-#: search.htm.py:19 search.htm.py:30 search2.htm:4 search2.htm.py:8
-#: search2.htm.py:14 search2.htm.py:17 search2.htm:20 terms.htm:5
-#: terms.htm.py:9 terms.htm.py:14
+#: popular.htm:17 privacy.htm:4 privacy.htm.py:11 search.htm:4
+#: search.htm.py:10 search.htm.py:19 search.htm.py:30 search2.htm:4
+#: search2.htm.py:8 search2.htm.py:14 search2.htm.py:17 search2.htm:20
+#: terms.htm:5 terms.htm.py:9 terms.htm.py:14
 msgid "Search"
 msgstr ""
 
@@ -138,7 +138,8 @@ msgstr ""
 msgid "The Independent Search Engine"
 msgstr ""
 
-#: contact.htm:10 contact.htm.py:16 footer.inc:10 footerwithoutcopyright.inc:11
+#: contact.htm:10 contact.htm.py:16 footer.inc:10
+#: footerwithoutcopyright.inc:11
 msgid "Contact Information"
 msgstr ""
 
