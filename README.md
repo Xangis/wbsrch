@@ -222,18 +222,23 @@ Some, but not all of these, are obvious and easy to detect.
 
 This is a very high-maintenance search engine.
 
-- Domain Links
+### Admin
+
+The admin site URL is at /adm/. You will need to create a superuser login via the command line by running python
+manage.py createsuperuser and following the prompts.
+
+### Domain Links
 
 The python manage.py domain_link_update command needs to run in order for incoming links to a domain to be counted.
 This will influence how well that site ranks. Typically this is run as a daemon via python domain_link_daemon.py
 
-- Index Stats
+### Index Stats
 
 The index stats page is fairly database intensive, since it has to count page and index totals for all languages.
 Python manage.py generate_index_stats will create a static version of that page. You should run it daily, weekly, or
 monthly depending on how much your index changes.
 
-- Vacuuming
+### Vacuuming
 
 Vacuuming the database can get to be problematic and time-consuming if you have a large index. But it will need to be
 done on occasion because the indexer will stop using the indexes if you don't. Increasing the pg stats target in
