@@ -31,7 +31,33 @@ def LanguageBlock(siteinfo, language=None):
     except ObjectDoesNotExist:
         site = BlockedSite()
         site.url = parsedurl.netloc
-        site.reason = 8
+        #(20, 'Unindexed Language - Arabic or Farsi'),
+        if language == 'ar':
+            site.reason = 20
+        #(21, 'Unindexed Language - Chinese'),
+        elif language == 'zh':
+            site.reason = 21
+        #(22, 'Unindexed Language - Hebrew'),
+        elif language == 'he':
+            site.reason = 22
+        #(23, 'Unindexed Language - Hindi'),
+        #(24, 'Unindexed Language - Indonesian or Similar'),
+        #(25, 'Unindexed Language - Japanese'),
+        elif language == 'ja':
+            site.reason = 25
+        #(26, 'Unindexed Language - Khmer'),
+        #(27, 'Unindexed Language - Korean'),
+        elif language == 'ko':
+            site.reason = 27
+        #(28, 'Unindexed Language - Russian or Other Cyrillic'),
+        elif language == 'ru':
+            site.reason = 28
+        #(29, 'Unindexed Language - Vietnamese'),
+        elif language == 'vn':
+            site.reason = 29
+        # Generic "unindexed language" reason.
+        else:
+            site.reason = 8
         site.save()
 
     RequeueRankedKeywordsForDomain(parsedurl.netloc)
@@ -73,13 +99,7 @@ class SiteInfoAdmin(admin.ModelAdmin):
         for item in queryset:
             LanguageBlock(item, 'ar')
 
-    block_domain_language_ar.short_description = "Block the selected domains (Arabic language)."
-
-    def block_domain_language_il(modeladmin, request, queryset):
-        for item in queryset:
-            LanguageBlock(item, 'he')
-
-    block_domain_language_il.short_description = "Block the selected domains (Israeli language)."
+    block_domain_language_ar.short_description = "Block the selected domains (Arabic/Farsi language)."
 
     def block_domain_language_cn(modeladmin, request, queryset):
         for item in queryset:
@@ -87,11 +107,35 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     block_domain_language_cn.short_description = "Block the selected domains (Chinese language)."
 
-    def block_domain_language_ru(modeladmin, request, queryset):
+    def block_domain_language_hi(modeladmin, request, queryset):
         for item in queryset:
-            LanguageBlock(item, 'ru')
+            LanguageBlock(item, 'hi')
 
-    block_domain_language_ru.short_description = "Block the selected domains (Russian language)."
+    block_domain_language_hi.short_description = "Block the selected domains (Hindi language)."
+
+    def block_domain_language_il(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'he')
+
+    block_domain_language_il.short_description = "Block the selected domains (Israeli language)."
+
+    def block_domain_language_km(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'km')
+
+    block_domain_language_km.short_description = "Block the selected domains (Khmer language)."
+
+    def block_domain_language_in(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'in')
+
+    block_domain_language_in.short_description = "Block the selected domains (Indonesian or similar language)."
+
+    def block_domain_language_ja(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'ja')
+
+    block_domain_language_ja.short_description = "Block the selected domains (Japanese language)."
 
     def block_domain_language_ko(modeladmin, request, queryset):
         for item in queryset:
@@ -99,11 +143,11 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     block_domain_language_ko.short_description = "Block the selected domains (Korean language)."
 
-    def block_domain_language_ja(modeladmin, request, queryset):
+    def block_domain_language_ru(modeladmin, request, queryset):
         for item in queryset:
-            LanguageBlock(item, 'ja')
+            LanguageBlock(item, 'ru')
 
-    block_domain_language_ja.short_description = "Block the selected domains (Japanese language)."
+    block_domain_language_ru.short_description = "Block the selected domains (Russian language)."
 
     def block_domain_language_vn(modeladmin, request, queryset):
         for item in queryset:
@@ -403,7 +447,8 @@ class SiteInfoAdmin(admin.ModelAdmin):
                move_to_spanish, move_to_french, move_to_italian, move_to_portuguese, move_to_polish, move_to_swedish,
                move_to_finnish, move_to_dutch, move_to_czech,
                move_to_greek, move_to_hungarian, move_to_turkish, block_domain_language_ar, 
-               block_domain_language_cn, block_domain_language_il, block_domain_language_ja, block_domain_language_ko, 
+               block_domain_language_cn, block_domain_language_il, block_domain_language_hi, block_domain_language_in, 
+               block_domain_language_ja, block_domain_language_km, block_domain_language_ko, 
                block_domain_language_ru, block_domain_language_vn,
                move_to_english]
 
