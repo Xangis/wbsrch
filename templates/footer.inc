@@ -8,6 +8,7 @@
 <a href="/privacy/">{% trans "Privacy Policy" %}</a> | 
 <a href="/faq/">{% trans "Frequently Asked Questions" %}</a> | <a href="/criteria/">{% trans "Ranking Criteria" %}</a> | 
 <a href="/dmca/">{% trans "DMCA and Copyright Policy" %}</a> | <a href="/contact/">{% trans "Contact Information" %}</a></p>
+<!--
 <br/>
 <p class="subhead">{% trans "Other languages" %}:</p>
 <nav class="language">
@@ -27,6 +28,7 @@
 <li><a href="https://sv.wbsrch.com/" alt="Svenska" title="Svenska" />Svenska (SV)</a></li>
 <li><a href="https://tr.wbsrch.com/" alt="Türkçe" title="Türkçe" />Türkçe (TR)</a></li> 
 </ul>
+-->
 </nav>
 <br/>
 {% ssi '/var/django/wbsrch/templates/copyright.inc' %}
