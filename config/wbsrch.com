@@ -1,37 +1,16 @@
 server {
-        listen 80;
-        server_name 216.151.17.10;
-        rewrite ^/(.*) https://wbsrch.com/$1;
-       }
-
-server {
-        listen 80;
-        server_name 216.151.17.12;
-        rewrite ^/(.*) https://wbsrch.com/$1;
-       }
-
-server {
 	listen 80;
         listen 443 ssl;
 	server_name www.wbsrch.com;
+        ssl_certificate /etc/letsencrypt/live/wbsrch.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/wbsrch.com/privkey.pem;
         ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-        ssl_certificate /etc/nginx/certs/wbsrch.crt;
-        ssl_certificate_key /etc/nginx/certs/wbsrch.key;
+        ssl_ciphers HIGH:!aNULL:!MD5;
 	rewrite ^/(.*) https://wbsrch.com/$1 permanent;
 	}
 
 server {
 	listen 80;
-        listen 443 ssl;
-        server_name ca.wbsrch.com et.wbsrch.com ha.wbsrch.com hr.wbsrch.com is.wbsrch.com lt.wbsrch.com lv.wbsrch.com ro.wbsrch.com rw.wbsrch.com sl.wbsrch.com sn.wbsrch.com so.wbsrch.com sw.wbsrch.com wo.wbsrch.com yo.wbsrch.com;
-        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-        ssl_certificate /etc/nginx/certs/wbsrch.crt;
-        ssl_certificate_key /etc/nginx/certs/wbsrch.key;
-	rewrite ^/(.*) https://wbsrch.com/ permanent;
-	}
-
-server {
-	listen 80 default;
 	server_name *.wbsrch.com wbsrch.com;
         listen 443 ssl;
         root /var/django/wbsrch/templates;
@@ -43,9 +22,10 @@ server {
         gzip_proxied any;
         client_max_body_size 2M;
 
-	ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-        ssl_certificate /etc/nginx/certs/wbsrch.crt;
-        ssl_certificate_key /etc/nginx/certs/wbsrch.key;
+        ssl_certificate /etc/letsencrypt/live/wbsrch.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/wbsrch.com/privkey.pem;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_ciphers HIGH:!aNULL:!MD5;
 
         if ($ssl_protocol = "") {
             return 301 https:$host$request_uri;
