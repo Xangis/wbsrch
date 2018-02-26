@@ -1546,6 +1546,9 @@ def IsHtmlUrl(url):
     non-HTML urls.
     """
     url = url.lower()
+    # TODO: .cab is actually a valid TLD extension. Make sure that we CAN retrieve .cab
+    # domains but not .cab files by parsing the URL and checking against the file portion
+    # and not the domain portion rather than just blindly checking the end of the whole URL.
     badextensions = [
                      u'.asm', u'.bat', u'.css', u'.csv', u'.dmg', u'.eps', u'.f4v', u'.git',
                      u'.exe', u'.msi', u'.pdf', u'.xpi', u'.xap', u'.bz2', u'.tar', u'.tgz',

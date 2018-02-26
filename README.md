@@ -118,11 +118,42 @@ Everything runs based on daemons. The crawler and indexer daemons are most impor
 of daemons can run. It should depend on how much RAM, how many processor cores, and how much disk
 space the system has.
 
+### The Alexa Top Million URLs
+
 One common option for seeding the initial crawl is the Alexa top 1 million sites. There is a script,
-alexa_import, that will do that. Be warned, though, that it's easy to game the Alexa rankings, so
+alexa_import.py, that will do that. Be warned, though, that it's easy to game the Alexa rankings, so
 there is a LOT of spam, especially in the bottom half. There are also a lot of the type of thing
 that ad networks won't let you place ads against -- porn, gambling, actual nazis, pill spam, malware,
-etc.
+etc. To run the alexa_import script, run:
+
+python alexa_import.py
+
+When it runs it will add any new domains found to the domains portion of the database.
+
+These files will be created as output:
+
+alexa_blocked.txt - URLs that were blocked from crawling due to banned domains, invalid URLs, etc.
+
+alexa_new.txt - List of all new domain URLs found in the file. You may want to crawl these immediately.
+
+alexa_processed.txt - List of all of the URLs that were processed from the file.
+
+alexa_skipped.txt - URLs that were skipped.
+
+### Crawling a List of URLs
+
+If you have a list of URLs in a text file, one per line like the alexa_new.txt file generates, you can 
+crawl them with this command (the -s 1 means crawl one URL per second and you may want to set that to 0):
+
+python manage.py crawl -f "alexa_new.txt" -m 1000000 -s 1
+
+### Crawling a Single URL
+
+To crawl a single URL, run this command:
+
+python manage.py crawl -j "https://www.example.com"
+
+### Word Lists
 
 When building the initial index, it may be helpful to use the language word lists in the /wordlists 
 folder. You can queue up a dictioary of words with:
@@ -133,6 +164,8 @@ This will add all of the words in the tr.txt.csv file to the pending index table
 index with the "python manage.py index" command. Note that you have to have some pages crawled, or
 nothing will be indexed.
 
+### Structure
+
 The system was originally designed with three different machines - a crawler, an indexer, and a web
 server. The crawler ran on the same system as the urls database, the indexer on the same system as
 the "zetaweb" page database, and the web server runs on the same system as the indexes. All three of
@@ -140,6 +173,8 @@ these databases can run on a single machine without any trouble.
 
 A rule of thumb (at least for low-end dedicated servers) is to have 4 crawlers per core or one indexer
 per core. Adjusting the "sleep time" between pages or index terms can be used for reducing load.
+
+### Indexin Updates
 
 One of the hardest problems with this search engine is keeping the indexes up to date as new pages are
 crawled. Since everything is based on computed indexes, a newly crawled page can take a long time to
