@@ -236,7 +236,7 @@ manage.py createsuperuser and following the prompts.
 
 ### Domain Links
 
-The python manage.py domain_link_update command needs to run in order for incoming links to a domain to be counted.
+The python manage.py domain_data_update command needs to run in order for incoming links to a domain to be counted.
 This will influence how well that site ranks. Typically this is run as a daemon via python domain_link_daemon.py
 
 ### Index Stats
