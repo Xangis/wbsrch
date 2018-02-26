@@ -164,6 +164,13 @@ This will add all of the words in the tr.txt.csv file to the pending index table
 index with the "python manage.py index" command. Note that you have to have some pages crawled, or
 nothing will be indexed.
 
+### Indexing Pending Word Lists
+
+If you have a bunch of terms in the pending index list, possibly from the add_new_to_pending command,
+you can index them with the python manage.py index command, like so (for English):
+
+python manage.py index -l en -p -m 2000000 -s 0
+
 ### Structure
 
 The system was originally designed with three different machines - a crawler, an indexer, and a web
@@ -174,7 +181,7 @@ these databases can run on a single machine without any trouble.
 A rule of thumb (at least for low-end dedicated servers) is to have 4 crawlers per core or one indexer
 per core. Adjusting the "sleep time" between pages or index terms can be used for reducing load.
 
-### Indexin Updates
+### Indexing Updates
 
 One of the hardest problems with this search engine is keeping the indexes up to date as new pages are
 crawled. Since everything is based on computed indexes, a newly crawled page can take a long time to
