@@ -32,7 +32,7 @@ server {
         }
 
         location ~ ^/admin/static/ {
-            root /home/xangis/.virtualenvs/wb/lib/python2.7/site-packages/django/contrib/;     
+            root /home/xangis/.virtualenvs/wbsrch/lib/python2.7/site-packages/django/contrib/;     
         }
 
         location /maintenance.htm {
