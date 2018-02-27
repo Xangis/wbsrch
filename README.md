@@ -251,6 +251,17 @@ Vacuuming the database can get to be problematic and time-consuming if you have 
 done on occasion because the indexer will stop using the indexes if you don't. Increasing the pg stats target in
 the Postgres config will help with index use.
 
+# Security
+
+Spambots LOVE this search engine.
+
+One thing that's pretty important is blocking IPs of sites that spam search queries as if they're going to find a
+way to post spam links, comments, or SQL injections. The config/blockips.conf file is a good start, and copying that to
+/etc/nginx/blockips.conf and using the config/nginx.conf file to enable it will protect from a lot of spammers.
+
+It's probably a better idea to use your existing nginx.conf file and add the lines that reference blockips.conf from
+nginx.conf to it manually, since the one in this source distribution is from an older version of Nginx.
+
 # Conclusion
 
 You should absolutely not use the WbSrch engine if you want to build a full-sized consumer-facing search engine.
