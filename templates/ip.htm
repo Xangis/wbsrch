@@ -28,7 +28,7 @@
 <h3 class="indented spacebelow">Domains Found at This IP</h3>
 {% for domain in domains %}
 <p>{% trans "Domain" %}: <a href="/domain/?q={{ domain.url }}" rel="nofollow">{{ domain.url }}</a>
-{% if domain.language_association %}{% trans "Language" %}: {{ domain.language_association }} ({{ domain.language_association|language_name_local }}){% endif %}
+{% if domain.language_association %}{% trans "Language" %}: {{ domain.language_association }} ({{ domain.language_association }}){% endif %}
 {% if domain.language_association and domain.language_association != language_code %}<a href="https://{{ domain.language_association }}.wbsrch.com/domain/?q={{ domain.url }}">Check this domain on the {{ domain.language_association|language_name }} site.</a>{% endif %}
 <br/>
 {% endfor %}
