@@ -112,6 +112,15 @@ have it, sudo apt-get install node-uglify.
 
 - Compile language translations: Run ./languages.sh to compile language translations.
 
+### Django Q
+
+This app uses Django-Q as its task queue. In order to run it, you'll need to run this command:
+
+nohup python manage.py qcluster > /dev/null &
+
+Failure to do so will cause search results and results clicks not to be logged. They're be queued, so that
+they'll show up when you finally do run django-q, but the dates will all be wrong.
+
 # Crawling and Indexing
 
 Everything runs based on daemons. The crawler and indexer daemons are most important, and any number
@@ -216,11 +225,17 @@ In addition, multilingual sites use many schemes, including subdomains, subdirec
 common:
 
 http://de.example.com/page.htm
+
 http://example.com/de/page.htm
+
 http://example.com/de-de/page.htm
+
 http://example.com/page.htm?lang=de
+
 http://example.com/page.htm?hl=de_de
+
 http://example.com/page_de.htm
+
 http://de.example.com/page.htm?lang=en-us
 
 Some, but not all of these, are obvious and easy to detect.
