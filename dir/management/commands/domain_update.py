@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand, CommandError
+from django.core import serializers
 from django.utils import timezone
 from optparse import make_option
 from dir.models import DomainInfo
 from dir.domain import GetDomainInfo
+from django.db.utils import DataError
 import time
 
 class Command(BaseCommand):
@@ -118,8 +120,10 @@ class Command(BaseCommand):
             if detailed:
                 print 'Created: {0}, Expires: {1}, Update Date: {2}, Name: {3}, City: {4}, Country: {5}, State: {6}, Address: {7}, Org: {8}, Registrar: {9}, Zipcode: {10}, Nameservers: {11}, EMails: {12}'.format(
                     domain.domain_created, domain.domain_expires, domain.domain_updated, domain.whois_name, domain.whois_city, domain.whois_country, domain.whois_state, domain.whois_address, domain.whois_org, domain.whois_registrar, domain.whois_zipcode, domain.whois_nameservers, domain.whois_emails)
-            domain.save()
-            #except Exception, e:
-            #    print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
+            try:
+                domain.save()
+            except DataError, e:
+                print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
+                print(serializers.serialize("json", [domain,], indent=4))
             # Even if the query failed, we should update the last-checked time so we don't keep re-checking bad domains.
             time.sleep(options['sleep'])
