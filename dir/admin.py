@@ -55,6 +55,9 @@ def LanguageBlock(siteinfo, language=None):
         #(29, 'Unindexed Language - Vietnamese'),
         elif language == 'vn':
             site.reason = 29
+        #(30, 'Unindexed Language - Thai'),
+        elif language == 'th':
+            site.reason = 30
         # Generic "unindexed language" reason.
         else:
             site.reason = 8
@@ -148,6 +151,12 @@ class SiteInfoAdmin(admin.ModelAdmin):
             LanguageBlock(item, 'ru')
 
     block_domain_language_ru.short_description = "Block the selected domains (Russian language)."
+
+    def block_domain_language_th(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'th')
+
+    block_domain_language_th.short_description = "Block the selected domains (Thai language)."
 
     def block_domain_language_vn(modeladmin, request, queryset):
         for item in queryset:
@@ -449,7 +458,7 @@ class SiteInfoAdmin(admin.ModelAdmin):
                move_to_greek, move_to_hungarian, move_to_turkish, block_domain_language_ar, 
                block_domain_language_cn, block_domain_language_il, block_domain_language_hi, block_domain_language_in, 
                block_domain_language_ja, block_domain_language_km, block_domain_language_ko, 
-               block_domain_language_ru, block_domain_language_vn,
+               block_domain_language_ru, block_domain_language_th, block_domain_language_vn,
                move_to_english]
 
 class SearchReportAdmin(admin.ModelAdmin):

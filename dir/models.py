@@ -117,6 +117,7 @@ EXCLUDED_SITE_REASONS = (
         (26, 'Unindexed Language - Khmer'),
         (27, 'Unindexed Language - Korean'),
         (28, 'Unindexed Language - Russian or Other Cyrillic'),
+        (30, 'Unindexed Language - Thai'),
         (29, 'Unindexed Language - Vietnamese'),
         # Warez/torrent/crack/piracy sites.
         (9, 'Piracy'),
