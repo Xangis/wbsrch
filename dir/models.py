@@ -85,13 +85,13 @@ blocked_language_names = {
 'belarusian': 'be',
 'farsi': 'fa',
 'persian': 'fa',
-'serbian', 'sr',
-'georgian', 'ge',
-'armenian', 'am',
-'azerbaijani', 'az',
-'hebrew', 'he',
-'japanese', 'ja',
-'korean', 'ko',
+'serbian': 'sr',
+'georgian': 'ge',
+'armenian': 'am',
+'azerbaijani': 'az',
+'hebrew': 'he',
+'japanese': 'ja',
+'korean': 'ko',
 }
 
 month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
