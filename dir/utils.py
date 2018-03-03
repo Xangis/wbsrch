@@ -649,7 +649,7 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
         if domain.domains_linking_in:
             linkrank = GetLinkRank(domain.domains_linking_in)
             if verbose:
-                rulematches.append('Bonus {0} for {1} links'.format(linkrak, domain.domains_linking_in))
+                rulematches.append('Bonus {0} for {1} links'.format(linkrank, domain.domains_linking_in))
             bonus += linkrank
         # One point bonus for the site being tagged as the language we're looking in.
         # This means that sites that have been marked as the correct language by a
@@ -1365,10 +1365,10 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
                 rulematches.append('Lose half of points for parked domain.')
             value /= 2
         # These phrases mean that a site is possibly parked, but almost definitely garbage.
-        if (u'Resources and Information.' in item.pagetitle) or (u'For search results please CLICK HERE' in pagetext):
+        if (u'Resources and Information.' in item.pagetitle) or (u'For search results please CLICK HERE' in item.pagetext):
             value -= 8
     # Empty pages without much real content, are penalized severely.
-    if not item.pagetext or (len(item.text) < 3):
+    if not item.pagetext or (len(item.pagetext) < 3):
         value -= 20
         if verbose:
             rulematches.append('Lose 20 points for page text length less than 3.')
@@ -1673,6 +1673,10 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
             del queryparams['Sess']
         if queryparams.has_key('SESSION'):
             del queryparams['SESSION']
+        if queryparams.has_key('token'):
+            del queryparams['token']
+        if queryparams.has_key('responseToken'):
+            del queryparams['responseToken']
         if queryparams.has_key('osCsid'):
             del queryparams['osCsid']
         if queryparams.has_key('eSID'):
