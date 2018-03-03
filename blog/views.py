@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import render_to_response
 from tagging.fields import TagField, Tag
@@ -21,7 +22,10 @@ def post_url(request, post_url):
     return render_to_response('article.htm', {'tags': tags, 'posts': posts, 'description': description, 'title': title, 'recent': recent })
 
 def article_category(request, category):
-    tag = Tag.objects.get(name=category)
+    try:
+        tag = Tag.objects.get(name=category)
+    except ObjectDoesNotExist:
+        raise Http404
     posts = TaggedItem.objects.get_by_model(BlogPost, tag).filter(visible=True).order_by('-post_time')
     tags = Tag.objects.usage_for_model(BlogPost, counts=True, filters={'visible': True })
     if posts.count() < 1:
