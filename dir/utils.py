@@ -725,7 +725,7 @@ def GetMimeTypeModifier(mimetype, language='en'):
                     u'text/html; charset: UTF-8; charset=UTF-8', u'text/html; Charset=UTF-8;charset=UTF-8', u'text/html; encoding=utf-8;charset=UTF-8',
                     u'text/HTML; charset=utf-8', u'text/HTML; Charset=utf-8', u'Text/html; charset=UTF-8', u'Text/Html; Charset=Utf-8',
                     u'text/html; UTF-8; charset=UTF-8', u'TEXT/HTML; charset=UTF-8', u'text/html; Charset=utf8',
-                    u'Text/HTML; charset=utf-8', u'text/HTML; charset=UTF-8', u'text/html;Charset=UTF-8']:
+                    u'Text/HTML; charset=utf-8', u'text/HTML; charset=UTF-8', u'text/html;Charset=UTF-8', u'text/html ; charset=UTF-8']:
         return 1.0
     # I have no idea how to treat the xhtml+xml MIME type. No effect right now.
     elif mimetype in [u'application/xhtml+xml; charset=utf-8',]:
@@ -752,7 +752,7 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html; Charset=ISO-8859-15', u'text/html;charset=iso-8859-15', u'text/html; charset=iso8859-15',
                       u'text/html, charset=iso-8859-15', u'text/html; charset=iso-8859-15;', u'text/html;charset=Windows-1252',
                       u'text/html; Charset=Windows-1252', u'text/HTML; Charset=windows-1252', u'text/html; Charset=iso-8859-15',
-                      u'text/html; charset=ISO8859-15']:
+                      u'text/html; charset=ISO8859-15', u'text/html; charset="iso-8859-15"']:
         return 0.25
     # No point modifier for unknown or undeclared charset.
     elif mimetype in [u'text/html; charset=_CHARSET',]:
@@ -793,7 +793,7 @@ def GetMimeTypeModifier(mimetype, language='en'):
     # ISO-8859-7 for Greek, as is Windows-28597 and Windows-1253
     elif mimetype in [u'text/html; charset=iso-8859-7', u'text/html; charset=windows-1253', u'text/html; charset=ISO-8859-7', 
                       u'text/html; charset=Windows-1253', u'text/html;charset=iso-8859-7', u'text/html; Charset=windows-1253',
-                      u'text/html;charset=windows-1253']:
+                      u'text/html;charset=windows-1253', u'text/html; Charset=Windows-1253']:
         if language in ['el',]:
             return 1.0
         else:
