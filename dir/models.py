@@ -84,7 +84,14 @@ blocked_language_names = {
 'bulgarian': 'bg',
 'belarusian': 'be',
 'farsi': 'fa',
-'persian': 'fa'
+'persian': 'fa',
+'serbian', 'sr',
+'georgian', 'ge',
+'armenian', 'am',
+'azerbaijani', 'az',
+'hebrew', 'he',
+'japanese', 'ja',
+'korean', 'ko',
 }
 
 month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -108,8 +115,9 @@ EXCLUDED_SITE_REASONS = (
         (7, 'Spam or Computer Generated Content'),
         # Not a language we include in our index.
         (8, 'Unindexed Language - Unspecified'),
-        (32, 'Unindexed Language - Armenian'),
         (20, 'Unindexed Language - Arabic or Farsi'),
+        (32, 'Unindexed Language - Armenian'),
+        (34, 'Unindexed Language - Azerbaijani'),
         (21, 'Unindexed Language - Chinese'),
         (31, 'Unindexed Language - Georgian'),
         (22, 'Unindexed Language - Hebrew'),
@@ -119,6 +127,7 @@ EXCLUDED_SITE_REASONS = (
         (26, 'Unindexed Language - Khmer'),
         (27, 'Unindexed Language - Korean'),
         (28, 'Unindexed Language - Russian or Other Cyrillic'),
+        (33, 'Unindexed Language - Serbian'),
         (30, 'Unindexed Language - Thai'),
         (29, 'Unindexed Language - Vietnamese'),
         # Warez/torrent/crack/piracy sites.
