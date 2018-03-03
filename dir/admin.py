@@ -619,76 +619,82 @@ class SettingAdmin(admin.ModelAdmin):
     search_fields = ('name', 'value')
 
 class SiteInfoAfterZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZZZZZZZ')
 
 class SiteInfoH1AfterZAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagefirstheadtag__gt='ZZZZZZZZZZ')
 
 class SiteInfoH2AfterZAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagefirsth2tag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagefirsth2tag__gt='ZZZZZZZZZZ')
 
 class SiteInfoH3AfterZAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagefirsth3tag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth3tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagefirsth3tag__gt='ZZZZZZZZZZ')
 
 class SiteInfoGreekAlphabetAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='Α', pagetitle__lt='ΩΩΩΩΩ')
 
 class SiteInfoH1GreekAlphabetAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagefirstheadtag__gt='Α', pagefirstheadtag__lt='ΩΩΩΩΩ')
 
 class SiteInfoBeforeZeroAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__lt='0', pagetitle__gt=' ')
 
 class SiteInfoH1BeforeZeroAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagefirstheadtag__lt='0', pagefirstheadtag__gt=' ')
 
 class SiteInfoH2BeforeZeroAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagefirsth2tag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagefirsth2tag__lt='0', pagefirsth2tag__gt=' ')
 
 class SiteInfoH3BeforeZeroAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagefirsth3tag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth3tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagefirsth3tag__lt='0', pagefirsth3tag__gt=' ')
 
 class SiteInfoEndingInADAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ad')
 
 class SiteInfoEndingInAEAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ae')
 
 class SiteInfoEndingInAEROAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.aero')
 
 class SiteInfoEndingInAFAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.af')
 
 class SiteInfoEndingInAIAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ai')
 
 class SiteInfoEndingInALAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.al')
 
@@ -698,20 +704,22 @@ class SiteInfoEndingInAMAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.am')
 
 class SiteInfoEndingInANAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.an')
 
 class SiteInfoEndingInAOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ao')
 
 class SiteInfoEndingInAQAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.aq')
 
 class SiteInfoEndingInARAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ar')
 
@@ -721,82 +729,94 @@ class SiteInfoEndingInASIAAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.asia')
 
 class SiteInfoEndingInATAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.at')
 
 class SiteInfoEndingInAUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.au')
 
 class SiteInfoEndingInAWAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.aw')
 
 class SiteInfoEndingInAZAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.az')
 
 class SiteInfoEndingInBAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ba')
 
 class SiteInfoEndingInBBAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bb')
 
 class SiteInfoEndingInBDAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bd')
 
 class SiteInfoEndingInBEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.be')
 
 class SiteInfoEndingInBERLINAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.berlin')
 
 class SiteInfoEndingInBFAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bf')
 
 class SiteInfoEndingInBGAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bg')
 
 class SiteInfoEndingInBHAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bh')
 
 class SiteInfoEndingInBIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bi')
 
 class SiteInfoEndingInBIZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.biz')
 
 class SiteInfoEndingInBJAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bj')
 
 class SiteInfoEndingInBNAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bn')
 
 class SiteInfoEndingInBOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bo')
 
 class SiteInfoEndingInBRAdmin(SiteInfoAdmin):
-    pass
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
+    def get_queryset(self, request):
+        return self.model.objects.filter(rooturl__endswith='.br')
 
 class SiteInfoEndingInBSAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
@@ -804,10 +824,12 @@ class SiteInfoEndingInBSAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.bs')
 
 class SiteInfoEndingInBTAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bt')
 
 class SiteInfoEndingInBWAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bw')
 
@@ -817,237 +839,282 @@ class SiteInfoEndingInBYAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.by')
 
 class SiteInfoEndingInBZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.bz')
 
 class SiteInfoEndingInCAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ca')
 
 class SiteInfoEndingInCATAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cat')
 
 class SiteInfoEndingInCCAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cc')
 
 class SiteInfoEndingInCDAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cd')
 
 class SiteInfoEndingInCFAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cf')
 
 class SiteInfoEndingInCGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cg')
 
 class SiteInfoEndingInCHAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ch')
 
 class SiteInfoEndingInCIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ci')
 
 class SiteInfoEndingInCKAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ck')
 
 class SiteInfoEndingInCLAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cl')
 
 class SiteInfoEndingInCOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.co')
 
 class SiteInfoEndingInCOMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.com')
 
 class SiteInfoEndingInCUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cu')
 
 class SiteInfoEndingInCVAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cv')
 
 class SiteInfoEndingInCWAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cw')
 
 class SiteInfoEndingInCMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cm')
 
 class SiteInfoEndingInCNAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cn')
 
 class SiteInfoEndingInCRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cr')
 
 class SiteInfoEndingInCUAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cu')
 
 class SiteInfoEndingInCVAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cv')
 
 class SiteInfoEndingInCXAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cx')
 
 class SiteInfoEndingInCYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cy')
 
 class SiteInfoEndingInCZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.cz')
 
 class SiteInfoEndingInDEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.de')
 
 class SiteInfoEndingInDJAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.dj')
 
 class SiteInfoEndingInDKAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.dk')
 
 class SiteInfoEndingInDMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.dm')
 
 class SiteInfoEndingInDOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.do')
 
 class SiteInfoEndingInDZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.dz')
 
 class SiteInfoEndingInECAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ec')
 
 class SiteInfoEndingInEDUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.edu')
 
 class SiteInfoEndingInEEAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ee')
 
 class SiteInfoEndingInETAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.et')
 
 class SiteInfoEndingInEGAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.eg')
 
 class SiteInfoEndingInERAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.er')
 
 class SiteInfoEndingInESAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.es')
 
 class SiteInfoEndingInEUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.eu')
 
 class SiteInfoEndingInEUSAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.eus')
 
 class SiteInfoEndingInFIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.fi')
 
 class SiteInfoEndingInFJAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.fj')
 
 class SiteInfoEndingInFKAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.fk')
 
 class SiteInfoEndingInFRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.fr')
 
 class SiteInfoEndingInFRLAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.frl')
 
 class SiteInfoEndingInFOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.fo')
 
 class SiteInfoEndingInGAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ga')
 
 class SiteInfoEndingInGALAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gal')
 
 class SiteInfoEndingInGDAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gd')
 
 class SiteInfoEndingInGEAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ge')
 
 class SiteInfoEndingInGFAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gf')
 
 class SiteInfoEndingInGHAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gh')
 
 class SiteInfoEndingInGIAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gi')
 
 class SiteInfoEndingInGLAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gl')
 
 class SiteInfoEndingInGMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gm')
 
 class SiteInfoEndingInGNAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gn')
 
 class SiteInfoEndingInGQAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gq')
 
@@ -1057,77 +1124,87 @@ class SiteInfoEndingInGRAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.gr')
 
 class SiteInfoEndingInGTAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gt')
 
 class SiteInfoEndingInGUAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gu')
 
 class SiteInfoEndingInGURUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.guru')
 
 class SiteInfoEndingInGWAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gw')
 
 class SiteInfoEndingInGYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.gy')
 
 class SiteInfoEndingInHKAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.hk')
 
 class SiteInfoEndingInHNAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.hn')
 
 class SiteInfoEndingInHMAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.hm')
 
 class SiteInfoEndingInHRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.hr')
 
 class SiteInfoEndingInHUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.hu')
 
 class SiteInfoEndingInHTAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ht')
 
 class SiteInfoEndingInIDAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.id')
 
 class SiteInfoEndingInILAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.il')
 
 class SiteInfoEndingInINAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.in')
 
 class SiteInfoEndingInINFOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.info')
 
 class SiteInfoEndingInIQAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.iq')
 
 class SiteInfoEndingInIRAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ir')
 
@@ -1137,11 +1214,12 @@ class SiteInfoEndingInISAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.is')
 
 class SiteInfoEndingInITAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.it')
 
 class SiteInfoEndingInJOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.jo')
 
@@ -1151,37 +1229,42 @@ class SiteInfoEndingInJPAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.jp')
 
 class SiteInfoEndingInKEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ke')
 
 class SiteInfoEndingInKGAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.kg')
 
 class SiteInfoEndingInKHAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.kh')
 
 class SiteInfoEndingInKIAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ki')
 
 class SiteInfoEndingInKOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ko')
 
 class SiteInfoEndingInKMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.km')
 
 class SiteInfoEndingInKNAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.kn')
 
 class SiteInfoEndingInKPAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.kp')
 
@@ -1191,7 +1274,7 @@ class SiteInfoEndingInKRAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.kr')
 
 class SiteInfoEndingInKWAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.kw')
 
@@ -1201,290 +1284,337 @@ class SiteInfoEndingInKZAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.kz')
 
 class SiteInfoEndingInLAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.la')
 
 class SiteInfoEndingInLBAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.lb')
 
 class SiteInfoEndingInLCAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.lc')
 
 class SiteInfoEndingInLIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.li')
 
 class SiteInfoEndingInLKAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.lk')
 
 class SiteInfoEndingInLRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.lr')
 
 class SiteInfoEndingInLSAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ls')
 
 class SiteInfoEndingInLUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.lu')
 
 class SiteInfoEndingInLTAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.lt')
 
 class SiteInfoEndingInLVAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.lv')
 
 class SiteInfoEndingInMAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ma')
 
 class SiteInfoEndingInMCAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mc')
 
 class SiteInfoEndingInMDAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.md')
 
 class SiteInfoEndingInMEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.me')
 
 class SiteInfoEndingInMGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mg')
 
 class SiteInfoEndingInMKAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mk')
 
 class SiteInfoEndingInMLAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ml')
 
 class SiteInfoEndingInMMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mm')
 
 class SiteInfoEndingInMNAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mn')
 
 class SiteInfoEndingInMOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mo')
 
 class SiteInfoEndingInMOBIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mobi')
 
 class SiteInfoEndingInMQAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mq')
 
 class SiteInfoEndingInMRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mr')
 
 class SiteInfoEndingInMUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mu')
 
 class SiteInfoEndingInMVAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mv')
 
 class SiteInfoEndingInMWAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mw')
 
 class SiteInfoEndingInMXAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mx')
 
 class SiteInfoEndingInMYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.my')
 
 class SiteInfoEndingInMZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mz')
 
 class SiteInfoEndingInNAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.na')
 
 class SiteInfoEndingInNEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ne')
 
 class SiteInfoEndingInNETAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.net')
 
 class SiteInfoEndingInNGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ng')
 
 class SiteInfoEndingInNIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ni')
 
 class SiteInfoEndingInNINJAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ninja')
 
 class SiteInfoEndingInNLAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.nl')
 
 class SiteInfoEndingInNOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.no')
 
 class SiteInfoEndingInNUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.nu')
 
 class SiteInfoEndingInNZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.nz')
 
 class SiteInfoEndingInOMAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.om')
 
 class SiteInfoEndingInORGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.org')
 
 class SiteInfoEndingInPAAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pa')
 
 class SiteInfoEndingInPARISAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.paris')
 
 class SiteInfoEndingInPEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pe')
 
 class SiteInfoEndingInPFAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pf')
 
 class SiteInfoEndingInPGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pg')
 
 class SiteInfoEndingInPHAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ph')
 
 class SiteInfoEndingInPICSAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pics')
 
 class SiteInfoEndingInPLAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pl')
 
 class SiteInfoEndingInPMAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pm')
 
 class SiteInfoEndingInPNAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pn')
 
 class SiteInfoEndingInNPAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.po')
 
 class SiteInfoEndingInPORNAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.porn')
 
 class SiteInfoEndingInPRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pr')
 
 class SiteInfoEndingInPTAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.pt')
 
 class SiteInfoEndingInPYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.py')
 
 class SiteInfoEndingInQAAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.qa')
 
 class SiteInfoEndingInROAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ro')
 
 class SiteInfoEndingInRSAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.rs')
 
 class SiteInfoEndingInRUAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ru')
 
 class SiteInfoEndingInRWAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.rw')
 
 class SiteInfoEndingInSAAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sa')
 
 class SiteInfoEndingInSBAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sb')
 
 class SiteInfoEndingInSCAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sc')
 
 class SiteInfoEndingInSDAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sd')
 
 class SiteInfoEndingInSEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.se')
 
 class SiteInfoEndingInSEXYAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sexy')
 
@@ -1494,35 +1624,42 @@ class SiteInfoEndingInSGAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.sg')
 
 class SiteInfoEndingInSIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.si')
 
 class SiteInfoEndingInSKAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sk')
 
 class SiteInfoEndingInSLAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sl')
 
 class SiteInfoEndingInSMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sm')
 
 class SiteInfoEndingInSNAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sn')
 
 class SiteInfoEndingInSOAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.so')
 
 class SiteInfoEndingInSRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sr')
 
 class SiteInfoEndingInSTAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.st')
 
@@ -1532,26 +1669,32 @@ class SiteInfoEndingInSUAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.su')
 
 class SiteInfoEndingInSVAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sv')
 
 class SiteInfoEndingInSYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sy')
 
 class SiteInfoEndingInSXAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sx')
 
 class SiteInfoEndingInSZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.sz')
 
 class SiteInfoEndingInTDAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.td')
 
 class SiteInfoEndingInTGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tg')
 
@@ -1566,85 +1709,97 @@ class SiteInfoEndingInTJAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.tj')
 
 class SiteInfoEndingInTKAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tk')
 
 class SiteInfoEndingInTLAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tl')
 
 class SiteInfoEndingInTMAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tm')
 
 class SiteInfoEndingInTOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.to')
 
 class SiteInfoEndingInTPAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tp')
 
 class SiteInfoEndingInTRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tr')
 
 class SiteInfoEndingInTRAVELAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.travel')
 
 class SiteInfoEndingInTTAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tt')
 
 class SiteInfoEndingInTVAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tv')
 
 class SiteInfoEndingInTWAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tw')
 
 class SiteInfoEndingInTZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.tz')
 
 class SiteInfoEndingInUAAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ua')
 
 class SiteInfoEndingInUGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ug')
 
 class SiteInfoEndingInUKAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.uk')
 
 class SiteInfoEndingInUSAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.us')
 
 class SiteInfoEndingInUYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.uy')
 
 class SiteInfoEndingInUZAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.uz')
 
 class SiteInfoEndingInVAAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.va')
 
 class SiteInfoEndingInVEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ve')
 
@@ -1654,39 +1809,42 @@ class SiteInfoEndingInVNAdmin(SiteInfoAdmin):
         return self.model.objects.filter(rooturl__endswith='.vn')
 
 class SiteInfoEndingInWFAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.wf')
 
 class SiteInfoEndingInWSAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ws')
 
 class SiteInfoEndingInXMLAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(url__endswith='.xml')
 
 class SiteInfoEndingInXXXAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.xxx')
 
 class SiteInfoEndingInYEAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ye')
 
 class SiteInfoEndingInYTAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.yt')
 
 class SiteInfoEndingInZAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.za')
 
 class SiteInfoEndingInZMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.zm')
 
@@ -1701,262 +1859,327 @@ class SiteInfoAfterZEndingInAMAdmin(SiteInfoAdmin):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.am')
 
 class SiteInfoAfterZEndingInAEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ae')
 
 class SiteInfoAfterZEndingInASIAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.asia')
 
 class SiteInfoAfterZEndingInAZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.az')
 
 class SiteInfoAfterZEndingInBGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.bg')
 
 class SiteInfoAfterZEndingInBHAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.bh')
 
 class SiteInfoAfterZEndingInBIZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.biz')
 
 class SiteInfoAfterZEndingInBYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.by')
 
 class SiteInfoAfterZEndingInBZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.bz')
 
 class SiteInfoAfterZEndingInCNAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.cn')
 
 class SiteInfoAfterZEndingInCOMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.com')
 
 class SiteInfoAfterZEndingInDZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.dz')
 
 class SiteInfoAfterZEndingInEEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ee')
 
 class SiteInfoAfterZEndingInEGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.eg')
 
 class SiteInfoAfterZEndingInFMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.fm')
 
 class SiteInfoAfterZEndingInGEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ge')
 
 class SiteInfoAfterZEndingInHKAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.hk')
 
 class SiteInfoAfterZEndingInILAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.il')
 
 class SiteInfoAfterZEndingInINAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.in')
 
 class SiteInfoAfterZEndingInINFOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.info')
 
 class SiteInfoAfterZEndingInIQAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.iq')
 
 class SiteInfoAfterZEndingInIRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ir')
 
 class SiteInfoAfterZEndingInJOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.jo')
 
 class SiteInfoAfterZEndingInJPAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.jp')
 
 class SiteInfoAfterZEndingInKGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.kg')
 
 class SiteInfoAfterZEndingInKRAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.kr')
 
 class SiteInfoAfterZEndingInKWAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.kw')
 
 class SiteInfoAfterZEndingInKZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.kz')
 
 class SiteInfoAfterZEndingInLAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.la')
 
 class SiteInfoAfterZEndingInLBAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.lb')
 
 class SiteInfoAfterZEndingInLIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.li')
 
 class SiteInfoAfterZEndingInLYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ly')
 
 class SiteInfoAfterZEndingInMAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ma')
 
 class SiteInfoAfterZEndingInMDAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.md')
 
 class SiteInfoAfterZEndingInMEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.me')
 
 class SiteInfoAfterZEndingInMKAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.mk')
 
 class SiteInfoAfterZEndingInMOBIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.mobi')
 
 class SiteInfoAfterZEndingInMYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.my')
 
 class SiteInfoAfterZEndingInOMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.om')
 
 class SiteInfoAfterZEndingInORGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.org')
 
 class SiteInfoAfterZEndingInNETAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.net')
 
 class SiteInfoAfterZEndingInPROAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.pro')
 
 class SiteInfoAfterZEndingInPSAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ps')
 
 class SiteInfoAfterZEndingInQAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.qa')
 
 class SiteInfoAfterZEndingInRSAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.rs')
 
 class SiteInfoAfterZEndingInRUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ru')
 
 class SiteInfoAfterZEndingInSAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.sa')
 
 class SiteInfoAfterZEndingInSDAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.sd')
 
 class SiteInfoAfterZEndingInSGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.sg')
 
 class SiteInfoAfterZEndingInSTAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.st')
 
 class SiteInfoAfterZEndingInSUAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.su')
 
 class SiteInfoAfterZEndingInSYAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.sy')
 
 class SiteInfoAfterZEndingInTJAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.tj')
 
 class SiteInfoAfterZEndingInTKAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.tk')
 
 class SiteInfoAfterZEndingInTMAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.tm')
 
 class SiteInfoAfterZEndingInTNAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.tn')
 
 class SiteInfoAfterZEndingInTOAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.to')
 
 class SiteInfoAfterZEndingInTVAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.tv')
 
 class SiteInfoAfterZEndingInTWAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.tw')
 
 class SiteInfoAfterZEndingInUAAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ua')
 
 class SiteInfoAfterZEndingInUSAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.us')
 
 class SiteInfoAfterZEndingInUZAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.uz')
 
 class SiteInfoAfterZEndingInVGAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.vg')
 
 class SiteInfoAfterZEndingInWSAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ws')
 
 class SiteInfoAfterZEndingInYEAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.ye')
 
 class SiteInfoAfterZEndingInP1AIAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='--p1ai')
 
