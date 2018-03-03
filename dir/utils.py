@@ -1530,8 +1530,13 @@ def RemoveURLsForDomain(rooturl):
     try:
         domain = DomainInfo.objects.get(url=rooturl)
         if domain.language_association and domain.language_association != 'en':
-            site_model = GetSiteInfoModelFromLanguage(domain.language_association)
-            site_model.objects.filter(rooturl=rooturl).delete()
+            try:
+                site_model = GetSiteInfoModelFromLanguage(domain.language_association)
+                site_model.objects.filter(rooturl=rooturl).delete()
+            except InvalidLanguageException:
+                # This can legitimately happen when removing URLs from an unsupported language,
+                # like Armenian, that doesn't have a language table.
+                pass
     except ObjectDoesNotExist:
          pass
     # Now we nuke all crawlable URLs.

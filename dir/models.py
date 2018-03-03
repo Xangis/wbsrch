@@ -108,8 +108,10 @@ EXCLUDED_SITE_REASONS = (
         (7, 'Spam or Computer Generated Content'),
         # Not a language we include in our index.
         (8, 'Unindexed Language - Unspecified'),
+        (32, 'Unindexed Language - Armenian'),
         (20, 'Unindexed Language - Arabic or Farsi'),
         (21, 'Unindexed Language - Chinese'),
+        (31, 'Unindexed Language - Georgian'),
         (22, 'Unindexed Language - Hebrew'),
         (23, 'Unindexed Language - Hindi'),
         (24, 'Unindexed Language - Indonesian or Similar'),

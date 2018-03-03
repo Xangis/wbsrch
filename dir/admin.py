@@ -31,12 +31,18 @@ def LanguageBlock(siteinfo, language=None):
     except ObjectDoesNotExist:
         site = BlockedSite()
         site.url = parsedurl.netloc
+        #(32, 'Unindexed Language - Georgian'),
+        if language == 'ge':
+            site.reason = 32
         #(20, 'Unindexed Language - Arabic or Farsi'),
-        if language == 'ar':
+        elif language == 'ar':
             site.reason = 20
         #(21, 'Unindexed Language - Chinese'),
         elif language == 'zh':
             site.reason = 21
+        #(31, 'Unindexed Language - Georgian'),
+        elif language == 'ge':
+            site.reason = 31
         #(22, 'Unindexed Language - Hebrew'),
         elif language == 'he':
             site.reason = 22
@@ -98,6 +104,12 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     block_domain_wrong_language.short_description = "Block the selected domains due to unindexed language."
 
+    def block_domain_language_am(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'am')
+
+    block_domain_language_am.short_description = "Block the selected domains (Armenian language)."
+
     def block_domain_language_ar(modeladmin, request, queryset):
         for item in queryset:
             LanguageBlock(item, 'ar')
@@ -110,6 +122,12 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     block_domain_language_cn.short_description = "Block the selected domains (Chinese language)."
 
+    def block_domain_language_ge(modeladmin, request, queryset):
+        for item in queryset:
+            LanguageBlock(item, 'ge')
+
+    block_domain_language_ge.short_description = "Block the selected domains (Georgian language)."
+
     def block_domain_language_hi(modeladmin, request, queryset):
         for item in queryset:
             LanguageBlock(item, 'hi')
@@ -120,7 +138,7 @@ class SiteInfoAdmin(admin.ModelAdmin):
         for item in queryset:
             LanguageBlock(item, 'he')
 
-    block_domain_language_il.short_description = "Block the selected domains (Israeli language)."
+    block_domain_language_il.short_description = "Block the selected domains (Hebrew language)."
 
     def block_domain_language_km(modeladmin, request, queryset):
         for item in queryset:
@@ -455,8 +473,9 @@ class SiteInfoAdmin(admin.ModelAdmin):
                recrawl_this_url, move_to_german,
                move_to_spanish, move_to_french, move_to_italian, move_to_portuguese, move_to_polish, move_to_swedish,
                move_to_finnish, move_to_dutch, move_to_czech,
-               move_to_greek, move_to_hungarian, move_to_turkish, block_domain_language_ar, 
-               block_domain_language_cn, block_domain_language_il, block_domain_language_hi, block_domain_language_in, 
+               move_to_greek, move_to_hungarian, move_to_turkish, block_domain_language_am, block_domain_language_ar, 
+               block_domain_language_cn, block_domain_language_ge, block_domain_language_il, 
+               block_domain_language_hi, block_domain_language_in, 
                block_domain_language_ja, block_domain_language_km, block_domain_language_ko, 
                block_domain_language_ru, block_domain_language_th, block_domain_language_vn,
                move_to_english]
