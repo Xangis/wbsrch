@@ -498,7 +498,7 @@ REST_FRAMEWORK = {
 
 Q_CLUSTER = {
     'name': 'wbsrch',
-    'workers': 8,
+    'workers': 2,
     'compress': True,
     'label': 'Django Q',
     'redis': {
