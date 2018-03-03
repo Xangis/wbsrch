@@ -2963,6 +2963,9 @@ def IsBotAgent(text):
     # Curl/PHP 5.4.45 (http://github.com/shuber/curl)
     if u'Curl/PHP' in text:
         return True
+    # curl/7.40.0
+    if u'curl/' in text:
+        return True
     # AHC/1.0
     if u'AHC/' in text:
         return True
@@ -2974,6 +2977,21 @@ def IsBotAgent(text):
         return True
     # VerticalLeap-BacklinkChecker
     if u'VerticalLeap-BacklinkChecker' in text:
+        return True
+    # Barkrowler/0.7 (+http://www.exensa.com/crawl)
+    if u'Barkrowler/' in text:
+        return True
+    # MBCrawler/1.0 (https://monitorbacklinks.com)
+    if u'MBCrawler/' in text:
+        return True
+    # http_requester/0.1
+    if u'http_requester/' in text:
+        return True
+    # YOURLS v1.7 +http://yourls.org/ (running on http://10.25.207.66)
+    if u'YOURLS v' in text:
+        return True
+    # Mozilla/5.0 (compatible; Wappalyzer; https://www.wappalyzer.com)
+    if u'Wappalyzer;' in text:
         return True
     return False
 
