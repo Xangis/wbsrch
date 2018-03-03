@@ -1,4 +1,4 @@
-{% load i18n %}<!DOCTYPE html>
+{% load i18n %}{% load extratags %}<!DOCTYPE html>
 <html lang="{{ language_code }}"><head>
 <!-- cached: {{ cached }} -->
 <meta name="description" content="WbSrch Web {% trans "Search" %}, home of the Independent {% trans "Search" %} Engine.">
@@ -29,7 +29,7 @@
 {% for domain in domains %}
 <p>{% trans "Domain" %}: <a href="/domain/?q={{ domain.url }}" rel="nofollow">{{ domain.url }}</a>
 {% if domain.language_association %}{% trans "Language" %}: {{ domain.language_association }} ({{ domain.language_association }}){% endif %}
-{% if domain.language_association and domain.language_association != language_code %}<a href="https://{{ domain.language_association }}.wbsrch.com/domain/?q={{ domain.url }}">Check this domain on the {{ domain.language_association|language_name }} site.</a>{% endif %}
+{% if domain.language_association and domain.language_association != language_code %}<a href="https://{{ domain.language_association }}.wbsrch.com/domain/?q={{ domain.url }}">Check this domain on the {{ domain.language_association|language_name_safe }} site.</a>{% endif %}
 <br/>
 {% endfor %}
 {% else %}
