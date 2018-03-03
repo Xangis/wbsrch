@@ -100,7 +100,6 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% endif %}
 <br/><br/>
 {% endif %}
-<div class="footer">
 {% ssi '/var/django/wbsrch/templates/footerwithoutcopyright.inc' parsed %}
 {% ssi '/var/django/wbsrch/templates/copyright.inc' %}
 {% if searchterm %}
@@ -108,6 +107,5 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 highlightText('{{ searchterm }}');
 </script>
 {% endif %}
-</div>
 </body>
 </html>
