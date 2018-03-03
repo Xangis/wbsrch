@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
 from django.template import Context, loader, RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.apps import apps
 from django.db import connection
 from django.core.cache import cache
@@ -659,7 +660,11 @@ def search(request):
             async(SaveLogEntry, log)
     is_language_name = None
     if result.is_language:
-        is_language_name = language_names[result.is_language]
+        try:
+            is_language_name = language_names[result.is_language]
+        except KeyError:
+            # This can happen if the language is "Russian" and that is not on the supported language name list.
+            is_language_name = None
     names_language_name = None
     if result.names_language:
         names_language_name = language_names[result.names_language]
