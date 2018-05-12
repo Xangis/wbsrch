@@ -2993,6 +2993,9 @@ def IsBotAgent(text):
     # Mozilla/5.0 (compatible; Wappalyzer; https://www.wappalyzer.com)
     if u'Wappalyzer;' in text:
         return True
+    # MauiBot (crawler.feedback+wc@gmail.com)
+    if u'MauiBot' in text:
+        return True
     return False
 
 def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=False):
