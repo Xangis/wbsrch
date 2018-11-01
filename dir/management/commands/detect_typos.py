@@ -13,8 +13,10 @@ from collections import Counter
 
 class Command(BaseCommand):
     help = """
-    This command processes a file containing a list of words. If those words are not already indexed for the specified
-    language, it adds them to the pending index list so that the indexer will build an index term for them.
+    This command examines existing indexes for sparse-result (<5 by default) terms and looks for similar words with
+    a larger number of results to see if the sparse term might be a typo for the well-populated term.
+
+    If you get an error saying that levenshtein does not exist, you need to CREATE EXTENSION fuzzystrmatch; on the indexes database.
     """
     option_list = BaseCommand.option_list + (
         make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for pending indexes (default=en).'),
@@ -22,6 +24,7 @@ class Command(BaseCommand):
         make_option('-u', '--under', default=5, action='store', type='int', dest='under', help='Check terms with fewer than this many results. (default=5)'),
         make_option('-o', '--over', default=1000, action='store', type='int', dest='over', help='Min number of results to consider as a possible intent. (default=1000)'),
         make_option('-s', '--skip', default=0, action='store', type='int', dest='skip', help='Number of items to skip. (default=0)'),
+        make_option('-n', '--nonumbers', default=False, action='store_true', dest='nonumbers', help='Do not check terms containing numbers.'),
     )
 
     def handle(self, *args, **options):
@@ -30,10 +33,13 @@ class Command(BaseCommand):
         under = options.get('under', 0)
         over = options.get('over', 0)
         skip = options.get('skip', 0)
+        nonumbers = options.get('nonumbers', False)
         index_model = GetIndexModelFromLanguage(language)
         check = index_model.objects.filter(num_results__lt=under, typo_for__isnull=True, refused=False).order_by('keywords')[skip:]
         print u'Found {0} items to check.'.format(check.count())
         for pos, item in enumerate(check):
+            if nonumbers and any(i.isdigit() for i in item.keywords):
+                continue
             print u'{1}: Checking {0}'.format(item.keywords, pos+skip)
             cursor = connections['indexes'].cursor()
             cursor.execute("SELECT keywords, num_results FROM dir_indexterm WHERE KEYWORDS != %s AND num_results > {1} AND levenshtein(keywords, %s) <= {0} ORDER BY num_results DESC;".format(distance, over), [item.keywords, item.keywords])

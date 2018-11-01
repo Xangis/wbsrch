@@ -81,7 +81,7 @@ When that's done you can run "python manage.py migrate" in the root of the appli
 
 python manage.py migrate
 
-python manage.py migrate --database indexes
+python manage.py migrate --database indexes (Note: this database needs CREATE EXTENSION fuzzystrmatch to be run manually)
 
 python manage.py migrate --database urls
 
@@ -116,7 +116,7 @@ have it, sudo apt-get install node-uglify.
 
 This app uses Django-Q as its task queue. In order to run it, you'll need to run this command:
 
-nohup python manage.py qcluster > /dev/null &
+nohup python manage.py qcluster > /dev/null 2>/dev/null &
 
 Failure to do so will cause search results and results clicks not to be logged. They're be queued, so that
 they'll show up when you finally do run django-q, but the dates will all be wrong.
