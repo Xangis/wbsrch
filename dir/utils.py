@@ -65,7 +65,7 @@ top_level_domains = [
 '.dance', '.date', '.dating', '.design', '.diet', '.directory', '.download',
 '.education', '.email', '.events', '.exposed',
 '.faith', '.farm', '.fit', '.flowers', '.futbol', 
-'.gift', '.glass', '.global', '.gop', '.green', '.guitars', '.guru',
+'.gift', '.glass', '.global', '.gop', '.gratis', '.green', '.guitars', '.guru',
 '.help', '.hiphop', '.hiv', '.holdings', '.hosting', '.hotel', '.house',
 '.info', '.ink', '.international', 
 '.jobs', '.juegos', '.kaufen', '.kim',
@@ -724,8 +724,9 @@ def GetMimeTypeModifier(mimetype, language='en'):
                     u'text/html;charset=UTF8', u'text/html; Charset=UTF8', u'text/html; charset=utf-8; boundary=xYzZY',
                     u'text/html; charset: UTF-8; charset=UTF-8', u'text/html; Charset=UTF-8;charset=UTF-8', u'text/html; encoding=utf-8;charset=UTF-8',
                     u'text/HTML; charset=utf-8', u'text/HTML; Charset=utf-8', u'Text/html; charset=UTF-8', u'Text/Html; Charset=Utf-8',
-                    u'text/html; UTF-8; charset=UTF-8', u'TEXT/HTML; charset=UTF-8', u'text/html; Charset=utf8',
-                    u'Text/HTML; charset=utf-8', u'text/HTML; charset=UTF-8', u'text/html;Charset=UTF-8', u'text/html ; charset=UTF-8']:
+                    u'text/html; UTF-8; charset=UTF-8', u'TEXT/HTML; charset=UTF-8', u'text/html; Charset=utf8', u'text/html;charset=utf-8;', 
+                    u'Text/HTML; charset=utf-8', u'text/HTML; charset=UTF-8', u'text/html;Charset=UTF-8', u'text/html ; charset=UTF-8',
+                    u'text/html; Charset=windows-65001']:
         return 1.0
     # I have no idea how to treat the xhtml+xml MIME type. No effect right now.
     elif mimetype in [u'application/xhtml+xml; charset=utf-8',]:
@@ -752,7 +753,7 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html; Charset=ISO-8859-15', u'text/html;charset=iso-8859-15', u'text/html; charset=iso8859-15',
                       u'text/html, charset=iso-8859-15', u'text/html; charset=iso-8859-15;', u'text/html;charset=Windows-1252',
                       u'text/html; Charset=Windows-1252', u'text/HTML; Charset=windows-1252', u'text/html; Charset=iso-8859-15',
-                      u'text/html; charset=ISO8859-15', u'text/html; charset="iso-8859-15"']:
+                      u'text/html; charset=ISO8859-15', u'text/html; charset="iso-8859-15"', u'text/html;charset=ISO8859-15']:
         return 0.25
     # No point modifier for unknown or undeclared charset.
     elif mimetype in [u'text/html; charset=_CHARSET',]:
@@ -771,7 +772,9 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html; Charset=windows-1250', u"text/html; charset='iso-8859-2'", u'text/html; Charset=ISO-8859-2',
                       u'text/html; charset=iso8859-2', 'text/html; Charset=iso-8859-2', u'text/html; ISO-8859-2; charset=ISO-8859-2',
                       u'type: text/html; charset=windows-1250;', u'text/html; charset=win-1250', u'text/html; charset=win1250', 
-                      u'text/html; charset= windows-1250', u'text/html; Charset=Windows-1250', u'text/html; charset=iso-8859-2;']:
+                      u'text/html; charset= windows-1250', u'text/html; Charset=Windows-1250', u'text/html; charset=iso-8859-2;',
+                      u'text/html; charset=CP-1250', u'text/html; charset=CP1250', u'text/html; charset: ISO-8859-2', u'text/html; charset=ISO8859-2',
+                      u'text/html; charset="iso-8859-2"', u'text/html;  charset=iso-8859-2', u'text/html; charset=latin2', u'text/html; charset=Latin2']:
         if language == 'en':
             return -1.0
         elif language in ['pl', 'cs', 'sk', 'hu', 'sl', 'hr', 'ro', 'de']:
@@ -793,7 +796,7 @@ def GetMimeTypeModifier(mimetype, language='en'):
     # ISO-8859-7 for Greek, as is Windows-28597 and Windows-1253
     elif mimetype in [u'text/html; charset=iso-8859-7', u'text/html; charset=windows-1253', u'text/html; charset=ISO-8859-7', 
                       u'text/html; charset=Windows-1253', u'text/html;charset=iso-8859-7', u'text/html; Charset=windows-1253',
-                      u'text/html;charset=windows-1253', u'text/html; Charset=Windows-1253']:
+                      u'text/html;charset=windows-1253', u'text/html; Charset=Windows-1253', u'text/html; Charset=ISO-8859-7']:
         if language in ['el',]:
             return 1.0
         else:
@@ -1131,10 +1134,11 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             value -= 3
             if verbose:
                 rulematches.append('-3 points for .casa and not language es.')
-    elif item.rooturl.endswith(u'.club') or item.rooturl.endswith(u'.guru') or item.rooturl.endswith(u'.ninja') or item.rooturl.endswith(u'.kr') or item.rooturl.endswith(u'.jp') or item.rooturl.endswith(u'.az') or item.rooturl.endswith(u'.iq') or item.rooturl.endswith(u'.ir') or item.rooturl.endswith(u'.name') or item.rooturl.endswith(u'.pro'):
+    # Lose moderate points for some new TLDs and CCTLDs.
+    elif item.rooturl.endswith(u'.club') or item.rooturl.endswith(u'.guru') or item.rooturl.endswith(u'.ninja') or item.rooturl.endswith(u'.kr') or item.rooturl.endswith(u'.jp') or item.rooturl.endswith(u'.az') or item.rooturl.endswith(u'.iq') or item.rooturl.endswith(u'.ir') or item.rooturl.endswith(u'.name') or item.rooturl.endswith(u'.pro') or item.rooturl.endswith(u'.gratis'):
         value -= 4
         if verbose:
-            rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir/.name/.pro')
+            rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir/.name/.pro/.gratis')
     elif item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or item.rooturl.endswith(u'.om') or item.rooturl.endswith(u'.kw') or item.rooturl.endswith(u'.th') or item.rooturl.endswith(u'.bn') or item.rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae'):
         value -= 2
         if verbose:
