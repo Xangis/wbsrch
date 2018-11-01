@@ -4,6 +4,8 @@ from dir.crawler import Crawler
 from django.conf import settings
 
 class Command(BaseCommand):
+    help = "This is the main command for crawling pages on the web."
+
     option_list = BaseCommand.option_list + (
         #make_option('-v', '--verbose', default=False, action='store_true', dest='verbose', help='Run in verbose mode.')
         make_option('-d', '--descriptive', default=False, action='store_true', dest='descriptive', help='Run in descriptive [verbose] mode. (default=False)'),

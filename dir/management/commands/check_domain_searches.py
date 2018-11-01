@@ -8,6 +8,9 @@ def is_ascii(s):
     return all(ord(c) < 128 for c in s)
 
 class Command(BaseCommand):
+    help = """Checks search results for domain names and prints a list of domains that need to be crawled. However, this command is
+              not particularly useful because most domain name searches are spam domains."""
+
     option_list = BaseCommand.option_list + (
         make_option('-w', '--websearches', default=False, action='store_true', dest='websearches', help='Check web searches for domains instead of checking domain searches.'),
     )

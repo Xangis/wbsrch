@@ -27,6 +27,8 @@ class Command(BaseCommand):
     help = """
     This command examines the search logs for known bot user agent strings and marks searches as bot
     searches. It should be run when we add new user agents to the bot list in utils.IsBotAgent.
+
+    It is not necessary otherwise, since the logger automatically flags searches as bots as they are done.
     """
     option_list = BaseCommand.option_list + (
         make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for search logs (default=en).'),
