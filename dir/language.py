@@ -555,7 +555,10 @@ def NLTKLanguageDetect(text):
     words = [word.lower() for word in tokens]
     languages_ratios = {}
     for language in stopwords.fileids():
-        stopwords_set = set(stopwords.words(language))
+        try:
+            stopwords_set = set(stopwords.words(language))
+        except UnicodeDecodeError:
+            print('UnicodeDecodeError getting stopwords for language {0}. Cannot categorize that language.'.format(language))
         words_set = set(words)
         common_elements = words_set.intersection(stopwords_set)
         languages_ratios[language] = len(common_elements)
