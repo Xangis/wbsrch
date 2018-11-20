@@ -374,7 +374,10 @@ def domain(request):
             country = gi.country_code(searchlog.ip)
             if country:
                 searchlog.ip_country = country
-        async(SaveLogEntry, searchlog)
+        try:
+            async(SaveLogEntry, searchlog)
+        except:
+            print('Cannot save log entry. Redis server may not be running.')
 
         return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
             'num_records': num_records, 'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
@@ -444,7 +447,10 @@ def ipaddry(request):
             country = gi.country_code(searchlog.ip)
             if country:
                 searchlog.ip_country = country
-        async(SaveLogEntry, searchlog)
+        try:
+            async(SaveLogEntry, searchlog)
+        except:
+            print('Cannot save log entry. Redis server may not be running.')
 
         return render_to_response('ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
                 'num_siteinfos': num_siteinfos, 'cached': cached },
@@ -657,7 +663,10 @@ def search(request):
                     log.browserstring = log.browserstring[0:252] + '...'
                 if IsBotAgent(log.browserstring):
                     log.is_bot = True
-            async(SaveLogEntry, log)
+            try:
+                async(SaveLogEntry, log)
+            except:
+                print('Cannot save log entry. Redis server may not be running.')
     is_language_name = None
     if result.is_language:
         try:
