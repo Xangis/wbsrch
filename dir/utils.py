@@ -726,7 +726,7 @@ def GetMimeTypeModifier(mimetype, language='en'):
                     u'text/HTML; charset=utf-8', u'text/HTML; Charset=utf-8', u'Text/html; charset=UTF-8', u'Text/Html; Charset=Utf-8',
                     u'text/html; UTF-8; charset=UTF-8', u'TEXT/HTML; charset=UTF-8', u'text/html; Charset=utf8', u'text/html;charset=utf-8;', 
                     u'Text/HTML; charset=utf-8', u'text/HTML; charset=UTF-8', u'text/html;Charset=UTF-8', u'text/html ; charset=UTF-8',
-                    u'text/html; Charset=windows-65001']:
+                    u'text/html; Charset=windows-65001', u'text/HTML; Charset=UTF-8']:
         return 1.0
     # I have no idea how to treat the xhtml+xml MIME type. No effect right now.
     elif mimetype in [u'application/xhtml+xml; charset=utf-8',]:
@@ -1364,7 +1364,8 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
-        if item.pagetext.startswith('Buy this domain.') or (u'This website is for sale' in item.pagetitle) or (u'This website is for sale' in item.pagetext) or (u'The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext):
+        if (item.pagetext.startswith('Buy this domain.') or (u'This website is for sale' in item.pagetitle) or (u'This website is for sale' in item.pagetext) or 
+          (u'The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or (u' is for sale' in item.pagetext)):
             if verbose:
                 rulematches.append('Lose half of points for parked domain.')
             value /= 2
@@ -2244,6 +2245,7 @@ def GenerateIndexStats(save=False):
         stats.total_indexes += langdata['indexes']
         stats.total_pendingindexes += langdata['pending_indexes']
         langs.append(langdata)
+    # TODO: Make this exclude blocked domains.
     if (not newest_stats) or (newest_stats.create_date < (timezone.now() - timedelta(days=30)).date()):
         print 'Most linked to domain list is older than 30 days, need to recalculate.'
         stats.most_linked_to_domains = json.dumps(list(DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in'))[0:100])
