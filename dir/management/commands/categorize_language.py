@@ -6,7 +6,10 @@ from dir.utils import *
 from dir.language import NLTKLanguageDetect, IdentifyPageLanguage, IdentifyLanguage
 
 class Command(BaseCommand):
-    help = "Performs semi-manual language categorization for domains."
+    help = """Performs semi-manual or automatic language categorization for domains.
+
+    To perform automatic categorization, which kind of works but is very experimental, you should use a command something like this:
+    time python manage.py categorize_language -c -t -a fr,de,it,es,cs,nl,fi,el,hu,pl,pt,sv,tr -o -j -i 20000 -m 200000|grep -v UnicodeDecodeError"""
 
     option_list = BaseCommand.option_list + (
         make_option('-m', '--maxurls', default=100000, action='store', type='int', dest='maxurls', help='Max number of URLs in domain to start with, in descending order. (default=100000)'),
@@ -19,7 +22,8 @@ class Command(BaseCommand):
         make_option('-b', '--autoblock', default=None, action='store', type='string', dest='autoblock', help='Automatically block this comma-seperated list of language codes, only works with -c.'),
         make_option('-u', '--urlsuffix', default=None, action='store', type='string', dest='urlsuffix', help='Only check URLs with this suffix.'),
         make_option('-p', '--urlprefix', default=None, action='store', type='string', dest='urlprefix', help='Only check URLs with this prefix.'),
-        make_option('-r', '--rank', default=None, action='store', type='string', dest='rank', help='Check untagged domains in order of popularity rank.'),
+        make_option('-r', '--rank', default=False, action='store_true', dest='rank', help='Check untagged domains in order of popularity rank.'),
+        make_option('-t', '--textminimum', default=False, action='store_true', dest='textminimum', help='Require at least 100 characters of text to count page for categorization.'),
         make_option('-d', '--domain', default=None, action='store', type='string', dest='domain', help='Only check this domain.'),
     )
 
@@ -32,6 +36,8 @@ class Command(BaseCommand):
         autotag = options.get('autotag', None)
         autoblock = options.get('autoblock', None)
         justdomain = options.get('domain', None)
+        textminimum = options.get('textminimum', False)
+        verbosity = int(options['verbosity'])
         if autotag:
             autotag = autotag.split(',')
         if autoblock:
@@ -80,6 +86,10 @@ class Command(BaseCommand):
             english = 0
             scores = {}
             for url in urls:
+                if textminimum and len(url.pagetext) < 100:
+                    if verbosity >=2:
+                        print 'Skipping page with less than 100 chars of text.'
+                    continue
                 total = total + 1
                 language = NLTKLanguageDetect(url.pagetext)
                 pagelanguage = IdentifyPageLanguage(url.url, url.pagecontents)
@@ -96,8 +106,11 @@ class Command(BaseCommand):
                 head = url.pagefirstheadtag
                 if not head:
                     head = url.pagefirsth3tag
-                print u'{0} ({1}) {2} {3} [{4}] [{5}]'.format(
-                    idlang, language, pagelanguage, url.url, url.pagetitle, url.pagefirstheadtag)
+                try:
+                    print(u'{0} ({1}) {2} {3} [{4}] [{5}]'.format(
+                        idlang, language, pagelanguage, url.url, url.pagetitle, url.pagefirstheadtag))
+                except UnicodeEncodeError:
+                    print('Page info is not valid unicode, cannot print')
             # If the URLs are blocked or removed between the time of querying domains and processing them,
             # as can happen running multi-day language processing, or running more than one, this prevents
             # divide by zero crashes.
