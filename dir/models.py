@@ -24,7 +24,7 @@ language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'el
 # Only including languages that aren't also a valid country. This means that "ar", which could be argentina,
 # and "uk" which could be the united kingdom, are not listed as blocked. Doing so could cause it to auto-delete
 # some sites in English or Spanish.
-blocked_language_list = ['az', 'bg', 'hy', 'id', 'il', 'mn', 'my', 'jp', 'ka' 'ko', 'ru', 'tg', 'th', 'vn', 'zh', 'vi', 'ur', 'ta', 'tl', 'kr', 'cn', 'gu', 'ps', 'am', 'hi', 'sq', 'az', 'te', 'kz', 'ua', 'zh-hans', 'ja', 'he', 'fa', 'ms']
+blocked_language_list = ['am', 'as', 'az', 'bg', 'cn', 'dz', 'fa', 'gu', 'he', 'hi', 'hy', 'id', 'il', 'ja', 'jv', 'ka', 'ko', 'kr', 'ku', 'kz', 'lo', 'mk', 'mr', 'mn', 'mr', 'ms', 'my', 'ne', 'or', 'pa', 'ps', 'ru', 'si', 'sq', 'ta', 'te', 'tg', 'th', 'tl', 'ua', 'ug', 'ur', 'vn', 'vi', 'zh', 'zh-hans',]
 
 language_names = {
 'ca': 'Catalan',
@@ -69,7 +69,7 @@ blocked_language_names = {
 'arabic': 'ar',
 'bengali': 'bn',
 'vietnamese': 'vi',
-'malay': 'my',
+'malay': 'ms',
 'tamil': 'ta',
 'telugu': 'te',
 'indonesian': 'id',
@@ -92,6 +92,22 @@ blocked_language_names = {
 'hebrew': 'he',
 'japanese': 'ja',
 'korean': 'ko',
+'assamese': 'as',
+'dzongkha': 'dz',
+'javanese': 'jv',
+'kurdish': 'ku',
+'lao': 'lo',
+'macedonian': 'mk',
+'malayalam': 'ml',
+'marathi': 'mr',
+'nepali': 'ne',
+'oriya': 'or',
+'punjabi': 'pa',
+'pashto': 'ps',
+'sinhala': 'si',
+'uyghur': 'ug',
+'urdu': 'ur',
+'burmese': 'my',
 }
 
 month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
