@@ -18,7 +18,7 @@ import uuid
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
 
-language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'el', 'sv', 'hu', 'fi']
+language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'el', 'sv', 'hu', 'fi', 'ro', 'hr', 'et', 'lt', 'lv', 'sw']
 #language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'ro', 'el', 'sv', 'da', 'hu', 'hr', 'sk', 'lt', 'no', 'fi', 'et', 'lv', 'sl', 'is', 'sw', 'yo', 'so', 'wo', 'ha', 'rw', 'sn', 'ca']
 
 # Only including languages that aren't also a valid country. This means that "ar", which could be argentina,
@@ -495,11 +495,6 @@ class SearchLog_de(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_ee(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_el(SearchLogBase):
 
     def __unicode__(self):
@@ -525,11 +520,6 @@ class SearchLog_ha(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_hr(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_hu(SearchLogBase):
 
     def __unicode__(self):
@@ -541,16 +531,6 @@ class SearchLog_is(SearchLogBase):
         return self.keywords
 
 class SearchLog_it(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_lt(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_lv(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -571,11 +551,6 @@ class SearchLog_pl(SearchLogBase):
         return self.keywords
 
 class SearchLog_pt(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_ro(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -2504,9 +2479,6 @@ class KeywordRanking_fi(KeywordRank):
 class KeywordRanking_fr(KeywordRank):
     pass
 
-class KeywordRanking_hr(KeywordRank):
-    pass
-
 class KeywordRanking_hu(KeywordRank):
     pass
 
@@ -2712,9 +2684,6 @@ class ResultClick_da(ResultClickBase):
 class ResultClick_de(ResultClickBase):
     pass
 
-class ResultClick_ee(ResultClickBase):
-    pass
-
 class ResultClick_el(ResultClickBase):
     pass
 
@@ -2730,9 +2699,6 @@ class ResultClick_fr(ResultClickBase):
 class ResultClick_ha(ResultClickBase):
     pass
 
-class ResultClick_hr(ResultClickBase):
-    pass
-
 class ResultClick_hu(ResultClickBase):
     pass
 
@@ -2740,12 +2706,6 @@ class ResultClick_is(ResultClickBase):
     pass
 
 class ResultClick_it(ResultClickBase):
-    pass
-
-class ResultClick_lt(ResultClickBase):
-    pass
-
-class ResultClick_lv(ResultClickBase):
     pass
 
 class ResultClick_nl(ResultClickBase):
@@ -2758,9 +2718,6 @@ class ResultClick_pl(ResultClickBase):
     pass
 
 class ResultClick_pt(ResultClickBase):
-    pass
-
-class ResultClick_ro(ResultClickBase):
     pass
 
 class ResultClick_rw(ResultClickBase):
@@ -2811,4 +2768,203 @@ class APIUsage(models.Model):
     class Meta:
         # Should be in indexes, but has relationship to auth.User in default
         in_db = 'default'
+
+
+if 'et' in language_list:
+
+    class SiteInfo_et(URLInfo):
+
+        def __unicode__(self):
+            return self.url
+
+    class PendingIndex_et(PendingIndexBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class IndexTerm_et(IndexTermBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class KeywordRanking_et(KeywordRank):
+        pass
+
+    class SearchLog_et(SearchLogBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class ResultClick_et(ResultClickBase):
+        pass
+
+    class AutoComplete_et(AutoCompleteBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+if 'hr' in language_list:
+
+    class SiteInfo_hr(URLInfo):
+
+        def __unicode__(self):
+            return self.url
+
+    class PendingIndex_hr(PendingIndexBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class IndexTerm_hr(IndexTermBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class KeywordRanking_hr(KeywordRank):
+        pass
+
+    class SearchLog_hr(SearchLogBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class ResultClick_hr(ResultClickBase):
+        pass
+
+    class AutoComplete_hr(AutoCompleteBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+if 'lt' in language_list:
+
+    class SiteInfo_lt(URLInfo):
+
+        def __unicode__(self):
+            return self.url
+
+    class PendingIndex_lt(PendingIndexBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class IndexTerm_lt(IndexTermBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class KeywordRanking_lt(KeywordRank):
+        pass
+
+    class SearchLog_lt(SearchLogBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class ResultClick_lt(ResultClickBase):
+        pass
+
+    class AutoComplete_lt(AutoCompleteBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+if 'lv' in language_list:
+
+    class SiteInfo_lv(URLInfo):
+
+        def __unicode__(self):
+            return self.url
+
+    class PendingIndex_lv(PendingIndexBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class IndexTerm_lv(IndexTermBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class KeywordRanking_lv(KeywordRank):
+        pass
+
+    class SearchLog_lv(SearchLogBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class ResultClick_lv(ResultClickBase):
+        pass
+
+    class AutoComplete_lv(AutoCompleteBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+if 'ro' in language_list:
+
+    class SiteInfo_ro(URLInfo):
+
+        def __unicode__(self):
+            return self.url
+
+    class PendingIndex_ro(PendingIndexBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class IndexTerm_ro(IndexTermBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class KeywordRanking_ro(KeywordRank):
+        pass
+
+    class SearchLog_ro(SearchLogBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class ResultClick_ro(ResultClickBase):
+        pass
+
+    class AutoComplete_ro(AutoCompleteBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+if 'sw' in language_list:
+
+    class SiteInfo_sw(URLInfo):
+
+        def __unicode__(self):
+            return self.url
+
+    class PendingIndex_sw(PendingIndexBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class IndexTerm_sw(IndexTermBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class KeywordRanking_sw(KeywordRank):
+        pass
+
+    class SearchLog_sw(SearchLogBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class ResultClick_sw(ResultClickBase):
+        pass
+
+    class AutoComplete_sw(AutoCompleteBase):
+
+        def __unicode__(self):
+            return self.keywords
 
