@@ -9,11 +9,22 @@ class Command(BaseCommand):
     help = """Performs semi-manual or automatic language categorization for domains.
 
     To perform automatic categorization, which kind of works but is very experimental, you should use a command something like this:
-    time python manage.py categorize_language -c -t -a fr,de,it,es,cs,nl,fi,el,hu,pl,pt,sv,tr -o -j -i 20000 -m 200000|grep -v UnicodeDecodeError"""
+
+        time python manage.py categorize_language -c -t -a cs,de,el,es,et,fi,fr,hr,hu,it,lt,lv,nl,pl,pt,ro,sv,sw,tr -q -o -j -i 700000 -m 200000
+
+    To perform automatic language blocking, which kind of works but is very experimental, you should use a command something like this:
+
+        python manage.py categorize_language -c -t -b am,as,az,bg,cn,dz,fa,gu,he,hi,hy,id,il,ja,jv,ka,ko,kr,ku,kz,lo,mk,mr,mn,mr,ms,my,ne,or,pa,ps,ru,si,sq,ta,te,tg,th,tl,ua,ug,ur,vn,vi,zh -q -i 1000
+
+    To automatically tag sites as english, which kind of works but is very experimental, you should use a command something like this (note the use of -n so we only tag with higher-confidence data):
+
+        python manage.py categorize_language -e -o -t -q -n 3 -i 2000    
+"""
 
     option_list = BaseCommand.option_list + (
         make_option('-m', '--maxurls', default=100000, action='store', type='int', dest='maxurls', help='Max number of URLs in domain to start with, in descending order. (default=100000)'),
         make_option('-i', '--items', default=100, action='store', type='int', dest='items', help='Number of items to process (default=100)'),
+        make_option('-n', '--numpageminimum', default=1, action='store', type='int', dest='numpageminimum', help='Minimum number of pages required to process a domain (default=1).'),
         make_option('-o', '--onlyautotag', default=False, action='store_true', dest='onlyautotag', help='Only auto-tag, nothing else. Requires -e or -a switch.'),
         make_option('-j', '--justnotenglish', default=False, action='store_true', dest='justnotenglish', help='Only prompt for items that detect as mostly (<10%) non-English (default=False)'),
         make_option('-e', '--autotagenglish', default=False, action='store_true', dest='autotagenglish', help='Auto-tag sites that detect as english (>95%). Supersedes skipping english in -j. (default=False)'),
@@ -23,6 +34,7 @@ class Command(BaseCommand):
         make_option('-u', '--urlsuffix', default=None, action='store', type='string', dest='urlsuffix', help='Only check URLs with this suffix.'),
         make_option('-p', '--urlprefix', default=None, action='store', type='string', dest='urlprefix', help='Only check URLs with this prefix.'),
         make_option('-r', '--rank', default=False, action='store_true', dest='rank', help='Check untagged domains in order of popularity rank.'),
+        make_option('-q', '--quiet', default=False, action='store_true', dest='quiet', help='Quiet mode - do not log individual pages and titles to the console.'),
         make_option('-t', '--textminimum', default=False, action='store_true', dest='textminimum', help='Require at least 100 characters of text to count page for categorization.'),
         make_option('-d', '--domain', default=None, action='store', type='string', dest='domain', help='Only check this domain.'),
     )
@@ -37,7 +49,9 @@ class Command(BaseCommand):
         autoblock = options.get('autoblock', None)
         justdomain = options.get('domain', None)
         textminimum = options.get('textminimum', False)
+        quiet = options.get('quiet', False)
         verbosity = int(options['verbosity'])
+        numpageminimum = int(options['numpageminimum'])
         if autotag:
             autotag = autotag.split(',')
         if autoblock:
@@ -51,27 +65,32 @@ class Command(BaseCommand):
         result = None
         cursor = connection.cursor()
         uncategorized_domains = []
+        # We start with the domains having the most pages and descend.
         if justdomain:
             cursor.execute("SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl = '{0}' GROUP BY rooturl;".format(justdomain))
         elif onlysuffix:
-            cursor.execute("SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '%{0}' GROUP BY rooturl HAVING count(*) < {1} ORDER BY count_total DESC LIMIT {2};".format(onlysuffix, maxurls, maxitems))
+            cursor.execute("SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '%{0}' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlysuffix, maxurls, maxitems))
         elif onlyprefix:
-            cursor.execute("SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '{0}%' GROUP BY rooturl HAVING count(*) < {1} ORDER BY count_total DESC LIMIT {2};".format(onlyprefix, maxurls, maxitems))
+            cursor.execute("SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '{0}%' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlyprefix, maxurls, maxitems))
         elif rank:
             cursor.execute('SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE language_association IS null AND alexa_rank IS NOT null AND uses_language_subdirs = false AND uses_language_query_parameter = false ORDER BY alexa_rank LIMIT {0};'.format(maxurls, maxitems))
         else:
-            cursor.execute('SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) < {0} ORDER BY count_total DESC LIMIT {1};'.format(maxurls, maxitems))
+            cursor.execute('SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) <= {0} ORDER BY count_total,RANDOM() DESC LIMIT {1};'.format(maxurls, maxitems))
         #cursor.execute('SELECT count(*), rooturl FROM site_info GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(maxitems))
         domain_counts = cursor.fetchall()
         for domain in domain_counts:
+            # Bail if we hit our page minimum -- we're done.
+            if domain[0] < numpageminimum:
+                break
+            # Skip domains above maximum number of pages.
+            if domain[0] <= maxurls:
+                uncategorized_domains.append(domain[1])
             try:
                 domaininfo = DomainInfo.objects.get(url=domain[1])
                 if domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid:
                     continue
             except:
                 pass
-            if domain[0] < maxurls:
-                uncategorized_domains.append(domain[1])
         for domain in uncategorized_domains:
             urls = SiteInfo.objects.filter(rooturl=domain)
             if rank and urls.count() < 1:
@@ -106,16 +125,17 @@ class Command(BaseCommand):
                 head = url.pagefirstheadtag
                 if not head:
                     head = url.pagefirsth3tag
-                try:
-                    print(u'{0} ({1}) {2} {3} [{4}] [{5}]'.format(
-                        idlang, language, pagelanguage, url.url, url.pagetitle, url.pagefirstheadtag))
-                except UnicodeEncodeError:
-                    print('Page info is not valid unicode, cannot print')
+                if not quiet:
+                    try:
+                        print(u'{0} ({1}) {2} {3} [{4}] [{5}]'.format(
+                            idlang, language, pagelanguage, url.url, url.pagetitle, url.pagefirstheadtag))
+                    except UnicodeEncodeError:
+                        print('Page info is not valid unicode, cannot print')
             # If the URLs are blocked or removed between the time of querying domains and processing them,
             # as can happen running multi-day language processing, or running more than one, this prevents
             # divide by zero crashes.
             scores = sorted(scores.iteritems(), key=lambda item: item[1], reverse=True)
-            print u'Scores: {0}'.format(scores)
+            print u'Scores for {0}: {1}'.format(domain, scores)
             if total:
                 englishratio = (english * 100) / total
             else:
@@ -127,10 +147,12 @@ class Command(BaseCommand):
                 print u'Not English. Skipping.'
                 continue
             elif justnotenglish and englishratio > 45:
-                print u'Site is more than slightly English - {0} of {1}, skipping categorization.'.format(english, total)
+                if not quiet:
+                    print u'Site is more than slightly English - {0} of {1}, skipping categorization.'.format(english, total)
                 continue
             elif confident and (scores[0][1] < (0.86 * total)):
-                print u'Site is not at least 86% one language - {0}/{1} {2}, skipping categorization.'.format(scores[0][1], total, scores[0][0])
+                if not quiet:
+                    print u'Site is not at least 86% one language - {0}/{1} {2}, skipping categorization.'.format(scores[0][1], total, scores[0][0])
                 continue
             else:
                 # Prompt for what to do. If c
@@ -141,10 +163,12 @@ class Command(BaseCommand):
                     print u'Auto-Blocking {0} as unindexed language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1])
                     input = 'del'
                 elif autotag and onlyautotag:
-                    print u'Skipping {0} because we are in only-auto-tag mode and it could not be automatically tagged.'.format(domain)
+                    if not quiet:
+                        print u'Skipping {0} because we are in only-auto-tag mode and it could not be automatically tagged.'.format(domain)
                     input = 's'
-                elif autoblock and onlyautotag:
-                    print u'Skipping {0} because we are in only-auto-tag mode and it could not be automatically blocked.'.format(domain)
+                elif autoblock:
+                    if not quiet:
+                        print u'Skipping {0} because we are in auto-block mode and it could not be automatically blocked.'.format(domain)
                     input = 's'
                 else:
                     input = raw_input(u'Tag {0} as: [q]uit/[s]kip/[i]nfix-tag/[u]rlparam-tag/[del]ete/[xx] lang ({1}/{2} En, {3}/{2} {4})]? '.format(total, english, total, scores[0][1], scores[0][0]))
@@ -178,10 +202,72 @@ class Command(BaseCommand):
                     # in that case, just delete it.
                     RemoveURLsForDomain(item.rooturl)
                 except ObjectDoesNotExist:
+                    langtoblock = scores[0][0]
                     site = BlockedSite()
                     site.url = domain
-                    site.reason = 8
+                    # TODO: Set reason to match language categorized as.
+                    if langtoblock == 'ar' or langtoblock == 'fa':
+                        # (20, 'Unindexed Language - Arabic or Farsi'),
+                        site.reason = 20
+                    elif langtoblock == 'hy':
+                        # (32, 'Unindexed Language - Armenian'),
+                        site.reason = 32
+                    elif langtoblock == 'az':
+                        # (34, 'Unindexed Language - Azerbaijani'),
+                        site.reason = 34
+                    elif langtoblock == 'zh':
+                        # (21, 'Unindexed Language - Chinese'),
+                        site.reason = 21
+                    elif langtoblock == 'ge':
+                        # (31, 'Unindexed Language - Georgian'),
+                        site.reason = 31
+                    elif langtoblock == 'he':
+                        # (22, 'Unindexed Language - Hebrew'),
+                        site.reason = 22
+                    elif langtoblock == 'hi':
+                        # (23, 'Unindexed Language - Hindi'),
+                        site.reason = 23
+                    elif langtoblock == 'id' or langtoblock == 'ms':
+                        # (24, 'Unindexed Language - Indonesian or Similar'),
+                        site.reason = 24
+                    elif langtoblock == 'ja':
+                        # (25, 'Unindexed Language - Japanese'),
+                        site.reason = 25
+                    elif langtoblock == 'km':
+                        # (26, 'Unindexed Language - Khmer'),
+                        site.reason = 26
+                    elif langtoblock == 'ko':
+                        # (27, 'Unindexed Language - Korean'),
+                        site.reason = 27
+                    elif langtoblock == 'ru' or langtoblock =='uk' or langtoblock == 'bg':
+                        # (28, 'Unindexed Language - Russian or Other Cyrillic'),
+                        site.reason = 28
+                    elif langtoblock == 'sr':
+                        # (33, 'Unindexed Language - Serbian'),
+                        site.reason = 33
+                    elif langtoblock == 'th':
+                        # (30, 'Unindexed Language - Thai'),
+                        site.reason = 30
+                    elif langtoblock == 'vi':
+                        # (29, 'Unindexed Language - Vietnamese'),
+                        site.reason = 29
+                    elif langtoblock == 'tl' or langtoblock == 'pa' or langtoblock == 'ps' or langtoblock == 'te' or langtoblock == 'am' or langtoblock == 'si':
+                        # TDOO: Add a reason for tagalog and 'pa' and 'ps' and 'te' and 'si' (sinhala).
+                        site.reason = 8
+                    else:
+                        # (8, 'Unindexed Language - Unspecified'),
+                        site.reason = 8
+                        print('Do not have a specific language block reason for language: {0}'.format(langtoblock))
+                        break
                     site.save()
+                    try:
+                        dom = DomainInfo.objects.get(url=domain)
+                    except:
+                        dom = DomainInfo()
+                        dom.url = domain
+                    dom.language_association = langtoblock
+                    dom.save()
+                continue
                 RequeueRankedKeywordsForDomain(domain)
                 print 'Site {0} language blocked and all URLs deleted.'.format(domain)
             else:
