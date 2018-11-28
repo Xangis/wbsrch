@@ -2221,7 +2221,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
     AddPendingTerm(text, language_code, u'Search {0} not indexed yet.'.format(text))
     return term
 
-def GenerateIndexStats(save=False):
+def GenerateIndexStats(save=False, verbose=False):
     start = timezone.now()
     stats = IndexStats(total_urls=0, total_indexes=0, total_pendingindexes=0)
     stats.num_excluded = BlockedSite.objects.count()
@@ -2245,10 +2245,22 @@ def GenerateIndexStats(save=False):
         stats.total_indexes += langdata['indexes']
         stats.total_pendingindexes += langdata['pending_indexes']
         langs.append(langdata)
-    # TODO: Make this exclude blocked domains.
-    if (not newest_stats) or (newest_stats.create_date < (timezone.now() - timedelta(days=30)).date()):
-        print 'Most linked to domain list is older than 30 days, need to recalculate.'
-        stats.most_linked_to_domains = json.dumps(list(DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in'))[0:100])
+    print('Most linked to domain list updated {0}'.format(newest_stats.last_most_linked_to))
+    if (not newest_stats) or (newest_stats.last_most_linked_to < (timezone.now() - timedelta(days=30)).date()):
+        print('Most linked to domain list is older than 30 days, need to recalculate.')
+        most_linked = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in')
+        most_linked_list = []
+        for linked_domain in most_linked:
+            if verbose:
+                print('Checking {0}'.format(linked_domain))
+            if not IsDomainBlocked(linked_domain['url']):
+                most_linked_list.append(linked_domain)
+                if len(most_linked_list) >= 100:
+                    break
+            else:
+                if verbose:
+                    print('Skipping blocked domain {0}'.format(linked_domain))
+        stats.most_linked_to_domains = json.dumps(most_linked_list)
         stats.last_most_linked_to = timezone.now()
     else:
         stats.most_linked_to_domains = newest_stats.most_linked_to_domains
