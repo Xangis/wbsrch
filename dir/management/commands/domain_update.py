@@ -97,7 +97,7 @@ class Command(BaseCommand):
                 except KeyError:
                     pass
                 try:
-                    domain.whois_registrar = info['registrar'][0][0:60]
+                    domain.whois_registrar = info['registrar'][0:60]
                 except TypeError:
                     pass
                 except KeyError:
