@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 from exceptions import InvalidLanguageException
 import codecs
 import os
-import langid
+from langid.langid import LanguageIdentifier, model
+identifier = LanguageIdentifier.from_modelstring(model, norm_probs=True)
 import urlparse
 
 language_name_reverse = {
@@ -568,4 +569,4 @@ def NLTKLanguageDetect(text):
     return most_rated_language
 
 def IdentifyLanguage(text):
-    return langid.classify(text)
+    return identifier.classify(text)
