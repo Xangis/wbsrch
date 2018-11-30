@@ -661,6 +661,9 @@ class SettingAdmin(admin.ModelAdmin):
     list_display = ('name', 'value')
     search_fields = ('name', 'value')
 
+class ExtendedSiteInfoAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
+
 class SiteInfoAfterZAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
@@ -2687,7 +2690,7 @@ admin.site.register(CrawlableUrl)
 
 # Conditional languages, enabled in language_list in models.py.
 if 'et' in language_list:
-    admin.site.register(SiteInfo_et, SiteInfoAdmin)
+    admin.site.register(SiteInfo_et, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_et, IndexTermAdmin)
     admin.site.register(PendingIndex_et, PendingIndexAdmin)
     admin.site.register(SearchLog_et, SearchLogAdmin)
@@ -2695,7 +2698,7 @@ if 'et' in language_list:
     admin.site.register(ResultClick_et, ResultClickAdmin)
     # We don't register KeywordRanking.
 if 'hr' in language_list:
-    admin.site.register(SiteInfo_hr, SiteInfoAdmin)
+    admin.site.register(SiteInfo_hr, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_hr, IndexTermAdmin)
     admin.site.register(PendingIndex_hr, PendingIndexAdmin)
     admin.site.register(SearchLog_hr, SearchLogAdmin)
@@ -2703,7 +2706,7 @@ if 'hr' in language_list:
     admin.site.register(ResultClick_hr, ResultClickAdmin)
     # We don't register KeywordRanking.
 if 'lt' in language_list:
-    admin.site.register(SiteInfo_lt, SiteInfoAdmin)
+    admin.site.register(SiteInfo_lt, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_lt, IndexTermAdmin)
     admin.site.register(PendingIndex_lt, PendingIndexAdmin)
     admin.site.register(SearchLog_lt, SearchLogAdmin)
@@ -2711,7 +2714,7 @@ if 'lt' in language_list:
     admin.site.register(ResultClick_lt, ResultClickAdmin)
     # We don't register KeywordRanking.
 if 'lv' in language_list:
-    admin.site.register(SiteInfo_lv, SiteInfoAdmin)
+    admin.site.register(SiteInfo_lv, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_lv, IndexTermAdmin)
     admin.site.register(PendingIndex_lv, PendingIndexAdmin)
     admin.site.register(SearchLog_lv, SearchLogAdmin)
@@ -2719,7 +2722,7 @@ if 'lv' in language_list:
     admin.site.register(ResultClick_lv, ResultClickAdmin)
     # We don't register KeywordRanking.
 if 'ro' in language_list:
-    admin.site.register(SiteInfo_ro, SiteInfoAdmin)
+    admin.site.register(SiteInfo_ro, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_ro, IndexTermAdmin)
     admin.site.register(PendingIndex_ro, PendingIndexAdmin)
     admin.site.register(SearchLog_ro, SearchLogAdmin)
@@ -2727,7 +2730,7 @@ if 'ro' in language_list:
     admin.site.register(ResultClick_ro, ResultClickAdmin)
     # We don't register KeywordRanking.
 if 'sw' in language_list:
-    admin.site.register(SiteInfo_sw, SiteInfoAdmin)
+    admin.site.register(SiteInfo_sw, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_sw, IndexTermAdmin)
     admin.site.register(PendingIndex_sw, PendingIndexAdmin)
     admin.site.register(SearchLog_sw, SearchLogAdmin)
