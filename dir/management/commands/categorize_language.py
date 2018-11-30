@@ -218,7 +218,7 @@ class Command(BaseCommand):
                     elif langtoblock == 'zh':
                         # (21, 'Unindexed Language - Chinese'),
                         site.reason = 21
-                    elif langtoblock == 'ge':
+                    elif langtoblock == 'ka':
                         # (31, 'Unindexed Language - Georgian'),
                         site.reason = 31
                     elif langtoblock == 'he':
@@ -251,8 +251,8 @@ class Command(BaseCommand):
                     elif langtoblock == 'vi':
                         # (29, 'Unindexed Language - Vietnamese'),
                         site.reason = 29
-                    elif langtoblock == 'tl' or langtoblock == 'pa' or langtoblock == 'ps' or langtoblock == 'te' or langtoblock == 'am' or langtoblock == 'si':
-                        # TDOO: Add a reason for tagalog and 'pa' and 'ps' and 'te' and 'si' (sinhala).
+                    elif langtoblock == 'tl' or langtoblock == 'pa' or langtoblock == 'ps' or langtoblock == 'te' or langtoblock == 'am' or langtoblock == 'si' or langtoblock == 'gu' or langtoblock == 'sq' or langtoblock == 'ku' or langtoblock == 'mk' or langtoblock == 'mn' or langtoblock == 'jv' or langtoblock == 'as' or langtoblock == 'ta':
+                        # TDOO: Add a reason for tagalog and 'pa' and 'ps' and 'te' and 'si' (sinhala) and 'sq' (albanian) and 'ku', 'mk', 'jv', 'as', 'mn', 'ta'.
                         site.reason = 8
                     else:
                         # (8, 'Unindexed Language - Unspecified'),
