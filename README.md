@@ -101,6 +101,9 @@ is not an SQL script to do this yet, so you'll have to do so manually. EXPLAIN A
 to get the search engine to use the indexes, you'll probably have to set random page cost low in the psql
 config file.
 
+There are SQL script files in the sql/ folder that will create GIN indexes. See the readme in that folder
+for more details.
+
 # Deployment
 
 There are a few things to be done when the site is deployed.
