@@ -702,7 +702,7 @@ def IsBadMimeType(mimetype):
         return True
     return False
 
-def GetMimeTypeModifier(mimetype, language='en'):
+def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
     if not mimetype:
         return 0.0
     # Bonus point for being UTF-8.
@@ -744,7 +744,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html; charset=LATIN1', u'text/html; charset=latin-1', u'text/html; UTF-8;charset=ISO-8859-1',
                       u'text/html; charset=ISO-8859-1, text/html', u'text/html; charset="iso-8859-1"', u'text/html; Charset=windows-28591',
                       u"text/html; charset='iso-8859-1'", u'text/html; profile=xhtml;charset=ISO-8859-1', u'text/HTML; Charset=ISO-8859-1',
-                      u'text/HTML;charset=ISO-8859-1', u'text/HTML; charset=iso-8859-1', u'text/html; charset=LATIN-1']:
+                      u'text/HTML;charset=ISO-8859-1', u'text/HTML; charset=iso-8859-1', u'text/html; charset=LATIN-1',
+                      u'text/html; charset=charset=iso-8859-1', u'text/html; charset=charset=ISO-8859-1']:
         return 0.5
     # Quarter point for ISO-8859-15 or Windows-1252. They're not UTF-8, but they're latin text at least.
     elif mimetype in [u'text/html; charset=Windows-1252', u'text/html; charset=windows-1252', u'text/html; charset=ISO-8859-15',
@@ -753,7 +754,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'text/html; Charset=ISO-8859-15', u'text/html;charset=iso-8859-15', u'text/html; charset=iso8859-15',
                       u'text/html, charset=iso-8859-15', u'text/html; charset=iso-8859-15;', u'text/html;charset=Windows-1252',
                       u'text/html; Charset=Windows-1252', u'text/HTML; Charset=windows-1252', u'text/html; Charset=iso-8859-15',
-                      u'text/html; charset=ISO8859-15', u'text/html; charset="iso-8859-15"', u'text/html;charset=ISO8859-15']:
+                      u'text/html; charset=ISO8859-15', u'text/html; charset="iso-8859-15"', u'text/html;charset=ISO8859-15',
+                      u'text/html; charset="ISO-8859-15"', u'text/html; charset=cp1252']:
         return 0.25
     # No point modifier for unknown or undeclared charset.
     elif mimetype in [u'text/html; charset=_CHARSET',]:
@@ -774,7 +776,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
                       u'type: text/html; charset=windows-1250;', u'text/html; charset=win-1250', u'text/html; charset=win1250', 
                       u'text/html; charset= windows-1250', u'text/html; Charset=Windows-1250', u'text/html; charset=iso-8859-2;',
                       u'text/html; charset=CP-1250', u'text/html; charset=CP1250', u'text/html; charset: ISO-8859-2', u'text/html; charset=ISO8859-2',
-                      u'text/html; charset="iso-8859-2"', u'text/html;  charset=iso-8859-2', u'text/html; charset=latin2', u'text/html; charset=Latin2']:
+                      u'text/html; charset="iso-8859-2"', u'text/html;  charset=iso-8859-2', u'text/html; charset=latin2', u'text/html; charset=Latin2',
+                      u'text/html;charset=latin2']:
         if language == 'en':
             return -1.0
         elif language in ['pl', 'cs', 'sk', 'hu', 'sl', 'hr', 'ro', 'de']:
@@ -815,7 +818,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
     # Windows-1251 is for Bulgarian, Serbian, Macedonian.
     elif mimetype in [u'text/html; charset=windows-1251', u'text/html; charset=CP1251', u'text/html; charset=WINDOWS-1251',
                       u'text/html; charset=windows-1251, text/html', u'text/html;charset=windows-1251', u'text/html; charset=cp1251',
-                      u'text/html; charset=Windows-1251', u'text/html; Charset=windows-1251', u'text/html; charset=cp-1251']:
+                      u'text/html; charset=Windows-1251', u'text/html; Charset=windows-1251', u'text/html; charset=cp-1251',
+                      u'text/html; charset=1251']:
         if language == 'hr' or language == 'si':
             return -1.0
         else:
@@ -876,7 +880,8 @@ def GetMimeTypeModifier(mimetype, language='en'):
         return -20.0
     else:
         # Lose half a point for unrecognized MIME types, same as plain text.
-        print u'Unrecognized MIME type: {0}'.format(mimetype)
+        if verbose:
+            print(u'Unrecognized MIME type: {0}'.format(mimetype))
         return -0.5
 
 def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=False):
@@ -1422,7 +1427,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if verbose:
             rulematches.append('1 point for page size over 4000.')
     if item.content_type_header:
-        pts = GetMimeTypeModifier(item.content_type_header, lang)
+        pts = GetMimeTypeModifier(item.content_type_header, lang, verbose)
         value += pts
         if verbose:
             rulematches.append('{0} points for content type {1}.'.format(pts, item.content_type_header))
@@ -1431,7 +1436,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if verbose:
             rulematches.append('-{0} points for recent crawl errors retrieving page.'.format(item.num_errors * 2))
     if verbose:
-        modifiers = GetIndexModifiersForDomain(item.rooturl, lang, rulematches=rulematches, verbose=True)
+        modifiers = GetIndexModifiersForDomain(item.rooturl, lang, rulematches=rulematches, verbose=verbose)
         rulematches.append('Domain Modifiers are bonus {0} and multiplier {1}'.format(modifiers[1], modifiers[0]))
     else:
         modifiers = GetIndexModifiersForDomain(item.rooturl, lang)
