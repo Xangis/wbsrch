@@ -586,11 +586,6 @@ class SearchLog_sv(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_sw(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_tr(SearchLogBase):
 
     def __unicode__(self):
@@ -2737,9 +2732,6 @@ class ResultClick_so(ResultClickBase):
     pass
 
 class ResultClick_sv(ResultClickBase):
-    pass
-
-class ResultClick_sw(ResultClickBase):
     pass
 
 class ResultClick_tr(ResultClickBase):

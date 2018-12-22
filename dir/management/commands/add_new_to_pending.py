@@ -38,7 +38,11 @@ class Command(BaseCommand):
         numdone = 0
         numadded = 0
         for line in reader:
-             line = GetRootUrl(line.strip().lower())
+             # Don't consider full URLs as valid search terms from file, instead use the root URL, if possible.
+             try:
+                 line = GetRootUrl(line.strip().lower())
+             except:
+                 line = line.strip().lower()
              # Do not queue anything less than 2 characters long.
              if len(line) < 2:
                  continue

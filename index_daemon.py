@@ -1,12 +1,16 @@
 from subprocess import call
-import time
+import optparse
+
+parser = optparse.OptionParser()
+parser.set_defaults(maxurls=10, seconds=3, jump=-1)
+parser.add_option('-m', '--maxindexes', action='store', default=10, type='int', dest='maxindexes', help='Max number of terms to index. (default=10)')
+parser.add_option('-s', '--seconds', action='store', default=0, type='int', dest='seconds', help='Seconds between indexes. (default=0)')
+parser.add_option('-n', '--noreindex', action='store_true', default=False, dest='noreindex', help='No reindex, only pending. (default=False)')
+(options, args) = parser.parse_args()
+
+print('Indexing ' + str(options.maxurls) + ' terms at a time, at a max rate of one every ' + str(options.seconds) + ' seconds with noreindex = ' + str(options.noreindex) + '.')
 
 while True:
-    # Reindex one term for every 10 new terms being indexed.
-    call(['python', 'manage.py', 'index', '-p', '-m', '10', '-s', '10'])
-    # Wait 5 seconds between context switches
-    time.sleep(1)
-    call(['python', 'manage.py', 'index', '-r', '-m', '10', '-s', '10'])
-    # Wait 5 seconds between cycles.
-    time.sleep(1)
-    
+    call(['python', 'manage.py', 'index', '-p', '-m', str(options.maxindexes), '-s', str(options.seconds)])
+    if not options.noreindex:
+        call(['python', 'manage.py', 'index', '-r', '-m', str(options.maxindexes), '-s', str(options.seconds)])
