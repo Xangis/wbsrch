@@ -180,6 +180,7 @@ class BlockedSite(models.Model):
     reason = models.IntegerField(null=True, blank=True, choices=EXCLUDED_SITE_REASONS)
     detailedreason = models.TextField(blank=True)
     exclude_subdomains = models.BooleanField(default=False, blank=True)
+    date_added = models.DateField(auto_now_add=True, db_index=True)
 
     class Meta:
         in_db = 'urls'
