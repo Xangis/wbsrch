@@ -9,7 +9,7 @@ psql indexes -t -c "SELECT keywords FROM dir_indexterm WHERE date_indexed >= '$1
 psql indexes -c "SELECT id, keywords, typo_for FROM dir_indexterm WHERE typo_for IS NOT NULL AND date_indexed >= '$1'" > /tmp/new_keyword_typos.txt
 psql indexes -t -c "SELECT keywords FROM dir_indexterm WHERE actively_blocked = true AND date_indexed >= '$1'" > /tmp/new_keyword_blocks.txt
 psql indexes -c "SELECT keywords, is_language FROM dir_indexterm WHERE is_language IS NOT NULL AND is_language != '' AND date_indexed >= '$1'" > /tmp/new_keyword_languages.txt
-psql urls -c "SELECT url, reason, date_added FROM dir_blockedsite WHERE date_added >= '$1'" > /tmp/new_blockedistes.txt
+psql urls -c "SELECT url, reason, date_added FROM dir_blockedsite WHERE date_added >= '$1'" > /tmp/new_blockedsites.txt
 psql indexes -t -c "SELECT keywords FROM dir_pendingindex WHERE date_added >= '$1'" > /tmp/new_indexes.txt
 psql indexes -t -c "SELECT keywords FROM dir_pendingindex_hr WHERE date_added >= '$1'" > /tmp/new_indexes_hr.txt
 psql indexes -t -c "SELECT keywords FROM dir_pendingindex_cs WHERE date_added >= '$1'" > /tmp/new_indexes_cs.txt
