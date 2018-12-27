@@ -37,51 +37,56 @@ class Command(BaseCommand):
         reader = codecs.getreader('utf8')(f)
         numdone = 0
         numadded = 0
-        for line in reader:
-             # Don't consider full URLs as valid search terms from file, instead use the root URL, if possible.
-             try:
-                 line = GetRootUrl(line.strip().lower())
-             except:
-                 line = line.strip().lower()
-             # Do not queue anything less than 2 characters long.
-             if len(line) < 2:
-                 continue
-             try:
-                 if domains:
-                     info = DomainInfo.objects.get(url=line)
-                 else:
-                     term = term_model.objects.get(keywords=line)
-             except ObjectDoesNotExist:
-                 if domains or printem:
-                     try:
-                         print u'{0}'.format(line)
-                         numadded = numadded + 1
-                     except:
-                         pass
-                 else:
-                     AddPendingTerm(line, language, 'add_new_to_pending from file {0}'.format(filename))
-                     print u'Added {0}.'.format(line)
-                     numadded = numadded + 1
-             if not noindividual and not domains:
-                 if ' ' in line:
-                     words = line.split(' ')
-                     for word in words: 
-                         try:
-                             term = term_model.objects.get(keywords=word)
-                         except ObjectDoesNotExist:
-                             if not printem:
-                                 try:
-                                     AddPendingTerm(word, language, 'add_new_to_pending from file {0}'.format(filename))
-                                 except:
-                                     pass
-                             try:
-                                 print u'{0}.'.format(word)
-                             except:
-                                 pass
-                             numadded = numadded + 1
-             numdone = numdone + 1
-             if numdone >= maxwords:
-                  break
+        numlines = 1
+        try:
+            for line in reader:
+                numlines = numlines + 1
+                # Don't consider full URLs as valid search terms from file, instead use the root URL, if possible.
+                try:
+                    line = GetRootUrl(line.strip().lower())
+                except:
+                    line = line.strip().lower()
+                # Do not queue anything less than 2 characters long.
+                if len(line) < 2:
+                    continue
+                try:
+                    if domains:
+                        info = DomainInfo.objects.get(url=line)
+                    else:
+                        term = term_model.objects.get(keywords=line)
+                except ObjectDoesNotExist:
+                    if domains or printem:
+                        try:
+                            print u'{0}'.format(line)
+                            numadded = numadded + 1
+                        except:
+                            pass
+                    else:
+                        AddPendingTerm(line, language, 'add_new_to_pending from file {0}'.format(filename))
+                        print u'Added {0}.'.format(line)
+                        numadded = numadded + 1
+                if not noindividual and not domains:
+                    if ' ' in line:
+                        words = line.split(' ')
+                        for word in words:
+                            try:
+                                term = term_model.objects.get(keywords=word)
+                            except ObjectDoesNotExist:
+                                if not printem:
+                                    try:
+                                        AddPendingTerm(word, language, 'add_new_to_pending from file {0}'.format(filename))
+                                    except:
+                                        pass
+                                try:
+                                    print u'{0}.'.format(word)
+                                except:
+                                    pass
+                                numadded = numadded + 1
+                numdone = numdone + 1
+                if numdone >= maxwords:
+                     break
+        except UnicodeDecodeError:
+            print('UnicodeDecodeError on line {0}'.format(numlines))
         if domains:
             print 'Processed {0} lines and {1} domains need to be crawled.'.format(numdone, numadded, language)
         else:
