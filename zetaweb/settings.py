@@ -4,7 +4,7 @@
 DEBUG = False
 import os
 # Add this line to /etc/environment or local vars to enable debug mode:
-#WBSRCH_ENVIRONMENT=debug
+#DJANGO_ENVIRONMENT=debug
 environment = os.getenv('DJANGO_ENVIRONMENT')
 if environment == 'debug' or environment == 'development':
     DEBUG = True
@@ -17,6 +17,8 @@ ALLOWED_HOSTS = [
         '.wbsrch.com', # Domain and subdomains.
         '.wbsrch.com.', # Allow FQDN and subdomains.
 ]
+if DEBUG:
+    ALLOWED_HOSTS.append('.localhost')
 
 MANAGERS = ADMINS
 
