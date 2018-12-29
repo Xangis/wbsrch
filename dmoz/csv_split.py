@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 # Script to split CSV files into URL list, assuming URL in first line of file.
+#
+# This should be run after split.sh if processing DMOZ urls.
 
 import os
 import sys
@@ -22,5 +24,6 @@ def ProcessCSVFile(filename):
         outfile.close()
     print('Processed {0} domains in {1}.'.format(num_domains, filename))
 
-for file in ('cs.csv', 'da.csv', 'de.csv', 'el.csv', 'en.csv', 'es.csv', 'fi.csv', 'fr.csv', 'hu.csv', 'it.csv', 'nl.csv', 'no.csv', 'pl.csv', 'pt.csv', 'sv.csv', 'tr.csv'):
+for file in ('cs.csv', 'da.csv', 'de.csv', 'el.csv', 'en.csv', 'es.csv', 'et.csv', 'fi.csv', 'fr.csv', 'hr.csv', 'hu.csv',
+             'it.csv', 'lt.csv', 'lv.csv', 'nl.csv', 'no.csv', 'pl.csv', 'pt.csv', 'ro.csv', 'sv.csv', 'sw.csv','tr.csv'):
     ProcessCSVFile(file)
