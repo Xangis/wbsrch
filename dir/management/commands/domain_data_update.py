@@ -4,6 +4,7 @@ from django.utils import timezone
 from optparse import make_option
 from dir.models import DomainInfo, PageLink
 import time
+import codecs
 
 class Command(BaseCommand):
     help = "This command updates domain metadata. It's used for updating domain link counts and domain keyword counts."
@@ -18,6 +19,7 @@ class Command(BaseCommand):
         make_option('-u', '--urlcounts', default=False, action='store_true', dest='urlcounts', help='Update domain URL counts, not link counts.. (default=False)'),
         make_option('-k', '--keywordcounts', default=False, action='store_true', dest='keywordcounts', help='Update domain URL counts, not link counts.. (default=False)'),
         make_option('-t', '--total', default=False, action='store_true', dest='total', help='After running, show the total number of domains without number of links calculated. (defaul=False)'),
+        make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load domain list from specified file.'),
     )
 
     def handle(self, *args, **options):
@@ -35,6 +37,27 @@ class Command(BaseCommand):
                 domains = DomainInfo.objects.filter(num_keywords_ranked_last_updated__isnull=False).order_by('num_keywords_ranked_last_updated')
             else:
                 domains = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('domains_linking_in_last_updated')
+        elif options['file']:
+            filename = options['file']
+            domains = []
+            numloaded = 0
+            print('Loading domains to update from file: {0}'.format(filename))
+            f = open(filename, 'rb')
+            reader = codecs.getreader('utf8')(f)
+            for line in reader.readlines():
+                line = line.strip()
+                numloaded = numloaded + 1
+                try:
+                    domain = DomainInfo.objects.get(url=line)
+                    domains.append(domain)
+                except:
+                    # Create domain if not found. This could be problematic if we have a file full of garbage text.
+                    print('Domain {0} not found, creating before update.'.format(line))
+                    domain = DomainInfo()
+                    domain.url = line
+                    domain.save()
+                    domains.append(domain)
+            print('{0} domains loaded from file {1}.'.format(numloaded, filename))
         else:
             if urlcounts:
                 domains = DomainInfo.objects.filter(num_urls_last_updated__isnull=False)
@@ -69,7 +92,7 @@ class Command(BaseCommand):
             domain.save()
             if sleeptime:
                 time.sleep(sleeptime)
-        updated = domains.count()
+        updated = len(domains)
         elapsed = timezone.now() - start
         if total:
             nototal = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=True).count()

@@ -1,6 +1,6 @@
 // Requires package libpqxx-dev.
 //
-// Build: g++ -std=c++11 -o domain domain_update.cpp -l pqxx
+// Build: g++ -std=c++11 -o domain_update domain_update.cpp -l pqxx
 //
 // Compared to the Python version, this uses 8MB for 10,000 domains updated in a batch vs.
 // Python's 130MB.
@@ -13,7 +13,13 @@ using namespace std;
 using namespace pqxx;
 
 int main(int argc, char* argv[]) {
-   const char * sql;
+   if( argc < 3 ) {
+     cout << "This program requires 2 arguments: number of items to process and offset. Try 10000 and 0." << endl;
+     exit(1);
+   }
+   stringstream sql;
+   int numitems = atoi(argv[1]);
+   int offset = atoi(argv[2]);
 
    try {
       connection C("dbname = zetaweb user = zetaweb password = d9irk0kfnv,er9kd2 \
@@ -36,14 +42,16 @@ int main(int argc, char* argv[]) {
       /* Create SQL statement */
       //sql = "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated, num_keywords_ranked, num_keywords_last_updated, num_urls, num_urls_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL ORDER BY alexa_rank LIMIT 100000";
       //sql = "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL ORDER BY alexa_rank LIMIT 100000";
-      sql = "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL LIMIT 1000";
+      sql << "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL LIMIT ";
+      sql << numitems << " OFFSET " << offset;
 
       /* Create a non-transactional object. */
       nontransaction N(C);
       nontransaction O(D);
 
+      cout << "Executing: " << sql.str() << endl;
       /* Execute SQL query */
-      result R( N.exec( sql ));
+      result R( N.exec( sql.str() ));
 
       /*
  id                              | integer                  | not null default nextval('dir_domaininfo_id_seq'::regclass)

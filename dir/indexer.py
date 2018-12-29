@@ -54,17 +54,24 @@ def RemoveFromPending(keywords, language=None):
 def Index(pendingindexes, max, sleep=2, language=None, verbose=False, abbreviated=False, type=None):
     processedkeywords = 0
     removedfrompending = 0
+    saved = 0
+    notsaved = 0
     for keywords in pendingindexes:
         if verbose:
             print u'Indexing: ' + keywords
-        BuildIndexForTerm(keywords, language, verbose, abbreviated, type)
+        was_saved = BuildIndexForTerm(keywords, language, verbose, abbreviated, type)
+        if was_saved:
+            saved = saved + 1
+        else:
+            notsaved = notsaved + 1
         if RemoveFromPending(keywords, language):
             removedfrompending = removedfrompending + 1
         processedkeywords = processedkeywords + 1
         if processedkeywords >= max:
             break
         time.sleep(sleep)
-    print u'Indexed ' + unicode(processedkeywords) + u' terms. ' + unicode(removedfrompending) + u' terms were removed from the pending term database.'
+    print u'Indexed {0} terms. {1} were saved and {2} were not saved. {3} terms were removed from the pending term database.'.format(
+        processedkeywords, saved, notsaved, removedfrompending)
 
 def LoadKeywordsFromFile(filename):
     pendingindexes = []
@@ -248,7 +255,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     if len(keywords) < 1:
         if verbose:
             print u'BuildIndexForTerm: Search term is empty. Refusing to index.'
-        return
+        return False
     keywords = keywords.lower()
     term = None
     new = False
@@ -327,7 +334,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
             weight = 0
         ratings.append([item.id, weight])
     # Sort by score
-    if verbose:    
+    if verbose:
         print timezone.now().isoformat() + ' Sorting index by score.'
     ratings.sort(key=lambda tup: tup[1], reverse=True)
     term.num_results = len(ratings)
@@ -346,6 +353,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         print timezone.now().isoformat() + ' Saving index term.'
     jsonify_start = timezone.now()
     # Don't save new index terms unless it has at least one result.
+    saved = True
     if not new or term.num_results > 0:
         if new and multiword:
             individualwords = term.keywords.split(' ')
@@ -355,8 +363,10 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
                 term.actively_blocked = True
         term.save()
         JsonifyIndexTerm(term, lang, verbose=verbose)
-    elif verbose:
-        print u'Not saving index term because it does not have at least one result.'
+    else:
+        if verbose:
+            print u'Not saving index term because it does not have at least one result.'
+        saved = False
     jsonify_delta = timezone.now() - jsonify_start
     if verbose:
         print timezone.now().isoformat() + ' Done indexing: ' + keywords + ', ' + str(term.num_results) + ' results.'
@@ -366,4 +376,4 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
             term.keywords, term.index_time, jsonify_delta.total_seconds(), term.num_results)
     except:
         pass
-
+    return saved

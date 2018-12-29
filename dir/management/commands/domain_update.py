@@ -7,6 +7,7 @@ from dir.models import DomainInfo
 from dir.domain import GetDomainInfo
 from django.db.utils import DataError
 import time
+import codecs
 
 class Command(BaseCommand):
     help = "This command updates domain whois-related information such as expiration, registrar, etc."
@@ -22,7 +23,7 @@ class Command(BaseCommand):
         make_option('-s', '--sleep', default=15, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=15)'),
         make_option('-o', '--offset', default=0, action='store', type='int', dest='offset', help='Domain slice offset - distance from beginning to start. (default=0)'),
         make_option('-r', '--random', default=False, action='store_true', dest='random', help='Update un-populated domains in random order (default=no)'),
-        #make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load term list from specified file.'),
+        make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load domain list from specified file.'),
 
         # TODO: Make an option to fill in nulls vs update already-queried domains.
     )
@@ -32,14 +33,34 @@ class Command(BaseCommand):
             domains = DomainInfo.objects.filter(whois_last_updated__isnull=True).order_by('?')[options['offset']:options['offset']+options['max']]
         elif options['justthisdomain']:
             domains = DomainInfo.objects.filter(url=options['justthisdomain'])
+        elif options['file']:
+            filename = options['file']
+            domains = []
+            numloaded = 0
+            print('Loading domains to update from file: {0}'.format(filename))
+            f = open(filename, 'rb')
+            reader = codecs.getreader('utf8')(f)
+            for line in reader.readlines():
+                line = line.strip()
+                numloaded = numloaded + 1
+                try:
+                    domain = DomainInfo.objects.get(url=line)
+                    domains.append(domain)
+                except:
+                    # Create domain if not found. This could be problematic if we have a file full of garbage text.
+                    print('Domain {0} not found, creating before update.'.format(line))
+                    domain = DomainInfo()
+                    domain.url = line
+                    domain.save()
+                    domains.append(domain)
+            print('{0} domains loaded from file {1}.'.format(numloaded, filename))
         else:
             domains = DomainInfo.objects.filter(whois_last_updated__isnull=True).order_by('alexa_rank')[options['offset']:options['offset']+options['max']]
         detailed = options['detailed']
         for domain in domains:
             print 'Updating {0}'.format(domain.url)
-            #try:
-            if True:
-                info = GetDomainInfo(domain.url)
+            info = GetDomainInfo(domain.url)
+            if info:
                 if detailed:
                     print 'Domain Info: {0}'.format(info)
                 try:
@@ -116,6 +137,8 @@ class Command(BaseCommand):
                     domain.whois_emails = info['emails']
                 except KeyError:
                     pass
+            else:
+                print('Could not get whois info for {0}'.format(domain.url))
             domain.whois_last_updated = timezone.now()
             if detailed:
                 print 'Created: {0}, Expires: {1}, Update Date: {2}, Name: {3}, City: {4}, Country: {5}, State: {6}, Address: {7}, Org: {8}, Registrar: {9}, Zipcode: {10}, Nameservers: {11}, EMails: {12}'.format(
