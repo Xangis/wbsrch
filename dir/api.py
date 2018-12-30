@@ -16,6 +16,9 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 
+# Note: In order to use the API, the user must have both a valid token AND
+# a valid subscription entered in the admin.
+
 def get_token(user):
     token = Token.objects.create(user=user)
     print token.key
@@ -158,9 +161,9 @@ def domain_pages_in_index(request):
     else:
         print u'{0} pages for domain {1}'.format(pages, domain)
     if site_model == SiteInfo:
-        return Response({'domain': domain, 'total': pages, 'en': pages }, status=200)
+        return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages }, status=200)
     else:
-        return Response({'domain': domain, 'total': pages, domaininfo.language_association: pages }, status=200)
+        return Response({'domain': domain, 'total_pages_crawled': pages, domaininfo.language_association: pages }, status=200)
 
 @api_view(['GET'])
 def domain_keywords_ranked(request):
@@ -169,19 +172,21 @@ def domain_keywords_ranked(request):
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
+    language = request.GET.get('lang', 'en')
     if not domain:
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
     altdomain = ReverseWWW(domain, False)
     print 'Domain: {0}'.format(domain)
-    keywords = KeywordRanking.objects.filter(rooturl=domain, rank__lt=200).count()
+    ranking_model = GetKeywordRankingModelFromLanguage(language)
+    keywords = ranking_model.objects.filter(rooturl=domain, rank__lt=200).count()
     if altdomain:
         added = KeywordRanking.objects.filter(rooturl=altdomain, rank__lt=200).count()
         print u'{0} keywords for domain {1} and {2} keywords for domain {3} for a total of {4}'.format(keywords, domain, added, altdomain, keywords+added)
         keywords += added
     else:
         print u'{0} keywords for domain {1}'.format(keywords, domain)
-    return Response({'domain': domain, 'en': keywords }, status=200)
+    return Response({'domain': domain, '{0}_ranked'.format(language): keywords }, status=200)
 
 @api_view(['GET'])
 def autocomplete(request):
