@@ -18,7 +18,7 @@ import uuid
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
 
-language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'el', 'sv', 'hu', 'fi', 'ro', 'hr', 'et', 'lt', 'lv', 'sw']
+language_list = ['en', 'ca', 'cs', 'de', 'el', 'es', 'et', 'fi', 'fr', 'hr', 'hu', 'it', 'lt', 'lv', 'nl', 'pl', 'pt', 'ro', 'sl', 'sv', 'sw', 'tr']
 #language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'ro', 'el', 'sv', 'da', 'hu', 'hr', 'sk', 'lt', 'no', 'fi', 'et', 'lv', 'sl', 'is', 'sw', 'yo', 'so', 'wo', 'ha', 'rw', 'sn', 'ca']
 
 # Only including languages that aren't also a valid country. This means that "ar", which could be argentina,
@@ -2763,6 +2763,39 @@ class APIUsage(models.Model):
         in_db = 'default'
 
 
+if 'ca' in language_list:
+
+    class SiteInfo_ca(URLInfo):
+
+        def __unicode__(self):
+            return self.url
+
+    class PendingIndex_ca(PendingIndexBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class IndexTerm_ca(IndexTermBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class KeywordRanking_ca(KeywordRank):
+        pass
+
+    class SearchLog_ca(SearchLogBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class ResultClick_ca(ResultClickBase):
+        pass
+
+    class AutoComplete_ca(AutoCompleteBase):
+
+        def __unicode__(self):
+            return self.keywords
+
 if 'et' in language_list:
 
     class SiteInfo_et(URLInfo):
@@ -2924,6 +2957,39 @@ if 'ro' in language_list:
         pass
 
     class AutoComplete_ro(AutoCompleteBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+if 'sl' in language_list:
+
+    class SiteInfo_sl(URLInfo):
+
+        def __unicode__(self):
+            return self.url
+
+    class PendingIndex_sl(PendingIndexBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class IndexTerm_sl(IndexTermBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class KeywordRanking_sl(KeywordRank):
+        pass
+
+    class SearchLog_sl(SearchLogBase):
+
+        def __unicode__(self):
+            return self.keywords
+
+    class ResultClick_sl(ResultClickBase):
+        pass
+
+    class AutoComplete_sl(AutoCompleteBase):
 
         def __unicode__(self):
             return self.keywords

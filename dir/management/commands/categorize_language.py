@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     To perform automatic categorization, which kind of works but is very experimental, you should use a command something like this:
 
-        time python manage.py categorize_language -c -t -a cs,de,el,es,et,fi,fr,hr,hu,it,lt,lv,nl,pl,pt,ro,sv,sw,tr -q -o -j -i 700000 -m 200000
+        time python manage.py categorize_language -c -t -a ca,cs,de,el,es,et,fi,fr,hr,hu,it,lt,lv,nl,pl,pt,ro,sl,sv,sw,tr -q -o -j -i 700000 -m 200000
 
     To perform automatic language blocking, which kind of works but is very experimental, you should use a command something like this:
 
@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     To automatically tag sites as english, which kind of works but is very experimental, you should use a command something like this (note the use of -n so we only tag with higher-confidence data):
 
-        python manage.py categorize_language -e -o -t -q -n 3 -i 2000    
+        python manage.py categorize_language -e -o -t -q -n 3 -i 2000
 """
 
     option_list = BaseCommand.option_list + (
