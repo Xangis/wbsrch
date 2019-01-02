@@ -1,0 +1,15 @@
+[Unit]
+Description=uWSGI Service for the WbSrch web server.
+After=syslog.target
+
+[Service]
+Environment="PATH='/home/xangis/.virtualenvs/wbsrch/bin'"
+ExecStart=/home/xangis/.virtualenvs/wbsrch/bin/uwsgi --ini /var/django/wbsrch/uwsgi.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
