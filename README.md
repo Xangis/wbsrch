@@ -15,6 +15,14 @@ considered abandonware.
 
 Linux is required. It doesn't matter which version, but it has only been tested with Ubuntu Server.
 
+Apache needs to be removed if it's installed:
+
+sudo apt-get remove apache2
+
+Build tools are required, as is Nginx and Python 2.x:
+
+sudo apt-get install build-essential nginx python2.7-dev
+
 WbSrch requires PostgreSQL. The version doesn't matter as long as it's 9.x or higher. If you don't
 have it yet, install it with:
 
