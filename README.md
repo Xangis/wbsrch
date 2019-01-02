@@ -57,8 +57,12 @@ pip install -r requirements.txt
 
 # Other Prerequisites
 
+### GeoIP
+
 The system uses the MaxMind data for GeoIP. geoip_update.sh must be run at least once to get this data.
 It should be run periodically to refresh the GeoIP data.
+
+### NLTK
 
 The system also use NLTK and needs to download module for it and install additional stopwords files.
 Run nltk_download.sh to do that (be sure your virtualenv is active).
