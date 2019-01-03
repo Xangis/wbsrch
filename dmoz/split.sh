@@ -16,6 +16,7 @@
 #World/Arabic
 #World/Bosanski
 
+grep "World/Català" parsed-new.csv > ca.csv
 grep "World/Česky" parsed-new.csv > cs.csv
 grep "World/Nederlands" parsed-new.csv > nl.csv
 grep "World/Suomi" parsed-new.csv > fi.csv
@@ -30,12 +31,15 @@ grep "World/Español" parsed-new.csv > es.csv
 grep "World/Svenska" parsed-new.csv > sv.csv
 grep "World/Dansk" parsed-new.csv > da.csv
 grep "World/Norsk" parsed-new.csv > no.csv
-grep "World/Türkçe" parsed-new.csv > tr.csv
 grep "World/Hrvatski" parsed-new.csv > hr.csv
+grep "World/Íslenska" parsed-new.csv > is.csv
 grep "World/Eesti" parsed-new.csv > et.csv
 grep "World/Lietuvių" parsed-new.csv > lt.csv
 grep "World/Latviski" parsed-new.csv > lv.csv
 grep "World/Română" parsed-new.csv > ro.csv
 grep "World/Kiswahili" parsed-new.csv > sw.csv
+grep "World/Slovensko" parsed-new.csv > sl.csv
+grep "World/Slovensky" parsed-new.csv > sk.csv
+grep "World/Türkçe" parsed-new.csv > tr.csv
 grep -v "/World/" parsed-new.csv > en.csv
 

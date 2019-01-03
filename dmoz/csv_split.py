@@ -24,6 +24,7 @@ def ProcessCSVFile(filename):
         outfile.close()
     print('Processed {0} domains in {1}.'.format(num_domains, filename))
 
-for file in ('cs.csv', 'da.csv', 'de.csv', 'el.csv', 'en.csv', 'es.csv', 'et.csv', 'fi.csv', 'fr.csv', 'hr.csv', 'hu.csv',
-             'it.csv', 'lt.csv', 'lv.csv', 'nl.csv', 'no.csv', 'pl.csv', 'pt.csv', 'ro.csv', 'sv.csv', 'sw.csv','tr.csv'):
+for file in ('ca.csv', 'cs.csv', 'da.csv', 'de.csv', 'el.csv', 'en.csv', 'es.csv', 'et.csv', 'fi.csv', 'fr.csv', 'hr.csv',
+             'hu.csv', 'is.csv', 'it.csv', 'lt.csv', 'lv.csv', 'nl.csv', 'no.csv', 'pl.csv', 'pt.csv', 'ro.csv', 'sk.csv',
+             'sl.csv', 'sv.csv', 'sw.csv', 'tr.csv'):
     ProcessCSVFile(file)
