@@ -1,0 +1,61 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ language_code }}">
+<head>
+<meta name="keywords" content="{% trans "search engine" %}, web, {% trans "search" %}, {% trans "algorithm" %}, {% trans "ranking" %}, wbrank, {% trans "pagerank" %}">
+<meta name="description" content="WbRank information for WbSrch {% trans "Web Search" %}, home of {% trans "The Independent Search Engine" %}.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>WbRank | WbSrch {% trans "Web Search" %}</title>
+{% ssi '/var/django/wbsrch/templates/style.inc' %}
+{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch Web 
+{% trans "Search" %} - WbRank</h1></div>
+<div class="page">
+
+<h2 class="left">WbRank</h2>
+<br/>
+<h3>What is WbRank?</h3>
+
+<p>WbRank is a general measure of a website's popularity on a scale of 0 to 10. The WbSrch search engine uses it as one of the ranking factors in its search results.</p>
+
+<h3>How is it calculated?</h3>
+
+<p>WbRank is determined using an unweighted count of the number of unique domains in the WbSrch search index that link to the target domain. More links result in a higher WbRank. It is calculated on a roughly logarithmic scale, so it takes more links to move from WbRank 3 to WbRank 4 than it does to move from WbRank 1 to WbRank 2.</p>
+
+<h3>Is this the same thing as PageRank?</h3>
+
+<p>No. PageRank is a weighted algorithm. WbRank is unweighted but serves a similar purpose.</p>
+
+<h3>How can I check my site's WbRank?</h3>
+
+<p>Check out our <a href="https://stats.wbsrch.com">stats section</a> where you can check your site's WbRank and a few other SEO-related metrics. We also have an API. It's not public yet, but if you're interested in getting access, you can contact us.</p>
+
+<h3>Are all links counted?</h3>
+
+<p>No. Links from sites excluded from the WbSrch search engine are not counted.</p>
+
+<h3>What about paid links?</h3>
+
+<p>Paid links are fine. That's just called advertising, and we don't have a problem with it.</p>
+
+<h3>What about link farms?</h3>
+
+<p>We tend to block those when we notice them, but they're not as prevalent now as they were in the past.</p>
+
+<h3>Are nofollow links counted?</h3>
+
+<p>Yes. Nofollow isn't a part of the HTML standard and is a silly idea in the first place. If it's a link, then it's meant to be followed.</p>
+
+<h3>Does linking to too many other sites decrease your ranking?</h3>
+
+<p>No. The web was designed around linking to other sites, and we don't want to do anything to discourage that.</p>
+
+<br /><p><a href="/">{% trans "Back to search form" %}.</a></p>
+</div>
+{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+</body>
+</html>

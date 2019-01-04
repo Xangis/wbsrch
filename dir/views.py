@@ -228,6 +228,12 @@ def criteria(request):
         language_code = 'en'
     return render_to_response('criteria.htm', {'language_code': language_code})
 
+def wbrank(request):
+    language_code = request.LANGUAGE_CODE
+    if language_code == 'en-us':
+        language_code = 'en'
+    return render_to_response('wbrank.htm', {'language_code': language_code})
+
 def changelog(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
