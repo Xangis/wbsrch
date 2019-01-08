@@ -9,8 +9,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>{% trans "Most Popular Searches" %} in {{ report.year }} - {{ report.month }} | WbSrch {% trans "Web Search" %}</title>
-{% ssi '/var/django/wbsrch/templates/style.inc' %}
-{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
 </head>
 <body>
 <div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch Web 
@@ -31,7 +31,7 @@
 {% endfor %}
 </p>
 <br /><p class="centered"><a href="/popular-searches/">{% trans "Back to search form" %}.</a></p>
-{% ssi '/var/django/wbsrch/templates/footerwithoutcopyright.inc' parsed %}
-{% ssi '/var/django/wbsrch/templates/copyright.inc' %}
+{% include 'footerwithoutcopyright.inc' parsed %}
+{% include 'copyright.inc' %}
 </body>
 </html>

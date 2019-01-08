@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>Philosophy and Goals | WbSrch Web {% trans "Search" %}</title>
-{% ssi '/var/django/wbsrch/templates/style.inc' %}
-{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
 </head>
 <body>
 <div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %} Philosophy and Goals</h1></div>
@@ -25,6 +25,6 @@
 <p>Give us a try. If we don't do what you want, come back in a few months and try again. Add us to the list of search engines in your browser. If you can't find something with Google or Bing, we'll be here for you. We're OK with being the second search engine you try when looking for something, and we primise that our results will be different.</p>
 <p><a href="/search/">Back to search form.</a></p>
 </div>
-{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+{% include 'footer.inc' %}
 </body>
 </html>

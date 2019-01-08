@@ -8,8 +8,8 @@
 {% if language_code == 'en' %}<link rel="search" href="https://wbsrch.com/opensearchdescription.xml" type="application/opensearchdescription+xml" title="WbSrch" />{% endif %}
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>{% if searchterm %}{% trans "Search Results" %} {% trans "for" %} {{ searchterm }} | {% endif %}WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }})</title>
-{% ssi '/var/django/wbsrch/templates/style.inc' %}
-{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
 <script src="/wbsrch.js" type="text/javascript"></script>
 </head>
 <body>
@@ -46,11 +46,13 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% if not results and not search_results and not refused %}
 <p>{% trans "No results were found for that search." %}</p>
 {% if show_network_ad %}
+<!--<p>including 1</p>-->
 {% include 'adsense.inc' %}
 {% endif %}
 <p>{% trans "Our robots are very embarrassed by their failure to find what you were looking for. They'll be on the hunt for new content and should have better results in a few days." %}</p>
 {% else %}
 {% if show_network_ad %}
+<!--<p>including 2</p>-->
 {% include 'adsense.inc' %}
 {% endif %}
 <table><tr><td>
@@ -98,12 +100,13 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% if allfromdomain %}<p><a href="/search/?q={{ searchterm }}">Back to search for "{{ searchterm }}" from all domains.</a></p>{% endif %}
 {% if not indexed and not refused %}<p><em>{% trans "Note: The phrase you searched for is not fully indexed. We have queued it for indexing and will have better results available soon." %}</em></p>{% endif %}
 {% if show_network_ad %}
+<!--<p>including 3</p>-->
 {% include 'adsense.inc' %}
 {% endif %}
 <br/><br/>
 {% endif %}
-{% ssi '/var/django/wbsrch/templates/footerwithoutcopyright.inc' parsed %}
-{% ssi '/var/django/wbsrch/templates/copyright.inc' %}
+{% include 'footerwithoutcopyright.inc' %}
+{% include 'copyright.inc' %}
 {% if searchterm %}
 <script>
 highlightText('{{ searchterm }}');
