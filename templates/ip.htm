@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>{% if ip %}{{ ip }} | {% endif %} {% trans "IP" %} Details | WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }})</title>
-{% ssi '/var/django/wbsrch/templates/style.inc' %}
-{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
 </head>
 <body>
 <div class="head">
@@ -41,7 +41,7 @@
 
 <p><a href="/search/">{% trans "Go to web search form" %}.</a></p>
 </div>
-{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+{% include 'footer.inc' %}
 </body>
 </html>
 

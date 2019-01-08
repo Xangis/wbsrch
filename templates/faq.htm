@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>Frequently Asked Questions (FAQ) | WbSrch Web {% trans "Search" %}</title>
-{% ssi '/var/django/wbsrch/templates/style.inc' %}
-{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
 </head>
 <body>
 <div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %} Frequently Asked Questions</h1></div>
@@ -148,6 +148,6 @@
 
 <p><a href="/search/">Back to search form.</a></p>
 </div>
-{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+{% include 'footer.inc' %}
 </body>
 </html>

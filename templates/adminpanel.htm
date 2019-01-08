@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>WbSrch Web {% trans "Search" %}</title>
-{% ssi '/var/django/wbsrch/templates/style.inc' %}
-{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
 </head>
 <body>
 <h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %}</h1>
@@ -136,6 +136,6 @@ KW: <input type="text" class="narrowText" name="keyword" maxlength="250" value="
 {% endif %}
 <p><a href="/search/">Back to search form.</a></p>
 <p class="copyright"><a href="/privacy/">Privacy Policy</a></p>
-{% ssi '/var/django/wbsrch/templates/copyright.inc' %}
+{% include 'copyright.inc' %}
 </body>
 </html>

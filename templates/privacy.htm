@@ -4,8 +4,8 @@
 <title>Privacy Policy | WbSrch Web {% trans "Search" %}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="icon" type="image/png" href="/favicon.png" />
-{% ssi '/var/django/wbsrch/templates/style.inc' %}
-{% ssi '/var/django/wbsrch/templates/analytics.inc' %}
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
 </head>
 <body>
 <div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" /></a>&nbsp;WbSrch Web {% trans "Search" %}</h1></div>
@@ -15,5 +15,5 @@
 <p>We use third-party advertising companies to serve ads when you visit our website. These companies may use information (not including your name, address, email address, or telephone number) about your visits to this and other websites in order to provide advertisements for goods and services. These companies may use cookies or web beacons for this purpose. We do not link that to any search information.</p>
 <p><a href="/search/">{% trans "Back to search form" %}.</a></p>
 </div>
-{% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
+{% include 'footer.inc' %}
 </body></html>

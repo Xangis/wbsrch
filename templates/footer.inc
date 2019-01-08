@@ -33,5 +33,5 @@
 -->
 </div>
 <br/>
-{% ssi '/var/django/wbsrch/templates/copyright.inc' %}
+{% include 'copyright.inc' %}
 
