@@ -46,10 +46,12 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% if not results and not search_results and not refused %}
 <p>{% trans "No results were found for that search." %}</p>
 {% if show_network_ad %}
+{% include 'adsense.inc' %}
 {% endif %}
 <p>{% trans "Our robots are very embarrassed by their failure to find what you were looking for. They'll be on the hunt for new content and should have better results in a few days." %}</p>
 {% else %}
 {% if show_network_ad %}
+{% include 'adsense.inc' %}
 {% endif %}
 <table><tr><td>
 {% for result, value in results %}
@@ -96,10 +98,7 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% if allfromdomain %}<p><a href="/search/?q={{ searchterm }}">Back to search for "{{ searchterm }}" from all domains.</a></p>{% endif %}
 {% if not indexed and not refused %}<p><em>{% trans "Note: The phrase you searched for is not fully indexed. We have queued it for indexing and will have better results available soon." %}</em></p>{% endif %}
 {% if show_network_ad %}
-{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
-{% endif %}
-{% else %}
-{% if show_network_ad %}
+{% include 'adsense.inc' %}
 {% endif %}
 <br/><br/>
 {% endif %}

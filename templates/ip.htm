@@ -23,7 +23,7 @@
 
 {% if ip %}
 <h2 class="left indented2 spacebelow">WbSrch {% trans "IP" %} {% trans "Info" %} {% trans "for" %} {{ ip }}:</h2>
-{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+{% include 'adsense.inc' %}
 {% if domains %}
 <h3 class="indented spacebelow">Domains Found at This IP</h3>
 {% for domain in domains %}
@@ -36,7 +36,7 @@
 <p>{% trans "Our crawler has not found any domains at that IP address" %}.</p>
 {% endif %}
 <p>We have {{ num_siteinfos }} pages in our index that were retrieved from that IP.</p>
-{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+{% include 'adsense.inc' %}
 {% endif %}
 
 <p><a href="/search/">{% trans "Go to web search form" %}.</a></p>

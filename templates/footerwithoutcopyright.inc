@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="footer"><p class="centered hidden-small"><a href="http://mycroftproject.com/search-engines.html?name={% if language_code and language_code != 'en' %}{{ language_code }}.{% endif %}wbsrch.com">Get the WbSrch search plugin</a> for <a href="http://firefox.com">Firefox</a>, Internet Explorer, and other modern browsers, or download the <a href="https://github.com/Xangis/wbbrowse">WbBrowse Browser</a>.</p>
+<div class="footer"><p class="centered hidden-small"><a href="http://mycroftproject.com/search-engines.html?name={% if language_code and language_code != 'en' %}{{ language_code }}.{% endif %}wbsrch.com">Get the WbSrch search plugin</a> for <a href="http://firefox.com">Firefox</a>, Internet Explorer, and other modern browsers, or download the <a href="https://browser.wbsrch.com">WbBrowse Browser</a>.</p>
 <p class="centered"><a href="/ip/">{% trans 'IP Address Info' %}</a> | 
 <a href="/changelog/">{% trans "Changelog" %}</a> | <a href="/policy/">{% trans "Inclusion Policy" %}</a> | 
 <a href="/philosophy/">{% trans "Philosophy and Goals" %}</a> |  
@@ -28,7 +28,7 @@
 <li><a href="https://sv.wbsrch.com/" alt="Svenska" title="Svenska">Svenska (SV)</a></li>
 <li><a href="https://tr.wbsrch.com/" alt="Türkçe" title="Türkçe">Türkçe (TR)</a></li> 
 </ul>
--->
 </nav>
+-->
 </div>
 <br/>

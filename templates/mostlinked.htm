@@ -17,7 +17,7 @@
 {% trans "Search" %} {% trans "Most Linked To Domains" %}</h1></div>
 <div class="page">
 <h2 class="left">Domains with the Most Inbound Links</h2><br/>
-{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+{% include 'adsense.inc' %}
 <ol>
 {% for domain in domains %}
 <li><a href="/domain/?q={{ domain.url }}">{{ domain.url }}</a></li>
@@ -26,7 +26,7 @@
 <p>These are the most linked-to domains based on data in the WbSrch index. Counts are taken based on the number of different domains linking to the target domain. We don't count links from domains that have been excluded due to our <a href="/policy/">inclusion policy</a>.</p>
 {% if not domains %}<h4 class="centered">Database error - no data was found.</h4>{% endif %}
 <br /><p><a href="/">{% trans "Back to search form" %}.</a></p>
-{% ssi '/var/django/wbsrch/templates/adsense.inc' %}
+{% include 'adsense.inc' %}
 </div>
 {% ssi '/var/django/wbsrch/templates/footer.inc' parsed %}
 </body>
