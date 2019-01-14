@@ -11,6 +11,7 @@ GeoIPASNum.dat
 GeoIP.dat
 GeoLiteCity.dat
 top-1m_*.zip
+top-1m.csv.zip
 top-1m.csv
 alexa_blocked.txt
 alexa_new.txt
