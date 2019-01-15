@@ -18,6 +18,8 @@
 
 <div class="content">
 
+{% include "mgid.inc" %}
+
 {% if category %}<h3>Showing articles in category "{{ category }}".</h3><p><a href="/articles/">Back to all articles</a></p>{% endif %}
 
 {% for post in posts %}
