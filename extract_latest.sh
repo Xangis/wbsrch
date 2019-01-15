@@ -56,14 +56,101 @@ psql zetaweb -t -c "SELECT url FROM dir_siteinfo_sv WHERE lastcrawled >= '$1'" >
 psql zetaweb -t -c "SELECT url FROM dir_siteinfo_tr WHERE lastcrawled >= '$1'" > /tmp/new_pages_tr.txt
 psql zetaweb -c "SELECT * FROM dir_domaininfo WHERE domain_updated >= '$1' OR whois_last_updated >= '$1' OR robots_last_updated >= '$1'" > /tmp/new_domains_full.txt
 psql zetaweb -t -c "SELECT url FROM dir_domaininfo WHERE domain_updated >= '$1' OR whois_last_updated >= '$1' OR robots_last_updated >= '$1'" > /tmp/new_domains.txt
-# TODO: Also extract these in a useful re-importable way:
-# dir_domainsearchlog
-# --> Extract all after certain date.
-# dir_ipsearchlog
-# --> Extract all after certain date.
+psql indexes -t -c "CREATE TABLE export_domainsearches AS SELECT * FROM dir_domainsearchlog WHERE last_search >= '$1'"
+pg_dump --table=export_domainsearches --data-only --column-inserts indexes > /tmp/new_domain_searches.sql
+psql indexes -t -c "DROP TABLE export_domainsearches"
+psql indexes -t -c "SELECT * FROM dir_domainsearchlog WHERE last_search >= '$1'" > /tmp/new_domain_searches.txt
+psql indexes -t -c "CREATE TABLE export_ipsearches AS SELECT * FROM dir_ipsearchlog WHERE last_search >= '$1'"
+pg_dump --table=export_ipsearches --data-only --column-inserts indexes > /tmp/new_ip_searches.sql
+psql indexes -t -c "DROP TABLE export_ipsearches"
+psql indexes -t -c "SELECT * FROM dir_ipsearchlog WHERE last_search >= '$1'" > /tmp/new_ip_searches.txt
 # dir_resultclick
+psql indexes -t -c "CREATE TABLE export_resultclicks AS SELECT * FROM dir_resultclick WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks --data-only --column-inserts indexes > /tmp/new_result_clicks.sql
+psql indexes -t -c "DROP TABLE export_resultclicks"
+psql indexes -t -c "SELECT * FROM dir_resultclick WHERE click_time >= '$1'" > /tmp/new_result_clicks.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_de AS SELECT * FROM dir_resultclick_de WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_de --data-only --column-inserts indexes > /tmp/new_result_clicks_de.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_de"
+psql indexes -t -c "SELECT * FROM dir_resultclick_de WHERE click_time >= '$1'" > /tmp/new_result_clicks_de.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_fr AS SELECT * FROM dir_resultclick_fr WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_fr --data-only --column-inserts indexes > /tmp/new_result_clicks_fr.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_fr"
+psql indexes -t -c "SELECT * FROM dir_resultclick_fr WHERE click_time >= '$1'" > /tmp/new_result_clicks_fr.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_es AS SELECT * FROM dir_resultclick_es WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_es --data-only --column-inserts indexes > /tmp/new_result_clicks_es.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_es"
+psql indexes -t -c "SELECT * FROM dir_resultclick_es WHERE click_time >= '$1'" > /tmp/new_result_clicks_es.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_nl AS SELECT * FROM dir_resultclick_nl WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_nl --data-only --column-inserts indexes > /tmp/new_result_clicks_nl.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_nl"
+psql indexes -t -c "SELECT * FROM dir_resultclick_nl WHERE click_time >= '$1'" > /tmp/new_result_clicks_nl.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_it AS SELECT * FROM dir_resultclick_it WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_it --data-only --column-inserts indexes > /tmp/new_result_clicks_it.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_it"
+psql indexes -t -c "SELECT * FROM dir_resultclick_it WHERE click_time >= '$1'" > /tmp/new_result_clicks_it.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_pl AS SELECT * FROM dir_resultclick_pl WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_pl --data-only --column-inserts indexes > /tmp/new_result_clicks_pl.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_pl"
+psql indexes -t -c "SELECT * FROM dir_resultclick_pl WHERE click_time >= '$1'" > /tmp/new_result_clicks_pl.txt
 # --> Extract all data after a certain date.
 # --> For ALL languages.
+
 # dir_searchlog
+psql indexes -t -c "CREATE TABLE export_searches AS SELECT * FROM dir_searchlog WHERE last_search >= '$1'"
+pg_dump --table=export_searches --data-only --column-inserts indexes > /tmp/new_searches.sql
+psql indexes -t -c "DROP TABLE export_searches"
+psql indexes -t -c "SELECT * FROM dir_searchlog WHERE last_search >= '$1'" > /tmp/new_searches.txt
+
+psql indexes -t -c "CREATE TABLE export_searches_de AS SELECT * FROM dir_searchlog_de WHERE last_search >= '$1'"
+pg_dump --table=export_searches_de --data-only --column-inserts indexes > /tmp/new_searches_de.sql
+psql indexes -t -c "DROP TABLE export_searches_de"
+psql indexes -t -c "SELECT * FROM dir_searchlog_de WHERE last_search >= '$1'" > /tmp/new_searches_de.txt
+
+psql indexes -t -c "CREATE TABLE export_searches_fr AS SELECT * FROM dir_searchlog_fr WHERE last_search >= '$1'"
+pg_dump --table=export_searches_fr --data-only --column-inserts indexes > /tmp/new_searches_fr.sql
+psql indexes -t -c "DROP TABLE export_searches_fr"
+psql indexes -t -c "SELECT * FROM dir_searchlog_fr WHERE last_search >= '$1'" > /tmp/new_searches_fr.txt
+
+psql indexes -t -c "CREATE TABLE export_searches_es AS SELECT * FROM dir_searchlog_es WHERE last_search >= '$1'"
+pg_dump --table=export_searches_es --data-only --column-inserts indexes > /tmp/new_searches_es.sql
+psql indexes -t -c "DROP TABLE export_searches_es"
+psql indexes -t -c "SELECT * FROM dir_searchlog_es WHERE last_search >= '$1'" > /tmp/new_searches_es.txt
+
+psql indexes -t -c "CREATE TABLE export_searches_nl AS SELECT * FROM dir_searchlog_nl WHERE last_search >= '$1'"
+pg_dump --table=export_searches_nl --data-only --column-inserts indexes > /tmp/new_searches_nl.sql
+psql indexes -t -c "DROP TABLE export_searches_nl"
+psql indexes -t -c "SELECT * FROM dir_searchlog_nl WHERE last_search >= '$1'" > /tmp/new_searches_nl.txt
+
+psql indexes -t -c "CREATE TABLE export_searches_it AS SELECT * FROM dir_searchlog_it WHERE last_search >= '$1'"
+pg_dump --table=export_searches_it --data-only --column-inserts indexes > /tmp/new_searches_it.sql
+psql indexes -t -c "DROP TABLE export_searches_it"
+psql indexes -t -c "SELECT * FROM dir_searchlog_it WHERE last_search >= '$1'" > /tmp/new_searches_it.txt
+
+psql indexes -t -c "CREATE TABLE export_searches_pl AS SELECT * FROM dir_searchlog_pl WHERE last_search >= '$1'"
+pg_dump --table=export_searches_pl --data-only --column-inserts indexes > /tmp/new_searches_pl.sql
+psql indexes -t -c "DROP TABLE export_searches_pl"
+psql indexes -t -c "SELECT * FROM dir_searchlog_pl WHERE last_search >= '$1'" > /tmp/new_searches_pl.txt
+
+psql indexes -t -c "CREATE TABLE export_searches_sv AS SELECT * FROM dir_searchlog_sv WHERE last_search >= '$1'"
+pg_dump --table=export_searches_sv --data-only --column-inserts indexes > /tmp/new_searches_sv.sql
+psql indexes -t -c "DROP TABLE export_searches_tr"
+psql indexes -t -c "SELECT * FROM dir_searchlog_tr WHERE last_search >= '$1'" > /tmp/new_searches_tr.txt
+
+psql indexes -t -c "CREATE TABLE export_searches_cs AS SELECT * FROM dir_searchlog_cs WHERE last_search >= '$1'"
+pg_dump --table=export_searches_cs --data-only --column-inserts indexes > /tmp/new_searches_cs.sql
+psql indexes -t -c "DROP TABLE export_searches_cs"
+psql indexes -t -c "SELECT * FROM dir_searchlog_cs WHERE last_search >= '$1'" > /tmp/new_searches_cs.txt
+
+psql indexes -t -c "CREATE TABLE export_searches_tr AS SELECT * FROM dir_searchlog_tr WHERE last_search >= '$1'"
+pg_dump --table=export_searches_tr --data-only --column-inserts indexes > /tmp/new_searches_tr.sql
+psql indexes -t -c "DROP TABLE export_searches_tr"
+psql indexes -t -c "SELECT * FROM dir_searchlog_tr WHERE last_search >= '$1'" > /tmp/new_searches_tr.txt
 # --> Extract all data after a certain date.
 # --> For ALL languages.
