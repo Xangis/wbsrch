@@ -1,4 +1,4 @@
-{% with '1 2 3 4 5' as numbers %}
+{% with '1 2 3 4 5 6' as numbers %}
 {% with numbers.split|random as section %}
 {% if section == '1' %}
 <!-- Adcash -->
@@ -15,6 +15,18 @@
 <!-- Yllix -->
 <script type="text/javascript" src="//ylx-1.com/bnr.php?section=General&pub=518533&format=728x90&ga=g"></script>
 <noscript><a href="https://yllix.com/publishers/518533" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" /></a></noscript>
+{% elif section == '5' %}
+<!-- Adsterra -->
+<script type="text/javascript">
+	atOptions = {
+		'key' : '7cb8fde86d9eb121ba106553cdc48d1a',
+		'format' : 'iframe',
+		'height' : 90,
+		'width' : 728,
+		'params' : {}
+	};
+	document.write('<scr' + 'ipt type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.bcloudhost.com/7cb8fde86d9eb121ba106553cdc48d1a/invoke.js"></scr' + 'ipt>');
+</script>
 {% else %}
 <!-- Chitika -->
 <script type="text/javascript">
