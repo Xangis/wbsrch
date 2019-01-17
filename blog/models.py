@@ -19,6 +19,9 @@ class BlogPost(models.Model):
     published = models.DateField(null=True, blank=True)
     visible = models.BooleanField(default=True)
 
+    class Meta:
+        in_db = 'indexes'
+
     def get_tags(self):
         return Tag.objects.get_for_object(self)
 
