@@ -239,20 +239,44 @@ class Command(BaseCommand):
                     elif langtoblock == 'ko':
                         # (27, 'Unindexed Language - Korean'),
                         site.reason = 27
+                    elif langtoblock == 'mk':
+                        # (41, 'Unindexed Language - Macedonian'),
+                        site.reason = 41
+                    elif langtoblock == 'pa':
+                        # (39, 'Unindexed Language - Punjabi'),
+                        site.reason = 39
+                    elif langtoblock == 'ps':
+                        # (40, 'Unindexed Language - Pashto'),
+                        site.reason = 40
                     elif langtoblock == 'ru' or langtoblock =='uk' or langtoblock == 'bg':
                         # (28, 'Unindexed Language - Russian or Other Cyrillic'),
                         site.reason = 28
+                    elif langtoblock == 'si':
+                        # (36, 'Unindexed Language - Sinhala'),
+                        site.reason = 36
+                    elif langtoblock == 'sq':
+                        # (37, 'Unindexed Language - Albanian'),
+                        site.reason = 37
                     elif langtoblock == 'sr':
                         # (33, 'Unindexed Language - Serbian'),
                         site.reason = 33
+                    elif langtoblock == 'te':
+                        # (42, 'Unindexed Language - Telugu'),
+                        site.reason = 42
                     elif langtoblock == 'th':
                         # (30, 'Unindexed Language - Thai'),
                         site.reason = 30
+                    elif langtoblock == 'tl':
+                        # (38, 'Unindexed Language - Tagalog'),
+                        site.reason = 38
+                    elif langtoblock == 'ur':
+                        # (35, 'Unindexed Language - Urdu'),
+                        site.reason = 35
                     elif langtoblock == 'vi':
                         # (29, 'Unindexed Language - Vietnamese'),
                         site.reason = 29
-                    elif langtoblock == 'tl' or langtoblock == 'pa' or langtoblock == 'ps' or langtoblock == 'te' or langtoblock == 'am' or langtoblock == 'si' or langtoblock == 'gu' or langtoblock == 'sq' or langtoblock == 'ku' or langtoblock == 'mk' or langtoblock == 'mn' or langtoblock == 'jv' or langtoblock == 'as' or langtoblock == 'ta':
-                        # TDOO: Add a reason for tagalog and 'pa' and 'ps' and 'te' and 'si' (sinhala) and 'sq' (albanian) and 'ku', 'mk', 'jv', 'as', 'mn', 'ta'.
+                    elif langtoblock == 'am' or langtoblock == 'si' or langtoblock == 'gu' or langtoblock == 'ku' or langtoblock == 'mn' or langtoblock == 'jv' or langtoblock == 'as' or langtoblock == 'ta':
+                        # TDOO: Add a reason for and 'am', 'si', 'gu', 'ku', 'jv', 'as', 'mn', 'ta'.
                         site.reason = 8
                     else:
                         # (8, 'Unindexed Language - Unspecified'),
