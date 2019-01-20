@@ -275,8 +275,8 @@ class Command(BaseCommand):
                     elif langtoblock == 'vi':
                         # (29, 'Unindexed Language - Vietnamese'),
                         site.reason = 29
-                    elif langtoblock == 'am' or langtoblock == 'si' or langtoblock == 'gu' or langtoblock == 'ku' or langtoblock == 'mn' or langtoblock == 'jv' or langtoblock == 'as' or langtoblock == 'ta':
-                        # TDOO: Add a reason for and 'am', 'si', 'gu', 'ku', 'jv', 'as', 'mn', 'ta'.
+                    elif langtoblock == 'am' or langtoblock == 'si' or langtoblock == 'gu' or langtoblock == 'ku' or langtoblock == 'mn' or langtoblock == 'jv' or langtoblock == 'as' or langtoblock == 'ta' or langtoblock == 'ne' or langtoblock == 'ug' or langtoblock == 'lo':
+                        # TDOO: Add a reason for and 'am', 'si', 'gu', 'ku', 'jv', 'as', 'mn', 'ta', 'ne', 'ug', 'lo'
                         site.reason = 8
                     else:
                         # (8, 'Unindexed Language - Unspecified'),
