@@ -2512,16 +2512,25 @@ def LogQueries(queries):
 
     return totaltime
 
-def PornBlock(item):
+# Use one of URL (as text) or domain (as a DomainInfo object)
+# This allows us to be flexible in how we block.
+def PornBlock(item=None, url=None):
     """
     Takes a SiteInfo and blocks it, removes its URLs, blocks its parent, and removes the
     parent's URLs, unless the site is taggged as unblockable, in which case it just removes
     the SiteInfo from the database. If the parent is unblockable, it only removes the domain
     itself.
     """
-    parsedurl = urlparse.urlparse(item.url)
+    if url is not None:
+        parsedurl = urlparse.urlparse(url).path
+    elif item is not None:
+        parsedurl = urlparse.urlparse(item.url).netloc
+    else:
+        print('PornBlock: Invalid call. Must supply url or DomainInfo object.')
+        return False
+    print('PornBlock: Parsed URL = "{0}"'.format(parsedurl))
     try:
-        domain = DomainInfo.objects.get(url=parsedurl.netloc)
+        domain = DomainInfo.objects.get(url=parsedurl)
         # If this domain is unblockable, then just delete the URL, because if someone checked
         # blog they at least want to nuke the URLs they just selected.
         if domain.is_unblockable:
@@ -2533,7 +2542,16 @@ def PornBlock(item):
     # For this type of site, we block the root url first. Then the actual url.
     # We also set it to block all subdomains by default (but don't check them
     # at block time yet)
-    rootdomain = GetRootDomain(item.rooturl)
+    #
+    # For https://stats.wbsrch.com/dashboard/
+    # The rooturl is stats.wbsrch.com
+    # and the rootdomain is wbsrch.com.
+    if item:
+        rooturl = item.rooturl
+        rootdomain = GetRootDomain(item.rooturl)
+    elif url:
+        rooturl = GetRootUrl(parsedurl)
+        rootdomain = GetRootDomain(parsedurl)
     print u'Rootdomain is {0}'.format(rootdomain)
     # Track whether the root domain is unblockable.
     unblockable = False
@@ -2546,7 +2564,7 @@ def PornBlock(item):
         pass
     # If the root domain does not match the current domain, block the root and clear out its
     # URLs, provided the root is not unblockable.
-    if (rootdomain != item.rooturl) and not unblockable:
+    if (rootdomain != rooturl) and not unblockable:
         print u'Removing URLs for root domain {0}.'.format(rootdomain)
         RemoveURLsForDomain(rootdomain)
         try:
@@ -2563,20 +2581,25 @@ def PornBlock(item):
     # Or, if this *is* the root domain, clear out all of the URLs, provided they are not blockable.
     # Technically, the "domain is root" and blockable case will never be true due to the check at the
     # beginning of this function, so we just go ahead and block.
-    print u'Blocking URLs for domain {0}'.format(parsedurl.netloc)
-    RemoveURLsForDomain(parsedurl.netloc)
+    print u'Blocking URLs for domain {0}'.format(parsedurl)
+    RemoveURLsForDomain(parsedurl)
     try:
-        existing = BlockedSite.objects.get(url=parsedurl.netloc)
-        print u'Domain {0} was already blocked. That is odd.'.format(item.rooturl)
+        existing = BlockedSite.objects.get(url=parsedurl)
+        print u'Domain {0} was already blocked. That is odd.'.format(parsedurl)
     except ObjectDoesNotExist:
-        print u'Adding BlockedSite for domain {0}.'.format(item.rooturl)
+        print u'Adding BlockedSite for domain {0}.'.format(parsedurl)
         site = BlockedSite()
-        site.url = parsedurl.netloc
+        site.url = parsedurl
         site.reason = 4
-        if (rootdomain == item.rooturl) and not unblockable:
+        if (rootdomain == rooturl) and not unblockable:
             site.exclude_subdomains = True
         site.save()
-    RequeueRankedKeywordsForDomain(parsedurl.netloc)
+    try:
+        RequeueRankedKeywordsForDomain(parsedurl)
+    except InvalidLanguageException:
+        # If the domain is an excluded language, like Japanese, we will get an InvalidLanguageException
+        # when we try to requeue ranked keywords. Ignore it.
+        pass
 
 def BannedSearchString(text):
     #print 'Checking {0} for banned search string.'.format(text)
