@@ -484,11 +484,6 @@ class SearchLog(SearchLogBase):
     def __unicode__(self):
         return self.keywords
 
-class SearchLog_ca(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
 class SearchLog_cs(SearchLogBase):
 
     def __unicode__(self):
@@ -570,11 +565,6 @@ class SearchLog_rw(SearchLogBase):
         return self.keywords
 
 class SearchLog_sk(SearchLogBase):
-
-    def __unicode__(self):
-        return self.keywords
-
-class SearchLog_sl(SearchLogBase):
 
     def __unicode__(self):
         return self.keywords
@@ -2676,9 +2666,6 @@ class ResultClickBase(models.Model):
 class ResultClick(ResultClickBase):
     pass
 
-class ResultClick_ca(ResultClickBase):
-    pass
-
 class ResultClick_cs(ResultClickBase):
     pass
 
@@ -2728,9 +2715,6 @@ class ResultClick_rw(ResultClickBase):
     pass
 
 class ResultClick_sk(ResultClickBase):
-    pass
-
-class ResultClick_sl(ResultClickBase):
     pass
 
 class ResultClick_sn(ResultClickBase):
