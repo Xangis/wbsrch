@@ -99,6 +99,68 @@ psql indexes -t -c "CREATE TABLE export_resultclicks_pl AS SELECT * FROM dir_res
 pg_dump --table=export_resultclicks_pl --data-only --column-inserts indexes > /tmp/new_result_clicks_pl.sql
 psql indexes -t -c "DROP TABLE export_resultclicks_pl"
 psql indexes -t -c "SELECT * FROM dir_resultclick_pl WHERE click_time >= '$1'" > /tmp/new_result_clicks_pl.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_hr AS SELECT * FROM dir_resultclick_hr WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_hr --data-only --column-inserts indexes > /tmp/new_result_clicks_hr.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_hr"
+psql indexes -t -c "SELECT * FROM dir_resultclick_hr WHERE click_time >= '$1'" > /tmp/new_result_clicks_hr.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_cs AS SELECT * FROM dir_resultclick_cs WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_cs --data-only --column-inserts indexes > /tmp/new_result_clicks_cs.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_cs"
+psql indexes -t -c "SELECT * FROM dir_resultclick_cs WHERE click_time >= '$1'" > /tmp/new_result_clicks_cs.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_pt AS SELECT * FROM dir_resultclick_pt WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_pt --data-only --column-inserts indexes > /tmp/new_result_clicks_pt.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_pt"
+psql indexes -t -c "SELECT * FROM dir_resultclick_pt WHERE click_time >= '$1'" > /tmp/new_result_clicks_pt.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_fi AS SELECT * FROM dir_resultclick_fi WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_fi --data-only --column-inserts indexes > /tmp/new_result_clicks_fi.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_fi"
+psql indexes -t -c "SELECT * FROM dir_resultclick_fi WHERE click_time >= '$1'" > /tmp/new_result_clicks_fi.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_el AS SELECT * FROM dir_resultclick_el WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_el --data-only --column-inserts indexes > /tmp/new_result_clicks_el.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_el"
+psql indexes -t -c "SELECT * FROM dir_resultclick_el WHERE click_time >= '$1'" > /tmp/new_result_clicks_el.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_sv AS SELECT * FROM dir_resultclick_sv WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_sv --data-only --column-inserts indexes > /tmp/new_result_clicks_sv.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_sv"
+psql indexes -t -c "SELECT * FROM dir_resultclick_sv WHERE click_time >= '$1'" > /tmp/new_result_clicks_sv.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_tr AS SELECT * FROM dir_resultclick_tr WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_tr --data-only --column-inserts indexes > /tmp/new_result_clicks_tr.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_tr"
+psql indexes -t -c "SELECT * FROM dir_resultclick_tr WHERE click_time >= '$1'" > /tmp/new_result_clicks_tr.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_ro AS SELECT * FROM dir_resultclick_ro WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_ro --data-only --column-inserts indexes > /tmp/new_result_clicks_ro.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_ro"
+psql indexes -t -c "SELECT * FROM dir_resultclick_ro WHERE click_time >= '$1'" > /tmp/new_result_clicks_ro.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_hu AS SELECT * FROM dir_resultclick_hu WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_hu --data-only --column-inserts indexes > /tmp/new_result_clicks_hu.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_hu"
+psql indexes -t -c "SELECT * FROM dir_resultclick_hu WHERE click_time >= '$1'" > /tmp/new_result_clicks_hu.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_sw AS SELECT * FROM dir_resultclick_sw WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_sw --data-only --column-inserts indexes > /tmp/new_result_clicks_sw.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_sw"
+psql indexes -t -c "SELECT * FROM dir_resultclick_sw WHERE click_time >= '$1'" > /tmp/new_result_clicks_sw.txt
+
+psql indexes -t -c "CREATE TABLE export_resultclicks_et AS SELECT * FROM dir_resultclick_et WHERE click_time >= '$1'"
+pg_dump --table=export_resultclicks_et --data-only --column-inserts indexes > /tmp/new_result_clicks_et.sql
+psql indexes -t -c "DROP TABLE export_resultclicks_et"
+psql indexes -t -c "SELECT * FROM dir_resultclick_et WHERE click_time >= '$1'" > /tmp/new_result_clicks_et.txt
+
+# Still need:
+# ca
+# lv
+# lt
+# sl
+
 # --> Extract all data after a certain date.
 # --> For ALL languages.
 
