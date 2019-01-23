@@ -2689,6 +2689,14 @@ admin.site.register(APIUsage, APIUsageAdmin)
 admin.site.register(CrawlableUrl)
 
 # Conditional languages, enabled in language_list in models.py.
+if 'ca' in language_list:
+    admin.site.register(SiteInfo_ca, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_ca, IndexTermAdmin)
+    admin.site.register(PendingIndex_ca, PendingIndexAdmin)
+    admin.site.register(SearchLog_ca, SearchLogAdmin)
+    admin.site.register(AutoComplete_ca, AutoCompleteAdmin)
+    admin.site.register(ResultClick_ca, ResultClickAdmin)
+    # We don't register KeywordRanking.
 if 'et' in language_list:
     admin.site.register(SiteInfo_et, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_et, IndexTermAdmin)
@@ -2728,6 +2736,14 @@ if 'ro' in language_list:
     admin.site.register(SearchLog_ro, SearchLogAdmin)
     admin.site.register(AutoComplete_ro, AutoCompleteAdmin)
     admin.site.register(ResultClick_ro, ResultClickAdmin)
+    # We don't register KeywordRanking.
+if 'sl' in language_list:
+    admin.site.register(SiteInfo_sl, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_sl, IndexTermAdmin)
+    admin.site.register(PendingIndex_sl, PendingIndexAdmin)
+    admin.site.register(SearchLog_sl, SearchLogAdmin)
+    admin.site.register(AutoComplete_sl, AutoCompleteAdmin)
+    admin.site.register(ResultClick_sl, ResultClickAdmin)
     # We don't register KeywordRanking.
 if 'sw' in language_list:
     admin.site.register(SiteInfo_sw, ExtendedSiteInfoAdmin)
