@@ -140,8 +140,8 @@ psql indexes -t -c "SELECT * FROM dir_searchlog_pl WHERE last_search >= '$1'" > 
 
 psql indexes -t -c "CREATE TABLE export_searches_sv AS SELECT * FROM dir_searchlog_sv WHERE last_search >= '$1'"
 pg_dump --table=export_searches_sv --data-only --column-inserts indexes > /tmp/new_searches_sv.sql
-psql indexes -t -c "DROP TABLE export_searches_tr"
-psql indexes -t -c "SELECT * FROM dir_searchlog_tr WHERE last_search >= '$1'" > /tmp/new_searches_tr.txt
+psql indexes -t -c "DROP TABLE export_searches_sv"
+psql indexes -t -c "SELECT * FROM dir_searchlog_sv WHERE last_search >= '$1'" > /tmp/new_searches_sv.txt
 
 psql indexes -t -c "CREATE TABLE export_searches_cs AS SELECT * FROM dir_searchlog_cs WHERE last_search >= '$1'"
 pg_dump --table=export_searches_cs --data-only --column-inserts indexes > /tmp/new_searches_cs.sql
