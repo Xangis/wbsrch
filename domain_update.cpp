@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
 
    try {
       connection C("dbname = zetaweb user = zetaweb password = d9irk0kfnv,er9kd2 \
-      hostaddr = 127.0.0.1 port = 5432");
+      hostaddr = 45.33.19.243 port = 5432");
       if (C.is_open()) {
          cout << "Opened database successfully: " << C.dbname() << endl;
       } else {
