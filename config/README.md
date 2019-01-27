@@ -33,3 +33,6 @@ wbsrch.com
 
 wbsrch_cron
   Cron job file, goes in /etc/cron.d/, runs daiy tasks like the index stats generation
+
+packages.sh
+  Used for installing apt packages required by WbSrch in all one go.
