@@ -1,11 +1,16 @@
 To create a wildcard certificate, you'll need to run a command like this for Certbot:
-  certbot -d "wbsrch.com,*.wbsrch.com" --manual --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory certonly
+  #certbot -d "wbsrch.com,*.wbsrch.com" --manual --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory certonly
+  certbot certonly --manual --preferred-challenges=dns --email=jchampion@sigmacentauri.com --agree-tos -d "wbsrch.com,*.wbsrch.com"
 
 You'll need to add two DNS TXT records, so be ready to do that.
 
 To confirm that the TXT records are correct, you can run a dig command from another window:
 
 dig -t txt _acme-challenge.wbsrch.com
+
+If dig is missing, you need to install dnsutils:
+
+sudo apt-get install dnsutils
 
 For more info:
 

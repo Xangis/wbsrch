@@ -292,6 +292,10 @@ way to post spam links, comments, or SQL injections. The config/blockips.conf fi
 It's probably a better idea to use your existing nginx.conf file and add the lines that reference blockips.conf from
 nginx.conf to it manually, since the one in this source distribution is from an older version of Nginx.
 
+## Certificates
+
+This uses Certbot for certificates. See config/certbot.txt for how to set up Certbot.
+
 # Conclusion
 
 You should absolutely not use the WbSrch engine if you want to build a full-sized consumer-facing search engine.
