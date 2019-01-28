@@ -2,7 +2,7 @@ from subprocess import call
 import optparse
 
 parser = optparse.OptionParser()
-parser.set_defaults(maxurls=10, seconds=3, jump=-1)
+parser.set_defaults(maxurls=100, seconds=180)
 parser.add_option('-m', '--maxurls', action='store', type='int', dest='maxurls', help='Max number of URLs to crawl. (default=100)')
 parser.add_option('-s', '--seconds', action='store', type='int', dest='seconds', help='Seconds between pages. (default=3)')
 (options, args) = parser.parse_args()

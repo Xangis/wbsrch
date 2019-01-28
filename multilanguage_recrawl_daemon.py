@@ -9,8 +9,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 from dir.views import language_list
 
 while True:
-    for x in range(2000, 0, -20):
+    for x in range(1000, 0, -20):
         for language in language_list:
             if language is 'en':
                 continue
-            call(['python', 'manage.py', 'crawl', '-r', '-m', '20', '-s', '5', '-o', str(x), '-l', language])
+            call(['python', 'manage.py', 'crawl', '-r', '-m', '20', '-s', '60', '-o', str(x), '-l', language])
