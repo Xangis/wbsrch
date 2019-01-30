@@ -3042,6 +3042,10 @@ def IsBotAgent(text):
     # MauiBot (crawler.feedback+wc@gmail.com)
     if u'MauiBot' in text:
         return True
+    # Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)
+    # No current user is on any Mozilla/4.0 browser. This is only used by bots at this point.
+    if u'Mozilla/4.0' in text:
+        return True
     return False
 
 def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=False):
