@@ -3042,6 +3042,9 @@ def IsBotAgent(text):
     # MauiBot (crawler.feedback+wc@gmail.com)
     if u'MauiBot' in text:
         return True
+    # Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.11) Gecko Kazehakase/0.5.4 Debian/0.5.4-2.1ubuntu3
+    if u'Kazehakase' in text:
+        return True
     # Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)
     # No current user is on any Mozilla/4.0 browser. This is only used by bots at this point.
     if u'Mozilla/4.0' in text:
