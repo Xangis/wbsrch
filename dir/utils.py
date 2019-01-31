@@ -2226,7 +2226,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
     AddPendingTerm(text, language_code, u'Search {0} not indexed yet.'.format(text))
     return term
 
-def GenerateIndexStats(save=False, verbose=False):
+def GenerateIndexStats(save=False, verbose=False, nolinks=False):
     start = timezone.now()
     stats = IndexStats(total_urls=0, total_indexes=0, total_pendingindexes=0)
     stats.num_excluded = BlockedSite.objects.count()
@@ -2250,8 +2250,8 @@ def GenerateIndexStats(save=False, verbose=False):
         stats.total_indexes += langdata['indexes']
         stats.total_pendingindexes += langdata['pending_indexes']
         langs.append(langdata)
-    print('Most linked to domain list updated {0}'.format(newest_stats.last_most_linked_to))
-    if (not newest_stats) or (newest_stats.last_most_linked_to < (timezone.now() - timedelta(days=30)).date()):
+    print('Most linked to domain list updated {0}. Nolinks is set to {1}.'.format(newest_stats.last_most_linked_to, nolinks))
+    if (not nolinks) and ((not newest_stats) or (newest_stats.last_most_linked_to < (timezone.now() - timedelta(days=30)).date())):
         print('Most linked to domain list is older than 30 days, need to recalculate.')
         most_linked = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in')
         most_linked_list = []
