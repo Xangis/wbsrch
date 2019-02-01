@@ -679,7 +679,11 @@ def search(request):
             is_language_name = language_names[result.is_language]
         except KeyError:
             # This can happen if the language is "Russian" and that is not on the supported language name list.
+            # In this case, we set the language to None and don't worry about it -- it won't try to link to the
+            # nonexistant language, but that will still be set on the record for the purpose of tagging and
+            # filtering elsewhere.
             is_language_name = None
+            result.is_language = None
     names_language_name = None
     if result.names_language:
         names_language_name = language_names[result.names_language]
