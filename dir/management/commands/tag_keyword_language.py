@@ -35,9 +35,9 @@ class Command(BaseCommand):
             print(u'Checking Keyword: {0}'.format(keyword))
             for language in language_list:
                 if language == 'en':
-                    cursor2.execute(u"SELECT keywords, num_results FROM dir_indexterm WHERE keywords = '{0}'".format(keyword[0]))
+                    cursor2.execute(u"SELECT keywords, num_results FROM dir_indexterm WHERE keywords = '{0}'".format(keyword[0].replace("'", "''")))
                 else:
-                    cursor2.execute(u"SELECT keywords, num_results FROM dir_indexterm_{0} WHERE keywords = '{1}'".format(language, keyword[0]))
+                    cursor2.execute(u"SELECT keywords, num_results FROM dir_indexterm_{0} WHERE keywords = '{1}'".format(language, keyword[0].replace("'", "''")))
                 count = cursor2.fetchall()
                 #print(u'Language {0} result: {1}'.format(language, count))
                 language_results[language] = count
