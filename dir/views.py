@@ -179,6 +179,33 @@ def index(request):
 
     return render_to_response('index.htm', {'language_code': language_code, 'recent_terms': recent_terms, 'superuser': superuser, 'cached': cached }, context_instance=RequestContext(request))
 
+def ads(request):
+    return HttpResponsePermanentRedirect('https://ads.wbsrch.com')
+
+def analytics(request):
+    return HttpResponsePermanentRedirect('https://analytics.wbsrch.com')
+
+def apps(request):
+    return HttpResponsePermanentRedirect('https://apps.wbsrch.com')
+
+def browser(request):
+    return HttpResponsePermanentRedirect('https://browser.wbsrch.com')
+
+def images(request):
+    return HttpResponsePermanentRedirect('https://images.wbsrch.com')
+
+def maps(request):
+    return HttpResponsePermanentRedirect('https://maps.wbsrch.com')
+
+def news(request):
+    return HttpResponsePermanentRedirect('https://news.wbsrch.com')
+
+def stats(request):
+    return HttpResponsePermanentRedirect('https://stats.wbsrch.com')
+
+def video(request):
+    return HttpResponsePermanentRedirect('https://video.wbsrch.com')
+
 def policy(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
