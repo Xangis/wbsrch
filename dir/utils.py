@@ -60,19 +60,19 @@ top_level_domains = [
 # New TLDs (many still needed)
 '.accountant', '.academy', '.adult', '.aero', '.agency', '.apartments', '.app', '.archi', '.associates', '.audio',
 '.bar', '.bargains', '.best', '.bike', '.biz', '.black', '.blackfriday', '.blog', '.blue', '.boo', '.builders',
-'.cab', '.camera', '.camp', '.cancerresearch', '.cards', '.center', '.ceo', '.cheap', '.christmas', '.church', '.click', '.clothing', 
+'.cab', '.cafe', '.camera', '.camp', '.cancerresearch', '.cards', '.center', '.ceo', '.cheap', '.christmas', '.church', '.click', '.clothing', 
 '.club', '.codes', '.coffee', '.college', '.coop',
 '.dance', '.date', '.dating', '.design', '.diet', '.directory', '.download',
 '.education', '.email', '.events', '.exposed',
-'.faith', '.farm', '.fit', '.flowers', '.futbol', 
+'.faith', '.farm', '.fit', '.flowers', '.fun', '.futbol',
 '.gift', '.glass', '.global', '.gop', '.gratis', '.green', '.guitars', '.guru',
 '.help', '.hiphop', '.hiv', '.holdings', '.hosting', '.hotel', '.house',
-'.info', '.ink', '.international', 
+'.icu', '.info', '.ink', '.international',
 '.jobs', '.juegos', '.kaufen', '.kim',
-'.land', '.lighting', '.link', '.loan', '.lol', '.love',
-'.meet', '.men', '.menu', '.mobi', '.moda', '.moe', '.mov', '.museum', '.music', 
+'.land', '.lighting', '.link', '.live', '.loan', '.lol', '.love',
+'.meet', '.men', '.menu', '.mobi', '.moda', '.moe', '.mov', '.museum', '.music',
 '.name', '.ngo', '.ninja', '.one', '.ong', '.onl', '.ooo', '.organic',
-'.party', '.photo', '.photos', '.pics', '.pink', '.plumbing', '.plus', '.porn', '.post', '.pub', '.pro', '.properties', '.property',
+'.party', '.photo', '.photos', '.pics', '.pictures', '.pink', '.plumbing', '.plus', '.porn', '.post', '.pub', '.pro', '.properties', '.property',
 '.realtor', '.red', '.rich',
 '.science', '.sex', '.sexy', '.shiksha', '.shop', '.singles', '.site', '.social', '.solar', '.sucks', '.systems',
 '.tattoo', '.tel', '.today', '.top', '.travel',
@@ -82,7 +82,7 @@ top_level_domains = [
 # Geographic TLDs (many still needed)
 '.alsace', '.asia', '.berlin', '.brussels', '.bzh', '.cat', '.cymru', '.eus', '.frl', '.gal', '.gent',
 '.irish', '.kiwi', '.krd', '.lat', '.london', '.melbourne', '.miami', '.nyc',
-'.paris', '.quebec', '.saarland', '.sydney', '.tokyo', '.vlaanderen', '.wales', '.wien'
+'.paris', '.quebec', '.saarland', '.sydney', '.tokyo', '.vip', '.vlaanderen', '.wales', '.wien'
 # Still need Internationalized Geographic TLDs.
 # Still need Brand top-level domains.
 '.google', '.ovh', '.yandex',
@@ -1116,19 +1116,19 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         value -= 50
         if verbose:
             rulematches.append('-50 points for root domain .xxx/.porn.')
-    elif item.rooturl.endswith(u'.pics') or item.rooturl.endswith(u'.sexy') or item.rooturl.endswith(u'.adult'):
+    elif item.rooturl.endswith(u'.pics') or item.rooturl.endswith(u'.sexy') or item.rooturl.endswith(u'.adult') or item.rooturl.endswith(u'.pictures'):
         value -= 10
         if verbose:
-            rulematches.append('-10 points for root domain .pics/.sexy/.adult.')
+            rulematches.append('-10 points for root domain .pics/.sexy/.adult/.pictures.')
     # These new TLDs are pretty much always spam and malware.
-    elif item.rooturl.endswith(u'.xyz') or item.rooturl.endswith(u'.kim') or item.rooturl.endswith(u'.review') or item.rooturl.endswith(u'.cricket') or item.rooturl.endswith(u'.science') or item.rooturl.endswith(u'.country') or item.rooturl.endswith(u'.party') or item.rooturl.endswith(u'.work') or item.rooturl.endswith(u'.link') or item.rooturl.endswith(u'.gq'):
+    elif item.rooturl.endswith(u'.xyz') or item.rooturl.endswith(u'.kim') or item.rooturl.endswith(u'.review') or item.rooturl.endswith(u'.cricket') or item.rooturl.endswith(u'.science') or item.rooturl.endswith(u'.country') or item.rooturl.endswith(u'.party') or item.rooturl.endswith(u'.work') or item.rooturl.endswith(u'.link') or item.rooturl.endswith(u'.gq') or item.rooturl.endswith(u'.fun'):
         value -= 8
         if verbose:
-            rulematches.append('-8 points for root domain .xyz/.kim/.review/.cricket/.link/.science/.work/.gq/.party/.country')
-    elif item.rooturl.endswith(u'.info') or item.rooturl.endswith(u'.cn') or item.rooturl.endswith(u'.ru') or item.rooturl.endswith(u'.su') or item.rooturl.endswith(u'.biz') or item.rooturl.endswith(u'.mobi'):
+            rulematches.append('-8 points for root domain .xyz/.kim/.review/.cricket/.link/.science/.work/.gq/.party/.country/.fun')
+    elif item.rooturl.endswith(u'.info') or item.rooturl.endswith(u'.cn') or item.rooturl.endswith(u'.ru') or item.rooturl.endswith(u'.su') or item.rooturl.endswith(u'.biz') or item.rooturl.endswith(u'.mobi') or item.rooturl.endswith(u'.icu'):
         value -= 6
         if verbose:
-            rulematches.append('-6 points for root domain .info/.cn/.ru/.su./.biz/.mobi')
+            rulematches.append('-6 points for root domain .info/.cn/.ru/.su./.biz/.mobi/.icu')
     # Differing scores for language-centric top-level domains.
     elif item.rooturl.endswith(u'.casa'):
         if lang == 'es':
@@ -1140,15 +1140,15 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('-3 points for .casa and not language es.')
     # Lose moderate points for some new TLDs and CCTLDs.
-    elif item.rooturl.endswith(u'.club') or item.rooturl.endswith(u'.guru') or item.rooturl.endswith(u'.ninja') or item.rooturl.endswith(u'.kr') or item.rooturl.endswith(u'.jp') or item.rooturl.endswith(u'.az') or item.rooturl.endswith(u'.iq') or item.rooturl.endswith(u'.ir') or item.rooturl.endswith(u'.name') or item.rooturl.endswith(u'.pro') or item.rooturl.endswith(u'.gratis') or item.rooturl.endswith(u'.win') or item.rooturl.endswith(u'.ooo') or item.rooturl.endswith(u'.plus') or item.rooturl.endswith(u'blue') or item.rooturl.endswith(u'party'):
+    elif item.rooturl.endswith(u'.club') or item.rooturl.endswith(u'.guru') or item.rooturl.endswith(u'.ninja') or item.rooturl.endswith(u'.kr') or item.rooturl.endswith(u'.jp') or item.rooturl.endswith(u'.az') or item.rooturl.endswith(u'.iq') or item.rooturl.endswith(u'.ir') or item.rooturl.endswith(u'.name') or item.rooturl.endswith(u'.pro') or item.rooturl.endswith(u'.gratis') or item.rooturl.endswith(u'.win') or item.rooturl.endswith(u'.ooo') or item.rooturl.endswith(u'.plus') or item.rooturl.endswith(u'blue') or item.rooturl.endswith(u'party') or item.rooturl.endswith(u'.vip'):
         value -= 4
         if verbose:
-            rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir/.name/.pro/.gratis/.win/.ooo/.plus/.party/.blue')
-    elif item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or item.rooturl.endswith(u'.om') or item.rooturl.endswith(u'.kw') or item.rooturl.endswith(u'.th') or item.rooturl.endswith(u'.bn') or item.rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.win'):
+            rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir/.name/.pro/.gratis/.win/.ooo/.plus/.party/.blue/.vip')
+    elif item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or item.rooturl.endswith(u'.om') or item.rooturl.endswith(u'.kw') or item.rooturl.endswith(u'.th') or item.rooturl.endswith(u'.bn') or item.rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.win') or item.rooturl.endswith(u'.site') or item.rooturl.endswith(u'.cafe') or item.rooturl.endswith(u'.download') or item.rooturl.endswith(u'.live') or item.rooturl.endswith(u'.today'):
         value -= 2
         if verbose:
-            rulematches.append('-2 points for domain .in/.sg/.tw/.mobi/.biz/.ng/.my/.id/.ph/.tw/.sg/.in/.lk/.ae/.ws/.om/.kw/.th/.bn/.am/.ge/.mn/.jo/.by/.la/.bt/.ae/.site')
-    elif item.rooturl.endswith(u'.tv') or item.rooturl.endswith(u'.vi') or item.rooturl.endswith(u'.vg') or item.rooturl.endswith(u'.sc') or item.rooturl.endswith(u'.vu') or item.rooturl.endswith(u'.to') or item.rooturl.endswith(u'.tl') or item.rooturl.endswith(u'.nr') or item.rooturl.endswith(u'.sh') or item.rooturl.endswith(u'.pn') or item.rooturl.endswith(u'.tk') or item.rooturl.endswith(u'.tc') or item.rooturl.endswith(u'.us') or item.rooturl.endswith(u'.site'):
+            rulematches.append('-2 points for domain .in/.sg/.tw/.mobi/.biz/.ng/.my/.id/.ph/.tw/.sg/.in/.lk/.ae/.ws/.om/.kw/.th/.bn/.am/.ge/.mn/.jo/.by/.la/.bt/.ae/.site/.cafe/.download/.live/.today')
+    elif item.rooturl.endswith(u'.tv') or item.rooturl.endswith(u'.vi') or item.rooturl.endswith(u'.vg') or item.rooturl.endswith(u'.sc') or item.rooturl.endswith(u'.vu') or item.rooturl.endswith(u'.to') or item.rooturl.endswith(u'.tl') or item.rooturl.endswith(u'.nr') or item.rooturl.endswith(u'.sh') or item.rooturl.endswith(u'.pn') or item.rooturl.endswith(u'.tk') or item.rooturl.endswith(u'.tc') or item.rooturl.endswith(u'.us'):
         value -= 1
         if verbose:
             rulematches.append('-1 points for domain .tv/.vi/.vg/.sc/.vu/.to/.tl/.nr/.sh/.pn/.tk/.tc/.us')
