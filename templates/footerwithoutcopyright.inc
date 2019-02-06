@@ -5,7 +5,7 @@
 <a href="/philosophy/">{% trans "Philosophy and Goals" %}</a> |  
 <a href="/index-stats/">{% trans "Index Statistics" %}</a> | <a href="/howto/">{% trans "How to Use WbSrch" %}</a> |
 <a href="/most-linked-to-domains/">Top 100 Most-Linked-To Domains</a> | 
-<a href="/articles/">Articles</a></p>
+<a href="https://stats.wbsrch.com">Stats</a> | <a href="/articles/">Articles</a></p>
 <p class="centered"><a href="/terms/">{% trans "Terms of Service" %}</a> | 
 <a href="/privacy/">{% trans "Privacy Policy" %}</a> | 
 <a href="/faq/">{% trans "Frequently Asked Questions" %}</a> | <a href="/criteria/">{% trans "Ranking Criteria" %}</a> | 
