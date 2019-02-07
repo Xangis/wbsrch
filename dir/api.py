@@ -7,6 +7,7 @@ from django.utils import timezone
 import json
 from models import *
 from utils import *
+from domain import UpdateDomainWhois
 from language import language_name_reverse
 from crawler import CrawlSingleUrl, Crawler
 from urlparse import urlparse
@@ -282,6 +283,8 @@ def get_whois_info(request):
     # TODO: Query the domain if it does not have whois_last_updated set.
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
+        if not domaininfo.whois_last_updated:
+            UpdateDomainWhois(domaininfo)
         return Response({'domain': domain, 'domain_created': domaininfo.domain_created, 'domain_expires': domaininfo.domain_expires, 'domain_last_updated': domaininfo.domain_updated,
           'info_updated': domaininfo.whois_last_updated, 'whois_name': domaininfo.whois_name, 'whois_city': domaininfo.whois_city, 'whois_country': domaininfo.whois_country,
           'whois_state': domaininfo.whois_state, 'whois_address': domaininfo.whois_address, 'whois_org': domaininfo.whois_org, 'whois_registrar': domaininfo.whois_registrar,
