@@ -32,6 +32,13 @@ def NormalizeDomain(domain):
         domain = parsedurl.netloc
     return domain
 
+def SwapHttps(url):
+    if url.startswith('http:'):
+        url = 'https:' + url[5:]
+    elif url.startswith('https:'):
+        url = 'http:' + url[6:]
+    return url
+
 def IncrementAPICallCount(user):
     """
     Increments the monthly API call count for a user. Returns True if
@@ -216,6 +223,8 @@ def get_page_details(request):
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     page = request.GET.get('page', None)
+    if not page.startswith('http'):
+        page = 'https://{0}'.format(page)
     # TODO: Try both HTTP and HTTPS, check DomainInfo to see what language index should be queried.
     # TODO: Try to crawl the page if it doesn't exist yet (depending on account permissions -- some accounts should and some should not be
     # allowed to trigger url retreival with this call.
