@@ -60,7 +60,7 @@ def IncrementAPICallCount(user):
 @api_view(['GET'])
 def ip_to_country(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse('No Token Provided', status=403)
     else:
         print 'ip_to_country called by {0}'.format(request.user)
     if not IncrementAPICallCount(request.user):
@@ -80,7 +80,7 @@ def ip_to_country(request):
 @api_view(['GET'])
 def domain_link_rank(request):
     if not request.auth:
-        return HttpResponse({'error': 'Not authorized.'}, status=403)
+        return HttpResponse('No Token Provided', status=403)
     else:
         print 'domain_link_rank called by {0}'.format(request.user)
     if not IncrementAPICallCount(request.user):
@@ -136,7 +136,7 @@ def domain_link_rank(request):
 @api_view(['GET'])
 def domain_pages_in_index(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse('No Token Provided', status=403)
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
@@ -168,7 +168,7 @@ def domain_pages_in_index(request):
 @api_view(['GET'])
 def domain_keywords_ranked(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse('No Token Provided', status=403)
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
@@ -191,7 +191,7 @@ def domain_keywords_ranked(request):
 @api_view(['GET'])
 def autocomplete(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse('No Token Provided', status=403)
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     word = request.GET.get('word', None)
@@ -201,7 +201,7 @@ def autocomplete(request):
 @api_view(['GET'])
 def check_typo(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse('No Token Provided', status=403)
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     word = request.GET.get('word', None)
@@ -212,7 +212,7 @@ def check_typo(request):
 @api_view(['GET'])
 def get_page_details(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse('No Token Provided', status=403)
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     page = request.GET.get('page', None)
@@ -248,7 +248,7 @@ def get_page_details(request):
 @api_view(['GET'])
 def get_alexa_rank(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse('No Token Provided', status=403)
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
@@ -264,7 +264,7 @@ def get_alexa_rank(request):
 @api_view(['GET'])
 def get_whois_info(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse('No Token Provided', status=403)
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
@@ -284,7 +284,7 @@ def get_whois_info(request):
 @api_view(['GET'])
 def get_robots_info(request):
     if not request.auth:
-        return HttpResponse(status=403)
+        return HttpResponse('No Token Provided', status=403)
     if not IncrementAPICallCount(request.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
