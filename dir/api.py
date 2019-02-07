@@ -131,7 +131,7 @@ def domain_link_rank(request):
     if link_rank > 8:
         link_rank = 8
     # TODO: Include domains_linking_in_last_updated in response.
-    return Response({'domain': domain, 'wbrank': link_rank, 'excluded': is_excluded}, status=200)
+    return Response({'domain': domain, 'wbrank': link_rank, 'excluded': is_excluded, 'domains_linking_in': domains_linking_in}, status=200)
 
 @api_view(['GET'])
 def domain_pages_in_index(request):
@@ -207,3 +207,92 @@ def check_typo(request):
     word = request.GET.get('word', None)
     print 'Word: {0}'.format(word)
     return Response({'word': word}, status=200)
+
+# Gets the full page info for a URL (number of javascript and CSS items, size, etc.)
+@api_view(['GET'])
+def get_page_details(request):
+    if not request.auth:
+        return HttpResponse(status=403)
+    if not IncrementAPICallCount(request.user):
+        return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
+    page = request.GET.get('page', None)
+    # TODO: Try both HTTP and HTTPS, check DomainInfo to see what language index should be queried.
+    # TODO: Try to crawl the page if it doesn't exist yet (depending on account permissions -- some accounts should and some should not be
+    # allowed to trigger url retreival with this call.
+    try:
+        pageinfo = SiteInfo.objects.get(url=page)
+        return Response({'page': page, 'url': pageinfo.url, 'domain': pageinfo.rooturl, 'title': pageinfo.pagetitle, 'description': pageinfo.pagedescription,
+          'ip': pageinfo.ip, 'num_css_files': pageinfo.num_css_files, 'num_images': pageinfo.num_images, 'num_javascript_files': pageinfo.num_javascripts,
+          'num_iframes': pageinfo.num_iframes, 'num_audio_tags': pageinfo.num_audio_tags, 'num_video_tags': pageinfo.num_video_tags, 'num_svg_tags': pageinfo.num_svg_tags,
+          'num_canvas_tags': pageinfo.num_canvas_tags, 'image_filenames': pageinfo.image_filenames, 'content_type': pageinfo.content_type_header,
+          'server_header': pageinfo.server_header, 'retrieved_time': pageinfo.lastcrawled, 'size': pageinfo.pagesize}, status=200)
+    except ObjectDoesNotExist:
+        return Response({'error': 'Page {0} not found in index.'.format(page)}, status=404)
+
+    """
+    Things we're not currently retrieving (and may or may not want to):
+    pagefirstheadtag = models.CharField(max_length=260, blank=True, null=True)
+    pagefirsth2tag = models.CharField(max_length=260, blank=True, null=True)
+    pagefirsth3tag = models.CharField(max_length=260, blank=True, null=True)
+    pagekeywords = models.CharField(max_length=260, blank=True, null=True)
+    pagecontents = models.TextField(blank=True, null=True)
+    pagetext = models.TextField(blank=True, null=True)
+    firstcrawled = models.DateTimeField(null=True, blank=True) # Note that this won't be accurate for pages recrawled before 2015-09-22.
+    num_errors = models.IntegerField(blank=True, default=0)
+    error_info = models.TextField(blank=True, default='')
+    image_alt_tags = models.TextField(null=True, blank=True)
+    image_title_tags = models.TextField(null=True, blank=True)
+    """
+
+# Gets the Alexa rank for a domain (from whenever we had it last).
+@api_view(['GET'])
+def get_alexa_rank(request):
+    if not request.auth:
+        return HttpResponse(status=403)
+    if not IncrementAPICallCount(request.user):
+        return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
+    domain = request.GET.get('domain', None)
+    domain = NormalizeDomain(domain)
+    print 'Domain: {0}'.format(domain)
+    try:
+        domaininfo = DomainInfo.objects.get(url=domain)
+        return Response({'domain': domain, 'alexa_rank': domaininfo.alexa_rank, 'alexa_rank_date': domaininfo.alexa_rank_date}, status=200)
+    except ObjectDoesNotExist:
+        return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
+
+# Gets the whois info for a domain if we have it.
+@api_view(['GET'])
+def get_whois_info(request):
+    if not request.auth:
+        return HttpResponse(status=403)
+    if not IncrementAPICallCount(request.user):
+        return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
+    domain = request.GET.get('domain', None)
+    domain = NormalizeDomain(domain)
+    print 'Domain: {0}'.format(domain)
+    # TODO: Query the domain if it does not have whois_last_updated set.
+    try:
+        domaininfo = DomainInfo.objects.get(url=domain)
+        return Response({'domain': domain, 'domain_created': domaininfo.domain_created, 'domain_expires': domaininfo.domain_expires, 'domain_last_updated': domaininfo.domain_updated,
+          'info_updated': domaininfo.whois_last_updated, 'whois_name': domaininfo.whois_name, 'whois_city': domaininfo.whois_city, 'whois_country': domaininfo.whois_country,
+          'whois_state': domaininfo.whois_state, 'whois_address': domaininfo.whois_address, 'whois_org': domaininfo.whois_org, 'whois_registrar': domaininfo.whois_registrar,
+          'whois_zipcode': domaininfo.whois_zipcode, 'whois_nameservers': domaininfo.whois_nameservers, 'whois_emails': domaininfo.whois_emails}, status=200)
+    except ObjectDoesNotExist:
+        return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
+
+# Gets the robots.txt info for a domain if we have it.
+@api_view(['GET'])
+def get_robots_info(request):
+    if not request.auth:
+        return HttpResponse(status=403)
+    if not IncrementAPICallCount(request.user):
+        return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
+    domain = request.GET.get('domain', None)
+    domain = NormalizeDomain(domain)
+    print 'Domain: {0}'.format(domain)
+    # TODO: Query the domain if it does not have robots_last_updated set.
+    try:
+        domaininfo = DomainInfo.objects.get(url=domain)
+        return Response({'domain': domain, 'robots_ip': domaininfo.robots_ip, 'robots_txt': domaininfo.robots_txt, 'robots_last_updated': domaininfo.robots_last_updated}, status=200)
+    except ObjectDoesNotExist:
+        return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
