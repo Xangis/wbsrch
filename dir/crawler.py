@@ -766,7 +766,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
         except:
             print u'Retrieving URL'
         req = urllib2.Request(url)
-        req.add_header('User-agent', 'Mozilla/5.0 (compatible; WbSrch/1.1 +http://wbsrch.com)')
+        req.add_header('User-agent', 'Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)')
         try:
             response = urllib2.urlopen(req, timeout=20)
             if ParseHtml(pendinglinks, url, response, descriptive, recrawl):
