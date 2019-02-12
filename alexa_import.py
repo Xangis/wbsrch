@@ -45,7 +45,7 @@ def LoadAlexaFile(filename):
         # Set all Alexa results as old.
         print u'Marking all previous alexa rank data as outdated.'
         cursor = connection.cursor()
-        cursor.execute('UPDATE dir_domaininfo SET alexa_outdated = true WHERE alexa_rank > 0 and alexa_rank <= 1000000 AND alexa_outdated = false;')
+        cursor.execute('UPDATE dir_domaininfo SET alexa_outdated = true WHERE alexa_outdated = false;')
         print u'Updating ranks.'
         for row in reader:
             if len(row) == 2:
