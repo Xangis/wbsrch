@@ -10,6 +10,7 @@
 <a href="/privacy/">{% trans "Privacy Policy" %}</a> | 
 <a href="/faq/">{% trans "Frequently Asked Questions" %}</a> | <a href="/criteria/">{% trans "Ranking Criteria" %}</a> | 
 <a href="/dmca/">{% trans "DMCA and Copyright Policy" %}</a> | <a href="https://analytics.wbsrch.com">Analytics</a> | 
+<a href="https://maps.wbsrch.com">Maps</a> | 
 <a href="/wbrank/">WbRank</a> | <a href="/contact/">{% trans "Contact Information" %}</a></p>
 <!--<br/>
 <p class="subhead">{% trans "Other languages" %}:</p>
