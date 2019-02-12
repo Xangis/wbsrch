@@ -2430,7 +2430,7 @@ class PageLink(models.Model):
     rooturl_source = models.CharField(max_length=260, blank=True, null=False)
     url_source = models.CharField(max_length=2048, blank=True, null=False, db_index=True)
     url_destination = models.CharField(max_length=2048, blank=True, null=False)
-    rooturl_destination = models.CharField(max_length=260, blank=True, null=False)
+    rooturl_destination = models.CharField(max_length=260, blank=True, null=False, db_index=True)
     anchor_text = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
