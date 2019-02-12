@@ -14,16 +14,20 @@ using namespace pqxx;
 
 int main(int argc, char* argv[]) {
    if( argc < 3 ) {
-     cout << "This program requires 2 arguments: number of items to process and offset. Try 10000 and 0." << endl;
+     cout << "This program requires 2 arguments: number of items to process and offset. Try 10000 and 0. If any third argument is supplied, it will recalculate old rather than new." << endl;
      exit(1);
    }
    stringstream sql;
    int numitems = atoi(argv[1]);
    int offset = atoi(argv[2]);
+   bool redo = false;
+   if( argc > 3 ) {
+       redo = true;
+   }
 
    try {
       connection C("dbname = zetaweb user = zetaweb password = d9irk0kfnv,er9kd2 \
-      hostaddr = 45.33.19.243 port = 5432");
+      hostaddr = 45.56.74.154 port = 5432");
       if (C.is_open()) {
          cout << "Opened database successfully: " << C.dbname() << endl;
       } else {
@@ -31,7 +35,7 @@ int main(int argc, char* argv[]) {
          return 1;
       }
       connection D("dbname = urls user = zetaweb password = d9irk0kfnv,er9kd2 \
-      hostaddr = 45.33.19.243 port = 5432");
+      hostaddr = 45.56.74.154 port = 5432");
       if (D.is_open()) {
          cout << "Opened database successfully: " << D.dbname() << endl;
       } else {
@@ -42,7 +46,11 @@ int main(int argc, char* argv[]) {
       /* Create SQL statement */
       //sql = "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated, num_keywords_ranked, num_keywords_last_updated, num_urls, num_urls_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL ORDER BY alexa_rank LIMIT 100000";
       //sql = "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL ORDER BY alexa_rank LIMIT 100000";
-      sql << "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL LIMIT ";
+      if (!redo ) {
+          sql << "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL LIMIT ";
+      } else {
+          sql << "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NOT NULL ORDER BY domains_linking_in_last_updated LIMIT ";
+      }
       sql << numitems << " OFFSET " << offset;
 
       /* Create a non-transactional object. */
