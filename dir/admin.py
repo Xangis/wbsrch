@@ -402,59 +402,23 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     tag_as_language_infix.short_description = "Tag these sites as Language infix, like /fr/."
 
-    def move_to_german(modeladmin, request, queryset):
+    def move_to_catalan(modeladmin, request, queryset):
         for item in queryset:
-            MoveSiteTo(item, 'de')
+            MoveSiteTo(item, 'ca')
 
-    move_to_german.short_description = "Move these to German."
+    move_to_catalan.short_description = "Move these to Catalan."
 
-    def move_to_spanish(modeladmin, request, queryset):
+    def move_to_czech(modeladmin, request, queryset):
         for item in queryset:
-            MoveSiteTo(item, 'es')
+            MoveSiteTo(item, 'cs')
 
-    move_to_spanish.short_description = "Move these to Spanish."
+    move_to_czech.short_description = "Move these to Czech."
 
-    def move_to_french(modeladmin, request, queryset):
+    def move_to_croatian(modeladmin, request, queryset):
         for item in queryset:
-            MoveSiteTo(item, 'fr')
+            MoveSiteTo(item, 'hr')
 
-    move_to_french.short_description = "Move these to French."
-
-    def move_to_italian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'it')
-
-    move_to_italian.short_description = "Move these to Italian."
-
-    def move_to_polish(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'pl')
-
-    move_to_polish.short_description = "Move these to Polish."
-
-    def move_to_portuguese(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'pt')
-
-    move_to_portuguese.short_description = "Move these to Portuguese."
-
-    def move_to_swedish(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'sv')
-
-    move_to_swedish.short_description = "Move these to Swedish."
-
-    def move_to_norwegian(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'no')
-
-    move_to_norwegian.short_description = "Move these to Norwegian."
-
-    def move_to_finnish(modeladmin, request, queryset):
-        for item in queryset:
-            MoveSiteTo(item, 'fi')
-
-    move_to_finnish.short_description = "Move these to Finnish."
+    move_to_croatian.short_description = "Move these to Croatian."
 
     def move_to_dutch(modeladmin, request, queryset):
         for item in queryset:
@@ -462,11 +426,29 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     move_to_dutch.short_description = "Move these to Dutch."
 
-    def move_to_czech(modeladmin, request, queryset):
+    def move_to_estonian(modeladmin, request, queryset):
         for item in queryset:
-            MoveSiteTo(item, 'cs')
+            MoveSiteTo(item, 'et')
 
-    move_to_czech.short_description = "Move these to Czech."
+    move_to_estonian.short_description = "Move these to Estonian."
+
+    def move_to_finnish(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'fi')
+
+    move_to_finnish.short_description = "Move these to Finnish."
+
+    def move_to_french(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'fr')
+
+    move_to_french.short_description = "Move these to French."
+
+    def move_to_german(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'de')
+
+    move_to_german.short_description = "Move these to German."
 
     def move_to_greek(modeladmin, request, queryset):
         for item in queryset:
@@ -480,6 +462,72 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     move_to_hungarian.short_description = "Move these to Hungarian."
 
+    def move_to_italian(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'it')
+
+    move_to_italian.short_description = "Move these to Italian."
+
+    def move_to_latvian(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'lv')
+
+    move_to_latvian.short_description = "Move these to Latvian."
+
+    def move_to_lithuanian(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'lt')
+
+    move_to_lithuanian.short_description = "Move these to Lithuanian."
+
+    def move_to_norwegian(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'no')
+
+    move_to_norwegian.short_description = "Move these to Norwegian."
+
+    def move_to_polish(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'pl')
+
+    move_to_polish.short_description = "Move these to Polish."
+
+    def move_to_portuguese(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'pt')
+
+    move_to_portuguese.short_description = "Move these to Portuguese."
+
+    def move_to_romanian(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'ro')
+
+    move_to_romanian.short_description = "Move these to Romanian."
+
+    def move_to_slovene(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'sl')
+
+    move_to_slovene.short_description = "Move these to Slovene."
+
+    def move_to_spanish(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'es')
+
+    move_to_spanish.short_description = "Move these to Spanish."
+
+    def move_to_swahili(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'sw')
+
+    move_to_swahili.short_description = "Move these to Swahili."
+
+    def move_to_swedish(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'sv')
+
+    move_to_swedish.short_description = "Move these to Swedish."
+
     def move_to_turkish(modeladmin, request, queryset):
         for item in queryset:
             MoveSiteTo(item, 'tr')
@@ -492,15 +540,16 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     move_to_english.short_description = "Move these to English."
 
-    actions = [block_domain_wrong_language, block_domain_porn, block_domain_gambling, block_domain_piracy, block_domain_shortener, 
-               block_domain_adserver, block_domain_nocontent, block_domain_spam, block_domain_social, tag_as_english, tag_as_language_infix, 
-               recrawl_this_url, move_to_german,
-               move_to_spanish, move_to_french, move_to_italian, move_to_portuguese, move_to_polish, move_to_swedish,
-               move_to_finnish, move_to_dutch, move_to_czech,
-               move_to_greek, move_to_hungarian, move_to_turkish, block_domain_language_am, block_domain_language_ar, 
-               block_domain_language_az, block_domain_language_cn, block_domain_language_ge, block_domain_language_il, 
-               block_domain_language_hi, block_domain_language_in, 
-               block_domain_language_ja, block_domain_language_km, block_domain_language_ko, 
+    actions = [block_domain_wrong_language, block_domain_porn, block_domain_gambling, block_domain_piracy, block_domain_shortener,
+               block_domain_adserver, block_domain_nocontent, block_domain_spam, block_domain_social, tag_as_english, tag_as_language_infix,
+               recrawl_this_url, move_to_catalan, move_to_croatian, move_to_estonian, move_to_finnish,
+               move_to_french, move_to_german, move_to_greek, move_to_italian, move_to_portuguese, move_to_polish,
+               move_to_romanian, move_to_spanish, move_to_slovene, move_to_swahili, move_to_swedish,
+               move_to_dutch, move_to_czech, move_to_latvian, move_to_lithuanian,
+               move_to_hungarian, move_to_turkish, block_domain_language_am, block_domain_language_ar,
+               block_domain_language_az, block_domain_language_cn, block_domain_language_ge, block_domain_language_il,
+               block_domain_language_hi, block_domain_language_in,
+               block_domain_language_ja, block_domain_language_km, block_domain_language_ko,
                block_domain_language_ru, block_domain_language_sr, block_domain_language_th, block_domain_language_vn,
                move_to_english]
 
