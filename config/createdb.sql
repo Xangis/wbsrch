@@ -8,3 +8,8 @@ grant all on database zetaweb to zetaweb;
 grant all on database urls to zetaweb;
 grant all on database indexes to zetaweb;
 grant all on database news to zetaweb;
+alter database zetaweb owner to zetaweb;
+alter database urls owner to zetaweb;
+alter database indexes owner to zetaweb;
+alter database news owner to zetaweb;
+

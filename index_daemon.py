@@ -2,7 +2,7 @@ from subprocess import call
 import optparse
 
 parser = optparse.OptionParser()
-parser.set_defaults(maxindexes=10, seconds=600)
+parser.set_defaults(maxindexes=20, seconds=60)
 parser.add_option('-m', '--maxindexes', action='store', default=10, type='int', dest='maxindexes', help='Max number of terms to index. (default=10)')
 parser.add_option('-s', '--seconds', action='store', default=0, type='int', dest='seconds', help='Seconds between indexes. (default=0)')
 parser.add_option('-n', '--noreindex', action='store_true', default=False, dest='noreindex', help='No reindex, only pending. (default=False)')

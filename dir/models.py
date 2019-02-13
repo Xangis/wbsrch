@@ -380,7 +380,7 @@ class DomainInfo(models.Model):
     rank_reason = models.IntegerField(null=True, blank=True, choices=EXCLUDED_SITE_REASONS)
     alexa_rank = models.IntegerField(null=True, blank=True)
     alexa_rank_date = models.DateField(null=True, blank=True)
-    alexa_outdated = models.BooleanField(blank=True, default=False)
+    alexa_outdated = models.BooleanField(blank=True, default=False, db_index=True)
     uses_language_subdirs = models.BooleanField(default=False, blank=True)
     uses_language_query_parameter = models.BooleanField(default=False, blank=True, help_text='Does this domain use query parameters like "hl=en" to determine the language?')
     uses_langid = models.BooleanField(default=False, blank=True, help_text='Does this domain use langid to categorize individual pages?')
@@ -2430,7 +2430,7 @@ class PageLink(models.Model):
     rooturl_source = models.CharField(max_length=260, blank=True, null=False)
     url_source = models.CharField(max_length=2048, blank=True, null=False, db_index=True)
     url_destination = models.CharField(max_length=2048, blank=True, null=False)
-    rooturl_destination = models.CharField(max_length=260, blank=True, null=False)
+    rooturl_destination = models.CharField(max_length=260, blank=True, null=False, db_index=True)
     anchor_text = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
