@@ -462,7 +462,7 @@ class CrawlableUrl(models.Model):
         in_db = 'urls'
 
 class SearchLogBase(models.Model):
-    keywords = models.TextField(unique=False)
+    keywords = models.TextField(unique=False, db_index=True)
     result_count = models.IntegerField()
     last_search = models.DateTimeField(auto_now_add=True)
     search_time = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=6)
@@ -2568,7 +2568,7 @@ class NewsSite(models.Model):
         in_db = 'news'
 
 class AutoCompleteBase(models.Model):
-    keywords = models.TextField(unique=False)
+    keywords = models.TextField(unique=False, db_index=True)
     score = models.IntegerField()
 
     class Meta:
