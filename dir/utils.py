@@ -1662,6 +1662,8 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
         queryparams = dict(urlparse.parse_qsl(parsedurl.query))
         if queryparams.has_key('PHPSESSID'):
             del queryparams['PHPSESSID']
+        if queryparams.has_key('fbclid'):
+            del queryparams['fbclid']
         if queryparams.has_key('sid'):
             del queryparams['sid']
         if queryparams.has_key('SID'):

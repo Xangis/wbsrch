@@ -380,7 +380,7 @@ class DomainInfo(models.Model):
     rank_reason = models.IntegerField(null=True, blank=True, choices=EXCLUDED_SITE_REASONS)
     alexa_rank = models.IntegerField(null=True, blank=True)
     alexa_rank_date = models.DateField(null=True, blank=True)
-    alexa_outdated = models.BooleanField(blank=True, default=False)
+    alexa_outdated = models.BooleanField(blank=True, default=False, db_index=True)
     uses_language_subdirs = models.BooleanField(default=False, blank=True)
     uses_language_query_parameter = models.BooleanField(default=False, blank=True, help_text='Does this domain use query parameters like "hl=en" to determine the language?')
     uses_langid = models.BooleanField(default=False, blank=True, help_text='Does this domain use langid to categorize individual pages?')
@@ -462,7 +462,7 @@ class CrawlableUrl(models.Model):
         in_db = 'urls'
 
 class SearchLogBase(models.Model):
-    keywords = models.TextField(unique=False)
+    keywords = models.TextField(unique=False, db_index=True)
     result_count = models.IntegerField()
     last_search = models.DateTimeField(auto_now_add=True)
     search_time = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=6)
@@ -2430,7 +2430,7 @@ class PageLink(models.Model):
     rooturl_source = models.CharField(max_length=260, blank=True, null=False)
     url_source = models.CharField(max_length=2048, blank=True, null=False, db_index=True)
     url_destination = models.CharField(max_length=2048, blank=True, null=False)
-    rooturl_destination = models.CharField(max_length=260, blank=True, null=False)
+    rooturl_destination = models.CharField(max_length=260, blank=True, null=False, db_index=True)
     anchor_text = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
@@ -2568,7 +2568,7 @@ class NewsSite(models.Model):
         in_db = 'news'
 
 class AutoCompleteBase(models.Model):
-    keywords = models.TextField(unique=False)
+    keywords = models.TextField(unique=False, db_index=True)
     score = models.IntegerField()
 
     class Meta:

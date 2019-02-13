@@ -7,6 +7,7 @@ from dir.domain import GetDomainInfo
 from django.db.utils import DataError
 import time
 import codecs
+from dir.domain import UpdateDomainWhois
 
 class Command(BaseCommand):
     help = "This command updates domain whois-related information such as expiration, registrar, etc."
