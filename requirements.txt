@@ -40,3 +40,4 @@ django-memcachedkeys==0.1.0
 simhash==1.9.0
 Jinja2==2.10
 backports.functools-lru-cache==1.5
+psycopg2-binary==2.7.7
