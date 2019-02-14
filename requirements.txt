@@ -43,3 +43,6 @@ backports.functools-lru-cache==1.5
 favicon==0.5.1
 psycopg2-binary==2.7.7
 psycopg2==2.7.7
+Pillow==5.4.1
+selenium==3.141.0
+

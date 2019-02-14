@@ -1,0 +1,27 @@
+{
+  "name": "wbsrch",
+  "version": "1.0.0",
+  "description": "The WbSrch search engine - JavaScript code modules.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xangis/wbsrch.git"
+  },
+  "keywords": [
+    "search",
+    "engine",
+    "search"
+  ],
+  "author": "Jason Champion",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/xangis/wbsrch/issues"
+  },
+  "homepage": "https://github.com/xangis/wbsrch#readme",
+  "dependencies": {
+    "phantomjs": "^2.1.7"
+  }
+}
