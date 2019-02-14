@@ -1939,7 +1939,8 @@ def SetDomainLanguage(url, language):
     """
     try:
         domain = DomainInfo.objects.get(url=url)
-        if not domain.language_association and not domain.uses_language_query_parameter and not domain.uses_langid:
+        # Override any existing language, but not if it's auto-detect or query-parameter based.
+        if not domain.uses_language_query_parameter and not domain.uses_langid:
             domain.language_association = language
             domain.save()
     except ObjectDoesNotExist:
