@@ -15,6 +15,7 @@ import StringIO
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from PIL import Image
+import signal
 import os
 import sys
 from zetaweb import settings
@@ -47,7 +48,7 @@ SMALLWIDTH = 320
 SMALLHEIGHT = 200
 
 def TakeScreenshot(url):
-    print('Screenshotting domain ' + row[1])
+    print('Screenshotting domain ' + url)
     caps = dict(DesiredCapabilities.PHANTOMJS)
     caps["phantomjs.page.settings.userAgent"] = "Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)"
     driver = webdriver.PhantomJS(executable_path="node_modules/phantomjs/bin/phantomjs", desired_capabilities=caps)
@@ -62,6 +63,13 @@ def TakeScreenshot(url):
     size = SMALLWIDTH, SMALLHEIGHT
     region.thumbnail(size)
     region.save('screenshots/{0}.320px.png'.format(url), 'PNG')
+    # Terminate phantomjs process. See: https://adiyatmubarak.wordpress.com/2017/03/29/python-fix-oserror-errno-9-bad-file-descriptor-in-selenium-using-phantomjs/
+    driver.service.process.send_signal(signal.SIGTERM)
+    try:
+       driver.quit()
+    except OSError:
+       # We can still get these errors, but at least the phantomjs process will terminate.
+       pass
     return False
 
 def LoadAlexaFile(filename):
@@ -91,27 +99,26 @@ def LoadAlexaFile(filename):
     print('Captured {0} domain screenshots. {1] failed to capture.'.format(len(screenshot_succeeded), len(screenshot_failed)))
 
 
-#TakeScreenshot('analytics.wbsrch.com')
-#TakeScreenshot('bloodlessmushroom.com')
-#TakeScreenshot('sashaandthechildren.com')
-#TakeScreenshot('rainwithoutend.com')
-#TakeScreenshot('emergencybrunch.com')
-#TakeScreenshot('orcfucker.com')
-#TakeScreenshot('toiletduckhunt.com')
-#TakeScreenshot('zetacentauri.com')
-
-# This is something that gets the process killed for being out of memory. Ouch.
-#TakeScreenshot('xangis.com')
-
-#TakeScreenshot('stampscoinsnotes.com')
+TakeScreenshot('analytics.wbsrch.com')
+TakeScreenshot('bloodlessmushroom.com')
+TakeScreenshot('sashaandthechildren.com')
+TakeScreenshot('rainwithoutend.com')
+TakeScreenshot('emergencybrunch.com')
+TakeScreenshot('orcfucker.com')
+TakeScreenshot('toiletduckhunt.com')
+TakeScreenshot('zetacentauri.com')
+TakeScreenshot('xangis.com')
+TakeScreenshot('stampscoinsnotes.com')
 TakeScreenshot('freewavesamples.com')
 TakeScreenshot('soundprogramming.net')
 TakeScreenshot('silica-gel.org')
 TakeScreenshot('bassguitarpro.com')
 TakeScreenshot('guitarl.com')
 TakeScreenshot('stats.wbsrch.com')
+TakeScreenshot('maps.wbsrch.com')
 TakeScreenshot('browser.wbsrch.com')
 TakeScreenshot('wbsrch.com')
+TakeScreenshot('news.wbsrch.com')
 exit(0)
 
 if not os.path.isfile('top-1m.csv'):
