@@ -10,6 +10,11 @@ from django.db import IntegrityError, connection
 from django.utils.timezone import utc
 from django.utils import timezone
 from operator import itemgetter, attrgetter
+import StringIO
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from PIL import Image
+import signal
 import json
 import ujson
 from bs4 import BeautifulSoup
@@ -25,6 +30,11 @@ import ipaddr
 import whois
 from nltk.corpus import stopwords
 from unidecode import unidecode
+
+WIDTH = 1280
+HEIGHT = 800
+SMALLWIDTH = 320
+SMALLHEIGHT = 200
 
 # This list is not exhaustive, nor can it be because new TLDs are being created all the time.
 top_level_domains = [
@@ -3117,3 +3127,42 @@ def SplitTitleAndGetPageRanks(siteinfo, minlength=3):
     for result in results:
         print result
     return need_to_index
+
+
+def TakeScreenshot(url):
+    """
+    Takes a screenshot of the specified URL, saves it to disk, and creates a Screenshot object containing it.
+    """
+    print('Screenshotting domain ' + url)
+    caps = dict(DesiredCapabilities.PHANTOMJS)
+    caps["phantomjs.page.settings.userAgent"] = "Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)"
+    driver = webdriver.PhantomJS(executable_path="node_modules/phantomjs/bin/phantomjs", desired_capabilities=caps)
+    driver.set_window_size(WIDTH, HEIGHT) # optional
+    driver.get('https://{0}'.format(url))
+    shot = Screenshot()
+    try:
+        shot.domain = DomainInfo.objects.get(url=url)
+    except ObjectDoesNotExist:
+        print('DomainInfo does not exist for domain {0}, cannot screenshot. Should we create a DomainInfo if one does not exist?'.format(url))
+        return False
+    screen = driver.get_screenshot_as_png()
+    # Crop it back to the window size (it may be taller)
+    box = (0, 0, WIDTH, HEIGHT)
+    im = Image.open(StringIO.StringIO(screen))
+    region = im.crop(box)
+    region.save('screenshots/{0}.png'.format(url), 'PNG')
+    shot.file_large.name = '../screenshots/{0}.png'.format(url)
+    shot.file_small.name = '../screenshots/{0}.320px.png'.format(url)
+    size = SMALLWIDTH, SMALLHEIGHT
+    region.thumbnail(size)
+    region.save('screenshots/{0}.320px.png'.format(url), 'PNG')
+    shot.save()
+    # Terminate phantomjs process. See: https://adiyatmubarak.wordpress.com/2017/03/29/python-fix-oserror-errno-9-bad-file-descriptor-in-selenium-using-phantomjs/
+    driver.service.process.send_signal(signal.SIGTERM)
+    try:
+       driver.quit()
+    except OSError:
+       # We can still get these errors, but at least the phantomjs process will terminate.
+       pass
+    return shot
+

@@ -418,6 +418,15 @@ class DomainInfo(models.Model):
     def __unicode__(self):
         return self.url
 
+class Screenshot(models.Model):
+    domain = models.ForeignKey('DomainInfo')
+    file_large = models.FileField(null=True, blank=True, upload_to='screenshots', help_text='1280x800px image file location.')
+    file_small = models.FileField(null=True, blank=True, upload_to='screenshots', help_text='320x200px image file location.')
+    date_taken = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.domain.url
+
 class AllowedDomain(models.Model):
     """
     When the crawler is in allowed-domain-only mode, this controls what domains can be added 
