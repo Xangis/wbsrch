@@ -51,14 +51,20 @@ def LoadAlexaFile(filename):
     with open(filename, 'rb') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         # Capture a screenshot for every domain.
+        rows  = 0
         for row in reader:
+            rows += 1
+            if rows < 106:
+                continue
+            if rows > 1000:
+                break
             if len(row) == 2:
                 #root = GetRootDomain(row[1])
                 if not TakeScreenshot(row[1]):
-                    print('Error screenshotting {0}'.format(row[1]))
-                    screenhot_failed.append(row[1])
+                    print('Row {0}: Error screenshotting {1}'.format(rows, row[1]))
+                    screenshot_failed.append(row[1])
+                else:
                     screenshot_succeeded.append(row[1])
-                processed.append(row[1])
     with open("screenshot_failed.txt", 'w') as outfile:
         for item in screenshot_failed:
             outfile.write('%s\n' % item)
@@ -67,10 +73,10 @@ def LoadAlexaFile(filename):
         for item in screenshot_succeeded:
             outfile.write('%s\n' % item)
         outfile.close()
-    print('Captured {0} domain screenshots. {1] failed to capture.'.format(len(screenshot_succeeded), len(screenshot_failed)))
+    print('Captured {0} domain screenshots. {1} failed to capture.'.format(len(screenshot_succeeded), len(screenshot_failed)))
 
 
-TakeScreenshot('analytics.wbsrch.com')
+#TakeScreenshot('analytics.wbsrch.com')
 #TakeScreenshot('bloodlessmushroom.com')
 #TakeScreenshot('sashaandthechildren.com')
 #TakeScreenshot('rainwithoutend.com')
@@ -90,7 +96,7 @@ TakeScreenshot('analytics.wbsrch.com')
 #TakeScreenshot('browser.wbsrch.com')
 #TakeScreenshot('wbsrch.com')
 #TakeScreenshot('news.wbsrch.com')
-exit(0)
+#exit(0)
 
 if not os.path.isfile('top-1m.csv'):
     print u'File top-1m.csv does not exist. Retrieving.'
