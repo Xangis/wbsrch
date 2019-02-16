@@ -48,6 +48,8 @@ class Command(BaseCommand):
             return False
         detailed = options['detailed']
         for domain in domains:
+            if detailed:
+                print('Taking screenshot of {0}'.format(domain.url))
             if TakeScreenshot(domain.url):
                 print('Took screenshot of {0}'.format(domain.url))
             else:

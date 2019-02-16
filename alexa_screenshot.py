@@ -54,8 +54,6 @@ def LoadAlexaFile(filename):
         rows  = 0
         for row in reader:
             rows += 1
-            if rows < 106:
-                continue
             if rows > 1000:
                 break
             if len(row) == 2:
