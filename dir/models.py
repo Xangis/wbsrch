@@ -420,8 +420,8 @@ class DomainInfo(models.Model):
 
 class Screenshot(models.Model):
     domain = models.ForeignKey('DomainInfo')
-    file_large = models.FileField(null=True, blank=True, upload_to='screenshots', help_text='1280x800px image file location.')
-    file_small = models.FileField(null=True, blank=True, upload_to='screenshots', help_text='320x200px image file location.')
+    file_large = models.TextField(null=True, blank=True, help_text='1280x800px image file location.')
+    file_small = models.TextField(null=True, blank=True, help_text='320x200px image file location.')
     date_taken = models.DateField(auto_now_add=True)
 
     def __unicode__(self):

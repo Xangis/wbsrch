@@ -3138,21 +3138,51 @@ def TakeScreenshot(url):
     caps["phantomjs.page.settings.userAgent"] = "Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)"
     driver = webdriver.PhantomJS(executable_path="node_modules/phantomjs/bin/phantomjs", desired_capabilities=caps)
     driver.set_window_size(WIDTH, HEIGHT) # optional
-    driver.get('https://{0}'.format(url))
-    shot = Screenshot()
+    try:
+        driver.get('https://{0}'.format(url))
+    except:
+        driver.service.process.send_signal(signal.SIGTERM)
+        try:
+           driver.quit()
+        except OSError:
+           pass
+        return False
+    try:
+        shot = Screenshot.objects.get(domain__url=url)
+        print('Updating existing screenshot record for {0}'.format(url))
+    except ObjectDoesNotExist:
+        shot = Screenshot()
+        print('Creating new screenshot record for {0}'.format(url))
     try:
         shot.domain = DomainInfo.objects.get(url=url)
     except ObjectDoesNotExist:
         print('DomainInfo does not exist for domain {0}, cannot screenshot. Should we create a DomainInfo if one does not exist?'.format(url))
         return False
-    screen = driver.get_screenshot_as_png()
+    try:
+        screen = driver.get_screenshot_as_png()
+    except:
+        driver.service.process.send_signal(signal.SIGTERM)
+        try:
+           driver.quit()
+        except OSError:
+           pass
+        return False
     # Crop it back to the window size (it may be taller)
     box = (0, 0, WIDTH, HEIGHT)
-    im = Image.open(StringIO.StringIO(screen))
+    try:
+        im = Image.open(StringIO.StringIO(screen))
+    except:
+        driver.service.process.send_signal(signal.SIGTERM)
+        try:
+           driver.quit()
+        except OSError:
+           pass
+        return False
     region = im.crop(box)
     region.save('screenshots/{0}.png'.format(url), 'PNG')
-    shot.file_large.name = '../screenshots/{0}.png'.format(url)
-    shot.file_small.name = '../screenshots/{0}.320px.png'.format(url)
+    shot.file_large = 'screenshots/{0}.png'.format(url)
+    shot.file_small = 'screenshots/{0}.320px.png'.format(url)
+    shot.date_taken = timezone.now()
     size = SMALLWIDTH, SMALLHEIGHT
     region.thumbnail(size)
     region.save('screenshots/{0}.320px.png'.format(url), 'PNG')
