@@ -21,6 +21,9 @@ from bs4 import BeautifulSoup
 from models import *
 from exceptions import InvalidLanguageException
 from datetime import timedelta
+import os
+import requests
+import favicon
 import urlparse
 import urllib
 import datetime
@@ -3196,3 +3199,30 @@ def TakeScreenshot(url):
        pass
     return shot
 
+def GetFavicons(domain):
+    url = 'https://{0}'.format(domain)
+    icons = favicon.get(url)
+    print('Icons: {0}'.format(icons))
+    for icon in icons:
+        response = requests.get(icon.url, stream=True)
+        filename = 'favicons/{0}{1}x{2}.{3}'.format(domain, icon.width, icon.height, icon.format)
+        with open(filename, 'wb') as image:
+            for chunk in response.iter_content(1024):
+                image.write(chunk)
+        if icon.width == 0 or icon.height == 0:
+            try:
+                with Image.open(filename) as im:
+                    width, height = im.size
+                    print('Read as 0. Actual size is: {0}x{1}'.format(width, height))
+                    newfilename = 'favicons/{0}-{1}x{2}.{3}'.format(domain, width, height, icon.format)
+                    os.rename(filename, newfilename)
+                    filename = newfilename
+            except IOError:
+                os.remove(filename)
+                print('Bad icon, cannot save: {0}'.format(icon))
+                continue
+        else:
+            width = icon.width
+            height = icon.height
+        print('{0} favicon size {1}x{2} saved to {3}.'.format(domain, width, height, filename))
+    return True

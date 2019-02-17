@@ -7,10 +7,10 @@ from dir.domain import GetDomainInfo
 from django.db.utils import DataError
 import time
 import codecs
-from dir.utils import TakeScreenshot
+from dir.utils import GetFavicons
 
 class Command(BaseCommand):
-    help = "This command takes screenshots of home pages for domains."
+    help = "This command retrieves favicons for domains."
 
     option_list = BaseCommand.option_list + (
         make_option('-d', '--detailed', default=False, action='store_true', dest='detailed', help='Run in verbose mode.'),
@@ -37,7 +37,7 @@ class Command(BaseCommand):
                     domains.append(domain)
                 except:
                     # Create domain if not found. This could be problematic if we have a file full of garbage text.
-                    print('Domain {0} not found, creating before screenshot.'.format(line))
+                    print('Domain {0} not found, creating before favicon harvest.'.format(line))
                     domain = DomainInfo()
                     domain.url = line
                     domain.save()
@@ -49,11 +49,11 @@ class Command(BaseCommand):
         detailed = options['detailed']
         for domain in domains:
             if detailed:
-                print('Taking screenshot of {0}'.format(domain.url))
-            if TakeScreenshot(domain.url):
-                print('Took screenshot of {0}'.format(domain.url))
+                print('Getting favicons for {0}'.format(domain.url))
+            if GetFavicons(domain.url):
+                print('Retrieved favicons for {0}'.format(domain.url))
             else:
-                print('Failed to take screenshot of {0}'.format(domain.url))
+                print('Failed to get favicons for {0}'.format(domain.url))
             # Even if the query failed, we should update the last-checked time so we don't keep re-checking bad domains.
             if len(domains) > 1:
                 time.sleep(options['sleep'])
