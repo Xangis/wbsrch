@@ -47,9 +47,11 @@ class Command(BaseCommand):
             print('Must use either -j or -f arguments.')
             return False
         detailed = options['detailed']
+        count = 0
         for domain in domains:
+            count = count + 1
             if detailed:
-                print('Getting favicons for {0}'.format(domain.url))
+                print('Getting favicons for {0}: {1}'.format(count, domain.url))
             if GetFavicons(domain.url):
                 print('Retrieved favicons for {0}'.format(domain.url))
             else:

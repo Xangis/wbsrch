@@ -404,6 +404,7 @@ class DomainInfo(models.Model):
     num_urls_last_updated = models.DateField(null=True, blank=True)
     num_keywords_ranked = models.IntegerField(null=True, blank=True)
     num_keywords_last_updated = models.DateField(null=True, blank=True)
+    favicons_last_updated = models.DateField(null=True, blank=True)
     whois_name = models.CharField(max_length=60, null=True, blank=True)
     whois_city = models.CharField(max_length=40, null=True, blank=True)
     whois_country = models.CharField(max_length=16, null=True, blank=True)
@@ -419,10 +420,21 @@ class DomainInfo(models.Model):
         return self.url
 
 class Screenshot(models.Model):
-    domain = models.ForeignKey('DomainInfo')
+    domain = models.OneToOneField('DomainInfo', db_index=True, unique=True)
     file_large = models.TextField(null=True, blank=True, help_text='1280x800px image file location.')
     file_small = models.TextField(null=True, blank=True, help_text='320x200px image file location.')
     date_taken = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.domain.url
+
+class Favicon(models.Model):
+    domain = models.ForeignKey('DomainInfo', db_index=True)
+    date_taken = models.DateField(auto_now_add=True)
+    icon = models.TextField(null=False, blank=False)
+    format = models.CharField(max_length=6, null=False, blank=False)
+    width = models.IntegerField()
+    height = models.IntegerField()
 
     def __unicode__(self):
         return self.domain.url

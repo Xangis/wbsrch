@@ -2734,6 +2734,7 @@ admin.site.register(Screenshot)
 admin.site.register(APISubscription, APISubscriptionAdmin)
 admin.site.register(APIUsage, APIUsageAdmin)
 admin.site.register(CrawlableUrl)
+admin.site.register(Favicon)
 
 # Conditional languages, enabled in language_list in models.py.
 if 'ca' in language_list:

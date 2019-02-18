@@ -3201,20 +3201,38 @@ def TakeScreenshot(url):
 
 def GetFavicons(domain):
     url = 'https://{0}'.format(domain)
-    icons = favicon.get(url)
+    try:
+        icons = favicon.get(url)
+    except:
+        print('Failed to get icons for {0}. Probably a connection problem.'.format(domain))
+        return False
+    try:
+        domaininfo = DomainInfo.objects.get(url=domain)
+    except ObjectDoesNotExist:
+        print('DomainInfo does not exist for domain {0}, cannot screenshot. Should we create a DomainInfo if one does not exist?'.format(url))
+        return False
     print('Icons: {0}'.format(icons))
     for icon in icons:
-        response = requests.get(icon.url, stream=True)
+        fav = Favicon()
+        fav.domain = domaininfo
+        try:
+            response = requests.get(icon.url, stream=True)
+        except:
+            print('Could not retrieve icon {0}'.format(icon.url))
+            continue
         filename = 'favicons/{0}{1}x{2}.{3}'.format(domain, icon.width, icon.height, icon.format)
+        if icon.format != 'bmp' and icon.format != 'ico' and icon.format != 'jpg' and icon.format != 'png':
+            print('Invalid icon format: {0}'.format(icon.format))
+            continue
         with open(filename, 'wb') as image:
             for chunk in response.iter_content(1024):
                 image.write(chunk)
         if icon.width == 0 or icon.height == 0:
             try:
                 with Image.open(filename) as im:
-                    width, height = im.size
-                    print('Read as 0. Actual size is: {0}x{1}'.format(width, height))
-                    newfilename = 'favicons/{0}-{1}x{2}.{3}'.format(domain, width, height, icon.format)
+                    fav.width, fav.height = im.size
+                    print('Read as 0. Actual size is: {0}x{1}'.format(fav.width, fav.height))
+                    newfilename = 'favicons/{0}-{1}x{2}.{3}'.format(domain, fav.width, fav.height, icon.format)
                     os.rename(filename, newfilename)
                     filename = newfilename
             except IOError:
@@ -3222,7 +3240,20 @@ def GetFavicons(domain):
                 print('Bad icon, cannot save: {0}'.format(icon))
                 continue
         else:
-            width = icon.width
-            height = icon.height
-        print('{0} favicon size {1}x{2} saved to {3}.'.format(domain, width, height, filename))
+            fav.width = icon.width
+            fav.height = icon.height
+        try:
+            existing = Favicon.objects.get(width=fav.width, height=fav.height, domain=domaininfo)
+            existing.last_updated = timezone.now()
+            existing.icon = filename
+            existing.format = fav.format
+            existing.save()
+            print('Updating existing icon entry.')
+        except ObjectDoesNotExist:
+            fav.filename = filename
+            fav.save()
+            print('Creating new icon entry.')
+        print('{0} favicon size {1}x{2} saved to {3}.'.format(domain, fav.width, fav.height, filename))
+    domaininfo.favicons_last_updated = timezone.now()
+    domaininfo.save()
     return True
