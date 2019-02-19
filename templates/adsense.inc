@@ -1,4 +1,4 @@
-{% with '1 3 5 6' as numbers %}
+{% with '3 5 6' as numbers %}
 {% with numbers.split|random as section %}
 {% if section == '1' %}
 <!-- Adcash -->
