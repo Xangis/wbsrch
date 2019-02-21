@@ -10,12 +10,20 @@ from django.db import IntegrityError, connection
 from django.utils.timezone import utc
 from django.utils import timezone
 from operator import itemgetter, attrgetter
+import StringIO
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from PIL import Image
+import signal
 import json
 import ujson
 from bs4 import BeautifulSoup
 from models import *
 from exceptions import InvalidLanguageException
 from datetime import timedelta
+import os
+import requests
+import favicon
 import urlparse
 import urllib
 import datetime
@@ -25,6 +33,11 @@ import ipaddr
 import whois
 from nltk.corpus import stopwords
 from unidecode import unidecode
+
+WIDTH = 1280
+HEIGHT = 800
+SMALLWIDTH = 320
+SMALLHEIGHT = 200
 
 # This list is not exhaustive, nor can it be because new TLDs are being created all the time.
 top_level_domains = [
@@ -2256,7 +2269,7 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
     print('Most linked to domain list updated {0}. Nolinks is set to {1}.'.format(newest_stats.last_most_linked_to, nolinks))
     if (not nolinks) and ((not newest_stats) or (newest_stats.last_most_linked_to < (timezone.now() - timedelta(days=30)).date())):
         print('Most linked to domain list is older than 30 days, need to recalculate.')
-        most_linked = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in')
+        most_linked = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in')[0:1000]
         most_linked_list = []
         for linked_domain in most_linked:
             if verbose:
@@ -3117,3 +3130,130 @@ def SplitTitleAndGetPageRanks(siteinfo, minlength=3):
     for result in results:
         print result
     return need_to_index
+
+
+def TakeScreenshot(url):
+    """
+    Takes a screenshot of the specified URL, saves it to disk, and creates a Screenshot object containing it.
+    """
+    print('Screenshotting domain ' + url)
+    caps = dict(DesiredCapabilities.PHANTOMJS)
+    caps["phantomjs.page.settings.userAgent"] = "Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)"
+    driver = webdriver.PhantomJS(executable_path="node_modules/phantomjs/bin/phantomjs", desired_capabilities=caps)
+    driver.set_window_size(WIDTH, HEIGHT) # optional
+    try:
+        driver.get('https://{0}'.format(url))
+    except:
+        driver.service.process.send_signal(signal.SIGTERM)
+        try:
+           driver.quit()
+        except OSError:
+           pass
+        return False
+    try:
+        shot = Screenshot.objects.get(domain__url=url)
+        print('Updating existing screenshot record for {0}'.format(url))
+    except ObjectDoesNotExist:
+        shot = Screenshot()
+        print('Creating new screenshot record for {0}'.format(url))
+    try:
+        shot.domain = DomainInfo.objects.get(url=url)
+    except ObjectDoesNotExist:
+        print('DomainInfo does not exist for domain {0}, cannot screenshot. Should we create a DomainInfo if one does not exist?'.format(url))
+        return False
+    try:
+        screen = driver.get_screenshot_as_png()
+    except:
+        driver.service.process.send_signal(signal.SIGTERM)
+        try:
+           driver.quit()
+        except OSError:
+           pass
+        return False
+    # Crop it back to the window size (it may be taller)
+    box = (0, 0, WIDTH, HEIGHT)
+    try:
+        im = Image.open(StringIO.StringIO(screen))
+    except:
+        driver.service.process.send_signal(signal.SIGTERM)
+        try:
+           driver.quit()
+        except OSError:
+           pass
+        return False
+    region = im.crop(box)
+    region.save('screenshots/{0}.png'.format(url), 'PNG')
+    shot.file_large = 'screenshots/{0}.png'.format(url)
+    shot.file_small = 'screenshots/{0}.320px.png'.format(url)
+    shot.date_taken = timezone.now()
+    size = SMALLWIDTH, SMALLHEIGHT
+    region.thumbnail(size)
+    region.save('screenshots/{0}.320px.png'.format(url), 'PNG')
+    shot.save()
+    # Terminate phantomjs process. See: https://adiyatmubarak.wordpress.com/2017/03/29/python-fix-oserror-errno-9-bad-file-descriptor-in-selenium-using-phantomjs/
+    driver.service.process.send_signal(signal.SIGTERM)
+    try:
+       driver.quit()
+    except OSError:
+       # We can still get these errors, but at least the phantomjs process will terminate.
+       pass
+    return shot
+
+def GetFavicons(domain):
+    url = 'https://{0}'.format(domain)
+    try:
+        icons = favicon.get(url)
+    except:
+        print('Failed to get icons for {0}. Probably a connection problem.'.format(domain))
+        return False
+    try:
+        domaininfo = DomainInfo.objects.get(url=domain)
+    except ObjectDoesNotExist:
+        print('DomainInfo does not exist for domain {0}, cannot screenshot. Should we create a DomainInfo if one does not exist?'.format(url))
+        return False
+    print('Icons: {0}'.format(icons))
+    for icon in icons:
+        fav = Favicon()
+        fav.domain = domaininfo
+        try:
+            response = requests.get(icon.url, stream=True)
+        except:
+            print('Could not retrieve icon {0}'.format(icon.url))
+            continue
+        filename = 'favicons/{0}{1}x{2}.{3}'.format(domain, icon.width, icon.height, icon.format)
+        if icon.format != 'bmp' and icon.format != 'ico' and icon.format != 'jpg' and icon.format != 'png':
+            print('Invalid icon format: {0}'.format(icon.format))
+            continue
+        with open(filename, 'wb') as image:
+            for chunk in response.iter_content(1024):
+                image.write(chunk)
+        if icon.width == 0 or icon.height == 0:
+            try:
+                with Image.open(filename) as im:
+                    fav.width, fav.height = im.size
+                    print('Read as 0. Actual size is: {0}x{1}'.format(fav.width, fav.height))
+                    newfilename = 'favicons/{0}-{1}x{2}.{3}'.format(domain, fav.width, fav.height, icon.format)
+                    os.rename(filename, newfilename)
+                    filename = newfilename
+            except IOError:
+                os.remove(filename)
+                print('Bad icon, cannot save: {0}'.format(icon))
+                continue
+        else:
+            fav.width = icon.width
+            fav.height = icon.height
+        try:
+            existing = Favicon.objects.get(width=fav.width, height=fav.height, domain=domaininfo)
+            existing.last_updated = timezone.now()
+            existing.icon = filename
+            existing.format = fav.format
+            existing.save()
+            print('Updating existing icon entry.')
+        except ObjectDoesNotExist:
+            fav.filename = filename
+            fav.save()
+            print('Creating new icon entry.')
+        print('{0} favicon size {1}x{2} saved to {3}.'.format(domain, fav.width, fav.height, filename))
+    domaininfo.favicons_last_updated = timezone.now()
+    domaininfo.save()
+    return True

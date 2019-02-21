@@ -11,11 +11,6 @@
 # sudo apt-get install libjpeg-dev
 # pip install selenium pillow
 
-import StringIO
-from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from PIL import Image
-import signal
 import os
 import sys
 from zetaweb import settings
@@ -41,36 +36,12 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 import datetime
 import csv
+from dir.utils import TakeScreenshot
 
 WIDTH = 1280
 HEIGHT = 800
 SMALLWIDTH = 320
 SMALLHEIGHT = 200
-
-def TakeScreenshot(url):
-    print('Screenshotting domain ' + url)
-    caps = dict(DesiredCapabilities.PHANTOMJS)
-    caps["phantomjs.page.settings.userAgent"] = "Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)"
-    driver = webdriver.PhantomJS(executable_path="node_modules/phantomjs/bin/phantomjs", desired_capabilities=caps)
-    driver.set_window_size(WIDTH, HEIGHT) # optional
-    driver.get('https://{0}'.format(url))
-    screen = driver.get_screenshot_as_png()
-    # Crop it back to the window size (it may be taller)
-    box = (0, 0, WIDTH, HEIGHT)
-    im = Image.open(StringIO.StringIO(screen))
-    region = im.crop(box)
-    region.save('screenshots/{0}.png'.format(url), 'PNG')
-    size = SMALLWIDTH, SMALLHEIGHT
-    region.thumbnail(size)
-    region.save('screenshots/{0}.320px.png'.format(url), 'PNG')
-    # Terminate phantomjs process. See: https://adiyatmubarak.wordpress.com/2017/03/29/python-fix-oserror-errno-9-bad-file-descriptor-in-selenium-using-phantomjs/
-    driver.service.process.send_signal(signal.SIGTERM)
-    try:
-       driver.quit()
-    except OSError:
-       # We can still get these errors, but at least the phantomjs process will terminate.
-       pass
-    return False
 
 def LoadAlexaFile(filename):
     added_to_pending = 0
@@ -80,14 +51,18 @@ def LoadAlexaFile(filename):
     with open(filename, 'rb') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         # Capture a screenshot for every domain.
+        rows  = 0
         for row in reader:
+            rows += 1
+            if rows > 1000:
+                break
             if len(row) == 2:
                 #root = GetRootDomain(row[1])
                 if not TakeScreenshot(row[1]):
-                    print('Error screenshotting {0}'.format(row[1]))
-                    screenhot_failed.append(row[1])
+                    print('Row {0}: Error screenshotting {1}'.format(rows, row[1]))
+                    screenshot_failed.append(row[1])
+                else:
                     screenshot_succeeded.append(row[1])
-                processed.append(row[1])
     with open("screenshot_failed.txt", 'w') as outfile:
         for item in screenshot_failed:
             outfile.write('%s\n' % item)
@@ -96,30 +71,30 @@ def LoadAlexaFile(filename):
         for item in screenshot_succeeded:
             outfile.write('%s\n' % item)
         outfile.close()
-    print('Captured {0} domain screenshots. {1] failed to capture.'.format(len(screenshot_succeeded), len(screenshot_failed)))
+    print('Captured {0} domain screenshots. {1} failed to capture.'.format(len(screenshot_succeeded), len(screenshot_failed)))
 
 
-TakeScreenshot('analytics.wbsrch.com')
-TakeScreenshot('bloodlessmushroom.com')
-TakeScreenshot('sashaandthechildren.com')
-TakeScreenshot('rainwithoutend.com')
-TakeScreenshot('emergencybrunch.com')
-TakeScreenshot('orcfucker.com')
-TakeScreenshot('toiletduckhunt.com')
-TakeScreenshot('zetacentauri.com')
-TakeScreenshot('xangis.com')
-TakeScreenshot('stampscoinsnotes.com')
-TakeScreenshot('freewavesamples.com')
-TakeScreenshot('soundprogramming.net')
-TakeScreenshot('silica-gel.org')
-TakeScreenshot('bassguitarpro.com')
-TakeScreenshot('guitarl.com')
-TakeScreenshot('stats.wbsrch.com')
-TakeScreenshot('maps.wbsrch.com')
-TakeScreenshot('browser.wbsrch.com')
-TakeScreenshot('wbsrch.com')
-TakeScreenshot('news.wbsrch.com')
-exit(0)
+#TakeScreenshot('analytics.wbsrch.com')
+#TakeScreenshot('bloodlessmushroom.com')
+#TakeScreenshot('sashaandthechildren.com')
+#TakeScreenshot('rainwithoutend.com')
+#TakeScreenshot('emergencybrunch.com')
+#TakeScreenshot('orcfucker.com')
+#TakeScreenshot('toiletduckhunt.com')
+#TakeScreenshot('zetacentauri.com')
+#TakeScreenshot('xangis.com')
+#TakeScreenshot('stampscoinsnotes.com')
+#TakeScreenshot('freewavesamples.com')
+#TakeScreenshot('soundprogramming.net')
+#TakeScreenshot('silica-gel.org')
+#TakeScreenshot('bassguitarpro.com')
+#TakeScreenshot('guitarl.com')
+#TakeScreenshot('stats.wbsrch.com')
+#TakeScreenshot('maps.wbsrch.com')
+#TakeScreenshot('browser.wbsrch.com')
+#TakeScreenshot('wbsrch.com')
+#TakeScreenshot('news.wbsrch.com')
+#exit(0)
 
 if not os.path.isfile('top-1m.csv'):
     print u'File top-1m.csv does not exist. Retrieving.'

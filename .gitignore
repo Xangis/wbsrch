@@ -18,3 +18,7 @@ alexa_new.txt
 alexa_processed.txt
 alexa_skipped.txt
 screenshots/*.png
+favicons/*.bmp
+favicons/*.ico
+favicons/*.png
+favicons/*.jpg
