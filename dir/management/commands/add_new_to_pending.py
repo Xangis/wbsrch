@@ -17,10 +17,10 @@ class Command(BaseCommand):
     """
     option_list = BaseCommand.option_list + (
         make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for pending indexes (default=en).'),
-        make_option('-d', '--domains', default=False, action='store_true', dest='domains', help='Process file as a domain list and print the domains that need to be crawled. (default=no).'),
+        make_option('-d', '--domains', default=False, action='store_true', dest='domains', help='Process file as a domain list and print the domains that need to be crawled. Redundant with -p since it only prints (default=no).'),
         make_option('-p', '--print', default=False, action='store_true', dest='print', help='Just print the terms that are not indexed to the screen, do not create pending terms. (default=no).'),
         make_option('-n', '--noindividual', default=False, action='store_true', dest='noindividual', help='Make sure individual words of a phrase are not indexed (default=False)'),
-        make_option('-m', '--maxwords', default=5, action='store', type='int', dest='maxwords', help='Max number of terms to index. (default=5)'),
+        make_option('-m', '--maxwords', default=100000000, action='store', type='int', dest='maxwords', help='Max number of terms to index. (default=100000000)'),
         make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load term list from specified file.'),
     )
 
@@ -32,7 +32,10 @@ class Command(BaseCommand):
         printem = options.get('print', False)
         noindividual = options.get('noindividual', None)
         term_model = GetIndexModelFromLanguage(language)
-        print 'Using file {0} with {1} max words and language {2}.'.format(filename, maxwords, language)
+        if domains and not filename:
+            print('Filename is a required argument when processing domains.')
+            return False
+        print('Using file {0} with {1} max words and language {2}.'.format(filename, maxwords, language))
         f = open(filename, 'rb')
         reader = codecs.getreader('utf8')(f)
         numdone = 0
