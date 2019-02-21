@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     To automatically tag sites as english, which kind of works but is very experimental, you should use a command something like this (note the use of -n so we only tag with higher-confidence data):
 
-        python manage.py categorize_language -e -o -t -q -n 3 -i 2000
+        python manage.py categorize_language -e -o -t -q -n 3 -i 2000 | grep -v UnicodeDecodeError
 """
 
     option_list = BaseCommand.option_list + (
@@ -52,6 +52,8 @@ class Command(BaseCommand):
         quiet = options.get('quiet', False)
         verbosity = int(options['verbosity'])
         numpageminimum = int(options['numpageminimum'])
+        tagged_count = 0
+        processed = 0
         if autotag:
             autotag = autotag.split(',')
         if autoblock:
@@ -60,27 +62,33 @@ class Command(BaseCommand):
         onlysuffix = options['urlsuffix']
         onlyprefix = options.get('urlprefix', None)
         rank = options.get('rank', False)
-        print 'Max Items to Process: {0}, Max Num URLs Starting Point: {1}'.format(maxitems, maxurls)
+        print 'Max Items to Process: {0}, Max Num URLs Starting Point: {1}, Min starting point: {2}'.format(maxitems, maxurls, numpageminimum)
         counts = []
         result = None
         cursor = connection.cursor()
         uncategorized_domains = []
         # We start with the domains having the most pages and descend.
         if justdomain:
-            cursor.execute("SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl = '{0}' GROUP BY rooturl;".format(justdomain))
+            query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl = '{0}' GROUP BY rooturl;".format(justdomain)
         elif onlysuffix:
-            cursor.execute("SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '%{0}' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlysuffix, maxurls, maxitems))
+            query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '%{0}' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlysuffix, maxurls, maxitems)
         elif onlyprefix:
-            cursor.execute("SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '{0}%' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlyprefix, maxurls, maxitems))
+            query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '{0}%' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlyprefix, maxurls, maxitems)
         elif rank:
-            cursor.execute('SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE language_association IS null AND alexa_rank IS NOT null AND uses_language_subdirs = false AND uses_language_query_parameter = false ORDER BY alexa_rank LIMIT {0};'.format(maxurls, maxitems))
+            query = 'SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE language_association IS null AND alexa_rank IS NOT null AND uses_language_subdirs = false AND uses_language_query_parameter = false ORDER BY alexa_rank LIMIT {0};'.format(maxurls, maxitems)
+        elif numpageminimum:
+            query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) >= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(numpageminimum, maxitems)
         else:
-            cursor.execute('SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) <= {0} ORDER BY count_total,RANDOM() DESC LIMIT {1};'.format(maxurls, maxitems))
+            query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) <= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(maxurls, maxitems)
         #cursor.execute('SELECT count(*), rooturl FROM site_info GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(maxitems))
+        print('Running query: {0}'.format(query))
+        cursor.execute(query)
         domain_counts = cursor.fetchall()
         for domain in domain_counts:
+            processed += 1
             # Bail if we hit our page minimum -- we're done.
             if domain[0] < numpageminimum:
+                print('Domain {0} is below our minimum of {1}, done gathering.'.format(domain[1], domain[0]))
                 break
             # Skip domains above maximum number of pages.
             if domain[0] <= maxurls:
@@ -143,6 +151,7 @@ class Command(BaseCommand):
             if autotagenglish and englishratio > 95:
                 print u'Site is mostly English - {0} of {1}, auto-tagging as English'.format(english, total)
                 input = 'en'
+                tagged_count = tagged_count + 1
             elif autotagenglish and onlyautotag:
                 print u'Not English. Skipping.'
                 continue
@@ -159,9 +168,11 @@ class Command(BaseCommand):
                 if confident and autotag and (scores[0][0] in autotag):
                     print u'Auto-Tagging {0} as language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1])
                     input = scores[0][0]
+                    tagged_count += 1
                 elif confident and autoblock and (scores[0][0] in autoblock):
                     print u'Auto-Blocking {0} as unindexed language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1])
                     input = 'del'
+                    tagged_count += 1
                 elif autotag and onlyautotag:
                     if not quiet:
                         print u'Skipping {0} because we are in only-auto-tag mode and it could not be automatically tagged.'.format(domain)
@@ -313,3 +324,5 @@ class Command(BaseCommand):
                 else:
                     print '{0} is not a valid language. Skipping'.format(input)
                     continue
+        print('Finished. Processed {0} domains and {1} were not tagged. Number of auto-tagged items: {2}'.format(
+          processed, len(uncategorized_domains), tagged_count))
