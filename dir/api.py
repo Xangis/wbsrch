@@ -121,6 +121,9 @@ def domain_link_rank(request):
         print u'Altdomain is {0}'.format(altdomain)
         try:
             altdomaininfo = DomainInfo.objects.get(url=altdomain)
+            # Handle Nones temporarily.
+            if not altdomaininfo.domains_linking_in:
+                altdomaininfo.domains_linking_in = 0
             print 'Alt domain DomainInfo found'
             domainfound = True
             print u'{0} domains linking in to domain {1} and {2} linking in to {3} for a total of {4}'.format(domains_linking_in,
