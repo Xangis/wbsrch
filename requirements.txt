@@ -45,4 +45,4 @@ psycopg2-binary==2.7.7
 psycopg2==2.7.7
 Pillow==5.4.1
 selenium==3.141.0
-
+requests==2.21.0
