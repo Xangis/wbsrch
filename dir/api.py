@@ -7,6 +7,7 @@ from django.utils import timezone
 import json
 from models import *
 from utils import *
+from exceptions import *
 from domain import UpdateDomainWhois
 from language import language_name_reverse
 from crawler import CrawlSingleUrl, Crawler
@@ -161,6 +162,10 @@ def domain_pages_in_index(request):
     except ObjectDoesNotExist:
         site_model = SiteInfo
         pass
+    # A language that is tagged as another language won't have any pages, but this keeps
+    # us from dying on an error.
+    except InvalidLanguageException:
+        site_model = SiteInfo
     pages = site_model.objects.filter(rooturl=domain).count()
     if altdomain:
         added = site_model.objects.filter(rooturl=altdomain).count()
