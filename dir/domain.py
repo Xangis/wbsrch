@@ -4,6 +4,7 @@ from django.db.utils import DataError
 import dateutil.parser
 import datetime
 import whois
+from socket import gaierror
 
 # Accepts a DomainInfo object and updates its whois information.
 def UpdateDomainWhois(domain, detailed=False):
@@ -143,5 +144,7 @@ def GetDomainInfo(domain):
         info = whois.whois(domain)
         return info
     except whois.parser.PywhoisError, e:
-        print 'PywhoisError (setting creation and expiration to None): {0}'.format(e)
+        print('PywhoisError (setting creation and expiration to None): {0}'.format(e))
         return None
+    except gaierror:
+        print('Could not look up domain {0}: socket.gaierror'.format(domain))
