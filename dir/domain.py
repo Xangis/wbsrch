@@ -148,5 +148,10 @@ def GetDomainInfo(domain):
         return None
     except gaierror:
         print('Could not look up domain {0}: socket.gaierror'.format(domain))
+        return None
     except timeout:
         print('Could not look up domain {0}: socket.timeout'.format(domain))
+        return None
+    except:
+        print('Unspecified error in GetDomainInfo for {0}.'.format(domain))
+        return None
