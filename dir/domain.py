@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 from django.core import serializers
 from django.db.utils import DataError
 import dateutil.parser
@@ -98,6 +99,14 @@ def UpdateDomainWhois(domain, detailed=False):
             except DataError, e:
                 print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
                 print(serializers.serialize("json", [domain,], indent=4))
+            except ValidationError, e:
+                print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
+                try:
+                    print(serializers.serialize("json", [domain,], indent=4))
+                except ValueError:
+                    pass
+                except AttributeError:
+                    pass
 
 def GetDomainAge(domain):
     """
