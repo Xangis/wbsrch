@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.core import serializers
 from django.db.utils import DataError
+from pytz import AmbiguousTimeError
 import dateutil.parser
 import datetime
 import whois
@@ -97,6 +98,9 @@ def UpdateDomainWhois(domain, detailed=False):
             try:
                 domain.save()
             except DataError, e:
+                print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
+                print(serializers.serialize("json", [domain,], indent=4))
+            except AmbiguousTimeError, e:
                 print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
                 print(serializers.serialize("json", [domain,], indent=4))
             except ValidationError, e:
