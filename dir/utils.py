@@ -2642,7 +2642,11 @@ def RequeueRankedKeywordsForDomain(domain):
             lang = dinfo.language_association
     except ObjectDoesNotExist:
         pass
-    ranking_model = GetKeywordRankingModelFromLanguage(lang)
+    try:
+        ranking_model = GetKeywordRankingModelFromLanguage(lang)
+    except InvalidLanguageException:
+        # We can't requeue keywords for a language that doesn't have an index.
+        return
     pending_model = GetPendingIndexModelFromLanguage(lang)
     index_model = GetIndexModelFromLanguage(lang)
     ranks = ranking_model.objects.filter(rooturl=domain)
