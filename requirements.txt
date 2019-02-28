@@ -4,7 +4,7 @@ Django==1.8.19
 Fabric==1.10.2
 # If this fails, run sudo apt-get install python-dev libpq-dev
 psycopg2==2.7.6.1
-beautifulsoup4==4.6.3
+beautifulsoup4==4.7.1
 coverage==4.5.2
 flup==1.0.3
 nltk==3.4
