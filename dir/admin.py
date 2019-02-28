@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.forms import TextInput, Textarea
-from django.db import models
+from django.db import IntegrityError, models
 from models import *
 from crawler import CrawlSingleUrl
 from utils import MoveSiteTo, RemoveURLsForDomain, MarkURLContentsAsSpam, SetDomainLanguage, SetDomainInfixLanguage, GetRootDomain, GenerateSearchReport, PornBlock, RequeueRankedKeywordsForDomain
@@ -79,8 +79,14 @@ def LanguageBlock(siteinfo, language=None):
         # Generic "unindexed language" reason.
         else:
             site.reason = 8
-        site.save()
-
+        try:
+            site.save()
+        except IntegrityError:
+            # The only reason we would get an integrity error is if we
+            # violate the unique key constraint of the database. If we
+            # did that, it means that the site is already in blocked and we
+            # can safely move on.
+            connection._rollback()
     RequeueRankedKeywordsForDomain(parsedurl.netloc)
 
     if language is not None:
