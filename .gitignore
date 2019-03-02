@@ -22,3 +22,5 @@ favicons/*.bmp
 favicons/*.ico
 favicons/*.png
 favicons/*.jpg
+categorize_*.out
+categorize_*.err

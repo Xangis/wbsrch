@@ -2259,6 +2259,7 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
         pendingindex_model = GetPendingIndexModelFromLanguage(lang)
         site_model = GetSiteInfoModelFromLanguage(lang)
         langdata['lang'] = language_names[lang]
+        langdata['prefix'] = lang
         langdata['count'] = site_model.objects.count()
         langdata['indexes'] = term_model.objects.count()
         langdata['pending_indexes'] = pendingindex_model.objects.count()
