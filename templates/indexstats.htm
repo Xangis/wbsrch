@@ -16,7 +16,7 @@
 <table class="centered">
 <tr><th>{% trans "Language" %}</th><th>{% trans "# of" %} {% trans "URLs" %} {% trans "Crawled" %}</th><th>{% trans "# of" %} {% trans "Terms" %} {% trans "Indexed" %}</th><th>{% trans "Pending" %} {% trans "Indexes" %}</th></tr>
 {% for language in stats.langs %}
-<tr><td><a href="https://{{ language.prefix }}.wbsrch.com">{% trans language.lang %}</a></td><td id="{{ language.lang }}pages">{{ language.count }}</td><td>{{ language.indexes }}</td><td>{{ language.pending_indexes }}</td></tr>
+<tr><td><a href="https://{% if language.prefix != 'en' %}{{ language.prefix }}.{% endif %}wbsrch.com">{% trans language.lang %}</a></td><td id="{{ language.lang }}pages">{{ language.count }}</td><td>{{ language.indexes }}</td><td>{{ language.pending_indexes }}</td></tr>
 {% endfor %}
 <tr><td>{% trans "Total" %}</td><td>{{ stats.total_urls }}</td><td>{{ stats.total_indexes }}</td><td>{{ stats.total_pendingindexes }}</td></tr>
 <tr><td colspan="4" class="centered">{% trans "Excluded" %} {% trans "Domains" %}: {{ stats.num_excluded }}</td><tr>
