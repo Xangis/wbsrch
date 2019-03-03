@@ -774,6 +774,11 @@ class SiteInfoEndingInADAdmin(SiteInfoAdmin):
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ad')
 
+class SiteInfoEndingInADULTAdmin(SiteInfoAdmin):
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
+    def get_queryset(self, request):
+        return self.model.objects.filter(rooturl__endswith='.adult')
+
 class SiteInfoEndingInAEAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
     def get_queryset(self, request):
@@ -2307,6 +2312,7 @@ class APIUsageAdmin(admin.ModelAdmin):
 admin.site.register(BlockedSite, ExcludedSiteAdmin)
 admin.site.register(SiteInfo, SiteInfoAdmin)
 admin.site.register(SiteInfoEndingInAD, SiteInfoEndingInADAdmin)
+admin.site.register(SiteInfoEndingInADULT, SiteInfoEndingInADULTAdmin)
 admin.site.register(SiteInfoEndingInAE, SiteInfoEndingInAEAdmin)
 admin.site.register(SiteInfoEndingInAERO, SiteInfoEndingInAEROAdmin)
 admin.site.register(SiteInfoEndingInAF, SiteInfoEndingInAFAdmin)

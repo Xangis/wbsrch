@@ -1230,6 +1230,11 @@ class SiteInfoH3BeforeZero(SiteInfo):
         proxy = True
         verbose_name_plural = 'Site Infos H3 Before 0'
 
+class SiteInfoEndingInADULT(SiteInfo):
+    class Meta:
+        proxy = True
+        verbose_name_plural = 'Site Infos Ending With .adult'
+
 class SiteInfoEndingInAD(SiteInfo):
     class Meta:
         proxy = True
