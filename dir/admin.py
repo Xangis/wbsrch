@@ -408,6 +408,12 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     tag_as_language_infix.short_description = "Tag these sites as Language infix, like /fr/."
 
+    def move_to_aragonese(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'an')
+
+    move_to_aragonese.short_description = "Move these to Catalan."
+
     def move_to_catalan(modeladmin, request, queryset):
         for item in queryset:
             MoveSiteTo(item, 'ca')
@@ -548,7 +554,8 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     actions = [block_domain_wrong_language, block_domain_porn, block_domain_gambling, block_domain_piracy, block_domain_shortener,
                block_domain_adserver, block_domain_nocontent, block_domain_spam, block_domain_social, tag_as_english, tag_as_language_infix,
-               recrawl_this_url, move_to_catalan, move_to_croatian, move_to_estonian, move_to_finnish,
+               recrawl_this_url, move_to_aragonese, move_to_catalan, move_to_croatian,
+               move_to_estonian, move_to_finnish,
                move_to_french, move_to_german, move_to_greek, move_to_italian, move_to_portuguese, move_to_polish,
                move_to_romanian, move_to_spanish, move_to_slovene, move_to_swahili, move_to_swedish,
                move_to_dutch, move_to_czech, move_to_latvian, move_to_lithuanian,
