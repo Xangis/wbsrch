@@ -2284,6 +2284,10 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
                     print('Skipping blocked domain {0}'.format(linked_domain))
         stats.most_linked_to_domains = json.dumps(most_linked_list)
         stats.last_most_linked_to = timezone.now()
+        with open("wbsrch_most_linked_domains.csv", 'w') as outfile:
+            for item in most_linked_list:
+                outfile.write('%s\n' % item)
+            outfile.close()
     else:
         stats.most_linked_to_domains = newest_stats.most_linked_to_domains
         stats.last_most_linked_to = newest_stats.last_most_linked_to
