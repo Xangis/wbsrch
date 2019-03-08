@@ -2259,6 +2259,10 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
         pendingindex_model = GetPendingIndexModelFromLanguage(lang)
         site_model = GetSiteInfoModelFromLanguage(lang)
         langdata['lang'] = language_names[lang]
+        if lang in hidden_language_list:
+            langdata['hidden'] = True
+        else:
+            langdata['hidden'] = False
         langdata['prefix'] = lang
         langdata['count'] = site_model.objects.count()
         langdata['indexes'] = term_model.objects.count()
@@ -2267,7 +2271,10 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
         stats.total_indexes += langdata['indexes']
         stats.total_pendingindexes += langdata['pending_indexes']
         langs.append(langdata)
-    print('Most linked to domain list updated {0}. Nolinks is set to {1}.'.format(newest_stats.last_most_linked_to, nolinks))
+    if newest_stats:
+        print('Most linked to domain list updated {0}. Nolinks is set to {1}.'.format(newest_stats.last_most_linked_to, nolinks))
+    else:
+        print('No most recent stats. Generating first one.')
     if (not nolinks) and ((not newest_stats) or (newest_stats.last_most_linked_to < (timezone.now() - timedelta(days=30)).date())):
         print('Most linked to domain list is older than 30 days, need to recalculate.')
         most_linked = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in')[0:1000]
