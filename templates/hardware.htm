@@ -1,0 +1,29 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ language_code }}">
+<head>
+<meta name="keywords" content="{% trans "search engine" %}, web, {% trans "index" %}, {% trans "hardware information" %}, {% trans "contact" %}, {% trans "email" %}, {% trans "address" %}, {% trans "contact info" %}">
+<meta name="description" content="Hardware information for WbSrch {% trans "Web Search" %}, home of {% trans "The Independent Search Engine" %}.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% trans "Hardware Information" %} | WbSrch {% trans "Web Search" %}</title>
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch Web 
+{% trans "Search" %} {% trans "Hardware Information" %}</h1></div>
+<div class="page">
+<h2 class="left">Hardware Information</h2><br/>
+<p>WbSrch is running on the following hardware:</p>
+<p>- A $10/mo IronGrid Big Data VPS (1GB RAM, 3 core CPU, 1TB HDD)</p>
+<p>- A $40/mo Linode VPS (8GB RAM, 4 core CPU, 160GB HDD)</p>
+<p>- A $20/mo Linode VPS (4GB RAM, 2 core CPU, 80GB HDD)</p>
+<p>- A $5/mo Linode VPS (1GB RAM, 1 core CPU, 25GB HDD)</p>
+<p>Total: 14GB RAM, 10 CPU cores, 1.26TB storage</p>
+<br /><p><a href="/">{% trans "Back to search form" %}.</a></p>
+</div>
+{% include 'footer.inc' %}
+</body>
+</html>
