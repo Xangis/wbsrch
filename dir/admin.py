@@ -412,7 +412,13 @@ class SiteInfoAdmin(admin.ModelAdmin):
         for item in queryset:
             MoveSiteTo(item, 'an')
 
-    move_to_aragonese.short_description = "Move these to Catalan."
+    move_to_aragonese.short_description = "Move these to Aragonese."
+
+    def move_to_basque(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'eu')
+
+    move_to_basque.short_description = "Move these to Basque."
 
     def move_to_catalan(modeladmin, request, queryset):
         for item in queryset:
@@ -438,6 +444,12 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     move_to_dutch.short_description = "Move these to Dutch."
 
+    def move_to_english(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'en')
+
+    move_to_english.short_description = "Move these to English."
+
     def move_to_estonian(modeladmin, request, queryset):
         for item in queryset:
             MoveSiteTo(item, 'et')
@@ -456,6 +468,12 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     move_to_french.short_description = "Move these to French."
 
+    def move_to_galician(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'gl')
+
+    move_to_galician.short_description = "Move these to Galician."
+
     def move_to_german(modeladmin, request, queryset):
         for item in queryset:
             MoveSiteTo(item, 'de')
@@ -467,6 +485,12 @@ class SiteInfoAdmin(admin.ModelAdmin):
             MoveSiteTo(item, 'el')
 
     move_to_greek.short_description = "Move these to Greek."
+
+    def move_to_hausa(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'ha')
+
+    move_to_hausa.short_description = "Move these to Hausa."
 
     def move_to_hungarian(modeladmin, request, queryset):
         for item in queryset:
@@ -516,11 +540,29 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     move_to_romanian.short_description = "Move these to Romanian."
 
+    def move_to_rwandan(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'rw')
+
+    move_to_rwandan.short_description = "Move these to Rwandan."
+
+    def move_to_shona(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'sn')
+
+    move_to_shona.short_description = "Move these to Shona."
+
     def move_to_slovene(modeladmin, request, queryset):
         for item in queryset:
             MoveSiteTo(item, 'sl')
 
     move_to_slovene.short_description = "Move these to Slovene."
+
+    def move_to_somali(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'so')
+
+    move_to_somali.short_description = "Move these to Somali."
 
     def move_to_spanish(modeladmin, request, queryset):
         for item in queryset:
@@ -546,20 +588,47 @@ class SiteInfoAdmin(admin.ModelAdmin):
 
     move_to_turkish.short_description = "Move these to Turkish."
 
-    def move_to_english(modeladmin, request, queryset):
+    def move_to_welsh(modeladmin, request, queryset):
         for item in queryset:
-            MoveSiteTo(item, 'en')
+            MoveSiteTo(item, 'cy')
 
-    move_to_english.short_description = "Move these to English."
+    move_to_welsh.short_description = "Move these to Welsh."
+
+    def move_to_wolof(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'wo')
+
+    move_to_wolof.short_description = "Move these to Wolof."
+
+    def move_to_yoruba(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'yo')
+
+    move_to_yoruba.short_description = "Move these to Yoruba."
+
+    def move_to_xhosa(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'xh')
+
+    move_to_xhosa.short_description = "Move these to Xhosa."
+
+    def move_to_zulu(modeladmin, request, queryset):
+        for item in queryset:
+            MoveSiteTo(item, 'zu')
+
+    move_to_zulu.short_description = "Move these to Zulu."
 
     actions = [block_domain_wrong_language, block_domain_porn, block_domain_gambling, block_domain_piracy, block_domain_shortener,
                block_domain_adserver, block_domain_nocontent, block_domain_spam, block_domain_social, tag_as_english, tag_as_language_infix,
-               recrawl_this_url, move_to_aragonese, move_to_catalan, move_to_croatian,
-               move_to_estonian, move_to_finnish,
-               move_to_french, move_to_german, move_to_greek, move_to_italian, move_to_portuguese, move_to_polish,
-               move_to_romanian, move_to_spanish, move_to_slovene, move_to_swahili, move_to_swedish,
-               move_to_dutch, move_to_czech, move_to_latvian, move_to_lithuanian,
-               move_to_hungarian, move_to_turkish, block_domain_language_am, block_domain_language_ar,
+               recrawl_this_url, move_to_aragonese, move_to_basque, move_to_catalan, move_to_croatian,
+               move_to_czech, move_to_dutch,
+               move_to_estonian, move_to_finnish, move_to_french, move_to_galician, move_to_german,
+               move_to_greek, move_to_hausa, move_to_hungarian, move_to_italian, move_to_latvian,
+               move_to_lithuanian, move_to_portuguese, move_to_polish, move_to_romanian,
+               move_to_rwandan, move_to_shona, move_to_slovene, move_to_somali, move_to_spanish, move_to_swahili,
+               move_to_swedish, move_to_turkish, move_to_welsh, move_to_wolof, move_to_yoruba,
+               move_to_xhosa, move_to_zulu,
+               block_domain_language_am, block_domain_language_ar,
                block_domain_language_az, block_domain_language_cn, block_domain_language_ge, block_domain_language_il,
                block_domain_language_hi, block_domain_language_in,
                block_domain_language_ja, block_domain_language_km, block_domain_language_ko,
@@ -2652,7 +2721,6 @@ admin.site.register(SearchLog_el, SearchLogAdmin)
 admin.site.register(SearchLog_es, SearchLogAdmin)
 admin.site.register(SearchLog_fi, SearchLogAdmin)
 admin.site.register(SearchLog_fr, SearchLogAdmin)
-admin.site.register(SearchLog_ha, SearchLogAdmin)
 admin.site.register(SearchLog_hu, SearchLogAdmin)
 admin.site.register(SearchLog_is, SearchLogAdmin)
 admin.site.register(SearchLog_it, SearchLogAdmin)
@@ -2660,14 +2728,9 @@ admin.site.register(SearchLog_nl, SearchLogAdmin)
 admin.site.register(SearchLog_no, SearchLogAdmin)
 admin.site.register(SearchLog_pl, SearchLogAdmin)
 admin.site.register(SearchLog_pt, SearchLogAdmin)
-admin.site.register(SearchLog_rw, SearchLogAdmin)
 admin.site.register(SearchLog_sk, SearchLogAdmin)
-admin.site.register(SearchLog_sn, SearchLogAdmin)
-admin.site.register(SearchLog_so, SearchLogAdmin)
 admin.site.register(SearchLog_sv, SearchLogAdmin)
 admin.site.register(SearchLog_tr, SearchLogAdmin)
-admin.site.register(SearchLog_wo, SearchLogAdmin)
-admin.site.register(SearchLog_yo, SearchLogAdmin)
 admin.site.register(PendingIndex, PendingIndexAdmin)
 admin.site.register(PendingIndex_cs, PendingIndexAdmin)
 admin.site.register(PendingIndex_de, PendingIndexAdmin)
@@ -2733,7 +2796,6 @@ admin.site.register(ResultClick_el, ResultClickAdmin)
 admin.site.register(ResultClick_es, ResultClickAdmin)
 admin.site.register(ResultClick_fi, ResultClickAdmin)
 admin.site.register(ResultClick_fr, ResultClickAdmin)
-admin.site.register(ResultClick_ha, ResultClickAdmin)
 admin.site.register(ResultClick_hu, ResultClickAdmin)
 admin.site.register(ResultClick_is, ResultClickAdmin)
 admin.site.register(ResultClick_it, ResultClickAdmin)
@@ -2741,14 +2803,9 @@ admin.site.register(ResultClick_nl, ResultClickAdmin)
 admin.site.register(ResultClick_no, ResultClickAdmin)
 admin.site.register(ResultClick_pl, ResultClickAdmin)
 admin.site.register(ResultClick_pt, ResultClickAdmin)
-admin.site.register(ResultClick_rw, ResultClickAdmin)
 admin.site.register(ResultClick_sk, ResultClickAdmin)
-admin.site.register(ResultClick_sn, ResultClickAdmin)
-admin.site.register(ResultClick_so, ResultClickAdmin)
 admin.site.register(ResultClick_sv, ResultClickAdmin)
 admin.site.register(ResultClick_tr, ResultClickAdmin)
-admin.site.register(ResultClick_wo, ResultClickAdmin)
-admin.site.register(ResultClick_yo, ResultClickAdmin)
 admin.site.register(Screenshot)
 admin.site.register(APISubscription, APISubscriptionAdmin)
 admin.site.register(APIUsage, APIUsageAdmin)
@@ -2756,6 +2813,14 @@ admin.site.register(CrawlableUrl)
 admin.site.register(Favicon)
 
 # Conditional languages, enabled in language_list in models.py.
+if 'an' in language_list:
+    admin.site.register(SiteInfo_an, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_an, IndexTermAdmin)
+    admin.site.register(PendingIndex_an, PendingIndexAdmin)
+    admin.site.register(SearchLog_an, SearchLogAdmin)
+    admin.site.register(AutoComplete_an, AutoCompleteAdmin)
+    admin.site.register(ResultClick_an, ResultClickAdmin)
+    # We don't register KeywordRanking.
 if 'ca' in language_list:
     admin.site.register(SiteInfo_ca, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_ca, IndexTermAdmin)
@@ -2764,6 +2829,14 @@ if 'ca' in language_list:
     admin.site.register(AutoComplete_ca, AutoCompleteAdmin)
     admin.site.register(ResultClick_ca, ResultClickAdmin)
     # We don't register KeywordRanking.
+if 'cy' in language_list:
+    admin.site.register(SiteInfo_cy, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_cy, IndexTermAdmin)
+    admin.site.register(PendingIndex_cy, PendingIndexAdmin)
+    admin.site.register(SearchLog_cy, SearchLogAdmin)
+    admin.site.register(AutoComplete_cy, AutoCompleteAdmin)
+    admin.site.register(ResultClick_cy, ResultClickAdmin)
+    # We don't register KeywordRanking.
 if 'et' in language_list:
     admin.site.register(SiteInfo_et, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_et, IndexTermAdmin)
@@ -2771,6 +2844,30 @@ if 'et' in language_list:
     admin.site.register(SearchLog_et, SearchLogAdmin)
     admin.site.register(AutoComplete_et, AutoCompleteAdmin)
     admin.site.register(ResultClick_et, ResultClickAdmin)
+    # We don't register KeywordRanking.
+if 'eu' in language_list:
+    admin.site.register(SiteInfo_eu, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_eu, IndexTermAdmin)
+    admin.site.register(PendingIndex_eu, PendingIndexAdmin)
+    admin.site.register(SearchLog_eu, SearchLogAdmin)
+    admin.site.register(AutoComplete_eu, AutoCompleteAdmin)
+    admin.site.register(ResultClick_eu, ResultClickAdmin)
+    # We don't register KeywordRanking.
+if 'gl' in language_list:
+    admin.site.register(SiteInfo_gl, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_gl, IndexTermAdmin)
+    admin.site.register(PendingIndex_gl, PendingIndexAdmin)
+    admin.site.register(SearchLog_gl, SearchLogAdmin)
+    admin.site.register(AutoComplete_gl, AutoCompleteAdmin)
+    admin.site.register(ResultClick_gl, ResultClickAdmin)
+    # We don't register KeywordRanking.
+if 'ha' in language_list:
+    admin.site.register(SiteInfo_ha, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_ha, IndexTermAdmin)
+    admin.site.register(PendingIndex_ha, PendingIndexAdmin)
+    admin.site.register(SearchLog_ha, SearchLogAdmin)
+    admin.site.register(AutoComplete_ha, AutoCompleteAdmin)
+    admin.site.register(ResultClick_ha, ResultClickAdmin)
     # We don't register KeywordRanking.
 if 'hr' in language_list:
     admin.site.register(SiteInfo_hr, ExtendedSiteInfoAdmin)
@@ -2804,6 +2901,14 @@ if 'ro' in language_list:
     admin.site.register(AutoComplete_ro, AutoCompleteAdmin)
     admin.site.register(ResultClick_ro, ResultClickAdmin)
     # We don't register KeywordRanking.
+if 'rw' in language_list:
+    admin.site.register(SiteInfo_rw, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_rw, IndexTermAdmin)
+    admin.site.register(PendingIndex_rw, PendingIndexAdmin)
+    admin.site.register(SearchLog_rw, SearchLogAdmin)
+    admin.site.register(AutoComplete_rw, AutoCompleteAdmin)
+    admin.site.register(ResultClick_rw, ResultClickAdmin)
+    # We don't register KeywordRanking.
 if 'sl' in language_list:
     admin.site.register(SiteInfo_sl, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_sl, IndexTermAdmin)
@@ -2812,6 +2917,22 @@ if 'sl' in language_list:
     admin.site.register(AutoComplete_sl, AutoCompleteAdmin)
     admin.site.register(ResultClick_sl, ResultClickAdmin)
     # We don't register KeywordRanking.
+if 'sn' in language_list:
+    admin.site.register(SiteInfo_sn, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_sn, IndexTermAdmin)
+    admin.site.register(PendingIndex_sn, PendingIndexAdmin)
+    admin.site.register(SearchLog_sn, SearchLogAdmin)
+    admin.site.register(AutoComplete_sn, AutoCompleteAdmin)
+    admin.site.register(ResultClick_sn, ResultClickAdmin)
+    # We don't register KeywordRanking.
+if 'so' in language_list:
+    admin.site.register(SiteInfo_so, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_so, IndexTermAdmin)
+    admin.site.register(PendingIndex_so, PendingIndexAdmin)
+    admin.site.register(SearchLog_so, SearchLogAdmin)
+    admin.site.register(AutoComplete_so, AutoCompleteAdmin)
+    admin.site.register(ResultClick_so, ResultClickAdmin)
+    # We don't register KeywordRanking.
 if 'sw' in language_list:
     admin.site.register(SiteInfo_sw, ExtendedSiteInfoAdmin)
     admin.site.register(IndexTerm_sw, IndexTermAdmin)
@@ -2819,4 +2940,36 @@ if 'sw' in language_list:
     admin.site.register(SearchLog_sw, SearchLogAdmin)
     admin.site.register(AutoComplete_sw, AutoCompleteAdmin)
     admin.site.register(ResultClick_sw, ResultClickAdmin)
+    # We don't register KeywordRanking.
+if 'wo' in language_list:
+    admin.site.register(SiteInfo_wo, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_wo, IndexTermAdmin)
+    admin.site.register(PendingIndex_wo, PendingIndexAdmin)
+    admin.site.register(SearchLog_wo, SearchLogAdmin)
+    admin.site.register(AutoComplete_wo, AutoCompleteAdmin)
+    admin.site.register(ResultClick_wo, ResultClickAdmin)
+    # We don't register KeywordRanking.
+if 'xh' in language_list:
+    admin.site.register(SiteInfo_xh, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_xh, IndexTermAdmin)
+    admin.site.register(PendingIndex_xh, PendingIndexAdmin)
+    admin.site.register(SearchLog_xh, SearchLogAdmin)
+    admin.site.register(AutoComplete_xh, AutoCompleteAdmin)
+    admin.site.register(ResultClick_xh, ResultClickAdmin)
+    # We don't register KeywordRanking.
+if 'yo' in language_list:
+    admin.site.register(SiteInfo_yo, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_yo, IndexTermAdmin)
+    admin.site.register(PendingIndex_yo, PendingIndexAdmin)
+    admin.site.register(SearchLog_yo, SearchLogAdmin)
+    admin.site.register(AutoComplete_yo, AutoCompleteAdmin)
+    admin.site.register(ResultClick_yo, ResultClickAdmin)
+    # We don't register KeywordRanking.
+if 'zu' in language_list:
+    admin.site.register(SiteInfo_zu, ExtendedSiteInfoAdmin)
+    admin.site.register(IndexTerm_zu, IndexTermAdmin)
+    admin.site.register(PendingIndex_zu, PendingIndexAdmin)
+    admin.site.register(SearchLog_zu, SearchLogAdmin)
+    admin.site.register(AutoComplete_zu, AutoCompleteAdmin)
+    admin.site.register(ResultClick_zu, ResultClickAdmin)
     # We don't register KeywordRanking.
