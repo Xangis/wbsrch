@@ -218,7 +218,7 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
             print u'Merge factor for term {0} is {1} with {2} results'.format(singleword, factor, word.num_results)
         except:
             print u'Merge factor for term (unprintable) is {1} with {2} results'.format(singleword, factor, word.num_results)
-        page_rankings = json.loads(word.page_rankings)
+        page_rankings = ujson.loads(word.page_rankings)
         for item in page_rankings:
             #print 'Checking {0} in page_rankings.'.format(item)
             points = item[1] * factor

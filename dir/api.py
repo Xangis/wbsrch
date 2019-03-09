@@ -4,7 +4,6 @@ from django.db.models import Count
 from django.db import connection
 from django.core.cache import cache
 from django.utils import timezone
-import json
 from models import *
 from utils import *
 from exceptions import *

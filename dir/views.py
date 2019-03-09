@@ -9,7 +9,6 @@ from django.db import connection
 from django.core.cache import cache
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-import json
 import ujson
 from models import *
 from utils import *
@@ -1183,7 +1182,7 @@ def autocomplete(request):
         autocomplete_model = GetAutoCompleteModelFromLanguage(language_code)
         results = autocomplete_model.objects.filter(keywords__startswith=text).order_by('-score')[0:8]
         if results.count() > 0:
-            return HttpResponse( (json.dumps(list(results), default=encode_autocomplete)), content_type='application/json', status=200)
+            return HttpResponse( (ujson.dumps(list(results), default=encode_autocomplete)), content_type='application/json', status=200)
         else:
             return HttpResponse(status=404)
     else:

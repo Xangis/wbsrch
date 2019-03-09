@@ -15,7 +15,6 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from PIL import Image
 import signal
-import json
 import ujson
 from bs4 import BeautifulSoup
 from models import *
@@ -2068,7 +2067,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
         search_result[key]['score'] = value['urls'][0]['score'] + GetUrlCountScore(num_urls)
     # Need to sort first, then truncate results.
     search_results = sorted(search_result.iteritems(), key=lambda item: item[1]['score'], reverse=True)[0:limit]
-    term.search_results = json.dumps(search_results)
+    term.search_results = ujson.dumps(search_results)
     if save:
         term.save()
     # Now we need to update the term rankings.
@@ -2289,7 +2288,7 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
             else:
                 if verbose:
                     print('Skipping blocked domain {0}'.format(linked_domain))
-        stats.most_linked_to_domains = json.dumps(most_linked_list)
+        stats.most_linked_to_domains = ujson.dumps(most_linked_list)
         stats.last_most_linked_to = timezone.now()
         with open("wbsrch_most_linked_domains.csv", 'w') as outfile:
             for item in most_linked_list:
@@ -2299,7 +2298,7 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
         stats.most_linked_to_domains = newest_stats.most_linked_to_domains
         stats.last_most_linked_to = newest_stats.last_most_linked_to
     langs.sort(key=lambda item: item['lang'])
-    stats.langs = json.dumps(langs)
+    stats.langs = ujson.dumps(langs)
     end_delta = timezone.now() - start
     stats.generation_time = end_delta.total_seconds()
     if save:
@@ -2337,7 +2336,7 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
     searches = searchlog_model.objects.filter(last_search__gte=first, last_search__lt=last)
     report.total_searches = searches.count()
     searches = searches.values('keywords').annotate(Count('keywords')).order_by('-keywords__count')[0:200]
-    report.top_searches = json.dumps(list(searches))
+    report.top_searches = ujson.dumps(list(searches))
     if save:
         report.save()
     print str(report.total_searches) + ' searches in ' + report.language + ' in ' + str(report.year) + '-' + str(report.month)
