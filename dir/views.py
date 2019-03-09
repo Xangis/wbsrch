@@ -287,6 +287,12 @@ def contact(request):
         language_code = 'en'
     return render_to_response('contact.htm', {'language_code': language_code})
 
+def hardware(request):
+    language_code = request.LANGUAGE_CODE
+    if language_code == 'en-us':
+        language_code = 'en'
+    return render_to_response('hardware.htm', {'language_code': language_code})
+
 def index_stats(request, realtime=False):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
