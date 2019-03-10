@@ -778,9 +778,9 @@ class FeedbackItemAdmin(admin.ModelAdmin):
         for item in queryset:
             MarkURLContentsAsSpam(item.comment, item.ip)
             item.delete()
-    
+
     spam_block.short_description = "Block the contents of these items as spam."
-    
+
     actions = [spam_block,]
 
 class DomainInfoAdmin(admin.ModelAdmin):

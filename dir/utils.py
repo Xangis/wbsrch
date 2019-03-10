@@ -646,10 +646,18 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
                 bonus = 4.0
                 if verbose:
                     rulematches.append('Bonus 4 for alexa rank {0}'.format(domain.alexa_rank))
+            elif domain.alexa_rank < 50000:
+                bonus = 3.5
+                if verbose:
+                    rulematches.append('Bonus 3.5 for alexa rank {0}'.format(domain.alexa_rank))
             elif domain.alexa_rank < 100000:
                 bonus = 3.0
                 if verbose:
                     rulematches.append('Bonus 3 for alexa rank {0}'.format(domain.alexa_rank))
+            elif domain.alexa_rank < 250000:
+                bonus = 2.5
+                if verbose:
+                    rulematches.append('Bonus 2.5 for alexa rank {0}'.format(domain.alexa_rank))
             elif domain.alexa_rank < 500000:
                 bonus = 2.0
                 if verbose:
@@ -658,6 +666,30 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
                 bonus = 1.0
                 if verbose:
                     rulematches.append('Bonus 1 for alexa rank {0}'.format(domain.alexa_rank))
+        # Majestic matters, but about half as much as Alexa in this ranking system.
+        if domain.majestic_rank:
+            # Outdated Majestic rank, meaning it was in the top million once, but not anymore,
+            # is still worth a fraction of a point.
+            if domain.majestic_outdated and domain.majestic_rank < 1000000:
+                bonus = 0.25
+                if verbose:
+                    rulematches.append('Bonus 0.25 for outdated Majestic rank {0}'.format(domain.majestic_rank))
+            elif domain.majestic_rank < 10000:
+                bonus = 2.0
+                if verbose:
+                    rulematches.append('Bonus 2 for Majestic rank {0}'.format(domain.majestic_rank))
+            elif domain.majestic_rank < 100000:
+                bonus = 1.5
+                if verbose:
+                    rulematches.append('Bonus 1.5 for Majestic rank {0}'.format(domain.majestic_rank))
+            elif domain.majestic_rank < 500000:
+                bonus = 1.0
+                if verbose:
+                    rulematches.append('Bonus 1 for Majestic rank {0}'.format(domain.majestic_rank))
+            elif domain.majestic_rank < 1000000:
+                bonus = 0.5
+                if verbose:
+                    rulematches.append('Bonus 0.5 for Majestic rank {0}'.format(domain.majestic_rank))
         if domain.domains_linking_in:
             linkrank = GetLinkRank(domain.domains_linking_in)
             if verbose:
@@ -3272,3 +3304,78 @@ def GetFavicons(domain):
     domaininfo.favicons_last_updated = timezone.now()
     domaininfo.save()
     return True
+
+
+def UpdateMajesticRank(domain_name, rank):
+    """
+    Updates the majestic rank for a site and for its www version (assuming it exists).
+    Returns True if the site needs to be crawled, false otherwise.
+    """
+    try:
+        domain = DomainInfo.objects.get(url=domain_name)
+        domain.majestic_rank = rank
+        domain.majestic_rank_date = datetime.date.today()
+        domain.majestic_outdated = False
+        domain.save()
+        # Update the www. version or non-www. version of the domain if it exists.
+        # Consider both to be the same thing and make them match.
+        try:
+            if not domain.url.startswith('www.'):
+                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain.majestic_rank = rank
+                domain.majestic_rank_date = datetime.date.today()
+                domain.majestic_outdated = False
+                domain.save()
+            else:
+                domain = DomainInfo.objects.get(url=domain_name[4:])
+                domain.majestic_rank = rank
+                domain.majestic_rank_date = datetime.date.today()
+                domain.majestic_outdated = False
+                domain.save()
+        except ObjectDoesNotExist:
+            pass
+    except ObjectDoesNotExist:
+        # Create the domain if it doesn't exist. Do this even for blocked sites
+        # because they will probably eventually migrate to the SiteInfo table.
+        domain = DomainInfo()
+        domain.url = domain_name
+        domain.majestic_rank = rank
+        domain.majestic_rank_date = datetime.date.today()
+        domain.majestic_outdated = False
+        domain.save()
+        try:
+            # Update the www. version or non-www. version of the domain if it exists.
+            try:
+                if not domain.url.startswith('www.'):
+                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain.majestic_rank = rank
+                    domain.majestic_rank_date = datetime.date.today()
+                    domain.majestic_outdated = False
+                    domain.save()
+                else:
+                    domain = DomainInfo.objects.get(url=domain_name[4:])
+                    domain.majestic_rank = rank
+                    domain.majestic_rank_date = datetime.date.today()
+                    domain.majestic_outdated = False
+                    domain.save()
+            except ObjectDoesNotExist:
+                pass
+            # If we haven't seen this URL in a pending import, add it to the
+            # to-be-crawled list so it eventually makes it into the index.
+            # But only if it's not blocked.
+            try:
+                blocked_domain = BlockedSite.objects.get(url=domain_name)
+            except ObjectDoesNotExist:
+                # Exception on a get means that it wasn't found in the block list.
+                url = CrawlableUrl()
+                url.url = domain_name
+                url.rooturl = GetRootUrl(url.url)
+                try:
+                    url.save()
+                except DatabaseError:
+                    connection._rollback()
+                return True
+        except DatabaseError:
+            connection._rollback()
+    return False
+
