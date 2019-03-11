@@ -14,11 +14,11 @@ class Command(BaseCommand):
 
     To perform automatic language blocking, which kind of works but is very experimental, you should use a command something like this:
 
-        python manage.py categorize_language -c -t -b am,as,az,bg,cn,dz,fa,gu,he,hi,hy,id,il,ja,jv,ka,ko,kr,ku,kz,lo,mk,mr,mn,mr,ms,my,ne,or,pa,ps,ru,si,sq,ta,te,tg,th,tl,ug,uk,ur,vn,vi,zh -q -i 1000
+        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mr,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 1000 | grep -v UnicodeDecodeError
 
     To perform automatic language blocking for only domains ending in .ua:
 
-        python manage.py categorize_language -c -t -b am,as,az,bg,cn,dz,fa,gu,he,hi,hy,id,il,ja,jv,ka,ko,kr,ku,kz,lo,mk,mr,mn,mr,ms,my,ne,or,pa,ps,ru,si,sq,ta,te,tg,th,tl,ug,uk,ur,vn,vi,zh -q -i 10000000 -u .ua | grep -v UnicodeDecodeError
+        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mr,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000 -u .ua | grep -v UnicodeDecodeError
 
     To automatically tag sites as english, which kind of works but is very experimental, you should use a command something like this (note the use of -n so we only tag with higher-confidence data):
 
