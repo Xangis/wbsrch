@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     To perform automatic language blocking, which kind of works but is very experimental, you should use a command something like this:
 
-        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mr,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 1000 | grep -v UnicodeDecodeError
+        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 1000 | grep -v UnicodeDecodeError
 
     To perform automatic language blocking for only domains ending in .ua:
 
@@ -224,27 +224,48 @@ class Command(BaseCommand):
                     if langtoblock == 'ar' or langtoblock == 'fa':
                         # (20, 'Unindexed Language - Arabic or Farsi'),
                         site.reason = 20
-                    elif langtoblock == 'hy':
-                        # (32, 'Unindexed Language - Armenian'),
-                        site.reason = 32
+                    elif langtoblock == 'am':
+                        # (45, 'Unindexed Language - Amharic'),
+                        site.reason = 45
+                    elif langtoblock == 'as':
+                        # (50, 'Unindexed Language - Assamese'),
+                        site.reason = 50
                     elif langtoblock == 'az':
                         # (34, 'Unindexed Language - Azerbaijani'),
                         site.reason = 34
-                    elif langtoblock == 'zh':
-                        # (21, 'Unindexed Language - Chinese'),
-                        site.reason = 21
-                    elif langtoblock == 'ka':
-                        # (31, 'Unindexed Language - Georgian'),
-                        site.reason = 31
+                    elif langtoblock == 'dz':
+                        # (56, 'Unindexed Language - Dzongkha'),
+                        site.reason = 56
+                    elif langtoblock == 'gu':
+                        # (46, 'Unindexed Language - Gujarati'),
+                        site.reason = 46
                     elif langtoblock == 'he':
                         # (22, 'Unindexed Language - Hebrew'),
                         site.reason = 22
                     elif langtoblock == 'hi':
                         # (23, 'Unindexed Language - Hindi'),
                         site.reason = 23
+                    elif langtoblock == 'hy':
+                        # (32, 'Unindexed Language - Armenian'),
+                        site.reason = 32
                     elif langtoblock == 'id' or langtoblock == 'ms':
                         # (24, 'Unindexed Language - Indonesian or Similar'),
                         site.reason = 24
+                    elif langtoblock == 'jv':
+                        # (49, 'Unindexed Language - Javanese'),
+                        site.reason = 49
+                    elif langtoblock == 'ka':
+                        # (31, 'Unindexed Language - Georgian'),
+                        site.reason = 31
+                    elif langtoblock == 'kk':
+                        # (43, 'Unindexed Language - Kazakh'),
+                        site.reason = 43
+                    elif langtoblock == 'ku':
+                        # (47, 'Unindexed Language - Kurdish'),
+                        site.reason = 47
+                    elif langtoblock == 'ky':
+                        # (44, 'Unindexed Language - Kyrgyz'),
+                        site.reason = 44
                     elif langtoblock == 'ja':
                         # (25, 'Unindexed Language - Japanese'),
                         site.reason = 25
@@ -254,9 +275,24 @@ class Command(BaseCommand):
                     elif langtoblock == 'ko':
                         # (27, 'Unindexed Language - Korean'),
                         site.reason = 27
+                    elif langtoblock == 'lo':
+                        # (54, 'Unindexed Language - Lao'),
+                        site.reason = 54
                     elif langtoblock == 'mk':
                         # (41, 'Unindexed Language - Macedonian'),
                         site.reason = 41
+                    elif langtoblock == 'mn':
+                        # (48, 'Unindexed Language - Mongolian'),
+                        site.reason = 48
+                    elif langtoblock == 'mr':
+                        # (55, 'Unindexed Language - Marathi'),
+                        site.reason = 55
+                    elif langtoblock == 'ne':
+                        # (52, 'Unindexed Language - Nepali'),
+                        site.reason = 52
+                    elif langtoblock == 'or':
+                        # (57, 'Unindexed Language - Oriya'),
+                        site.reason = 57
                     elif langtoblock == 'pa':
                         # (39, 'Unindexed Language - Punjabi'),
                         site.reason = 39
@@ -275,6 +311,9 @@ class Command(BaseCommand):
                     elif langtoblock == 'sr':
                         # (33, 'Unindexed Language - Serbian'),
                         site.reason = 33
+                    elif langtoblock == 'ta':
+                        # (51, 'Unindexed Language - Tamil'),
+                        site.reason = 51
                     elif langtoblock == 'te':
                         # (42, 'Unindexed Language - Telugu'),
                         site.reason = 42
@@ -284,15 +323,21 @@ class Command(BaseCommand):
                     elif langtoblock == 'tl':
                         # (38, 'Unindexed Language - Tagalog'),
                         site.reason = 38
+                    elif langtoblock == 'ug':
+                        # (53, 'Unindexed Language - Uighur'),
+                        site.reason = 53
                     elif langtoblock == 'ur':
                         # (35, 'Unindexed Language - Urdu'),
                         site.reason = 35
                     elif langtoblock == 'vi':
                         # (29, 'Unindexed Language - Vietnamese'),
                         site.reason = 29
-                    elif langtoblock == 'am' or langtoblock == 'si' or langtoblock == 'gu' or langtoblock == 'ku' or langtoblock == 'mn' or langtoblock == 'jv' or langtoblock == 'as' or langtoblock == 'ta' or langtoblock == 'ne' or langtoblock == 'ug' or langtoblock == 'lo' or langtoblock == 'mr' or langtoblock == 'dz' or langtoblock == 'or':
-                        # TDOO: Add a reason for and 'am', 'si', 'gu', 'ku', 'jv', 'as', 'mn', 'ta', 'ne', 'ug', 'lo', 'mr', 'dz', 'or'
-                        site.reason = 8
+                    elif langtoblock == 'zh':
+                        # (21, 'Unindexed Language - Chinese'),
+                        site.reason = 21
+                    #elif langtoblock == 'or':
+                    #    # TDOO: Add a reason for and 'or'
+                    #    site.reason = 8
                     else:
                         # (8, 'Unindexed Language - Unspecified'),
                         site.reason = 8
