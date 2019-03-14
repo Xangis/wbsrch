@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     To perform automatic language blocking, which kind of works but is very experimental, you should use a command something like this:
 
-        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 1000 | grep -v UnicodeDecodeError
+        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000 | grep -v UnicodeDecodeError
 
     To perform automatic language blocking for only domains ending in .ua:
 
@@ -260,6 +260,9 @@ class Command(BaseCommand):
                     elif langtoblock == 'kk':
                         # (43, 'Unindexed Language - Kazakh'),
                         site.reason = 43
+                    elif langtoblock == 'kn':
+                        # (58, 'Unindexed Language - Kannada'),
+                        site.reason = 58
                     elif langtoblock == 'ku':
                         # (47, 'Unindexed Language - Kurdish'),
                         site.reason = 47
