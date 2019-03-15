@@ -145,7 +145,7 @@ class Command(BaseCommand):
                 pagelanguage = IdentifyPageLanguage(url.url, url.pagecontents)
                 idlang = IdentifyLanguage(url.pagetext)
                 if idlang[0] == 'en':
-                    english = english + 1
+                    english = english + idlang[1]
                 if scores.has_key(idlang[0]):
                     scores[idlang[0]] = scores[idlang[0]] + idlang[1]
                 else:
@@ -170,9 +170,10 @@ class Command(BaseCommand):
             if total:
                 englishratio = (english * 100) / total
             else:
+                englishratio = 0
                 continue
             if autotagenglish and englishratio > 95:
-                print u'Site is mostly English - {0} of {1}, auto-tagging as English'.format(english, total)
+                print u'Site {0} is mostly English - ratio {1} from {2} of {3}, auto-tagging as English'.format(domain, englishratio, english, total)
                 input = 'en'
                 tagged_count = tagged_count + 1
             elif autotagenglish and onlyautotag:
@@ -255,6 +256,9 @@ class Command(BaseCommand):
                     elif langtoblock == 'be':
                         # (59, 'Unindexed Language - Belarusian'),
                         site.reason = 59
+                    elif langtoblock == 'bn':
+                        # (60, 'Unindexed Language - Bengladeshi'),
+                        site.reason = 60
                     elif langtoblock == 'dz':
                         # (56, 'Unindexed Language - Dzongkha'),
                         site.reason = 56
