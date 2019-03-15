@@ -4,6 +4,7 @@ from optparse import make_option
 from dir.models import *
 from dir.utils import *
 from dir.language import NLTKLanguageDetect, IdentifyPageLanguage, IdentifyLanguage
+import codecs
 
 class Command(BaseCommand):
     help = """Performs semi-manual or automatic language categorization for domains.
@@ -41,6 +42,7 @@ class Command(BaseCommand):
         make_option('-q', '--quiet', default=False, action='store_true', dest='quiet', help='Quiet mode - do not log individual pages and titles to the console.'),
         make_option('-t', '--textminimum', default=False, action='store_true', dest='textminimum', help='Require at least 100 characters of text to count page for categorization.'),
         make_option('-d', '--domain', default=None, action='store', type='string', dest='domain', help='Only check this domain.'),
+        make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load domain list from specified file. Ignores all options and categorizes/blocks everything.'),
     )
 
     def handle(self, *args, **options):
@@ -71,38 +73,55 @@ class Command(BaseCommand):
         result = None
         cursor = connection.cursor()
         uncategorized_domains = []
+        if options['file']:
+            autotagenglish = True
+            onlyautotag = False
+            confident = True
+            autotag = language_list
+            autoblock = blocked_language_list
+            filename = options['file']
+            domains = []
+            numloaded = 0
+            print('Loading domains to check from file: {0}'.format(filename))
+            f = open(filename, 'rb')
+            reader = codecs.getreader('utf8')(f)
+            for line in reader.readlines():
+                line = line.strip()
+                uncategorized_domains.append(line)
+            print('{0} domains loaded from file {1}.'.format(numloaded, filename))
         # We start with the domains having the most pages and descend.
-        if justdomain:
-            query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl = '{0}' GROUP BY rooturl;".format(justdomain)
-        elif onlysuffix:
-            query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '%{0}' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlysuffix, maxurls, maxitems)
-        elif onlyprefix:
-            query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '{0}%' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlyprefix, maxurls, maxitems)
-        elif rank:
-            query = 'SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE language_association IS null AND alexa_rank IS NOT null AND uses_language_subdirs = false AND uses_language_query_parameter = false ORDER BY alexa_rank LIMIT {0};'.format(maxurls, maxitems)
-        elif numpageminimum:
-            query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) >= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(numpageminimum, maxitems)
         else:
-            query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) <= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(maxurls, maxitems)
-        #cursor.execute('SELECT count(*), rooturl FROM site_info GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(maxitems))
-        print('Running query: {0}'.format(query))
-        cursor.execute(query)
-        domain_counts = cursor.fetchall()
-        for domain in domain_counts:
-            processed += 1
-            # Bail if we hit our page minimum -- we're done.
-            if domain[0] < numpageminimum:
-                print('Domain {0} is below our minimum of {1}, done gathering.'.format(domain[1], domain[0]))
-                break
-            # Skip domains above maximum number of pages.
-            if domain[0] <= maxurls:
-                uncategorized_domains.append(domain[1])
-            try:
-                domaininfo = DomainInfo.objects.get(url=domain[1])
-                if domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid:
-                    continue
-            except:
-                pass
+            if justdomain:
+                query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl = '{0}' GROUP BY rooturl;".format(justdomain)
+            elif onlysuffix:
+                query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '%{0}' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlysuffix, maxurls, maxitems)
+            elif onlyprefix:
+                query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '{0}%' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlyprefix, maxurls, maxitems)
+            elif rank:
+                query = 'SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE language_association IS null AND alexa_rank IS NOT null AND uses_language_subdirs = false AND uses_language_query_parameter = false ORDER BY alexa_rank LIMIT {0};'.format(maxurls, maxitems)
+            elif numpageminimum:
+                query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) >= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(numpageminimum, maxitems)
+            else:
+                query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) <= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(maxurls, maxitems)
+            #cursor.execute('SELECT count(*), rooturl FROM site_info GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(maxitems))
+            print('Running query: {0}'.format(query))
+            cursor.execute(query)
+            domain_counts = cursor.fetchall()
+            for domain in domain_counts:
+                processed += 1
+                # Bail if we hit our page minimum -- we're done.
+                if domain[0] < numpageminimum:
+                    print('Domain {0} is below our minimum of {1}, done gathering.'.format(domain[1], domain[0]))
+                    break
+                # Skip domains above maximum number of pages.
+                if domain[0] <= maxurls:
+                    uncategorized_domains.append(domain[1])
+                try:
+                    domaininfo = DomainInfo.objects.get(url=domain[1])
+                    if domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid:
+                        continue
+                except:
+                    pass
         for domain in uncategorized_domains:
             urls = SiteInfo.objects.filter(rooturl=domain)
             if rank and urls.count() < 1:
@@ -233,6 +252,9 @@ class Command(BaseCommand):
                     elif langtoblock == 'az':
                         # (34, 'Unindexed Language - Azerbaijani'),
                         site.reason = 34
+                    elif langtoblock == 'be':
+                        # (59, 'Unindexed Language - Belarusian'),
+                        site.reason = 59
                     elif langtoblock == 'dz':
                         # (56, 'Unindexed Language - Dzongkha'),
                         site.reason = 56
@@ -358,7 +380,7 @@ class Command(BaseCommand):
                 RequeueRankedKeywordsForDomain(domain)
                 print 'Site {0} language blocked and all URLs deleted.'.format(domain)
             else:
-                if input in language_list or input in ['gl', 'eu', 'fo', 'fy', 'oc', 'om', 'nap', 'eo']:
+                if input in language_list or input in ['fo', 'fy', 'oc', 'om', 'nap', 'eo']:
                     model = GetSiteInfoModelFromLanguage(input)
                     if model:
                         try:

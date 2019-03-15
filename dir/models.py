@@ -145,6 +145,7 @@ EXCLUDED_SITE_REASONS = (
         (32, 'Unindexed Language - Armenian'),
         (50, 'Unindexed Language - Assamese'),
         (34, 'Unindexed Language - Azerbaijani'),
+        (59, 'Unindexed Language - Belarusian'),
         (21, 'Unindexed Language - Chinese'),
         (56, 'Unindexed Language - Dzongkha'),
         (31, 'Unindexed Language - Georgian'),
