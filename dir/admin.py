@@ -108,7 +108,7 @@ class IPAddressAdmin(admin.ModelAdmin):
 
 class SiteInfoAdmin(admin.ModelAdmin):
     list_per_page = 200
-    list_display = ('rooturl', 'url', 'pagetitle')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag')
     search_fields = ('rooturl',)
     show_full_result_count = False
     formfield_overrides = {
