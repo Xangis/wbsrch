@@ -98,13 +98,13 @@ def UpdateDomainWhois(domain, detailed=False):
             try:
                 domain.save()
             except DataError, e:
-                print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
+                print 'DataError: Failed to get domain info for {0}: {1}'.format(domain.url, e)
                 print(serializers.serialize("json", [domain,], indent=4))
             except AmbiguousTimeError, e:
-                print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
+                print 'AmbiguousTimeError: Failed to get domain info for {0}: {1}'.format(domain.url, e)
                 print(serializers.serialize("json", [domain,], indent=4))
             except ValidationError, e:
-                print 'Failed to get domain info for {0}: {1}'.format(domain.url, e)
+                print 'ValidationError: Failed to get domain info for {0}: {1}'.format(domain.url, e)
                 try:
                     print(serializers.serialize("json", [domain,], indent=4))
                 except ValueError:
