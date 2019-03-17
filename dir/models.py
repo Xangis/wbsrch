@@ -165,6 +165,7 @@ EXCLUDED_SITE_REASONS = (
         (54, 'Unindexed Language - Lao'),
         (41, 'Unindexed Language - Macedonian'),
         (55, 'Unindexed Language - Marathi'),
+        (61, 'Unindexed Language - Malayalam'),
         (48, 'Unindexed Language - Mongolian'),
         (52, 'Unindexed Language - Nepali'),
         (57, 'Unindexed Language - Oriya'),

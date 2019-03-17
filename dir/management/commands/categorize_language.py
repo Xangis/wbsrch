@@ -316,6 +316,9 @@ class Command(BaseCommand):
                     elif langtoblock == 'mr':
                         # (55, 'Unindexed Language - Marathi'),
                         site.reason = 55
+                    elif langtoblock == 'ml':
+                        # (60, 'Unindexed Language - Malayalam'),
+                        site.reason = 60
                     elif langtoblock == 'ne':
                         # (52, 'Unindexed Language - Nepali'),
                         site.reason = 52
