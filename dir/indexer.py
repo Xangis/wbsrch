@@ -17,7 +17,6 @@ from django.db import connection
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.db.utils import DatabaseError
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from models import *
 from utils import *

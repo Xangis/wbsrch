@@ -12,7 +12,7 @@ from django.db.utils import DatabaseError, DataError
 from django.db import connection
 from django.utils import timezone
 from django.utils.timezone import utc
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 import HTMLParser
 import datetime
