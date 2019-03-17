@@ -21,12 +21,18 @@ def UpdateDomainWhois(domain, detailed=False):
                     domain.domain_created = info['creation_date']
                 except KeyError:
                     pass
+                if domain.domain_created == 'b' or domain.domain_created == ':':
+                    print('Invalid domain_created date "{0}". Resetting to None'.format(domain.domain_created))
+                    domain.domain_created = None
                 try:
                     domain.domain_expires = info['expiration_date'][0]
                 except TypeError:
                     domain.domain_expires = info['expiration_date']
                 except KeyError:
                     pass
+                if domain.domain_expires == 'b' or domain.domain_expires == ':':
+                    print('Invalid domain_expires date "{0}". Resetting to None'.format(domain.domain_expires))
+                    domain.domain_expires = None
                 try:
                     domain.domain_updated = info['updated_date'][0]
                 except TypeError:
@@ -108,9 +114,13 @@ def UpdateDomainWhois(domain, detailed=False):
                 try:
                     print(serializers.serialize("json", [domain,], indent=4))
                 except ValueError:
-                    pass
+                    print('domain_created: "{0}"'.format(domain.domain_created))
+                    print('domain_expires: "{0}"'.format(domain.domain_expires))
+                    print('domain_updated: "{0}"'.format(domain.domain_updated))
                 except AttributeError:
-                    pass
+                    print('domain_created: "{0}"'.format(domain.domain_created))
+                    print('domain_expires: "{0}"'.format(domain.domain_expires))
+                    print('domain_updated: "{0}"'.format(domain.domain_updated))
 
 def GetDomainAge(domain):
     """
