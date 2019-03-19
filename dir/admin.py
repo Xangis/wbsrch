@@ -793,7 +793,7 @@ class SettingAdmin(admin.ModelAdmin):
     search_fields = ('name', 'value')
 
 class ExtendedSiteInfoAdmin(SiteInfoAdmin):
-    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
+    list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag', 'pagefirsth3tag')
 
 class SiteInfoAfterZAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
@@ -2699,6 +2699,7 @@ admin.site.register(SiteInfoBeforeZero, SiteInfoBeforeZeroAdmin)
 admin.site.register(SiteInfoH1BeforeZero, SiteInfoH1BeforeZeroAdmin)
 admin.site.register(SiteInfoH2BeforeZero, SiteInfoH2BeforeZeroAdmin)
 admin.site.register(SiteInfoH3BeforeZero, SiteInfoH3BeforeZeroAdmin)
+admin.site.register(SiteInfoFull, ExtendedSiteInfoAdmin)
 admin.site.register(SiteInfo_cs, SiteInfoAdmin)
 admin.site.register(SiteInfo_de, SiteInfoAdmin)
 admin.site.register(SiteInfo_el, SiteInfoAdmin)

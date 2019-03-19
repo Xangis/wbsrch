@@ -850,6 +850,11 @@ class Setting(models.Model):
     def __unicode__(self):
         return self.name + ': ' + self.value
 
+class SiteInfoFull(SiteInfo):
+    class Meta:
+        proxy = True
+        verbose_name_plural = 'Site Infos - Full View'
+
 class SiteInfoAfterZ(SiteInfo):
     class Meta:
         proxy = True
@@ -2434,6 +2439,7 @@ class IndexStats(models.Model):
     class Meta:
         in_db = 'indexes'
         ordering = ['-create_date',]
+        verbose_name_plural = 'Index Stats'
 
 # Model for holding a monthly report of the most popular searches.
 class MonthlySearchReport(models.Model):
