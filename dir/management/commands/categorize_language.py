@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand, CommandError
 from optparse import make_option
 from dir.models import *
 from dir.utils import *
-from dir.language import NLTKLanguageDetect, IdentifyPageLanguage, IdentifyLanguage
+from dir.language import IdentifyLanguage
 import codecs
 
 class Command(BaseCommand):
@@ -141,8 +141,6 @@ class Command(BaseCommand):
                         print 'Skipping page with less than 100 chars of text.'
                     continue
                 total = total + 1
-                language = NLTKLanguageDetect(url.pagetext)
-                pagelanguage = IdentifyPageLanguage(url.url, url.pagecontents)
                 idlang = IdentifyLanguage(url.pagetext)
                 if idlang[0] == 'en':
                     english = english + idlang[1]
@@ -158,8 +156,8 @@ class Command(BaseCommand):
                     head = url.pagefirsth3tag
                 if not quiet:
                     try:
-                        print(u'{0} ({1}) {2} {3} [{4}] [{5}]'.format(
-                            idlang, language, pagelanguage, url.url, url.pagetitle, url.pagefirstheadtag))
+                        print(u'{0} {1} [{2}] [{3}]'.format(
+                            idlang, url.url, url.pagetitle, url.pagefirstheadtag))
                     except UnicodeEncodeError:
                         print('Page info is not valid unicode, cannot print')
             # If the URLs are blocked or removed between the time of querying domains and processing them,
