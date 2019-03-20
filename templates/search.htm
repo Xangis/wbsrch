@@ -98,7 +98,7 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% endif %}
 <p>{{ result_count }} results found{% if allfromdomain %} from this domain{% endif %}.</p>
 {% if allfromdomain %}<p><a href="/search/?q={{ searchterm }}">Back to search for "{{ searchterm }}" from all domains.</a></p>{% endif %}
-{% if not indexed and not refused %}<p><em>{% trans "Note: The phrase you searched for is not fully indexed. We have queued it for indexing and will have better results available soon." %}</em></p>{% endif %}
+{% if not indexed and not refused %}<!-- Term not indexed yet. -->{% else %}<!-- Term indexed {{ date_indexed }} -->{% endif %}
 {% if show_network_ad %}
 <!--<p>including 3</p>-->
 {% include 'adsense.inc' %}
