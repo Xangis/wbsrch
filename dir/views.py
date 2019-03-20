@@ -61,6 +61,7 @@ class SearchResult():
         self.refused = False
         self.is_domain = None
         self.is_ip = None
+        self.date_indexed = None
         if self.language_code == 'en-us':
             self.language_code = 'en'
 
@@ -83,6 +84,12 @@ def MergeSearchResult(search_result, index_term, bonus_existing=False):
             search_result.show_sd_ad = True
     except:
         pass
+
+    # Set the index date. Add dates to string for multiple terms.
+    if not search_result.date_indexed:
+        search_result.date_indexed = '{0}'.format(index_term.date_indexed)
+    else:
+        search_result.date_indexed = '{0}, {1}'.format(search_result.date_indexed, index_term.date_indexed)
 
     tmp_result = ujson.loads(index_term.search_results)
     if search_result.allfromdomain:
@@ -735,7 +742,7 @@ def search(request):
           'show_network_ad': result.show_network_ad, 'typo_for': result.typo_for, 'is_language': result.is_language,
           'is_language_name': is_language_name, 'superuser': superuser, 'refused': result.refused, 'is_domain': result.is_domain,
           'is_ip': result.is_ip, 'names_language': result.names_language, 'names_language_search': result.names_language_search,
-          'names_language_name': names_language_name, 'log': log, 'exclude': exclude },
+          'names_language_name': names_language_name, 'log': log, 'exclude': exclude, 'date_indexed': result.date_indexed },
         context_instance=RequestContext(request))
 
 @permission_required('is_superuser')
