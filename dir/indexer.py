@@ -32,7 +32,7 @@ def Indexer(options):
     elif options['pending']:
         pendingindexes = GetPendingIndexes(options['maxindexes'], options['offset'], options['language'], options['verbose'], options['random'])
     elif options['reindex']:
-        pendingindexes = GetReindexes(options['maxindexes'], options['offset'], options['language'], options['verbose'], options['random'])
+        pendingindexes = GetReindexes(options['maxindexes'], options['offset'], options['language'], options['verbose'], options['random'], options['quickness'], options['days'])
     elif options['file']:
         pendingindexes = LoadKeywordsFromFile(options['file'])
     else:
@@ -99,19 +99,30 @@ def GetPendingIndexes(max, offset=0, language='en', verbose=False, random=False)
     print u'Loaded ' + unicode(len(pendingindexes)) + u' pending indexes from database.'
     return pendingindexes
 
-def GetReindexes(max, offset=0, language='en', verbose=False, random=False):
+def GetReindexes(max, offset=0, language='en', verbose=False, random=False, quickness=None, days=None):
     pendingindexes = []
     index_model = GetIndexModelFromLanguage(language)
-    if random:
+    if days and days > 0:
+        newest = (timezone.now() - datetime.timedelta(days=days))
+        if verbose:
+            print('Getting indexes before {0}, which is {1} days before now.'.format(newest, days))
+        pending = index_model.objects.filter(date_indexed__lte=newest).order_by('date_indexed')[offset:max+offset]
+    elif random:
         pending = index_model.objects.all().order_by('?')[offset:max+offset]
     else:
         pending = index_model.objects.all().order_by('date_indexed')[offset:max+offset]
-    print u'Loading stale indexes from ' + language + u' database: '
+    print('Loading stale indexes from {0} database: '.format(language))
     for item in pending:
+        if quickness and quickness > 0:
+            if item.index_time > quickness:
+                if verbose:
+                    print('Not adding "{0}" to queue because it took {1} seconds, longer than our limit of {2}'.format(
+                        item.keywords, item.index_time, quickness))
+                continue
         pendingindexes.append(item.keywords)
         if verbose:
             print item.keywords
-    print u'Loaded ' + unicode(len(pendingindexes)) + u' stale indexes from database.'
+    print('Loaded {0} stale indexes from database.'.format(pendingindexes))
     return pendingindexes
 
 def AddIndividualWords(ratings, keywords, type, lang='en'):

@@ -9,12 +9,14 @@ from dir.utils import GetPendingIndexModelFromLanguage
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('-a', '--abbreviated', default=False, action='store_true', dest='abbreviated', help='Run in abbreviated mode, which does not scan page text.'),
+        make_option('-b', '--before', default=-1, action='store', dest='days', type='int', help='Only index terms before X days ago. (default=-1)'),
         make_option('-d', '--detailed', default=False, action='store_true', dest='verbose', help='Run in verbose mode.'),
         make_option('-p', '--pending', default=False, action='store_true', dest='pending', help='Get pending term list from database.'),
-        make_option('-i', '--info', default=False, action='store_true', dest='info', help='Print info showing the pendingin index counts for all langs and exit.'),
+        make_option('-i', '--info', default=False, action='store_true', dest='info', help='Print info showing the pendining index counts for all langs and exit.'),
         make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for pending indexes (default=en).'),
         make_option('-r', '--reindex', default=False, action='store_true', dest='reindex', help='Reindex existing least-recently-indexed terms.'),
         make_option('-m', '--maxindexes', default=5, action='store', type='int', dest='maxindexes', help='Max number of terms to index. (default=5)'),
+        make_option('-q', '--quickness', default=-1, action='store', type='int', dest='quickness', help='Only works with -r (reindex) and only reindexes terms that took less than X seconds. (default=-1)'),
         make_option('-s', '--sleep', default=2, action='store', type='int', dest='sleep', help='Time to sleep between terms. (default=2)'),
         make_option('-o', '--offset', default=0, action='store', type='int', dest='offset', help='Term slice offset - number of items from beginning to start. (default=0)'),
         make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load term list from specified file.'),
