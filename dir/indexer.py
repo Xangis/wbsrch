@@ -122,7 +122,7 @@ def GetReindexes(max, offset=0, language='en', verbose=False, random=False, quic
         pendingindexes.append(item.keywords)
         if verbose:
             print item.keywords
-    print('Loaded {0} stale indexes from database.'.format(pendingindexes))
+    print('Loaded {0} stale indexes from database.'.format(len(pendingindexes)))
     return pendingindexes
 
 def AddIndividualWords(ratings, keywords, type, lang='en'):
