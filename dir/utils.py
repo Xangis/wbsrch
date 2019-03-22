@@ -3112,6 +3112,12 @@ def IsBotAgent(text):
     # No current user is on any Mozilla/4.0 browser. This is only used by bots at this point.
     if u'Mozilla/4.0' in text:
         return True
+    # SEMrushBot
+    if u'SEMrushBot' in text:
+        return True
+    # Mozilla/5.0 (compatible; SemrushBot-BA; +http://www.semrush.com/bot.html)
+    if u'SemrushBot' in text:
+        return True
     return False
 
 def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=False):
@@ -3379,3 +3385,45 @@ def UpdateMajesticRank(domain_name, rank):
             connection._rollback()
     return False
 
+
+def GetIndexAverageAge(language):
+    total_items = 0
+    total_ages = datetime.timedelta(days=0)
+    imodel = GetIndexModelFromLanguage(language)
+    now = timezone.now()
+    for item in imodel.objects.values_list('date_indexed', flat=True):
+        total_ages += now - item
+        total_items += 1
+    if total_items > 0:
+        return total_ages / total_items
+    else:
+        return 0
+
+def GetPagesAverageAge(language):
+    total_items = 0
+    total_ages = datetime.timedelta(days=0)
+    imodel = GetSiteInfoModelFromLanguage(language)
+    now = timezone.now()
+    for item in imodel.objects.values_list('lastcrawled', flat=True):
+        total_ages += now - item
+        total_items += 1
+    if total_items > 0:
+        return total_ages / total_items
+    else:
+        return 0
+
+def GetOldestIndexAge(language):
+    total_items = 0
+    imodel = GetIndexModelFromLanguage(language)
+    now = timezone.now()
+    for item in imodel.objects.order_by('date_indexed').values_list('date_indexed', flat=True):
+        return item
+    return None
+
+def GetOldestPageAge(language):
+    total_items = 0
+    imodel = GetSiteInfoModelFromLanguage(language)
+    now = timezone.now()
+    for item in imodel.objects.order_by('lastcrawled').values_list('lastcrawled', flat=True):
+        return item
+    return None
