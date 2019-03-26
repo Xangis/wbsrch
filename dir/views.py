@@ -955,8 +955,6 @@ def adminpanel_sitelimits(request):
     counts = []
     result = None
     cursor = connection.cursor()
-    if request.GET.has_key('crawlurl'):
-        result = CrawlSingleUrl(request.GET['crawlurl'])
     sites = DomainInfo.objects.filter(max_urls__isnull=False).order_by('-alexa_rank')
     for site in sites:
         table = u'site_info'
