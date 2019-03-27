@@ -25,3 +25,4 @@ favicons/*.jpg
 *.out
 *.err
 majestic*.csv
+*.o
