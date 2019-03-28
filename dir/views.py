@@ -550,6 +550,9 @@ def search(request):
             result.searchterm = result.searchterm.replace('%2c', ',')
         if '%2c' in result.searchterm:
             result.searchterm = result.searchterm.replace('%3a', ':')
+        # Normalize any search  terms that contain stupid characters or sql injection tricks.
+        if "'[0]" in result.searchterm:
+            result.searchterm = result.searchterm.replace("'[0]", "")
         # Break term into individual words
         pieces = result.searchterm.split(' ')
         if len(pieces) > 1:
@@ -910,6 +913,7 @@ def adminpanel_searchlogs(request):
     bingsearches = request.GET.get('bingsearches', None)
     googlesearches = request.GET.get('googlesearches', None)
     slowsearches = request.GET.get('slowsearches', None)
+    nodomains = request.GET.get('nodomains', None)
     log_model = GetSearchLogModelFromLanguage(lang)
 
     if not unindexed:
@@ -922,6 +926,8 @@ def adminpanel_searchlogs(request):
         logs = logs.filter(result_count=0)
     if twoormore or threeormore:
         logs = logs.filter(keywords__contains=' ')
+    if nodomains:
+        logs = logs.exclude(keywords__contains=".")
     if bingsearches or googlesearches:
         tmplogs = []
         for log in logs:
@@ -949,7 +955,7 @@ def adminpanel_searchlogs(request):
     return render_to_response('adminpanel.htm',
         { 'message': 'Showing recent non-bot {0} logs'.format(lang), 'logs': logs, 'lang': lang, 'twoormore': twoormore, 'zeroresults': zeroresults,
           'threeormore': threeormore, 'bingsearches': bingsearches, 'googlesearches': googlesearches, 'maxresults': maxresults,
-          'unindexed': unindexed },
+          'unindexed': unindexed, 'nodomains': nodomains },
         context_instance=RequestContext(request))
 
 @permission_required('is_superuser')
