@@ -116,7 +116,7 @@ class Command(BaseCommand):
             if beforezero:
                 # Should give us SELECT DISTINCT rooturl FROM site_info WHERE pagetitle < '0'
                 domainpages = SiteInfoBeforeZero.objects.filter(pagetitle__lt='0').values_list('rooturl', flat=True).distinct()
-                print('{0} domains found with title after Z.'.format(len(domainpages)))
+                print('{0} domains found with title before zero.'.format(len(domainpages)))
                 for domainpage in domainpages:
                     try:
                         domaininfo = DomainInfo.objects.get(url=domainpage)
