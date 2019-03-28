@@ -390,8 +390,8 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         print('{0} Done indexing: {0}, {1} results from {2} pages.'.format(timezone.now().isoformat(), keywords, term.num_results, term.num_pages))
         querytime = LogQueries(connection.queries[prevqueries:])
     try:
-        print("Index Time for '{0}': {1} seconds, Jsonify Time: {2} seconds (includes ranking update), {3} results.".format(
-            term.keywords, term.index_time, jsonify_delta.total_seconds(), term.num_results))
+        print("Index Time for '{0}': {1} seconds, Jsonify Time: {2} seconds (includes ranking update), {3} pages, {4} results.".format(
+            term.keywords, term.index_time, jsonify_delta.total_seconds(), term.num_pages, term.num_results))
     except:
         pass
     return saved
