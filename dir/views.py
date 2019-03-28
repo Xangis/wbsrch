@@ -22,6 +22,7 @@ import uuid
 from django.contrib.gis.geoip import GeoIP
 
 INDEX_TERM_STALE_DAYS = 730
+MAX_SEARCH_RESULTS = 200
 
 def SaveLogEntry(log):
     """
@@ -380,14 +381,14 @@ def domain(request):
         # Get cached keyword rankings if available, otherwise query and cache.
         rankings = cache.get('rankings_' + language_code + '_' + rawdomain)
         if not rankings:
-            rankings = list(ranking_model.objects.filter(rooturl=rawdomain, rank__lte=200, show=True).order_by('rank', 'keywords')[0:100])
+            rankings = list(ranking_model.objects.filter(rooturl=rawdomain, rank__lte=MAX_SEARCH_RESULTS, show=True).order_by('rank', 'keywords')[0:100])
         # Cache for up to 3 days (in seconds).
             cache.set('rankings_' + language_code + '_' + rawdomain, rankings, 259200)
         else:
             cached = True
 
         num_records = siteinfos.count()
-        siteinfos = siteinfos[:200]
+        siteinfos = siteinfos[:MAX_SEARCH_RESULTS]
         searchlog = DomainSearchLog()
         searchlog.search_id = uuid.uuid4()
         searchlog.keywords = domain
@@ -735,9 +736,9 @@ def search(request):
     if result.refused:
         result.search_results = None
         result.result_count = 0
-    if result.result_count > 200:
-        result.search_results = result.search_results[0:200]
-        result.result_count = 200
+    if result.result_count > MAX_SEARCH_RESULTS:
+        result.search_results = result.search_results[0:MAX_SEARCH_RESULTS]
+        result.result_count = MAX_SEARCH_RESULTS
     return render_to_response('search.htm',
         { 'search_results': result.search_results, 'searchterm': result.searchterm,
           'result_count': result.result_count, 'language_code': result.language_code, 'indexed': result.indexed,
