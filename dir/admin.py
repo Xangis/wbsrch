@@ -688,7 +688,7 @@ class SearchLogAdmin(admin.ModelAdmin):
     actions = [block_these_terms, mark_as_bot]
 
 class IndexTermAdmin(admin.ModelAdmin):
-    list_display = ('keywords', 'date_indexed', 'num_results', 'index_time', 'actively_blocked', 'refused')
+    list_display = ('keywords', 'date_indexed', 'num_pages', 'index_time', 'actively_blocked', 'refused')
     search_fields = ('keywords',)
     fields = [('keywords', 'term_weight'), ('date_indexed', 'index_time'), 'page_rankings', ('num_pages', 'num_results'), 'search_results',
              ('actively_blocked', 'refused', 'show_ad', 'verified_english'), ('is_language', 'typo_for')]
@@ -717,7 +717,7 @@ class IndexTermAdmin(admin.ModelAdmin):
     actions = [delete_these_index_terms, reindex_these_terms]
 
 class EnglishIndexTermAdmin(IndexTermAdmin):
-    list_display = ('keywords', 'date_indexed', 'num_results', 'index_time', 'actively_blocked', 'refused', 'show_ad', 'typo_for', 'is_language')
+    list_display = ('keywords', 'date_indexed', 'num_pages', 'index_time', 'actively_blocked', 'refused', 'show_ad', 'typo_for', 'is_language')
 
 class BadQueryAdmin(admin.ModelAdmin):
     list_display = ('keywords',)
