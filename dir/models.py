@@ -721,7 +721,8 @@ class IndexTermBase(models.Model):
     keywords = models.CharField(max_length=240, unique=True)
     date_indexed = models.DateTimeField(default=timezone.now)
     page_rankings = models.TextField()
-    num_results = models.IntegerField(null=True, blank=True, help_text='The number of results found in the database (max 1000000), or for mutli-word, the number of exact matches found in the database.')
+    num_results = models.IntegerField(null=True, blank=True, help_text='The number of results shown in search (max 200), or for multi-word, the number of exact matches found in the database.')
+    num_pages = models.IntegerField(null=True, blank=True, help_text='The number of pages found in the database for this term (max 1000000).')
     index_time = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=8)
     # Newer batteries-included JSON format for search results.
     search_results = models.TextField(null=True, blank=True)
