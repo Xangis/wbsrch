@@ -47,12 +47,16 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 <p>{% trans "No results were found for that search." %}</p>
 {% if show_network_ad %}
 <!--<p>including 1</p>-->
+<p>
 {% include 'adsense.inc' %}
+</p>
 {% endif %}
 {% else %}
 {% if show_network_ad %}
 <!--<p>including 2</p>-->
+<p>
 {% include 'adsense.inc' %}
+</p>
 {% endif %}
 <table><tr><td>
 {% for result, value in results %}
@@ -99,8 +103,9 @@ onkeyup="autocomp();" list="autocompleteOptions"/>
 {% if allfromdomain %}<p><a href="/search/?q={{ searchterm }}">Back to search for "{{ searchterm }}" from all domains.</a></p>{% endif %}
 {% if not indexed and not refused %}<!-- Term not indexed yet. -->{% else %}<!-- Term indexed {{ date_indexed }} -->{% endif %}
 {% if show_network_ad %}
-<!--<p>including 3</p>-->
+<p>
 {% include 'adsense.inc' %}
+</p>
 {% endif %}
 <br/><br/>
 {% endif %}
