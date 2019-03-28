@@ -2039,7 +2039,7 @@ def BuildJsonIndex(language='en', limit=None, only_empty=True, sleep=0):
         print 'Search results size: ' + str(size) + ', Total Size: ' + str(cumulative)
 
 # Requires an IndexTerm, will JSONify and save its search rankings.
-def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
+def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
     site_model = GetSiteInfoModelFromLanguage(language)
     # Get ourselves a list of list pairs.
     records = eval(term.page_rankings)
@@ -2099,6 +2099,9 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
         search_result[key]['score'] = value['urls'][0]['score'] + GetUrlCountScore(num_urls)
     # Need to sort first, then truncate results.
     search_results = sorted(search_result.iteritems(), key=lambda item: item[1]['score'], reverse=True)[0:limit]
+    term.num_results = len(search_results)
+    if verbose:
+        print('JsonifyIndexTerm: Term has {0} search results after jsonify.'.format(term.num_results))
     term.search_results = ujson.dumps(search_results)
     if save:
         term.save()
