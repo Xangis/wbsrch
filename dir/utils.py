@@ -2727,6 +2727,9 @@ def IsBotAgent(text):
     # Mozilla/5.0 (compatible; Applebot/0.3; +http://www.apple.com/go/applebot)
     if u'Applebot' in text:
         return True
+    # Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36 Google Favicon
+    if u'Google Favicon' in text:
+        return True
     # Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6 - James BOT - WebCrawler http://cognitiveseo.com/bot.html
     if u'James BOT' in text:
         return True
@@ -3117,6 +3120,12 @@ def IsBotAgent(text):
         return True
     # Mozilla/5.0 (compatible; SemrushBot-BA; +http://www.semrush.com/bot.html)
     if u'SemrushBot' in text:
+        return True
+    # Ancient versions of browsers are commonly used by bots, but pretty much never by Humans.
+    # Examples:
+    # Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6
+    # Firefox/3.0.6
+    if u'Firefox/2.0.0.6' in text or 'Firefox/3.0.6' in text:
         return True
     return False
 
