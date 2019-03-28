@@ -2064,7 +2064,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
             # If the item has "www." but we have a non-www of the domain in the search results.
             elif item.rooturl.startswith('www.') and search_result.has_key(item.rooturl[4:]):
                 if verbose:
-                    print 'JsonifyIndexTerm: WWW site {0} has non-WWW version in results.'.format(item.rooturl)
+                    print('JsonifyIndexTerm: WWW site {0} has non-WWW version in results.'.format(item.rooturl))
                 search_result[item.rooturl[4:]]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
                 search_result[item.rooturl[4:]]['alternateurl'] = item.rooturl
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
@@ -2077,7 +2077,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
             # If the item does not have "www." but we have a "www." version of the domain in the search results.
             elif not item.rooturl.startswith('www.') and search_result.has_key('www.' + item.rooturl):
                 if verbose:
-                    print 'JsonifyIndexTerm: non-WWW site {0} has WWW version in results.'.format(item.rooturl)
+                    print('JsonifyIndexTerm: non-WWW site {0} has WWW version in results.'.format(item.rooturl))
                 search_result['www.' + item.rooturl]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
                 search_result['www.' + item.rooturl]['alternateurl'] = item.rooturl
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
@@ -2120,7 +2120,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
         alternateurl = result[1].get('alternateurl', None)
         if alternateurl:
             if verbose:
-                print u'JsonifyIndexTerm: Site {0} also has alternate URL of {1}'.format(result[0], alternateurl)
+                print('JsonifyIndexTerm: Site {0} also has alternate URL of {1}'.format(result[0], alternateurl))
             altrankitem = ranking_model()
             altrankitem.rooturl = alternateurl
             altrankitem.keywords = term
@@ -2256,6 +2256,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
         term.keywords = text
         term.search_results = '{}'
         term.num_results = 0
+        term.num_pages = 0
     results = []
     tmp_results = site_model.objects.filter(pagetitle__icontains=text)[:200]
     # A page title is worth 100 points in a placeholder term because we consider it an exact perfect match
@@ -2263,6 +2264,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
     for item_result in tmp_results:
         results.append([item_result.id, 100])
     term.num_results = len(results)
+    term.num_pages = term.num_results
     term.page_rankings = str(results)
     if term.num_results > 0:
         end_delta = timezone.now() - start
