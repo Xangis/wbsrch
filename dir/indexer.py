@@ -264,7 +264,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     keywords = keywords.strip()
     if len(keywords) < 1:
         if verbose:
-            print u'BuildIndexForTerm: Search term is empty. Refusing to index.'
+            print('BuildIndexForTerm: Search term is empty. Refusing to index.')
         return False
     keywords = keywords.lower()
     term = None
@@ -277,18 +277,19 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         term = term_model()
         term.keywords = keywords
         term.num_results = 0
+        term.num_pages = 0
         new = True
     if verbose:
-        print timezone.now().isoformat() + ' Indexing term (' + lang + '): ' + keywords
+        print('{0} Indexing term ({1}): {2}'.format(timezone.now().isoformat(), lang, keywords))
         if term.num_results > 0:
-            print '(Reindex) Term had ' + str(term.num_results) + ' results last index on ' + str(term.date_indexed)
+            print('(Reindex) Term had {0} results and {1} pages last index on {2}'.format(term.num_results, term.num_pages, term.date_indexed))
     # We do not need pagecontents, lastcrawled, or firstcrawled. This may or may not save some effort.
     # However, leaving out pagetext saves a *lot* of effort and computation time.
     kp = '%' + keywords + '%' # Allow us to do raw ILIKE queries without formatting problems.
     spacelesskeywords = keywords.replace(' ', '%')
     asciikeywords = unidecode(spacelesskeywords)
     if spacelesskeywords != asciikeywords:
-        print u'Checking URL as {0}'.format(asciikeywords)
+        print('Checking URL as {0}'.format(asciikeywords))
     skp = '%' + spacelesskeywords + '%'
     akp = '%' + asciikeywords + '%'
     # Don't even bother selecting on page text, keywords, or description ILIKE for massive queries.
@@ -297,19 +298,20 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     #
     # On 2015-03-18 added a limit of 1 million rows to every query. Results for anything with a million rows will be crappy
     # and a popularity contest anyway, at least that gives us a chance of succeeding in our indexing.
-    if term.num_results > 100000:
+    querystart = timezone.now()
+    if term.num_pages > 100000:
         sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
                      u" WHERE (pagetitle ILIKE %s OR url ILIKE " +
                      u"%s OR pagefirstheadtag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, akp, kp])
-    elif term.num_results > 40000:
+    elif term.num_pages > 40000:
         sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
                      u" WHERE (pagetitle ILIKE %s OR url ILIKE " +
                      u"%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, akp, kp, kp])
-    elif term.num_results > 10000:
+    elif term.num_pages > 10000:
         sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
                      u" WHERE (pagetitle ILIKE %s OR url ILIKE " +
@@ -317,7 +319,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         index_items = site_model.objects.raw(sql_query, [kp, akp, kp, kp, kp])
     # If we have more than 3000 results, ignore the specific page text because we can get what we
     # need from the head tag, url, keywords, description, and title (mostly).
-    elif abbreviated or term.num_results > 3000:
+    elif abbreviated or term.num_pages > 3000:
         sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
                      u" WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR url ILIKE " +
@@ -333,9 +335,12 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         print sql_query.replace("%s", ("'" + kp + "'"))
     ratings = []
     if verbose:
-        print timezone.now().isoformat() + ' Calculating values.'
+        querydelta = timezone.now() - querystart
+        print('Query took: {0} seconds'.format(querydelta.total_seconds()))
+        print('{0} Calculating values.'.format(timezone.now().isoformat()))
     counter = 0
     # Calculate the score for each page we've found.
+    termcalcstart = timezone.now()
     for item in index_items:
         try:
             weight = CalculateTermValue(item, keywords, abbreviated, lang)
@@ -343,11 +348,13 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         except:
             weight = 0
         ratings.append([item.id, weight])
+    term.num_pages = len(ratings)
     # Sort by score
     if verbose:
-        print timezone.now().isoformat() + ' Sorting index by score.'
+        termcalcdelta = timezone.now() - termcalcstart
+        print('Calculating term values took: {0} seconds'.format(termcalcdelta.total_seconds()))
+        print('{0} Sorting index by score.'.format(timezone.now().isoformat()))
     ratings.sort(key=lambda tup: tup[1], reverse=True)
-    term.num_results = len(ratings)
     ratings = ratings[0:5000]
     # Load existing terms for multi-word phrases.
     if multiword and type:
@@ -356,11 +363,12 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         ratings = ratings[0:5000]
     term.keywords = keywords
     term.page_rankings = str(ratings)
+    term.num_results = len(ratings)
     end_delta = timezone.now() - start
     term.index_time = end_delta.total_seconds()
 
     if verbose:
-        print timezone.now().isoformat() + ' Saving index term.'
+        print('{0} Saving index term.'.format(timezone.now().isoformat()))
     jsonify_start = timezone.now()
     # Don't save new index terms unless it has at least one result.
     saved = True
@@ -369,21 +377,21 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
             individualwords = term.keywords.split(' ')
             blocked = term_model.objects.filter(keywords__in=individualwords, actively_blocked=True).count()
             if blocked > 0:
-                print u'Marking this term as blocked because at least one of the words in it is blocked.'
+                print('Marking this term as blocked because at least one of the words in it is blocked.')
                 term.actively_blocked = True
         term.save()
         JsonifyIndexTerm(term, lang, verbose=verbose)
     else:
         if verbose:
-            print u'Not saving index term because it does not have at least one result.'
+            print('Not saving index term because it does not have at least one result.')
         saved = False
     jsonify_delta = timezone.now() - jsonify_start
     if verbose:
-        print timezone.now().isoformat() + ' Done indexing: ' + keywords + ', ' + str(term.num_results) + ' results.'
+        print('{0} Done indexing: {0}, {1} results from {2} pages.'.format(timezone.now().isoformat(), keywords, term.num_results, term.num_pages))
         querytime = LogQueries(connection.queries[prevqueries:])
     try:
-        print u"Index Time for '{0}': {1} seconds, Jsonify Time: {2} seconds (includes ranking update), {3} results.".format(
-            term.keywords, term.index_time, jsonify_delta.total_seconds(), term.num_results)
+        print("Index Time for '{0}': {1} seconds, Jsonify Time: {2} seconds (includes ranking update), {3} results.".format(
+            term.keywords, term.index_time, jsonify_delta.total_seconds(), term.num_results))
     except:
         pass
     return saved
