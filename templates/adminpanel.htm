@@ -58,7 +58,8 @@
 {% if logs %}
 <form method="get" action="/adminpanel/searchlogs/">
 <p><strong>{% trans "Language" %}:</strong></p>
-<input id="lang" type="text" name="lang" maxlength="4" class="narrowText" {% if lang %}value="{{ lang }}"{% endif %} autocomplete="off" /><br/>
+<input id="lang" type="text" name="lang" maxlength="4" class="narrowText" {% if lang %}value="{{ lang }}"{% endif %} autocomplete="off" /> 
+Max Results: <input id="maxresults" type="text" name="maxresults" maxlength="5" class="narrowText" {% if maxresults %}value="{{ maxresults }}"{% else %}vaue="200"{% endif %} autocomplete="off" /><br/>
 Just Unindexed: <input type="checkbox" name="unindexed" id="unindexed" {% if unindexed %}checked="checked"{%endif%} autocomplete="off" /> | 
 2-Or-More-Words: <input type="checkbox" name="twoormore" id="twoormore" {% if twoormore %}checked="checked"{% endif %} autocomplete="off" /> |  
 3-Or-More-Words: <input type="checkbox" name="threeormore" id="threeormore" {% if threeormore %}checked="checked"{% endif %} autocomplete="off" /> | 

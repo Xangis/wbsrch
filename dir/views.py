@@ -902,6 +902,7 @@ def adminpanel_pagescore(request):
 @permission_required('is_superuser')
 def adminpanel_searchlogs(request):
     lang = request.GET.get('lang', 'en')
+    maxresults = int(request.GET.get('maxresults', 200))
     unindexed = request.GET.get('unindexed', None)
     twoormore = request.GET.get('twoormore', None)
     threeormore = request.GET.get('threeormore', None)
@@ -930,7 +931,7 @@ def adminpanel_searchlogs(request):
                 tmplogs.append(log)
             if googlesearches and u'google.com' in log.referer:
                 tmplogs.append(log)
-            if len(tmplogs) > 199:
+            if len(tmplogs) > maxresults:
                 logs = tmplogs
                 break
     if threeormore:
@@ -939,15 +940,16 @@ def adminpanel_searchlogs(request):
             words = log.keywords.split(' ')
             if len(words) > 2:
                 tmplogs.append(log)
-            if len(tmplogs) > 199:
+            if len(tmplogs) > maxresults:
                 logs = tmplogs
                 break
     else:
-        logs = logs[0:200]
+        logs = logs[0:maxresults]
 
     return render_to_response('adminpanel.htm',
         { 'message': 'Showing recent non-bot {0} logs'.format(lang), 'logs': logs, 'lang': lang, 'twoormore': twoormore, 'zeroresults': zeroresults,
-          'threeormore': threeormore, 'bingsearches': bingsearches, 'googlesearches': googlesearches },
+          'threeormore': threeormore, 'bingsearches': bingsearches, 'googlesearches': googlesearches, 'maxresults': maxresults,
+          'unindexed': unindexed },
         context_instance=RequestContext(request))
 
 @permission_required('is_superuser')
