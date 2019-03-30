@@ -1,7 +1,8 @@
 SHELL=/bin/bash
 PATH=/var/django/wbsrch
-MAILTO=jchampion@zetacentauri.com
+MAILTO=jchampion@sigmacentauri.com
 
 # run-parts
 1 2 * * * xangis /home/xangis/.virtualenvs/wbsrch/bin/python /var/django/wbsrch/manage.py generate_index_stats
 1 4 * * * xangis /var/django/wbsrch/wget_alexa.sh
+1 5 * * * xangis /var/django/wbsrch/wget_majestic.sh
