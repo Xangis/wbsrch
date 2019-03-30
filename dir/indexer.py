@@ -372,7 +372,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     jsonify_start = timezone.now()
     # Don't save new index terms unless it has at least one result.
     saved = True
-    if not new or term.num_results > 0:
+    if not new or term.num_pages > 0:
         if new and multiword:
             individualwords = term.keywords.split(' ')
             blocked = term_model.objects.filter(keywords__in=individualwords, actively_blocked=True).count()
