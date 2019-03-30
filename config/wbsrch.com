@@ -1,4 +1,11 @@
 server {
+        listen 80;
+        listen 443 ssl;
+        server_name 216.151.3.106;
+        return 301 $scheme://wbsrch.com$request_uri;
+}
+
+server {
 	listen 80;
         listen 443 ssl;
 	server_name www.wbsrch.com;
