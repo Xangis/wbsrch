@@ -1,0 +1,4 @@
+# This is how you change permissions on an entire database, i.e. if the database owner was "zetaweb" on one server but "indexes" on the new one.
+# This is a bash command to be run in the terminal.
+
+for tbl in `psql -qAt -c "select tablename from pg_tables where schemaname = 'public';" indexes` ; do  psql -c "alter table \"$tbl\" owner to indexes" indexes ; done

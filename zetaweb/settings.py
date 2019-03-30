@@ -10,7 +10,7 @@ if environment == 'debug' or environment == 'development':
     DEBUG = True
 
 ADMINS = (
-    ('Jason Champion', 'jchampion@zetacentauri.com'),
+    ('Jason Champion', 'jchampion@sigmacentauri.com'),
 )
 
 ALLOWED_HOSTS = [
