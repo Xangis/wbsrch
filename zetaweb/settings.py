@@ -8,7 +8,7 @@ import os
 environment = os.getenv('DJANGO_ENVIRONMENT')
 if environment == 'debug' or environment == 'development':
     DEBUG = True
-DEBUG=True
+
 ADMINS = (
     ('Jason Champion', 'jchampion@sigmacentauri.com'),
 )
