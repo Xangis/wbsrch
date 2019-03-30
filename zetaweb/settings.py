@@ -22,30 +22,30 @@ if DEBUG:
 
 MANAGERS = ADMINS
 
-if environment != 'production':
+if environment != 'development':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'zetaweb',               # Or path to database file if using sqlite3.
             'USER': 'zetaweb',               # Not used with sqlite3.
             'PASSWORD': 'd9irk0kfnv,er9kd2', # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'HOST': '45.56.74.154',          # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         },
         'urls': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'urls',                  # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',               # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2', # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'USER': 'urls',                  # Not used with sqlite3.
+            'PASSWORD': 'ExplodingUnderwear9099321', # Not used with sqlite3.
+            'HOST': '216.151.3.108',         # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         },
         'indexes': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'indexes',               # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',               # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2', # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'USER': 'indexes',               # Not used with sqlite3.
+            'PASSWORD': 'Fracking,TheW3b02211', # Not used with sqlite3.
+            'HOST': '216.151.3.106',         # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         },
         'news': {
@@ -53,7 +53,7 @@ if environment != 'production':
             'NAME': 'news',                  # Or path to database file if using sqlite3.
             'USER': 'zetaweb',               # Not used with sqlite3.
             'PASSWORD': 'd9irk0kfnv,er9kd2', # Not used with sqlite3.
-            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+            'HOST': '45.56.74.154',          # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
