@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
          cout << "Can't open database" << endl;
          return 1;
       }
-      connection D("dbname = urls user = zetaweb password = d9irk0kfnv,er9kd2 \
-      hostaddr = 45.56.74.154 port = 5432");
+      connection D("dbname = urls user = urls password = ExplodingUnderwear9099321 \
+      hostaddr = 216.151.3.108 port = 5432");
       if (D.is_open()) {
          cout << "Opened database successfully: " << D.dbname() << endl;
       } else {
