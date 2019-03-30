@@ -1,0 +1,13 @@
+[uwsgi]
+plugin = python
+uid = xangis
+gid = xangis
+master = true
+processes = 12
+threads = 4
+virtualenv = /home/xangis/.virtualenvs/wbsrch/
+chdir = /var/django/wbsrch/
+wsgi-file = zetaweb/wsgi.py
+socket = 127.0.0.1:9116
+max-requests = 1000
+logto = /var/django/wbsrch/log/uwsgi.log
