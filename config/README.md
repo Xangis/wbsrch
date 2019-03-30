@@ -19,13 +19,25 @@ fastcgi.conf
 nginx.conf
   NGINX config file, goes in /etc/nginx/
 
+packages.sh
+  One-off shell script to install all of the Ubuntu packages that WbSrch depends on.
+
+pg_hba.conf
+  Postgresql authentication configuration. The default configuration doesn't allow password access
+  or remote access.
+
+postgresql.conf.*
+  These configs are various versions for different servers. Postgresql doesn't allow remote connections
+  by default and it doesn't take advantage of high amounts of RAM or fast disks. These configs address
+  those.
+
 uwsgi.wbsrch.conf
   uWSGI configuration file, goes in init.d. Used to start and stop the WbSrch service on an
   Upstart-based system.
 
 uwsgi.wbsrch.service
   uWSGI configuration file for running on a systemd-based system. Goes in the
-  /lib/systemd/system/ folder.
+  /etc/systemd/system/ folder.
 
 wbsrch.com
   Web config file for nginx. Goes in /etc/init.d/sites-available with a symbolic link in
