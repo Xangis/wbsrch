@@ -675,21 +675,23 @@ class SearchLogAdmin(admin.ModelAdmin):
                 bad.save()
             item.is_bot = True
             item.save()
-    
+
     block_these_terms.short_description = "Add terms to bad query list and mark as bot queries."
 
     def mark_as_bot(modeladmin, request, queryset):
         for item in queryset:
             item.is_bot = True
             item.save()
-    
+
     mark_as_bot.short_description = "Mark these queries as bot queries."
-    
+
     actions = [block_these_terms, mark_as_bot]
 
 class IndexTermAdmin(admin.ModelAdmin):
-    list_display = ('keywords', 'date_indexed', 'num_results', 'index_time', 'actively_blocked', 'refused')
+    list_display = ('keywords', 'date_indexed', 'num_pages', 'index_time', 'actively_blocked', 'refused')
     search_fields = ('keywords',)
+    fields = [('keywords', 'term_weight'), ('date_indexed', 'index_time'), 'page_rankings', ('num_pages', 'num_results'), 'search_results',
+             ('actively_blocked', 'refused', 'show_ad', 'verified_english'), ('is_language', 'typo_for')]
 
     def reindex_these_terms(modeladmin, request, queryset):
         for item in queryset:
@@ -699,9 +701,9 @@ class IndexTermAdmin(admin.ModelAdmin):
             else:
                 lang = name[-2:]
             BuildIndexForTerm(item.keywords, lang=lang, type='fourthrootandlog')
-    
+
     reindex_these_terms.short_description = "Reindex these term(s). (may time out)"
-    
+
     def delete_these_index_terms(modeladmin, request, queryset):
         for item in queryset:
             ranking_model = KeywordRanking
@@ -715,7 +717,7 @@ class IndexTermAdmin(admin.ModelAdmin):
     actions = [delete_these_index_terms, reindex_these_terms]
 
 class EnglishIndexTermAdmin(IndexTermAdmin):
-    list_display = ('keywords', 'date_indexed', 'num_results', 'index_time', 'actively_blocked', 'refused', 'show_ad', 'typo_for', 'is_language')
+    list_display = ('keywords', 'date_indexed', 'num_pages', 'index_time', 'actively_blocked', 'refused', 'show_ad', 'typo_for', 'is_language')
 
 class BadQueryAdmin(admin.ModelAdmin):
     list_display = ('keywords',)

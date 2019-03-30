@@ -15,7 +15,7 @@
 
 <p>
 <table width="100%"><tr>
-<td><a href="/adminpanel/">Admin Panel Root</a></td>
+<td><a href="/adminpanel/">Admin Panel Home</a></td>
 <td><a href="/adminpanel/blocksite/">Block a Site</a></td>
 <td><a href="/adminpanel/topsites/">Top Sites</a></td>
 </tr><tr>
@@ -23,13 +23,9 @@
 <td><a href="/adminpanel/unclassified/">Top Sites With Unclassified Language</a></td>
 <td><a href="/adminpanel/oldestcrawls/">Sites Crawled Least Recently</a></td>
 </tr><tr>
-<td><a href="/adminpanel/index-stats/">Index Stats in Real-Time</a></td>
 <td><a href="/adminpanel/pagescore/">Analyze a page's score for a keyword.</a></td>
 <td><a href="/adminpanel/searchlogs/">View recent search logs excluding bots.</a></td>
-</tr><tr>
-<td><a href="/adminpanel/urlrange/?low=0&high=100&language=en&model=SiteInfo">URL Range</a></td>
-<td><a href="/adminpanel/domainsafterz/">Root Domains After Z</a></td>
-<td><a href="/adminpanel/siteinfoendingin/">Site Infos Ending in a Suffix</a></td>
+<td>&nbsp;</td>
 </tr></table>
 </p>
 
@@ -62,13 +58,15 @@
 {% if logs %}
 <form method="get" action="/adminpanel/searchlogs/">
 <p><strong>{% trans "Language" %}:</strong></p>
-<input id="lang" type="text" name="lang" maxlength="4" class="narrowText" {% if lang %}value="{{ lang }}"{% endif %} autocomplete="off" /><br/>
+<input id="lang" type="text" name="lang" maxlength="4" class="narrowText" {% if lang %}value="{{ lang }}"{% endif %} autocomplete="off" /> 
+Max Results: <input id="maxresults" type="text" name="maxresults" maxlength="5" class="narrowText" {% if maxresults %}value="{{ maxresults }}"{% else %}vaue="200"{% endif %} autocomplete="off" /><br/>
 Just Unindexed: <input type="checkbox" name="unindexed" id="unindexed" {% if unindexed %}checked="checked"{%endif%} autocomplete="off" /> | 
 2-Or-More-Words: <input type="checkbox" name="twoormore" id="twoormore" {% if twoormore %}checked="checked"{% endif %} autocomplete="off" /> |  
 3-Or-More-Words: <input type="checkbox" name="threeormore" id="threeormore" {% if threeormore %}checked="checked"{% endif %} autocomplete="off" /> | 
 Zero Results: <input type="checkbox" name="zeroresults" id="zeroresults" {% if zeroresults %}checked="checked"{% endif %} autocomplete="off" /> | 
 Bing Searches: <input type="checkbox" name="bingsearches" id="bingsearches" {% if bingsearches %}checked="checked"{% endif %} autocomplete="off" /> | 
 Google Searches: <input type="checkbox" name="googlesearches" id="googlesearches" {% if googlesearches %}checked="checked"{% endif %} autocomplete="off" /> |
+No Domains: <input type="checkbox" name="nodomains" id="nodomains" {% if nodomains %}checked="checked"{% endif %} autocomplete="off" /> |
 Slow Searches: <input type="checkbox" name="slowsearches" id="slowsearches" {% if slowsearches %}checked="checked"{% endif %} autocomplete="off" />
 <input type="submit" value="{% trans "Get" %}">
 </form>

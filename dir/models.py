@@ -721,8 +721,9 @@ class IndexTermBase(models.Model):
     keywords = models.CharField(max_length=240, unique=True)
     date_indexed = models.DateTimeField(default=timezone.now)
     page_rankings = models.TextField()
-    num_results = models.IntegerField(null=True, blank=True, help_text='The number of results found in the database (max 1000000), or for mutli-word, the number of exact matches found in the database.')
-    index_time = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=8)
+    num_results = models.IntegerField(null=True, blank=True, help_text='Number of results shown in search (max 200), or for multi-word, number of exact matches found in the db.')
+    num_pages = models.IntegerField(null=True, blank=True, help_text='Number of pages found in the database (max 1000000).')
+    index_time = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=8, help_text='in seconds')
     # Newer batteries-included JSON format for search results.
     search_results = models.TextField(null=True, blank=True)
     actively_blocked = models.BooleanField(default=False, blank=True)
@@ -730,7 +731,7 @@ class IndexTermBase(models.Model):
     refused = models.BooleanField(default=False, blank=True)
     typo_for = models.CharField(max_length=240, null=True, blank=True, help_text='A phrase that this search term is a possible typo for.')
     is_language = models.CharField(max_length=4, null=True, blank=True, help_text='This is a word in language X, and will show a link to that index in search results.')
-    term_weight = models.IntegerField(null=True, blank=True, help_text='Term weight in percent. Used for multi-word terms. If set below 100, this term will count less than other words.')
+    term_weight = models.IntegerField(null=True, blank=True, help_text='Term weight in percent (for multi-word terms). If set below 100, this term will count less than other words.')
 
     def save(self, keep_date=False, *args, **kwargs):
         if not keep_date:

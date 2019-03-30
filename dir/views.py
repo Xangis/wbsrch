@@ -22,6 +22,7 @@ import uuid
 from django.contrib.gis.geoip import GeoIP
 
 INDEX_TERM_STALE_DAYS = 730
+MAX_SEARCH_RESULTS = 200
 
 def SaveLogEntry(log):
     """
@@ -380,14 +381,14 @@ def domain(request):
         # Get cached keyword rankings if available, otherwise query and cache.
         rankings = cache.get('rankings_' + language_code + '_' + rawdomain)
         if not rankings:
-            rankings = list(ranking_model.objects.filter(rooturl=rawdomain, rank__lte=200, show=True).order_by('rank', 'keywords')[0:100])
+            rankings = list(ranking_model.objects.filter(rooturl=rawdomain, rank__lte=MAX_SEARCH_RESULTS, show=True).order_by('rank', 'keywords')[0:100])
         # Cache for up to 3 days (in seconds).
             cache.set('rankings_' + language_code + '_' + rawdomain, rankings, 259200)
         else:
             cached = True
 
         num_records = siteinfos.count()
-        siteinfos = siteinfos[:200]
+        siteinfos = siteinfos[:MAX_SEARCH_RESULTS]
         searchlog = DomainSearchLog()
         searchlog.search_id = uuid.uuid4()
         searchlog.keywords = domain
@@ -550,6 +551,9 @@ def search(request):
             result.searchterm = result.searchterm.replace('%2c', ',')
         if '%2c' in result.searchterm:
             result.searchterm = result.searchterm.replace('%3a', ':')
+        # Normalize any search  terms that contain stupid characters or sql injection tricks.
+        if "'[0]" in result.searchterm:
+            result.searchterm = result.searchterm.replace("'[0]", "")
         # Break term into individual words
         pieces = result.searchterm.split(' ')
         if len(pieces) > 1:
@@ -732,9 +736,9 @@ def search(request):
     if result.refused:
         result.search_results = None
         result.result_count = 0
-    if result.result_count > 200:
-        result.search_results = result.search_results[0:200]
-        result.result_count = 200
+    if result.result_count > MAX_SEARCH_RESULTS:
+        result.search_results = result.search_results[0:MAX_SEARCH_RESULTS]
+        result.result_count = MAX_SEARCH_RESULTS
     return render_to_response('search.htm',
         { 'search_results': result.search_results, 'searchterm': result.searchterm,
           'result_count': result.result_count, 'language_code': result.language_code, 'indexed': result.indexed,
@@ -877,115 +881,6 @@ def adminpanel_topsites(request):
     return render_to_response('adminpanel.htm', { 'domain_counts': counts, 'result': result })
 
 @permission_required('is_superuser')
-def adminpanel_urlrange(request):
-    low = request.GET.get('low', 0)
-    high = request.GET.get('high', 100)
-    model = request.GET.get('model', None)
-    language_code = request.GET.get('language', u'en')
-
-    result = SearchResult(language_code)
-
-    start = timezone.now()
-    if not model:
-        site_model = GetSiteInfoModelFromLanguage(language_code)
-    else:
-        site_model = apps.get_model('dir', model)
-        if not site_model:
-            return HttpResponse(status=404)
-    term_model = GetIndexModelFromLanguage(language_code)
-    term = term_model()
-    term.keywords = 'SiteInfo IDs {0} to {1}, model {2}, language {3}'.format(low, high, model, language_code)
-    result.searchterm = term.keywords
-    term.search_results = '{}'
-    term.num_results = 0
-    results = []
-    tmp_results = site_model.objects.filter(id__gte=low, id__lte=high)
-    for item_result in tmp_results:
-        results.append([item_result.id, (0-item_result.id)])
-    term.num_results = len(results)
-    term.page_rankings = str(results)
-    if term.num_results > 0:
-        end_delta = timezone.now() - start
-        term.index_time = end_delta.total_seconds()
-        term = JsonifyIndexTerm(term, language_code, save=False, limit=5000)
-    result = MergeSearchResult(result, term)
-    #raise (result.search_results, term.search_results)
-    return render_to_response('search.htm', { 'search_results': result.search_results, 'searchterm': result.searchterm,
-        'result_count': result.result_count, 'language_code': result.language_code, 'indexed': False, 'allfromdomain': False,
-        'actively_blocked': False, 'show_sd_ad': False, 'show_network_ad': False, 'superuser': True },
-        context_instance=RequestContext(request))
-
-@permission_required('is_superuser')
-def adminpanel_siteinfoendingin(request):
-    suffix = request.GET.get('suffix', None)
-    language_code = request.GET.get('language', u'en')
-
-    result = SearchResult(language_code)
-
-    if suffix:
-        start = timezone.now()
-        site_model = apps.get_model('dir', 'SiteInfoEndingIn' + suffix.upper())
-        if not site_model:
-            return HttpResponse(status=404)
-        #term_model = GetIndexModelFromLanguage(language_code)
-        term_model = GetIndexModelFromLanguage('en')
-        term = term_model()
-        term.keywords = 'Site Infos Ending In {0}'.format(suffix)
-        result.searchterm = term.keywords
-        term.search_results = '{}'
-        term.num_results = 0
-        results = []
-        tmp_results = site_model.objects.all()
-        for item_result in tmp_results:
-            results.append([item_result.id, (0-item_result.id)])
-        term.num_results = len(results)
-        term.page_rankings = str(results)
-        if term.num_results > 0:
-            end_delta = timezone.now() - start
-            term.index_time = end_delta.total_seconds()
-            term = JsonifyIndexTerm(term, language_code, save=False, limit=5000)
-        result = MergeSearchResult(result, term)
-    # This renders the search results in the search results template.
-    return render_to_response('search.htm', { 'search_results': result.search_results, 'searchterm': result.searchterm,
-        'result_count': result.result_count, 'language_code': result.language_code, 'indexed': False, 'allfromdomain': False,
-        'actively_blocked': False, 'show_sd_ad': False, 'show_network_ad': False, 'superuser': True },
-        context_instance=RequestContext(request))
-    # This renders the search results in the admin panel template.
-    #return render_to_response('adminpanel.htm', { 'urls': tmp_results, 'lang': language_code })
-
-@permission_required('is_superuser')
-def adminpanel_domainsafterz(request):
-    language_code = request.GET.get('language', u'en')
-    result = SearchResult(language_code)
-
-    site_model = SiteInfoAfterZ
-    term_model = GetIndexModelFromLanguage(language_code)
-    term = term_model()
-    term.keywords = 'SiteInfoAfterZ Root Domains'
-    result.searchterm = term.keywords
-    term.search_results = '{}'
-    term.num_results = 0
-    results = []
-    tmp_results = site_model.objects.all()
-    num = 0
-    for item_result in tmp_results:
-        if item_result.url in ['http://' + item_result.rooturl, 'https://' + item_result.rooturl, 'http://' + item_result.rooturl + '/', 'https://' + item_result.rooturl + '/']:
-            results.append([item_result.id, (0-item_result.id)])
-            num = num + 1
-        if num >= 100:
-            break
-    term.num_results = len(results)
-    term.page_rankings = str(results)
-    if term.num_results > 0:
-        end_delta = timezone.now() - start
-        term.index_time = end_delta.total_seconds()
-        term = JsonifyIndexTerm(term, language_code, save=False, limit=5000)
-    result = MergeSearchResult(result, term)
-    return render_to_response('search.htm', { 'search_results': result.search_results, 'searchterm': result.searchterm,
-        'result_count': result.result_count, 'language_code': result.language_code, 'indexed': False, 'allfromdomain': False,
-        'actively_blocked': False, 'show_sd_ad': False, 'show_network_ad': False }, context_instance=RequestContext(request))
-
-@permission_required('is_superuser')
 def adminpanel_pagescore(request):
     url = request.GET.get('url', None)
     keyword = request.GET.get('keyword', None)
@@ -1011,6 +906,7 @@ def adminpanel_pagescore(request):
 @permission_required('is_superuser')
 def adminpanel_searchlogs(request):
     lang = request.GET.get('lang', 'en')
+    maxresults = int(request.GET.get('maxresults', 200))
     unindexed = request.GET.get('unindexed', None)
     twoormore = request.GET.get('twoormore', None)
     threeormore = request.GET.get('threeormore', None)
@@ -1018,6 +914,7 @@ def adminpanel_searchlogs(request):
     bingsearches = request.GET.get('bingsearches', None)
     googlesearches = request.GET.get('googlesearches', None)
     slowsearches = request.GET.get('slowsearches', None)
+    nodomains = request.GET.get('nodomains', None)
     log_model = GetSearchLogModelFromLanguage(lang)
 
     if not unindexed:
@@ -1030,6 +927,8 @@ def adminpanel_searchlogs(request):
         logs = logs.filter(result_count=0)
     if twoormore or threeormore:
         logs = logs.filter(keywords__contains=' ')
+    if nodomains:
+        logs = logs.exclude(keywords__contains=".")
     if bingsearches or googlesearches:
         tmplogs = []
         for log in logs:
@@ -1039,7 +938,7 @@ def adminpanel_searchlogs(request):
                 tmplogs.append(log)
             if googlesearches and u'google.com' in log.referer:
                 tmplogs.append(log)
-            if len(tmplogs) > 199:
+            if len(tmplogs) > maxresults:
                 logs = tmplogs
                 break
     if threeormore:
@@ -1048,15 +947,16 @@ def adminpanel_searchlogs(request):
             words = log.keywords.split(' ')
             if len(words) > 2:
                 tmplogs.append(log)
-            if len(tmplogs) > 199:
+            if len(tmplogs) > maxresults:
                 logs = tmplogs
                 break
     else:
-        logs = logs[0:200]
+        logs = logs[0:maxresults]
 
     return render_to_response('adminpanel.htm',
         { 'message': 'Showing recent non-bot {0} logs'.format(lang), 'logs': logs, 'lang': lang, 'twoormore': twoormore, 'zeroresults': zeroresults,
-          'threeormore': threeormore, 'bingsearches': bingsearches, 'googlesearches': googlesearches },
+          'threeormore': threeormore, 'bingsearches': bingsearches, 'googlesearches': googlesearches, 'maxresults': maxresults,
+          'unindexed': unindexed, 'nodomains': nodomains },
         context_instance=RequestContext(request))
 
 @permission_required('is_superuser')
@@ -1064,8 +964,6 @@ def adminpanel_sitelimits(request):
     counts = []
     result = None
     cursor = connection.cursor()
-    if request.GET.has_key('crawlurl'):
-        result = CrawlSingleUrl(request.GET['crawlurl'])
     sites = DomainInfo.objects.filter(max_urls__isnull=False).order_by('-alexa_rank')
     for site in sites:
         table = u'site_info'

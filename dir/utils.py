@@ -2039,7 +2039,7 @@ def BuildJsonIndex(language='en', limit=None, only_empty=True, sleep=0):
         print 'Search results size: ' + str(size) + ', Total Size: ' + str(cumulative)
 
 # Requires an IndexTerm, will JSONify and save its search rankings.
-def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
+def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
     site_model = GetSiteInfoModelFromLanguage(language)
     # Get ourselves a list of list pairs.
     records = eval(term.page_rankings)
@@ -2064,7 +2064,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
             # If the item has "www." but we have a non-www of the domain in the search results.
             elif item.rooturl.startswith('www.') and search_result.has_key(item.rooturl[4:]):
                 if verbose:
-                    print 'JsonifyIndexTerm: WWW site {0} has non-WWW version in results.'.format(item.rooturl)
+                    print('JsonifyIndexTerm: WWW site {0} has non-WWW version in results.'.format(item.rooturl))
                 search_result[item.rooturl[4:]]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
                 search_result[item.rooturl[4:]]['alternateurl'] = item.rooturl
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
@@ -2077,7 +2077,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
             # If the item does not have "www." but we have a "www." version of the domain in the search results.
             elif not item.rooturl.startswith('www.') and search_result.has_key('www.' + item.rooturl):
                 if verbose:
-                    print 'JsonifyIndexTerm: non-WWW site {0} has WWW version in results.'.format(item.rooturl)
+                    print('JsonifyIndexTerm: non-WWW site {0} has WWW version in results.'.format(item.rooturl))
                 search_result['www.' + item.rooturl]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
                 search_result['www.' + item.rooturl]['alternateurl'] = item.rooturl
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
@@ -2099,6 +2099,9 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
         search_result[key]['score'] = value['urls'][0]['score'] + GetUrlCountScore(num_urls)
     # Need to sort first, then truncate results.
     search_results = sorted(search_result.iteritems(), key=lambda item: item[1]['score'], reverse=True)[0:limit]
+    term.num_results = len(search_results)
+    if verbose:
+        print('JsonifyIndexTerm: Term has {0} search results after jsonify.'.format(term.num_results))
     term.search_results = ujson.dumps(search_results)
     if save:
         term.save()
@@ -2120,7 +2123,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=500, verbose=False):
         alternateurl = result[1].get('alternateurl', None)
         if alternateurl:
             if verbose:
-                print u'JsonifyIndexTerm: Site {0} also has alternate URL of {1}'.format(result[0], alternateurl)
+                print('JsonifyIndexTerm: Site {0} also has alternate URL of {1}'.format(result[0], alternateurl))
             altrankitem = ranking_model()
             altrankitem.rooturl = alternateurl
             altrankitem.keywords = term
@@ -2256,6 +2259,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
         term.keywords = text
         term.search_results = '{}'
         term.num_results = 0
+        term.num_pages = 0
     results = []
     tmp_results = site_model.objects.filter(pagetitle__icontains=text)[:200]
     # A page title is worth 100 points in a placeholder term because we consider it an exact perfect match
@@ -2263,6 +2267,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
     for item_result in tmp_results:
         results.append([item_result.id, 100])
     term.num_results = len(results)
+    term.num_pages = term.num_results
     term.page_rankings = str(results)
     if term.num_results > 0:
         end_delta = timezone.now() - start
@@ -2662,7 +2667,9 @@ def PornBlock(item=None, url=None):
 
 def BannedSearchString(text):
     #print 'Checking {0} for banned search string.'.format(text)
-    if text.endswith(u'a=0') or text.endswith(u'A=0') or u'11111111' in text or u'999999' in text or u'sleep(3)' in text or u'result: ' in text or u'concat((select' in text or u'unhex(hex(' in text or u'name_const(char(' in text or u'rk=0' in text or u'1=1' in text or u'1=2' in text:
+    if (text.endswith(u'a=0') or text.endswith(u'A=0') or u'11111111' in text or u'999999' in text or u'sleep(3)' in text or
+      u'result: ' in text or u'concat((select' in text or u'unhex(hex(' in text or u'name_const(char(' in text or u'rk=0' in text or
+      u'1=1' in text or u'1=2' in text or u'union all select' in text or u'null,concat(' in text):
         return True
     try:
         bad = BadQuery.objects.get(keywords=text)
@@ -2726,6 +2733,9 @@ def IsBotAgent(text):
         return True
     # Mozilla/5.0 (compatible; Applebot/0.3; +http://www.apple.com/go/applebot)
     if u'Applebot' in text:
+        return True
+    # Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36 Google Favicon
+    if u'Google Favicon' in text:
         return True
     # Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6 - James BOT - WebCrawler http://cognitiveseo.com/bot.html
     if u'James BOT' in text:
@@ -3117,6 +3127,12 @@ def IsBotAgent(text):
         return True
     # Mozilla/5.0 (compatible; SemrushBot-BA; +http://www.semrush.com/bot.html)
     if u'SemrushBot' in text:
+        return True
+    # Ancient versions of browsers are commonly used by bots, but pretty much never by Humans.
+    # Examples:
+    # Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6
+    # Firefox/3.0.6
+    if u'Firefox/2.0.0.6' in text or 'Firefox/3.0.6' in text:
         return True
     return False
 
