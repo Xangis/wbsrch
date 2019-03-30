@@ -8,9 +8,9 @@ import os
 environment = os.getenv('DJANGO_ENVIRONMENT')
 if environment == 'debug' or environment == 'development':
     DEBUG = True
-
+DEBUG=True
 ADMINS = (
-    ('Jason Champion', 'jchampion@zetacentauri.com'),
+    ('Jason Champion', 'jchampion@sigmacentauri.com'),
 )
 
 ALLOWED_HOSTS = [
