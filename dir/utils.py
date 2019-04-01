@@ -2670,7 +2670,7 @@ def BannedSearchString(text):
     if (text.endswith(u'a=0') or text.endswith(u'A=0') or u'11111111' in text or u'999999' in text or u'sleep(3)' in text or
       u'result: ' in text or u'concat((select' in text or u'unhex(hex(' in text or u'name_const(char(' in text or u'rk=0' in text or
       u'1=1' in text or u'1=2' in text or u'union all select' in text or u'null,concat(' in text or u'and 1>1' in text or
-      u"and 'x'='" in text or u'and "x"="' in text):
+      u'2121121121212.1' in text or u"and 'x'='" in text or u'and "x"="' in text):
         return True
     try:
         bad = BadQuery.objects.get(keywords=text)
