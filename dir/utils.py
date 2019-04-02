@@ -693,8 +693,8 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
         if domain.domains_linking_in:
             linkrank = GetLinkRank(domain.domains_linking_in)
             if verbose:
-                rulematches.append('Bonus {0} for {1} links'.format(linkrank, domain.domains_linking_in))
-            bonus += linkrank
+                rulematches.append('Bonus {0} for {1} links'.format(linkrank * 2, domain.domains_linking_in))
+            bonus += (linkrank * 2)
         # One point bonus for the site being tagged as the language we're looking in.
         # This means that sites that have been marked as the correct language by a
         # person or a script will rank ever-so-slightly higher.
@@ -1014,7 +1014,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             value += 10
             if verbose:
                 rulematches.append('10 points for .com domain match.')
-        elif spliturl[1] == u'.co.uk' or spliturl[1] == u'.gov' or spliturl[1] == u'.edu' or spliturl[1]:
+        elif spliturl[1] == u'.co.uk' or spliturl[1] == u'.gov' or spliturl[1] == u'.edu':
             value += 6
             if verbose:
                 rulematches.append('6 points for .co.uk/.gov/.edu domain match.')
@@ -1034,7 +1034,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             value += 10
             if verbose:
                 rulematches.append('10 points for .com domain match.')
-        elif spliturl[2] == u'.co.uk' or spliturl[2] == u'.gov' or spliturl[2] == u'.edu' or spliturl[2]:
+        elif spliturl[2] == u'.co.uk' or spliturl[2] == u'.gov' or spliturl[2] == u'.edu':
             value += 6
             if verbose:
                 rulematches.append('6 points for .co.uk/.gov/.edu domain match.')
