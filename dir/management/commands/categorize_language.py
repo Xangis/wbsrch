@@ -37,8 +37,9 @@ class Command(BaseCommand):
         make_option('-a', '--autotag', default=None, action='store', type='string', dest='autotag', help='Automatically tag this comma-seperated list of language codes, only works with -c.'),
         make_option('-b', '--autoblock', default=None, action='store', type='string', dest='autoblock', help='Automatically block this comma-seperated list of language codes, only works with -c.'),
         make_option('-u', '--urlsuffix', default=None, action='store', type='string', dest='urlsuffix', help='Only check URLs with this suffix.'),
-        make_option('-z', '--afterz', default=False, action='store_true', dest='afterz', help='Only check URLs with pages having a title after z. Can be combined with -0'),
-        make_option('-0', '--beforezero', default=False, action='store_true', dest='beforezero', help='Only check URLs with pages having a title before zero. Can be combined with -z'),
+        make_option('-z', '--afterz', default=False, action='store_true', dest='afterz', help='Only check URLs with pages having a title after z. Can be combined with -0.'),
+        make_option('-0', '--beforezero', default=False, action='store_true', dest='beforezero', help='Only check URLs with pages having a title before zero. Can be combined with -z.'),
+        make_option('-s', '--startafter', default=None, action='store', type='string', dest='startafter', help='Start after <string>. Only useful for resuming an afterz or beforezero categorize.'),
         make_option('-p', '--urlprefix', default=None, action='store', type='string', dest='urlprefix', help='Only check URLs with this prefix.'),
         make_option('-r', '--rank', default=False, action='store_true', dest='rank', help='Check untagged domains in order of popularity rank.'),
         make_option('-q', '--quiet', default=False, action='store_true', dest='quiet', help='Quiet mode - do not log individual pages and titles to the console.'),
@@ -60,6 +61,7 @@ class Command(BaseCommand):
         afterz = options.get('afterz', False)
         beforezero = options.get('beforezero', False)
         quiet = options.get('quiet', False)
+        startafter = options.get('startafter', None)
         verbosity = int(options['verbosity'])
         numpageminimum = int(options['numpageminimum'])
         tagged_count = 0
@@ -102,9 +104,11 @@ class Command(BaseCommand):
             autoblock = blocked_language_list
             if afterz:
                 # Should give us SELECT DISTINCT rooturl FROM site_info WHERE pagetitle > 'z'
-                domainpages = SiteInfo.objects.filter(pagetitle__gt='ZZZZZZZZZZ').values_list('rooturl', flat=True).distinct()
+                domainpages = SiteInfo.objects.filter(pagetitle__gt='ZZZZZZZZZZ').values_list('rooturl', flat=True).distinct().order_by('rooturl')
                 print('{0} domains found with title after Z.'.format(len(domainpages)))
                 for domainpage in domainpages:
+                    if startafter and domainpage < startafter:
+                        continue
                     try:
                         domaininfo = DomainInfo.objects.get(url=domainpage)
                         if domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid:
@@ -115,9 +119,11 @@ class Command(BaseCommand):
                         uncategorized_domains.append(domainpage)
             if beforezero:
                 # Should give us SELECT DISTINCT rooturl FROM site_info WHERE pagetitle < '0'
-                domainpages = SiteInfoBeforeZero.objects.filter(pagetitle__lt='0').values_list('rooturl', flat=True).distinct()
+                domainpages = SiteInfoBeforeZero.objects.filter(pagetitle__lt='0').values_list('rooturl', flat=True).distinct().order_by('rooturl')
                 print('{0} domains found with title before zero.'.format(len(domainpages)))
                 for domainpage in domainpages:
+                    if startafter and domainpage < startafter:
+                        continue
                     try:
                         domaininfo = DomainInfo.objects.get(url=domainpage)
                         if domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid:
@@ -126,6 +132,9 @@ class Command(BaseCommand):
                             uncategorized_domains.append(domainpage)
                     except:
                         uncategorized_domains.append(domainpage)
+            if startafter:
+                print('{0} domains found with uncategorized language after "{1}".'.format(len(uncategorized_domains), startafter))
+            else:
                 print('{0} domains found with uncategorized language.'.format(len(uncategorized_domains)))
         else:
             if justdomain:
