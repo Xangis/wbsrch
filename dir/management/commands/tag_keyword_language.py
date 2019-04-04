@@ -1,74 +1,79 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from django.core.management.base import BaseCommand, CommandError
-from django.db import connections
+from django.core.exceptions import ObjectDoesNotExist
 from optparse import make_option
-from dir.models import *
-from dir.utils import *
-from dir.language import NLTKLanguageDetect, IdentifyPageLanguage, IdentifyLanguage
+from dir.models import IndexTerm, language_list
+from dir.utils import GetIndexModelFromLanguage
+import sys
+import operator
+import codecs
+
+UTF8Writer = codecs.getwriter('utf8')
+sys.stdout = UTF8Writer(sys.stdout)
 
 class Command(BaseCommand):
-    help = """Tool for semi-manual or keyword language categorization."""
-
+    help = """
+    This gets the words from the English index and checks them against the index for another language. If
+    there are more than X (threshold) results, it prompts you whether to tag that word as being in the target
+    language. Works based on the idea that if a word shows up a lot in a known-other-language, that word might
+    be in that language.
+    """
     option_list = BaseCommand.option_list + (
-        make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Two-letter lowercase language code to check'),
-        make_option('-m', '--maxresults', default=10000000, action='store', type='int', dest='maxresults', help='Max number of keyword results to start with'),
+        make_option('-s', '--startafter', default=None, action='store', type='string', dest='startafter', help='Start after <string>. Only useful for resuming an afterz or beforezero categorize.'),
+        make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for index keywords (default=en).'),
+        make_option('-w', '--wordlength', default=3, action='store', type='int', dest='wordlength', help='Min word length to check. (default=3)'),
+        make_option('-t', '--threshold', default=100, action='store', type='int', dest='threshold', help='Min number of results to suggest tag. (default=100)'),
     )
 
     def handle(self, *args, **options):
-        check_language = options['language']
-        max_results = options['maxresults']
-        result = None
-        cursor = connections['indexes'].cursor()
-        cursor2 = connections['indexes'].cursor()
-        uncategorized_domains = []
-        # We start with the domains having the most pages and descend.
-        if( check_language == 'en'):
-            cursor.execute(u"SELECT keywords, num_results FROM dir_indexterm WHERE (is_language IS NULL or is_language='') AND actively_blocked = false AND (typo_for IS NULL or typo_for='') AND verified_english = false AND num_results <= {0} ORDER BY num_results DESC".format(max_results))
+        startafter = options.get('startafter', None)
+        wordlength = options.get('wordlength', None)
+        threshold = options.get('threshold', None)
+        index_language = options.get('language', 'en')
+        language_checked = GetIndexModelFromLanguage(index_language)
+        if startafter:
+            keywords = language_checked.objects.filter(keywords__gt=startafter, is_language=None).values_list('keywords', flat=True).order_by('keywords')
         else:
-            cursor.execute(u"SELECT keywords, num_results FROM dir_indexterm_{0} WHERE (is_language IS NULL or is_language='') AND actively_blocked = false AND (typo_for IS NULL or typo_for='') AND num_results <= {1} ORDER BY num_results DESC".format(check_language, max_results))
-        keywords = cursor.fetchall()
+            keywords = language_checked.objects.filter(is_language=None).values_list('keywords', flat=True).order_by('keywords')
+        tooshort = 0
+        toofew = 0
+        notprompted = 0
         for keyword in keywords:
-            # Skip words less than 4 letters long.
-            if len(keyword[0]) < 4:
+            if len(keyword) < wordlength:
+                tooshort = tooshort + 1
                 continue
-            language_results = {}
-            print(u'Checking Keyword: {0}'.format(keyword))
+            langcounts = {}
             for language in language_list:
-                if language == 'en':
-                    cursor2.execute(u"SELECT keywords, num_results FROM dir_indexterm WHERE keywords = '{0}'".format(keyword[0].replace("'", "''")))
-                else:
-                    cursor2.execute(u"SELECT keywords, num_results FROM dir_indexterm_{0} WHERE keywords = '{1}'".format(language, keyword[0].replace("'", "''")))
-                count = cursor2.fetchall()
-                #print(u'Language {0} result: {1}'.format(language, count))
-                language_results[language] = count
-            results = sorted(language_results.iteritems(), key=lambda item: item[1], reverse=True)
-            print(u'Scores for {0}: {1}'.format(keyword, results))
-            if( results[0][0] == 'en' ):
-                print(u'Keyword ranks highest for English. Skipping prompt.')
+                model = GetIndexModelFromLanguage(language)
+                try:
+                    kw = model.objects.get(keywords=keyword)
+                    if kw is not None and (kw.num_pages > 0):
+                        langcounts[language] = kw.num_pages
+                    elif kw.num_results > 0:
+                        langcounts[language] = kw.num_results
+                except ObjectDoesNotExist:
+                    continue
+            scores = sorted(langcounts.iteritems(), key=lambda item: item[1], reverse=True)
+            if len(scores) < 1:
                 continue
-            input = raw_input(u'Tag {0} as: [q]uit/[s]kip/[del]ete/[xx] tag as lang]? '.format(keyword))
+            print u'Scores for "{0}": {1}'.format(keyword, scores)
+            if scores[0][0] == 'en':
+                notprompted = notprompted + 1
+                continue
+            if threshold and (scores[0][1] < threshold):
+                toofew = toofew + 1
+                continue
+            input = raw_input(u'Tag {0} as: [q]uit/[s]kip/[xx] tag as lang]? '.format(keyword))
             input = input.lower()
             if input == 'q':
                 exit()
             elif input == 's':
                 continue
-            elif input == 'del':
-                model = GetIndexModelFromLanguage(check_language)
-                if model:
-                    dom = model.objects.delete(keywords=keyword[0])
             else:
                 if input in language_list:
-                    model = GetIndexModelFromLanguage(check_language)
-                    if model:
-                        dom = model.objects.get(keywords=keyword[0])
-                        if( input == 'en' and check_language == 'en'):
-                            print('Setting keyword as verified_english = True')
-                            dom.verified_english = True
-                            dom.save()
-                        else:
-                            print('Setting keyword as language {0}'.format(input))
-                            dom.is_language = input
-                            dom.save()
-                else:
-                    print(u'{0} is not a valid language. Skipping'.format(input))
-                    continue
+                    kw = language_checked.objects.get(keywords=keyword)
+                    kw.is_language = input
+                    kw.save()
+                    print('Setting keyword "{0}" as language {1}'.format(keyword, input))
+        print('Done. {0} too-short and {1} below-threshold words were skipped, and {2} had more English results.'.format(tooshort, toofew, notprompted))
