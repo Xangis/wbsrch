@@ -3,7 +3,6 @@
 
 DEBUG = False
 import os
-from appoptics_apm import djangoware
 
 # Add this line to /etc/environment or local vars to enable debug mode:
 #DJANGO_ENVIRONMENT=debug
