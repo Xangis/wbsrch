@@ -1,11 +1,4 @@
 server {
-        listen 80;
-        listen 443 ssl;
-        server_name 216.151.3.106;
-        return 301 $scheme://wbsrch.com$request_uri;
-}
-
-server {
 	listen 80;
         listen 443 ssl;
 	server_name www.wbsrch.com;
@@ -48,7 +41,19 @@ server {
             if (-f $document_root/maintenance.htm) {
                 return 503;
            }
-         }
+        }
+
+        location ^~ /wp-login.php {
+	    return 444;
+	}
+
+        location ^~ /admin/config.php {
+	    return 444;
+	}
+
+        location ^~ /admin/wp-login.php {
+	    return 444;
+	}
 
         location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|pdf|zip|exe|wav|gz|bmp|tgz|gz|rar|txt|tar|rtf|otf|ttf|html|xml)$ {
             root /var/django/wbsrch/templates/;
