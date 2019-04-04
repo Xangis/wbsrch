@@ -56,6 +56,7 @@ class SearchResult():
         self.show_sd_ad = False
         self.show_network_ad = True # Fallback if we shouldn't show the SD ad.
         self.typo_for = None
+        self.typo = None
         self.is_language = None
         self.names_language = None
         self.names_language_search = None
@@ -78,6 +79,7 @@ def MergeSearchResult(search_result, index_term, bonus_existing=False):
         search_result.refused = True
     if index_term.typo_for:
         search_result.typo_for = index_term.typo_for
+        search_result.typo = index_term.keywords
     if index_term.is_language:
         search_result.is_language = index_term.is_language
     try:
@@ -739,6 +741,10 @@ def search(request):
     if result.result_count > MAX_SEARCH_RESULTS:
         result.search_results = result.search_results[0:MAX_SEARCH_RESULTS]
         result.result_count = MAX_SEARCH_RESULTS
+    # Replace typo word in search term so we can correct multi-word phrases. We cannot, however,
+    # correct multiple typos in a phrase.
+    if result.typo_for:
+        result.typo_for = result.searchterm.replace(result.typo, result.typo_for)
     return render_to_response('search.htm',
         { 'search_results': result.search_results, 'searchterm': result.searchterm,
           'result_count': result.result_count, 'language_code': result.language_code, 'indexed': result.indexed,

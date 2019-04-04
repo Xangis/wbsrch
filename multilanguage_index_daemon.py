@@ -23,10 +23,10 @@ while True:
         # take advantage of caching (which may or may not make a difference,
         # we haven't benchmarked anything).
         indexcount = lang_index_counts.get(language, 10)
-        call(['python', 'manage.py', 'index', '-p', '-m', str(indexcount), '-s', '60', '-l', language])
+        call(['python', 'manage.py', 'index', '-p', '-m', str(indexcount), '-s', '1', '-l', language])
         # Wait a few seconds between context switches
-        time.sleep(60)
-        call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount), '-s', '60', '-l', language])
+        time.sleep(1)
+        call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount), '-s', '1', '-l', language])
         # Wait a few seconds between cycles.
-        time.sleep(60)
-    
+        time.sleep(1)
+
