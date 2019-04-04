@@ -3414,7 +3414,7 @@ def GetIndexAverageAge(language):
     if total_items > 0:
         return total_ages / total_items
     else:
-        return 0
+        return timedelta(days=0)
 
 def GetPagesAverageAge(language):
     total_items = 0
@@ -3427,7 +3427,7 @@ def GetPagesAverageAge(language):
     if total_items > 0:
         return total_ages / total_items
     else:
-        return 0
+        return timedelta(days=0)
 
 def GetOldestIndexAge(language):
     total_items = 0
