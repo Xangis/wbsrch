@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
           result S( O.exec( sqltwo.c_str() ));
           const int num_rows = S.size();
           //cout << num_rows << " rows in dir_domaininfo for " << url << endl;
-          if( num_rows == 0 ) {
+          if( num_rows > 0 ) {
               domains_to_check.push_back(url);
           } else {
               //cout << "Not adding already tagged site to check list." << endl;
