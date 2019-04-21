@@ -19,7 +19,7 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        blocked = BlockedSite.objects.all()
+        blocked = BlockedSite.objects.all().order_by('url')
         processed = 0
         print('{0} blocked sites retrieved.'.format(len(blocked)))
         for item in blocked:
