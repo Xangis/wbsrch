@@ -2642,6 +2642,7 @@ def PornBlock(item=None, url=None):
             site.exclude_subdomains = True
             site.save()
         RequeueRankedKeywordsForDomain(rootdomain)
+        DeleteDomainLinks(parsedurl)
     # Or, if this *is* the root domain, clear out all of the URLs, provided they are not blockable.
     # Technically, the "domain is root" and blockable case will never be true due to the check at the
     # beginning of this function, so we just go ahead and block.
@@ -2660,6 +2661,7 @@ def PornBlock(item=None, url=None):
         site.save()
     try:
         RequeueRankedKeywordsForDomain(parsedurl)
+        DeleteDomainLinks(parsedurl)
     except InvalidLanguageException:
         # If the domain is an excluded language, like Japanese, we will get an InvalidLanguageException
         # when we try to requeue ranked keywords. Ignore it.
@@ -2678,6 +2680,36 @@ def BannedSearchString(text):
     except ObjectDoesNotExist:
         pass
     return False
+
+def DeleteDomainLinks(domain):
+    """
+    Deletes all outgoing links from the link table. Also deletes CSS, JavaScript, and image links.
+
+    DELETE FROM dir_crawlableurl WHERE rooturl = domain  # CrawlableUrl
+    DELETE FROM dir_pagelink WHERE rooturl_source = domain  # PageLink
+    DELETE FROM dir_pageiframe WHERE rooturl_source = domain  # PageIFrame
+    DELETE FROM dir_pagejavascript WHERE rooturl_source = domain  # PageJavaScript
+    """
+    links = CrawlableUrl.objects.filter(rooturl=domain)
+    num = len(links)
+    if num > 0:
+        print('Deleting {0} CrawlableUrl items for {1}'.format(num, domain))
+        links.delete()
+    links = PageLink.objects.filter(rooturl_source=domain)
+    num = len(links)
+    if num > 0:
+        print('Deleting {0} CrawlableUrl items for {1}'.format(num, domain))
+        links.delete()
+    links = PageIFrame.objects.filter(rooturl_source=domain)
+    num = len(links)
+    if num > 0:
+        print('Deleting {0} CrawlableUrl items for {1}'.format(num, domain))
+        links.delete()
+    links = PageJavaScript.objects.filter(rooturl_source=domain)
+    num = len(links)
+    if num > 0:
+        print('Deleting {0} CrawlableUrl items for {1}'.format(num, domain))
+        links.delete()
 
 def RequeueRankedKeywordsForDomain(domain):
     """

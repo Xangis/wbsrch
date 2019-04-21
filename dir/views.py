@@ -844,6 +844,7 @@ def adminpanel_blocksite(request):
             if domain and domain.language_association:
                 num_after_urls += site_model.objects.filter(rooturl=sitename).count()
             RequeueRankedKeywordsForDomain(sitename)
+            DeleteDomainLinks(sitename)
             message += u'Domain was already blocked. {0} urls were in the database and now there are {1}.'.format(
                 num_before_urls, num_after_urls)
         except ObjectDoesNotExist:
@@ -859,6 +860,7 @@ def adminpanel_blocksite(request):
             if domain and domain.language_association:
                 num_after_urls += site_model.objects.filter(rooturl=sitename).count()
             RequeueRankedKeywordsForDomain(sitename)
+            DeleteDomainLinks(sitename)
             message += u'Domain blocked. {0} urls were in the database and now there are {1}.'.format(
                 num_before_urls, num_after_urls)
     elif request.method == 'GET' and request.GET.has_key('site'):
