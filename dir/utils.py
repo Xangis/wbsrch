@@ -2698,17 +2698,17 @@ def DeleteDomainLinks(domain):
     links = PageLink.objects.filter(rooturl_source=domain)
     num = len(links)
     if num > 0:
-        print('Deleting {0} CrawlableUrl items for {1}'.format(num, domain))
+        print('Deleting {0} PageLink items for {1}'.format(num, domain))
         links.delete()
     links = PageIFrame.objects.filter(rooturl_source=domain)
     num = len(links)
     if num > 0:
-        print('Deleting {0} CrawlableUrl items for {1}'.format(num, domain))
+        print('Deleting {0} PageIFrame items for {1}'.format(num, domain))
         links.delete()
     links = PageJavaScript.objects.filter(rooturl_source=domain)
     num = len(links)
     if num > 0:
-        print('Deleting {0} CrawlableUrl items for {1}'.format(num, domain))
+        print('Deleting {0} PageJavaScript items for {1}'.format(num, domain))
         links.delete()
 
 def RequeueRankedKeywordsForDomain(domain):
