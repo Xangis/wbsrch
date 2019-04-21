@@ -2460,7 +2460,7 @@ class MonthlySearchReport(models.Model):
         ordering = ['-year','-month', 'language']
 
 class PageLink(models.Model):
-    rooturl_source = models.CharField(max_length=260, blank=True, null=False)
+    rooturl_source = models.CharField(max_length=260, blank=True, null=False, db_index=True)
     url_source = models.CharField(max_length=2048, blank=True, null=False, db_index=True)
     url_destination = models.CharField(max_length=2048, blank=True, null=False)
     rooturl_destination = models.CharField(max_length=260, blank=True, null=False, db_index=True)
@@ -2552,7 +2552,7 @@ class QueryParameter(models.Model):
         in_db = 'urls'
 
 class PageIFrame(models.Model):
-    rooturl_source = models.CharField(max_length=260, blank=True, null=False)
+    rooturl_source = models.CharField(max_length=260, blank=True, null=False, db_index=True)
     url_source = models.CharField(max_length=2048, blank=True, null=False, db_index=True)
     url_destination = models.CharField(max_length=2048, blank=True, null=False)
     rooturl_destination = models.CharField(max_length=260, blank=True, null=False)
@@ -2564,7 +2564,7 @@ class PageIFrame(models.Model):
         in_db = 'urls'
 
 class PageJavaScript(models.Model):
-    rooturl_source = models.CharField(max_length=260, blank=True, null=False)
+    rooturl_source = models.CharField(max_length=260, blank=True, null=False, db_index=True)
     url_source = models.CharField(max_length=2048, blank=True, null=False, db_index=True)
     url_destination = models.CharField(max_length=2048, blank=True, null=False)
     rooturl_destination = models.CharField(max_length=260, blank=True, null=False)
