@@ -1,0 +1,10 @@
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX dir_siteinfo_ha_pagetitle_gin ON dir_siteinfo_ha USING gin(pagetitle gin_trgm_ops);
+CREATE INDEX dir_siteinfo_ha_pagedescription_gin ON dir_siteinfo_ha USING gin(pagedescription gin_trgm_ops);
+CREATE INDEX dir_siteinfo_ha_pagekeywords_gin ON dir_siteinfo_ha USING gin(pagekeywords gin_trgm_ops);
+CREATE INDEX dir_siteinfo_ha_pagefirstheadtag_gin ON dir_siteinfo_ha USING gin(pagefirstheadtag gin_trgm_ops);
+CREATE INDEX dir_siteinfo_ha_pagefirsth2tag_gin ON dir_siteinfo_ha USING gin(pagefirsth2tag gin_trgm_ops);
+CREATE INDEX dir_siteinfo_ha_pagefirsth3tag_gin ON dir_siteinfo_ha USING gin(pagefirsth3tag gin_trgm_ops);
+CREATE INDEX dir_siteinfo_ha_pagetext_gin ON dir_siteinfo_ha USING gin(pagetext gin_trgm_ops);
+CREATE INDEX dir_siteinfo_ha_url_gin ON dir_siteinfo_ha USING gin(url gin_trgm_ops);
+CREATE INDEX dir_siteinfo_ha_rooturl_gin ON dir_siteinfo_ha USING gin(rooturl gin_trgm_ops);

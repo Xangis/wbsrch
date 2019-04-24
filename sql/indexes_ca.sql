@@ -7,3 +7,4 @@ CREATE INDEX dir_siteinfo_ca_pagefirsth2tag_gin ON dir_siteinfo_ca USING gin(pag
 CREATE INDEX dir_siteinfo_ca_pagefirsth3tag_gin ON dir_siteinfo_ca USING gin(pagefirsth3tag gin_trgm_ops);
 CREATE INDEX dir_siteinfo_ca_pagetext_gin ON dir_siteinfo_ca USING gin(pagetext gin_trgm_ops);
 CREATE INDEX dir_siteinfo_ca_url_gin ON dir_siteinfo_ca USING gin(url gin_trgm_ops);
+CREATE INDEX dir_siteinfo_ca_rooturl_gin ON dir_siteinfo_ca USING gin(rooturl gin_trgm_ops);
