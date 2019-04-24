@@ -36,7 +36,11 @@ class Command(BaseCommand):
                     porndict[link.rooturl_source] = 1
         porndict = sorted(porndict.items(), key=lambda item: item[1], reverse=True)
         print('{0} domains were found linking to these {1} sites blocked as porn.'.format(len(porndict), len(domains)))
+        processed = 0
         for domainurl in porndict:
+            processed = processed + 1
+            if processed % 1000 == 0:
+                print('Processed {0}.'.format(processed))
             if (domainurl[1] < min) or (domainurl[1] > max):
                 continue
             pages = SiteInfo.objects.filter(rooturl=domainurl[0])
