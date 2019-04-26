@@ -11,5 +11,6 @@ def to_int(value):
 def language_name_safe(value):
     try:
         val = translation.get_language_info(value)['name']
+        return val
     except KeyError:
         return value
