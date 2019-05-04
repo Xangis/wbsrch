@@ -3,7 +3,7 @@
 # can also be used manually.
 mkdir -p ./urls/domcop
 MYDATESTR=$(date +"%Y-%m-%d")
-MYFILENAME="./urls/domcop/top-1m_$MYDATESTR.csv.zip"
+MYFILENAME="./urls/domcop/top10milliondomains_$MYDATESTR.csv.zip"
 echo "Getting top10milliondomains.csv.zip as $MYFILENAME"
 wget -O $MYFILENAME https://www.domcop.com/files/top/top10milliondomains.csv.zip
 ls -l $MYFILENAME
