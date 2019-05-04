@@ -382,8 +382,10 @@ def domain(request):
 
         # Get pages for site, but only if it's not blocked.
         siteinfos = []
+        num_records = 0
         if not blocked:
             siteinfos = site_model.objects.filter(rooturl=rawdomain)
+            num_records = siteinfos.count()
 
         # Get cached keyword rankings if available, otherwise query and cache.
         # But only do this if the domain is not blocked.
@@ -397,7 +399,6 @@ def domain(request):
             else:
                 cached = True
 
-        num_records = siteinfos.count()
         siteinfos = siteinfos[:MAX_SEARCH_RESULTS]
         searchlog = DomainSearchLog()
         searchlog.search_id = uuid.uuid4()
