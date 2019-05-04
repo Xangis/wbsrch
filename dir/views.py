@@ -351,9 +351,9 @@ def domain(request):
         # Prevent crawling excluded sites.
         domains = DomainInfo.objects.filter(url=rawdomain)
         excluded = BlockedSite.objects.filter(url=rawdomain)
-        link = True
+        blocked = False
         if excluded.count() > 0:
-            link = False
+            blocked = True
         extra = None
         parent = None
         pieces = rawdomain.split('.')
@@ -379,18 +379,26 @@ def domain(request):
                 extra = DomainInfo.objects.get(url=(rawdomain[4:]))
             except ObjectDoesNotExist:
                 pass
-        siteinfos = site_model.objects.filter(rooturl=rawdomain)
+
+        # Get pages for site, but only if it's not blocked.
+        siteinfos = []
+        num_records = 0
+        if not blocked:
+            siteinfos = site_model.objects.filter(rooturl=rawdomain)
+            num_records = siteinfos.count()
 
         # Get cached keyword rankings if available, otherwise query and cache.
-        rankings = cache.get('rankings_' + language_code + '_' + rawdomain)
-        if not rankings:
-            rankings = list(ranking_model.objects.filter(rooturl=rawdomain, rank__lte=MAX_SEARCH_RESULTS, show=True).order_by('rank', 'keywords')[0:100])
-        # Cache for up to 3 days (in seconds).
-            cache.set('rankings_' + language_code + '_' + rawdomain, rankings, 259200)
-        else:
-            cached = True
+        # But only do this if the domain is not blocked.
+        rankings = []
+        if not blocked:
+            rankings = cache.get('rankings_' + language_code + '_' + rawdomain)
+            if not rankings:
+                rankings = list(ranking_model.objects.filter(rooturl=rawdomain, rank__lte=MAX_SEARCH_RESULTS, show=True).order_by('rank', 'keywords')[0:100])
+            # Cache for up to 3 days (in seconds).
+                cache.set('rankings_' + language_code + '_' + rawdomain, rankings, 259200)
+            else:
+                cached = True
 
-        num_records = siteinfos.count()
         siteinfos = siteinfos[:MAX_SEARCH_RESULTS]
         searchlog = DomainSearchLog()
         searchlog.search_id = uuid.uuid4()
@@ -430,7 +438,7 @@ def domain(request):
 
         return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
             'num_records': num_records, 'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
-            'link': link, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain, 'notdomain': notdomain },
+            'excluded': excluded, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain, 'notdomain': notdomain },
             context_instance=RequestContext(request))
     return render_to_response('domain.htm', {'language_code': language_code }, context_instance=RequestContext(request))
 

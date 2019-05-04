@@ -37,7 +37,7 @@
 {% csrf_token %}</form>
 <br/>
 <a href="/adminpanel/?crawlurl={{ domain.url }}&randomfromdomain=1">Crawl a random URL from this domain.</a></p>{% endif %}
-<p>{% trans "Domain" %}: {% if link %}<a href="http://{{ domain.url }}" rel="nofollow">{{ domain.url }}</a>{% else %}{{ domain.url }}</p>{% endif %}
+<p>{% trans "Domain" %}: {% if not excluded %}<a href="http://{{ domain.url }}" rel="nofollow">{{ domain.url }}</a>{% else %}{{ domain.url }}</p>{% endif %}
 {% if domain.language_association %}<p>{% trans "Language" %}: {{ domain.language_association }}</p>{% endif %}
 {% if domain.language_association and domain.language_association != language_code %}<p><a href="https://{{ domain.language_association }}.wbsrch.com/domain/?q={{ domain.url }}">Check this domain on the {{ domain.language_association|language_name_safe }} site.</a></p>{% endif %}
 {% if domain.domain_created %}<p>{% trans "Created" %}: {{ domain.domain_created|date:"Y-m-d" }}</p>{% endif %}
