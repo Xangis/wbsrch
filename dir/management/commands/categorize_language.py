@@ -11,19 +11,23 @@ class Command(BaseCommand):
 
     To perform automatic categorization, which kind of works but is very experimental, you should use a command something like this:
 
-        time python manage.py categorize_language -c -t -a an,ca,cs,cy,de,el,es,et,eu,fi,fr,gl,hr,hu,it,lt,lv,nl,pl,pt,ro,sl,sv,sw,tr,rw,xh,zu -q -o -j -i 12000000 -m 200000 | grep -v UnicodeDecodeError
+        time python manage.py categorize_language -c -t -a an,ca,cs,cy,de,el,es,et,eu,fi,fr,gl,hr,hu,it,lt,lv,nl,pl,pt,ro,sl,sv,sw,tr,rw,xh,zu -q -o -j -i 12000000 -m 200000
 
     To perform automatic language blocking, which kind of works but is very experimental, you should use a command something like this:
 
-        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000 | grep -v UnicodeDecodeError
+        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000
 
     To perform automatic language blocking for only domains ending in .ua:
 
-        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mr,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000 -u .ua | grep -v UnicodeDecodeError
+        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mr,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000 -u .ua
 
     To automatically tag sites as english, which kind of works but is very experimental, you should use a command something like this (note the use of -n so we only tag with higher-confidence data):
 
-        python manage.py categorize_language -e -o -t -q -n 3 -i 2000 | grep -v UnicodeDecodeError
+        python manage.py categorize_language -e -o -t -q -n 3 -i 2000
+
+    To automatically blog and categorize all domains ending in .fi:
+
+        python manage.py categorize_language -g -t -i 99999999 -u .fi
 """
 
     option_list = BaseCommand.option_list + (
@@ -45,6 +49,7 @@ class Command(BaseCommand):
         make_option('-q', '--quiet', default=False, action='store_true', dest='quiet', help='Quiet mode - do not log individual pages and titles to the console.'),
         make_option('-t', '--textminimum', default=False, action='store_true', dest='textminimum', help='Require at least 100 characters of text to count page for categorization.'),
         make_option('-d', '--domain', default=None, action='store', type='string', dest='domain', help='Only check this domain.'),
+        make_option('-g', '--goahead', default=False, action='store_true', dest='goahead', help='Go ahead and block and tag ALL languages, and do it automatically. Same options as -f, -0, or -z. Combines -e,-a,-b,-c. Overrides everything but -f, -0, and -z. Works with -u,-j,-p,-n,-r,-t. (default=False)'),
         make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load domain list from specified file. Ignores all options and categorizes/blocks everything.'),
     )
 
@@ -59,6 +64,7 @@ class Command(BaseCommand):
         justdomain = options.get('domain', None)
         textminimum = options.get('textminimum', False)
         afterz = options.get('afterz', False)
+        goahead = options.get('goahead', False)
         beforezero = options.get('beforezero', False)
         quiet = options.get('quiet', False)
         startafter = options.get('startafter', None)
@@ -137,6 +143,12 @@ class Command(BaseCommand):
             else:
                 print('{0} domains found with uncategorized language.'.format(len(uncategorized_domains)))
         else:
+            if goahead:
+                autotagenglish = True
+                onlyautotag = False
+                confident = True
+                autotag = language_list
+                autoblock = blocked_language_list
             if justdomain:
                 query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl = '{0}' GROUP BY rooturl;".format(justdomain)
             elif onlysuffix:
