@@ -282,6 +282,7 @@ class Command(BaseCommand):
                     # If the domain is already blocked, the URL must have been added erroneously.
                     # in that case, just delete it.
                     RemoveURLsForDomain(item.rooturl)
+                    DeleteDomainLinks(item.rooturl)
                 except ObjectDoesNotExist:
                     langtoblock = scores[0][0]
                     site = BlockedSite()
@@ -431,6 +432,7 @@ class Command(BaseCommand):
                     dom.save()
                 continue
                 RequeueRankedKeywordsForDomain(domain)
+                DeleteDomainLinks(domain)
                 print 'Site {0} language blocked and all URLs deleted.'.format(domain)
             else:
                 if input in language_list or input in ['fo', 'fy', 'oc', 'om', 'nap', 'eo']:
