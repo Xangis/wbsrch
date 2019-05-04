@@ -15,11 +15,12 @@ class Command(BaseCommand):
     in the database. This is used to fix that by creating DomainInfo records where they're missing.
     """
     option_list = BaseCommand.option_list + (
-        make_option('-s', '--sleep', default=15, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=15)'),
+        make_option('-s', '--sleep', default=0, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=0)'),
     )
 
     def handle(self, *args, **options):
         blocked = BlockedSite.objects.all().order_by('url')
+        sleep = options.get('sleep', 0)
         processed = 0
         print('{0} blocked sites retrieved.'.format(len(blocked)))
         for item in blocked:
@@ -27,4 +28,6 @@ class Command(BaseCommand):
             processed = processed + 1
             if processed % 1000 == 0:
                 print('{0} items processed'.format(processed))
+            if sleep:
+                time.sleep(sleep)
 
