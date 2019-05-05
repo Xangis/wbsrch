@@ -132,6 +132,7 @@ int main(int argc, char* argv[]) {
 */
 
       /* Print all records */
+      int count = 0;
       for (result::const_iterator c = R.begin(); c != R.end(); ++c) {
          int id = c[0].as<int>();
          //cout << "ID = " << id << endl;
@@ -165,6 +166,7 @@ int main(int argc, char* argv[]) {
              // UPDATE dir_domaininfo SET domains_linking_in = value, domains_linking_in_last_updated = current_timestamp WHERE ID = id;
              std::string sqlthree("UPDATE dir_domaininfo SET domains_linking_in = ");
              sqlthree = sqlthree + std::to_string(value) + ", domains_linking_in_last_updated = current_timestamp WHERE ID = " + std::to_string(id);
+             count += 1;
              //cout << sqlthree << endl;
              result T( N.exec( sqlthree.c_str() ));
              //for (result::const_iterator e = T.begin(); e != T.end(); ++e) {
@@ -174,7 +176,7 @@ int main(int argc, char* argv[]) {
          // SELECT COUNT(DISTINCT rooturl_source) FROM dir_pagelink WHERE rooturl_destination = <URL>
          // SELECT COUNT(DISTINCT rooturl_source) FROM dir_pagelink WHERE rooturl_destination = <URL>
       }
-      cout << "Operation done successfully" << endl;
+      cout << "Operation done successfully. " << count << " domains updated." << endl;
       C.disconnect ();
    } catch (const std::exception &e) {
       cerr << e.what() << std::endl;
