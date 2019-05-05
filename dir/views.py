@@ -482,7 +482,7 @@ def ipaddry(request):
         searchlog = IPSearchLog()
         searchlog.search_id = uuid.uuid4()
         searchlog.keywords = ip
-        searchlog.result_count = domains.count()
+        searchlog.result_count = len(domains)
         searchlog.indexed = False
         if request.META.has_key('HTTP_REFERER'):
             searchlog.referer = request.META['HTTP_REFERER']
