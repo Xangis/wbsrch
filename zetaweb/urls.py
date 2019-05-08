@@ -43,6 +43,8 @@ urlpatterns = patterns('',
     url(r'^news/$', 'dir.views.news'),
     url(r'^video/$', 'dir.views.video'),
     url(r'^stats/$', 'dir.views.stats'),
+    url(r'^error/$', 'dir.views.error'),
+    url(r'^email/$', 'dir.views.email'),
     # Admin panel views.
     url(r'^adminpanel/oldestcrawls/$', 'dir.views.adminpanel_oldestcrawls', name='adminpanel-oldestcrawls'),
     url(r'^adminpanel/unclassified/$', 'dir.views.adminpanel_unclassified', name='adminpanel-unclassified'),

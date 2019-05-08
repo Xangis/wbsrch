@@ -23,6 +23,12 @@ if DEBUG:
 
 MANAGERS = ADMINS
 
+SERVER_EMAIL = 'jchampion@wbsrch.com'
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+
+
 if environment != 'development':
     DATABASES = {
         'default': {
