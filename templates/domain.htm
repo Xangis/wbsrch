@@ -95,8 +95,8 @@
 <em><a href="{{ result.url }}" rel="nofollow">{{ result.url }}</a></em><br />
 {% if superuser %}<span class="smallertext"><a href="/adminpanel/?crawlurl={{ result.url }}">[recrawl]</a>
 <a href="/adminpanel/blocksite/?reason=8&site={{ result.url }}">[block]</a>
-<a href="/adm/dir/siteinfo/?q={{ result.rooturl }}">[view domain pages in admin]</a>
-<a href="/adm/dir/siteinfo/{{ result.id }}/">[view this page in admin]</a></span> <br/>{% endif %}
+<a href="/adm/dir/siteinfofull/?q={{ result.rooturl }}">[view domain pages in admin]</a>
+<a href="/adm/dir/siteinfofull/{{ result.id }}/">[view this page in admin]</a></span> <br/>{% endif %}
 </p>
 {% endfor %}
 {% else %}
