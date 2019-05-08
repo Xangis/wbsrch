@@ -21,6 +21,7 @@ from datetime import datetime, date, timedelta
 import itertools
 import uuid
 from django.contrib.gis.geoip import GeoIP
+from django.core.mail import send_mail
 
 INDEX_TERM_STALE_DAYS = 730
 MAX_SEARCH_RESULTS = 200
@@ -1129,4 +1130,12 @@ def go(request):
     click.xpos = 0
     click.ypos = 0
     click.save()
+    return HttpResponse(status=200)
+
+def error(request):
+    raise ValueError('ERROR')
+
+def email(request):
+    send_mail('Test Email', 'This is a test message.', 'jchampion@wbsrch.com',
+        ['jchampion@sigmacentauri.com'], fail_silently=False)
     return HttpResponse(status=200)
