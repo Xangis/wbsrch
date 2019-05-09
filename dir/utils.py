@@ -2272,7 +2272,17 @@ def CreatePlaceholderIndexTerm(text, language_code):
     if term.num_results > 0:
         end_delta = timezone.now() - start
         term.index_time = end_delta.total_seconds()
-        term.save()
+        try:
+            term.save()
+        except IntegrityError:
+            # The only reason we would get an integrity error is if we
+            # violate the unique key constraint of the database. If we
+            # did that, it means that the term is already in there and we
+            # should be able to query it. This can happen when someone
+            # searches an unindexed term and re-searches it before the
+            # placeholder term finishes creating (which could take a while).
+            connection._rollback()
+            term = term_model.objects.get(keywords=text)
         term = JsonifyIndexTerm(term, language_code)
     # Add this to pending so we get a non-half-assed version.
     AddPendingTerm(text, language_code, u'Search {0} not indexed yet.'.format(text))
