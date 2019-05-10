@@ -3,6 +3,6 @@ PATH=/var/django/wbsrch
 MAILTO=jchampion@sigmacentauri.com
 
 # run-parts
-1 2 * * * xangis /home/xangis/.virtualenvs/wbsrch/bin/python /var/django/wbsrch/manage.py generate_index_stats
-1 4 * * * xangis /var/django/wbsrch/wget_alexa.sh
-1 5 * * * xangis /var/django/wbsrch/wget_majestic.sh
+1 2 * * * xangis cd /var/django/wbsrch && /home/xangis/.virtualenvs/wbsrch/bin/python /var/django/wbsrch/manage.py generate_index_stats
+1 4 * * * xangis cd /var/django/wbsrch && /var/django/wbsrch/wget_alexa.sh
+1 5 * * * xangis cd /var/django/wbsrch && /var/django/wbsrch/wget_majestic.sh
