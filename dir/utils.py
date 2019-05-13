@@ -1807,23 +1807,6 @@ def CanCrawlUrl(url, verbose=False):
         print u'Testing CanCrawlURL for: ' + url
     # Check 'no new urls' setting for domain extension.
     rooturl = GetRootUrl(url)
-    try:
-        domain = None
-        try:
-            domain = DomainInfo.objects.get(url=rooturl)
-        except ObjectDoesNotExist:
-            pass
-        # We can only crawl "no new url" domains if it's tagged with a valid
-        # language int a DomainInfo record. For instance, we couldn't crawl a
-        # new somesite.cn domain, but we could crawl english.somesite.cn if it
-        # were specifically allowed.
-        if not domain or not domain.language_association:
-            suffix = GetDomainExtension(rooturl)
-            extension = DomainSuffix.objects.get(extension=suffix)
-            if extension.no_new_domain_urls:
-                return False
-    except ObjectDoesNotExist:
-        pass
     # We only count domain limit on crawl, not recrawl.
     if DomainLimitReached(rooturl, verbose):
         return False

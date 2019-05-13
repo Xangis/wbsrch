@@ -413,7 +413,6 @@ class CanCrawlUrlTestCase(TestCase):
         domainext.save()
         domainext = DomainSuffix()
         domainext.extension = '.cn'
-        domainext.no_new_domain_urls = True
         domainext.save()
 
     def test_safe_url(self):
