@@ -501,6 +501,7 @@ class DomainSuffix(models.Model):
 
     class Meta:
         in_db = 'urls'
+        ordering = ['extension',]
 
 def RandomValue():
     return random.randint(0,2000000000)

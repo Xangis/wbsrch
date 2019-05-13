@@ -2399,6 +2399,9 @@ class APIUsageAdmin(admin.ModelAdmin):
     list_display = ('user', 'month', 'year', 'calls_used')
     search_fields = ('user__username',)
 
+class DomainSuffixAdmin(admin.ModelAdmin):
+    list_display = ('extension', 'num_known', 'num_crawled', 'num_blocked', 'default_language', 'blocked_to_crawled_ratio')
+
 admin.site.register(BlockedSite, ExcludedSiteAdmin)
 admin.site.register(SiteInfo, SiteInfoAdmin)
 admin.site.register(SiteInfoEndingInAD, SiteInfoEndingInADAdmin)
@@ -2776,7 +2779,7 @@ admin.site.register(IndexTerm_sv, IndexTermAdmin)
 admin.site.register(IndexTerm_tr, IndexTermAdmin)
 admin.site.register(FeedbackItem, FeedbackItemAdmin)
 admin.site.register(ChangelogItem)
-admin.site.register(DomainSuffix)
+admin.site.register(DomainSuffix, DomainSuffixAdmin)
 admin.site.register(IPAddress, IPAddressAdmin)
 admin.site.register(Setting, SettingAdmin)
 admin.site.register(IndexStats)
