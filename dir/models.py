@@ -483,9 +483,18 @@ class AllowedDomain(models.Model):
 
 
 class DomainSuffix(models.Model):
-    extension = models.CharField(max_length=8, null=False, blank=False)
+    extension = models.CharField(max_length=24, null=False, blank=False, db_index=True)
+    num_known = models.IntegerField(null=True, blank=True)
+    num_crawled = models.IntegerField(null=True, blank=True)
+    num_blocked = models.IntegerField(null=True, blank=True)
+    blocked_to_crawled_ratio = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=7)
+    # Don't make decisions based on this, it's not guaranteed.
+    # But we should be able to call categorize_language and have it
+    # scan all TLDs tagged with a particular language.
     default_language = models.CharField(max_length=8, null=True, blank=True)
-    no_new_domain_urls = models.BooleanField(default=False)
+    # This is the score adjustment for the domain suffix when indexing.
+    score_adjustment = models.IntegerField(default=0)
+    last_updated = models.DateField(null=True, blank=True, auto_now=True)
 
     def __unicode__(self):
         return self.extension
