@@ -1,0 +1,29 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ language_code }}"><head>
+<meta name="keywords" content="wbsrch, web, cctld, stats, {% trans "tld" %}, top-level domain, {% trans "statistics" %}, urls, counts, top level domain, {% trans "search engine" %}">
+<meta name="description" content="WbSrch {% trans "Web Search" %}, home of {% trans "The Independent Search Engine" %}.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% trans "Top-Level Domain (ccTLD and TLD)" %} {% trans "Statistics" %} | WbSrch {% trans "Web Search" %}</title>
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch {% trans "Web Search" %} {% trans "Top-Level Domain" %} {% trans "Statistics" %}</h1></div>
+
+<table class="centered">
+<tr><td colspan="5">We know about {{ count }} top-level domains.<br/></td></tr>
+<tr><th>{% trans "Extension" %}</th><th>{% trans "Known Domains" %}</th><th>{% trans "Crawled Domains" %}</th><th>{% trans "Excluded Domains" %}</th><th>{% trans "Exclude/Crawl Ratio (%)" %}</tr>
+{% for stat in stats %}
+<tr><td>{{ stat.extension }}</td><td>{{ stat.num_known }}</td><td>{{ stat.num_crawled }}</td><td>{{ stat.num_blocked }}</td><td>{{ stat.blocked_to_crawled_ratio }}</td></tr>
+{% endfor %}
+<tr><td colspan="5"><br/>The number of known domains includes domains that may have expired since discovery.</td></tr>
+<tr><td colspan="5" class="centered"><br/>For index stats, please see the <a href="/index-stats/">index stats page</a></td><tr>
+</table>
+{% include 'adsense.inc' %}
+<br /><p class="centered"><a href="/search/">{% trans "Back to search form" %}.</a></p><br />
+{% include 'footer.inc' %}
+</body>
+</html>

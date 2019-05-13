@@ -320,6 +320,16 @@ def index_stats(request, realtime=False):
         stats.langs = ujson.loads(stats.langs)
     return render_to_response('indexstats.htm', {'language_code': language_code, 'stats': stats})
 
+
+def tld_stats(request):
+    language_code = request.LANGUAGE_CODE
+    if language_code == 'en-us':
+        language_code = 'en'
+    stats = DomainSuffix.objects.all()
+    count = stats.count()
+    return render_to_response('tldstats.htm', {'language_code': language_code, 'stats': stats, 'count': count})
+
+
 def domain(request):
     start = timezone.now()
     if request.method != 'GET':

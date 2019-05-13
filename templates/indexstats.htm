@@ -22,7 +22,9 @@
 {% endfor %}
 <tr><td>{% trans "Total" %}</td><td>{{ stats.total_urls }}</td><td>{{ stats.total_indexes }}</td><td>{{ stats.total_pendingindexes }}</td></tr>
 <tr><td colspan="4" class="centered">{% trans "Excluded" %} {% trans "Domains" %}: {{ stats.num_excluded }}</td><tr>
+<tr><td colspan="4" class="centered"><br/>For top-level domain stats, please see the <a href="/tld-stats/">TLD stats page</a></td><tr>
 </table>
+{% include 'adsense.inc' %}
 <br /><p class="centered"><a href="/search/">{% trans "Back to search form" %}.</a></p><br />
 {% include 'footer.inc' %}
 </body>
