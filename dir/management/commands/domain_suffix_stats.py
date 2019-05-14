@@ -9,7 +9,7 @@ from tlds import tld_set
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
-        make_option('-t', '--tld', default='all', action='store', type='string', dest='tld', help='Update ONLY this TLD. If not specified, all are updated.'),
+        make_option('-t', '--tld', default=None, action='store', type='string', dest='tld', help='Update ONLY this TLD. If not specified, all are updated.'),
     )
 
     def handle(self, *args, **options):
