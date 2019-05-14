@@ -9,12 +9,18 @@ from tlds import tld_set
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
-        make_option('-l', '--language', default='all', action='store', type='string', dest='language', help='Language to use for index ages, or "all" for all. (default=all).'),
+        make_option('-t', '--tld', default='all', action='store', type='string', dest='tld', help='Update ONLY this TLD. If not specified, all are updated.'),
     )
 
     def handle(self, *args, **options):
         counts = []
-        for tld in tld_set:
+        tlds = tld_set
+        tld = options.get('tld', None)
+        if tld:
+            if tld.startswith('.'):
+                tld = tld[1:]
+            tlds = [tld,]
+        for tld in tlds:
             tldwithdot = '.{0}'.format(tld)
             print('Checking {0}'.format(tldwithdot))
             num_domains = DomainInfo.objects.filter(url__endswith=tldwithdot).values('url').count()
