@@ -394,7 +394,7 @@ def domain(request):
         # Get pages for site, but only if it's not blocked.
         siteinfos = []
         if not blocked:
-            siteinfos = site_model.objects.filter(rooturl=rawdomain)[:MAX_SEARCH_RESULTS]
+            siteinfos = site_model.objects.filter(rooturl=rawdomain).values('id', 'url', 'pagetitle', 'pagedescription', 'pagetext', 'rooturl')[:MAX_SEARCH_RESULTS]
 
         num_records = len(siteinfos)
         if num_records >= 200:
