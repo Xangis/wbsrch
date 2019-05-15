@@ -479,7 +479,7 @@ def ipaddry(request):
         except ValueError:
             raise Http404
         site_model = GetSiteInfoModelFromLanguage(language_code)
-        domains = DomainInfo.objects.filter(robots_ip=ip)
+        domains = DomainInfo.objects.filter(robots_ip=ip).values('url', 'language_association')
         siteinfos = None
 
         num_siteinfos_cache = cache.get('pages_at_ip_' + ip)
