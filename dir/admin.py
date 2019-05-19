@@ -786,13 +786,14 @@ class FeedbackItemAdmin(admin.ModelAdmin):
     actions = [spam_block,]
 
 class DomainInfoAdmin(admin.ModelAdmin):
-    list_display = ('url', 'language_association', 'alexa_rank')
+    list_display = ('url', 'language_association', 'alexa_rank', 'majestic_rank', 'domcop_pagerank')
     search_fields = ('url',)
     fields = ['url', ('language_association', 'rank_adjustment', 'rank_reason'),
               ('is_unblockable', 'verified_notporn', 'only_crawl_rooturl', 'max_urls'),
               ('uses_language_subdirs', 'uses_language_query_parameter', 'uses_langid'),
               ('domains_linking_in', 'domains_linking_in_last_updated', 'favicons_last_updated'),
               ('alexa_rank', 'alexa_rank_date', 'alexa_outdated', 'majestic_rank', 'majestic_rank_date', 'majestic_outdated'),
+              ('quantcast_rank', 'quantcast_rank_date', 'quantcast_outdated', 'domcop_rank', 'domcop_pagerank', 'domcop_pagerank_date', 'domcop_pagerank_outdated'),
               ('domain_created', 'domain_expires', 'domain_updated', 'whois_last_updated'),
               ('num_urls', 'num_urls_last_updated', 'num_keywords_ranked', 'num_keywords_last_updated'),
               ('whois_registrar', 'whois_name', 'whois_country', 'whois_state'),
