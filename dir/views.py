@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.apps import apps
-from django.db import connection
+from django.db import IntegrityError, connection
 from django.core.cache import cache
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -420,8 +420,22 @@ def domain(request):
         if searchlog.result_count < 1 and (len(rankings) > 0 or len(siteinfos) > 0):
             dominfo = DomainInfo()
             dominfo.url = rawdomain
-            dominfo.save()
-            domains = [dominfo,]
+            try:
+                dominfo.save()
+                domains = [dominfo,]
+            except IntegrityError:
+                # The only reason we would get an integrity error is if we
+                # violate the unique key constraint of the database. If we
+                # did that, it means that the term is already in there and we
+                # should be able to query it. This can happen when someone
+                # searches an unindexed term and re-searches it before the
+                # placeholder term finishes creating (which could take a while).
+                connection._rollback()
+                try:
+                    dominfo = DomainInfo.objects.get(url=rawdomain)
+                    domains = [dominfo,]
+                except ObjectDoesNotExist:
+                    domains = []
         searchlog.indexed = False
         if request.META.has_key('HTTP_REFERER'):
             searchlog.referer = request.META['HTTP_REFERER']
