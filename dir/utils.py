@@ -671,29 +671,58 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
             # Outdated Majestic rank, meaning it was in the top million once, but not anymore,
             # is still worth a fraction of a point.
             if domain.majestic_outdated and domain.majestic_rank < 1000000:
-                bonus = 0.25
+                bonus = 0.5
                 if verbose:
                     rulematches.append('Bonus 0.25 for outdated Majestic rank {0}'.format(domain.majestic_rank))
             elif domain.majestic_rank < 10000:
-                bonus = 2.0
+                bonus = 4.0
                 if verbose:
                     rulematches.append('Bonus 2 for Majestic rank {0}'.format(domain.majestic_rank))
             elif domain.majestic_rank < 100000:
-                bonus = 1.5
+                bonus = 3.0
                 if verbose:
                     rulematches.append('Bonus 1.5 for Majestic rank {0}'.format(domain.majestic_rank))
             elif domain.majestic_rank < 500000:
-                bonus = 1.0
+                bonus = 2.0
                 if verbose:
                     rulematches.append('Bonus 1 for Majestic rank {0}'.format(domain.majestic_rank))
             elif domain.majestic_rank < 1000000:
-                bonus = 0.5
+                bonus = 1.0
                 if verbose:
                     rulematches.append('Bonus 0.5 for Majestic rank {0}'.format(domain.majestic_rank))
+        if domain.quantcast_rank:
+            if domain.quantcast_rank_outdated and domain.quantcast_rank < 1000000:
+                bonus = 0.25
+                if verbose:
+                    rulematches.append('Bonus 0.25 for outdated Quantcast rank {0}'.format(domain.quantcast_rank))
+            elif domain.quantcast_rank < 1000000:
+                bonus = 0.5
+                if verbose:
+                    rulematches.append('Bonus 0.5 for Quantcast rank {0}'.format(domain.quantcast_rank))
+            elif domain.quantcast_rank < 500000:
+                bonus = 0.75
+                if verbose:
+                    rulematches.append('Bonus 0.75 for Quantcast rank {0}'.format(domain.quantcast_rank))
+            elif domain.quantcast_rank < 100000:
+                bonus = 1.0
+                if verbose:
+                    rulematches.append('Bonus 1.0 for Quantcast rank {0}'.format(domain.quantcast_rank))
+            elif domain.quantcast_rank < 50000:
+                bonus = 1.25
+                if verbose:
+                    rulematches.append('Bonus 1.25 for Quantcast rank {0}'.format(domain.quantcast_rank))
+            elif domain.quantcast_rank < 10000:
+                bonus = 1.5
+                if verbose:
+                    rulematches.append('Bonus 1.5 for Majestic rank {0}'.format(domain.quantcast_rank))
+        if domain.domcop_pagerank and not domain.domcop_pagerank_outdated:
+            bonus += domain.domcop_pagerank
+            if verbose:
+                rulematches.append('Bonus {0} for Domcop PageRank {1}'.format(domain.domcop_pagerank))
         if domain.domains_linking_in:
             linkrank = GetLinkRank(domain.domains_linking_in)
             if verbose:
-                rulematches.append('Bonus {0} for {1} links'.format(linkrank * 2, domain.domains_linking_in))
+                rulematches.append('Bonus {0} for {1} links (double wbsrch link rank)'.format(linkrank * 2, domain.domains_linking_in))
             bonus += (linkrank * 2)
         # One point bonus for the site being tagged as the language we're looking in.
         # This means that sites that have been marked as the correct language by a
@@ -1894,6 +1923,158 @@ def UpdateAlexaRank(domain_name, rank):
                     domain.alexa_rank = rank
                     domain.alexa_rank_date = datetime.date.today()
                     domain.alexa_outdated = False
+                    domain.save()
+            except ObjectDoesNotExist:
+                pass
+            # If we haven't seen this URL in a pending import, add it to the
+            # to-be-crawled list so it eventually makes it into the index.
+            # But only if it's not blocked.
+            try:
+                blocked_domain = BlockedSite.objects.get(url=domain_name)
+            except ObjectDoesNotExist:
+                # Exception on a get means that it wasn't found in the block list.
+                url = CrawlableUrl()
+                url.url = domain_name
+                url.rooturl = GetRootUrl(url.url)
+                try:
+                    url.save()
+                except DatabaseError:
+                    connection._rollback()
+                return True
+        except DatabaseError:
+            connection._rollback()
+    return False
+
+def UpdateQuantcastRank(domain_name, rank):
+    """
+    Updates the Quantcast rank for a site and for its www version (assuming it exists).
+    Returns True if the site needs to be crawled, false otherwise.
+    """
+    try:
+        domain = DomainInfo.objects.get(url=domain_name)
+        domain.quantcast_rank = rank
+        domain.quantcast_rank_date = datetime.date.today()
+        domain.quantcast_outdated = False
+        domain.save()
+        # Update the www. version or non-www. version of the domain if it exists.
+        # Consider both to be the same thing and make them match.
+        try:
+            if not domain.url.startswith('www.'):
+                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain.quantcast_rank = rank
+                domain.quantcast_rank_date = datetime.date.today()
+                domain.quantcast_outdated = False
+                domain.save()
+            else:
+                domain = DomainInfo.objects.get(url=domain_name[4:])
+                domain.quantcast_rank = rank
+                domain.quantcast_rank_date = datetime.date.today()
+                domain.quantcast_outdated = False
+                domain.save()
+        except ObjectDoesNotExist:
+            pass
+    except ObjectDoesNotExist:
+        # Create the domain if it doesn't exist. Do this even for blocked sites
+        # because they will probably eventually migrate to the SiteInfo table.
+        domain = DomainInfo()
+        domain.url = domain_name
+        domain.quantcast_rank = rank
+        domain.quantcast_rank_date = datetime.date.today()
+        domain.quantcast_outdated = False
+        domain.save()
+        try:
+            # Update the www. version or non-www. version of the domain if it exists.
+            try:
+                if not domain.url.startswith('www.'):
+                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain.quantcast_rank = rank
+                    domain.quantcast_rank_date = datetime.date.today()
+                    domain.quantcast_outdated = False
+                    domain.save()
+                else:
+                    domain = DomainInfo.objects.get(url=domain_name[4:])
+                    domain.quantcast_rank = rank
+                    domain.quantcast_rank_date = datetime.date.today()
+                    domain.quantcast_outdated = False
+                    domain.save()
+            except ObjectDoesNotExist:
+                pass
+            # If we haven't seen this URL in a pending import, add it to the
+            # to-be-crawled list so it eventually makes it into the index.
+            # But only if it's not blocked.
+            try:
+                blocked_domain = BlockedSite.objects.get(url=domain_name)
+            except ObjectDoesNotExist:
+                # Exception on a get means that it wasn't found in the block list.
+                url = CrawlableUrl()
+                url.url = domain_name
+                url.rooturl = GetRootUrl(url.url)
+                try:
+                    url.save()
+                except DatabaseError:
+                    connection._rollback()
+                return True
+        except DatabaseError:
+            connection._rollback()
+    return False
+
+def UpdateDomcopRank(domain_name, rank, pagerank):
+    """
+    Updates the Domcop rank and pagerank for a site and for its www version (assuming it exists).
+    Returns True if the site needs to be crawled, false otherwise.
+    """
+    try:
+        domain = DomainInfo.objects.get(url=domain_name)
+        domain.domcop_rank = rank
+        domain.domcop_pagerank = pagerank
+        domain.domcop_rank_date = datetime.date.today()
+        domain.domcop_outdated = False
+        domain.save()
+        # Update the www. version or non-www. version of the domain if it exists.
+        # Consider both to be the same thing and make them match.
+        try:
+            if not domain.url.startswith('www.'):
+                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain.domcop_rank = rank
+                domain.domcop_pagerank = pagerank
+                domain.domcop_rank_date = datetime.date.today()
+                domain.domcop_outdated = False
+                domain.save()
+            else:
+                domain = DomainInfo.objects.get(url=domain_name[4:])
+                domain.domcop_rank = rank
+                domain.domcop_pagerank = pagerank
+                domain.domcop_rank_date = datetime.date.today()
+                domain.domcop_outdated = False
+                domain.save()
+        except ObjectDoesNotExist:
+            pass
+    except ObjectDoesNotExist:
+        # Create the domain if it doesn't exist. Do this even for blocked sites
+        # because they will probably eventually migrate to the SiteInfo table.
+        domain = DomainInfo()
+        domain.url = domain_name
+        domain.domcop_rank = rank
+        domain.domcop_pagerank = pagerank
+        domain.domcop_rank_date = datetime.date.today()
+        domain.domcop_outdated = False
+        domain.save()
+        try:
+            # Update the www. version or non-www. version of the domain if it exists.
+            try:
+                if not domain.url.startswith('www.'):
+                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain.domcop_rank = rank
+                    domain.domcop_pagerank = pagerank
+                    domain.domcop_rank_date = datetime.date.today()
+                    domain.domcop_outdated = False
+                    domain.save()
+                else:
+                    domain = DomainInfo.objects.get(url=domain_name[4:])
+                    domain.domcop_rank = rank
+                    domain.domcop_pagerank = pagerank
+                    domain.domcop_rank_date = datetime.date.today()
+                    domain.domcop_outdated = False
                     domain.save()
             except ObjectDoesNotExist:
                 pass
@@ -3356,7 +3537,7 @@ def GetFavicons(domain):
     return True
 
 
-def UpdateMajesticRank(domain_name, rank):
+def UpdateMajesticRank(domain_name, rank, refsubnets):
     """
     Updates the majestic rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
@@ -3374,12 +3555,14 @@ def UpdateMajesticRank(domain_name, rank):
                 domain = DomainInfo.objects.get(url='www.'+ domain_name)
                 domain.majestic_rank = rank
                 domain.majestic_rank_date = datetime.date.today()
+                domain.majestic_refsubnets = refsubnets
                 domain.majestic_outdated = False
                 domain.save()
             else:
                 domain = DomainInfo.objects.get(url=domain_name[4:])
                 domain.majestic_rank = rank
                 domain.majestic_rank_date = datetime.date.today()
+                domain.majestic_refsubnets = refsubnets
                 domain.majestic_outdated = False
                 domain.save()
         except ObjectDoesNotExist:
@@ -3391,6 +3574,7 @@ def UpdateMajesticRank(domain_name, rank):
         domain.url = domain_name
         domain.majestic_rank = rank
         domain.majestic_rank_date = datetime.date.today()
+        domain.majestic_refsubnets = refsubnets
         domain.majestic_outdated = False
         domain.save()
         try:
@@ -3400,12 +3584,14 @@ def UpdateMajesticRank(domain_name, rank):
                     domain = DomainInfo.objects.get(url='www.'+ domain_name)
                     domain.majestic_rank = rank
                     domain.majestic_rank_date = datetime.date.today()
+                    domain.majestic_refsubnets = refsubnets
                     domain.majestic_outdated = False
                     domain.save()
                 else:
                     domain = DomainInfo.objects.get(url=domain_name[4:])
                     domain.majestic_rank = rank
                     domain.majestic_rank_date = datetime.date.today()
+                    domain.majestic_refsubnets = refsubnets
                     domain.majestic_outdated = False
                     domain.save()
             except ObjectDoesNotExist:
