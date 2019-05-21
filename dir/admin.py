@@ -2402,7 +2402,7 @@ class APIUsageAdmin(admin.ModelAdmin):
     search_fields = ('user__username',)
 
 class DomainSuffixAdmin(admin.ModelAdmin):
-    list_display = ('extension', 'num_known', 'num_crawled', 'num_blocked', 'default_language', 'blocked_to_crawled_ratio')
+    list_display = ('extension', 'num_known', 'num_crawled', 'num_blocked', 'default_language', 'blocked_to_crawled_ratio', 'last_updated')
 
     def generate_stats(modeladmin, request, queryset):
         for item in queryset:
