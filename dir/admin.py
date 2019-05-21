@@ -4,7 +4,7 @@ from django.forms import TextInput, Textarea
 from django.db import IntegrityError, models
 from models import *
 from crawler import CrawlSingleUrl
-from utils import MoveSiteTo, RemoveURLsForDomain, MarkURLContentsAsSpam, SetDomainLanguage, SetDomainInfixLanguage, GetRootDomain, GenerateSearchReport, PornBlock, RequeueRankedKeywordsForDomain
+from utils import MoveSiteTo, RemoveURLsForDomain, MarkURLContentsAsSpam, SetDomainLanguage, SetDomainInfixLanguage, GetRootDomain, GenerateSearchReport, PornBlock, RequeueRankedKeywordsForDomain, CalculateDomainSuffixStats
 from urlparse import urlparse
 from indexer import BuildIndexForTerm
 from django.core.exceptions import ObjectDoesNotExist
@@ -2403,6 +2403,14 @@ class APIUsageAdmin(admin.ModelAdmin):
 
 class DomainSuffixAdmin(admin.ModelAdmin):
     list_display = ('extension', 'num_known', 'num_crawled', 'num_blocked', 'default_language', 'blocked_to_crawled_ratio')
+
+    def generate_stats(modeladmin, request, queryset):
+        for item in queryset:
+            CalculateDomainSuffixStats(item.extension)
+
+    generate_stats.short_description = "Generate stats for this domain suffix."
+
+    actions=[generate_stats,]
 
 admin.site.register(BlockedSite, ExcludedSiteAdmin)
 admin.site.register(SiteInfo, SiteInfoAdmin)
