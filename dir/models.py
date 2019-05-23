@@ -866,6 +866,9 @@ class Setting(models.Model):
     name = models.CharField(max_length=80)
     value = models.CharField(max_length=120)
 
+    class Meta:
+        in_db = 'indexes'
+
     def __unicode__(self):
         return self.name + ': ' + self.value
 

@@ -84,7 +84,7 @@ class Command(BaseCommand):
                 blocked = blocked + 1
                 if verbose:
                     print u'{0} is blocked for all sites.'.format(link.url)
-            if rerp.is_allowed('Mozilla/5.0 (compatible; WbSrch/1.0; +https://wbsrch.com)', link.url):
+            if rerp.is_allowed('Mozilla/5.0 (compatible; WbSrch/1.1; +https://wbsrch.com)', link.url):
                 wbok = wbok + 1
             else:
                 wbblocked = wbblocked + 1
