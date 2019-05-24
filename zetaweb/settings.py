@@ -505,12 +505,6 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 GEOIP_PATH = '/var/django/wbsrch/geoip/'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    )
-}
-
 Q_CLUSTER = {
     'name': 'wbsrch',
     'workers': 2,

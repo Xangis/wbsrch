@@ -13,17 +13,50 @@ from crawler import CrawlSingleUrl, Crawler
 from urlparse import urlparse
 from datetime import datetime, date, timedelta
 from django.contrib.gis.geoip import GeoIP
+from rest_framework import exceptions
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
+from rest_framework.authentication import get_authorization_header
+import hashlib
+import uuid
+import binascii
 
 # Note: In order to use the API, the user must have both a valid token AND
 # a valid subscription entered in the admin.
 
-def get_token(user):
-    token = Token.objects.create(user=user)
-    print token.key
+def CreateToken(user):
+    # We may want to use a better salt, but at least we're not using b'salt'.
+    dk = hashlib.pbkdf2_hmac('sha256', str(uuid.uuid4()).encode(), b'saltedcaramel', 250000)
+    key = binascii.hexlify(dk).decode()[0:36]
+    print('New API token for APIUser {0} ({1}): {2}'.format(user.name, user.id, key))
+    token = APIToken()
+    token.key = key
     token.save()
+
+def GetToken(request):
+    auth = get_authorization_header(request).split()
+    if not auth or auth[0].lower() != b'token':
+        return None
+
+    if len(auth) == 1:
+        msg = 'Invalid token header. No credentials provided.'
+        raise exceptions.AuthenticationFailed(msg)
+    elif len(auth) > 2:
+        msg = 'Invalid token header'
+        raise exceptions.AuthenticationFailed(msg)
+
+    try:
+        token = auth[1]
+        if token=="null":
+            msg = 'Null token not allowed'
+            raise exceptions.AuthenticationFailed(msg)
+    except UnicodeError:
+        msg = 'Invalid token header. Token string should not contain invalid characters.'
+        raise exceptions.AuthenticationFailed(msg)
+
+    # Query database for token.
+    apitoken = APIToken.objects.get(key=token)
+    return apitoken
 
 def NormalizeDomain(domain):
     # Normalize URL
@@ -67,12 +100,12 @@ def IncrementAPICallCount(user):
 
 @api_view(['GET'])
 def ip_to_country(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    else:
-        print 'ip_to_country called by {0}'.format(request.user)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    print 'ip_to_country called by {0}'.format(token.user.name)
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
+
     ip = request.GET.get('ip', None)
     print 'IP: {0}'.format(ip)
     gi = GeoIP()
@@ -87,11 +120,10 @@ def ip_to_country(request):
 
 @api_view(['GET'])
 def domain_link_rank(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    else:
-        print 'domain_link_rank called by {0}'.format(request.user)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    print 'domain_link_rank called by {0}'.format(request.user)
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
     decimal = request.GET.get('decimal', None)
@@ -146,9 +178,9 @@ def domain_link_rank(request):
 
 @api_view(['GET'])
 def domain_pages_in_index(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
     if not domain:
@@ -182,9 +214,9 @@ def domain_pages_in_index(request):
 
 @api_view(['GET'])
 def domain_keywords_ranked(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
     language = request.GET.get('lang', 'en')
@@ -205,9 +237,9 @@ def domain_keywords_ranked(request):
 
 @api_view(['GET'])
 def autocomplete(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     word = request.GET.get('word', None)
     print 'Word: {0}'.format(word)
@@ -215,9 +247,9 @@ def autocomplete(request):
 
 @api_view(['GET'])
 def check_typo(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     word = request.GET.get('word', None)
     print 'Word: {0}'.format(word)
@@ -226,9 +258,9 @@ def check_typo(request):
 # Gets the full page info for a URL (number of javascript and CSS items, size, etc.)
 @api_view(['GET'])
 def get_page_details(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     page = request.GET.get('page', None)
     if not page.startswith('http'):
@@ -264,9 +296,9 @@ def get_page_details(request):
 # Gets the Alexa rank for a domain (from whenever we had it last).
 @api_view(['GET'])
 def get_alexa_rank(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
     domain = NormalizeDomain(domain)
@@ -280,9 +312,9 @@ def get_alexa_rank(request):
 # Gets the whois info for a domain if we have it.
 @api_view(['GET'])
 def get_whois_info(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
     domain = NormalizeDomain(domain)
@@ -302,9 +334,9 @@ def get_whois_info(request):
 # Gets the robots.txt info for a domain if we have it.
 @api_view(['GET'])
 def get_robots_info(request):
-    if not request.auth:
-        return HttpResponse('No Token Provided', status=403)
-    if not IncrementAPICallCount(request.user):
+    token = GetToken(request)
+
+    if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
     domain = NormalizeDomain(domain)

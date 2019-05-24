@@ -2776,6 +2776,13 @@ class APIUser(models.Model):
     class Meta:
         in_db = 'indexes'
 
+class APIToken(models.Model):
+    user = models.ForeignKey(APIUser)
+    key = models.CharField(max_length=64)
+
+    class Meta:
+        in_db = 'indexes'
+
 class APISubscription(models.Model):
     user = models.ForeignKey(APIUser)
     monthly_calls = models.IntegerField(default=5000)
