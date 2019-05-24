@@ -331,6 +331,12 @@ EXTRA_LANG_INFO = {
         'name': 'Akan',
         'name_local': u'Akan'
     },
+    'an': {
+        'bidi': False,
+        'code': 'an',
+        'name': 'Aragonese',
+        'name_local': u'Aragonés'
+    },
     'bm': {
         'bidi': False,
         'code': 'bm',
