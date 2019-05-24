@@ -5,7 +5,6 @@ from django.db.models import Q
 from django.template.defaultfilters import truncatechars
 from django.utils.timezone import utc
 from django.utils import timezone
-from django.contrib.auth.models import User
 from simhash import Simhash
 import random
 import urlparse
@@ -2771,25 +2770,28 @@ class ResultClick_sv(ResultClickBase):
 class ResultClick_tr(ResultClickBase):
     pass
 
+class APIUser(models.Model):
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        in_db = 'indexes'
+
 class APISubscription(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(APIUser)
     monthly_calls = models.IntegerField(default=5000)
     expires = models.DateField()
 
     class Meta:
-        # Should be in indexes, but has relationship to auth.User in default
-        in_db = 'default'
+        in_db = 'indexes'
 
 class APIUsage(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(APIUser)
     month = models.IntegerField()
     year = models.IntegerField()
     calls_used = models.IntegerField(default=0)
 
     class Meta:
-        # Should be in indexes, but has relationship to auth.User in default
-        in_db = 'default'
-
+        in_db = 'indexes'
 
 if 'an' in language_list:
 
