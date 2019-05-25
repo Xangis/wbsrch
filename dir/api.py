@@ -228,14 +228,27 @@ def domain_keywords_ranked(request):
     domain = NormalizeDomain(domain)
     altdomain = ReverseWWW(domain, False)
     print 'Domain: {0}'.format(domain)
-    ranking_model = GetKeywordRankingModelFromLanguage(language)
-    keywords = ranking_model.objects.filter(rooturl=domain, rank__lt=200).count()
+    domainfound = False
+    try:
+        domaininfo = DomainInfo.objects.get(url=domain)
+        domainfound = True
+    except ObjectDoesNotExist:
+        pass
     if altdomain:
-        added = KeywordRanking.objects.filter(rooturl=altdomain, rank__lt=200).count()
-        print u'{0} keywords for domain {1} and {2} keywords for domain {3} for a total of {4}'.format(keywords, domain, added, altdomain, keywords+added)
-        keywords += added
-    else:
+        try:
+            altdomaininfo = DomainInfo.objects.get(url=domain)
+            altdomainfound = True
+        except ObjectDoesNotExist:
+            pass
+
+    keywords = 0
+    if domainfound:
+        keywords = GetNumberOfDomainKeywordsRanked(domaininfo)
         print u'{0} keywords for domain {1}'.format(keywords, domain)
+    if altdomainfound:
+        added = GetNumberOfDomainKeywordsRanked(altdomaininfo)
+        print u'{0} keywords for domain {1} and {2} keywords for domain {3} for a total of {4}'.format(keywords, domain, added, altdomain, keywords+added)
+
     return Response({'domain': domain, '{0}_ranked'.format(language): keywords }, status=200)
 
 @api_view(['GET'])

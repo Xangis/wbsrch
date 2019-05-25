@@ -34,6 +34,7 @@ from nltk.corpus import stopwords
 from unidecode import unidecode
 
 DOMAIN_PAGE_COUNT_MAX_AGE = 45
+DOMAIN_KEYWORDS_COUNT_MAX_AGE = 60
 WIDTH = 1280
 HEIGHT = 800
 SMALLWIDTH = 320
@@ -3716,5 +3717,34 @@ def GetNumberOfDomainPages(domain):
         pages = site_model.objects.filter(rooturl=domain).count()
         domain.num_urls = pages
         domain.num_urls_last_updated = timezone.now()
+        domain.save()
+        return pages
+
+def GetNumberOfDomainKeywordsRanked(domain):
+    """
+    Takes a DomainInfo and gets the number of keywords ranked for that domain.
+
+    First checks the num_pages field to see if it's populated and recent.
+    If so, returns that. Otherwise recalculates the count and saves it
+    before returning.
+    """
+
+    if not domain:
+        return 0
+
+    maxage = (timezone.now() - timedelta(days=DOMAIN_KEYWORDS_COUNT_MAX_AGE)).date()
+
+    if domain.num_keywords_last_updated and (domain.num_keywords_last_updated > maxage):
+        return domain.num_keywords_ranked
+    else:
+        try:
+            site_model = GetSiteInfoModelFromLanguage(domain.language_association)
+        except ObjectDoesNotExist:
+            # A language that is tagged as another language won't have any pages, but this keeps
+            # us from dying on an error.
+            site_model = SiteInfo
+        pages = site_model.objects.filter(rooturl=domain).count()
+        domain.num_keywords_ranked = pages
+        domain.num_keywords_ranked_last_updated = timezone.now()
         domain.save()
         return pages
