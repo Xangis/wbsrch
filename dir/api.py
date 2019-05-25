@@ -192,22 +192,25 @@ def domain_pages_in_index(request):
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
         domainfound = True
-        site_model = GetSiteInfoModelFromLanguage(domaininfo.language_association)
     except ObjectDoesNotExist:
-        site_model = SiteInfo
         pass
-    # A language that is tagged as another language won't have any pages, but this keeps
-    # us from dying on an error.
-    except InvalidLanguageException:
-        site_model = SiteInfo
-    pages = site_model.objects.filter(rooturl=domain).count()
     if altdomain:
-        added = site_model.objects.filter(rooturl=altdomain).count()
-        print u'{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages+added)
-        pages += added
-    else:
+        try:
+            altdomaininfo = DomainInfo.objects.get(url=domain)
+            altdomainfound = True
+        except ObjectDoesNotExist:
+            pass
+
+    pages = 0
+    if domainfound:
+        pages = GetNumberOfDomainPages(domaininfo)
         print u'{0} pages for domain {1}'.format(pages, domain)
-    if site_model == SiteInfo:
+    if altdomainfound:
+        added = GetNumberOfDomainPages(altdomaininfo)
+        print u'{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages+added)
+        pages = pages + added
+
+    if not domaininfo.language_association or (domaininfo.language_association == 'en'):
         return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages }, status=200)
     else:
         return Response({'domain': domain, 'total_pages_crawled': pages, domaininfo.language_association: pages }, status=200)
