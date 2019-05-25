@@ -10,8 +10,8 @@ class Command(BaseCommand):
     help = "This command updates domain metadata. It's used for updating domain link counts and domain keyword counts."
 
     option_list = BaseCommand.option_list + (
-        make_option('-m', '--max', default=5, action='store', type='int', dest='max', help='Max number of domains to update. (default=5)'),
-        make_option('-s', '--sleep', default=5, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=5)'),
+        make_option('-m', '--max', default=100000, action='store', type='int', dest='max', help='Max number of domains to update. (default=100000)'),
+        make_option('-s', '--sleep', default=0, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=0)'),
         make_option('-o', '--offset', default=0, action='store', type='int', dest='offset', help='Domain slice offset - distance from beginning to start. (default=0)'),
         make_option('-j', '--justthisurl', default=None, action='store', type='string', dest='justthisurl', help='Calculate only for this url.'),
         make_option('-r', '--recalculate', default=False, action='store_true', dest='recalculate', help='Update already-populated domains instead of uncounted (default=False)'),
