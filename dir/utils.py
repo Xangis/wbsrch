@@ -3710,7 +3710,7 @@ def GetNumberOfDomainPages(domain):
     else:
         try:
             site_model = GetSiteInfoModelFromLanguage(domain.language_association)
-        except ObjectDoesNotExist:
+        except InvalidLanguageException:
             # A language that is tagged as another language won't have any pages, but this keeps
             # us from dying on an error.
             site_model = SiteInfo
@@ -3739,7 +3739,7 @@ def GetNumberOfDomainKeywordsRanked(domain):
     else:
         try:
             site_model = GetSiteInfoModelFromLanguage(domain.language_association)
-        except ObjectDoesNotExist:
+        except InvalidLanguageException:
             # A language that is tagged as another language won't have any pages, but this keeps
             # us from dying on an error.
             site_model = SiteInfo
