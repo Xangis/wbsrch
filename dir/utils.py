@@ -3745,6 +3745,6 @@ def GetNumberOfDomainKeywordsRanked(domain):
             site_model = SiteInfo
         pages = site_model.objects.filter(rooturl=domain).count()
         domain.num_keywords_ranked = pages
-        domain.num_keywords_ranked_last_updated = timezone.now()
+        domain.num_keywords_last_updated = timezone.now()
         domain.save()
         return pages
