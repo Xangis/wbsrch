@@ -61,7 +61,7 @@ listen_addresses = '216.151.3.109'	# what IP address(es) to listen on;
 					# defaults to 'localhost'; use '*' for all
 					# (change requires restart)
 port = 5432				# (change requires restart)
-max_connections = 300			# (change requires restart)
+#max_connections = 400			# (change requires restart)
 #superuser_reserved_connections = 3	# (change requires restart)
 unix_socket_directories = '/var/run/postgresql'	# comma-separated list of directories
 					# (change requires restart)
@@ -657,16 +657,16 @@ include_dir = 'conf.d'			# include files ending in '.conf' from
 
 # Add settings for extensions here
 
-max_connections = 200
-shared_buffers = 60GB
-effective_cache_size = 180GB
-maintenance_work_mem = 2GB
+max_connections = 400
+shared_buffers = 80GB
+effective_cache_size = 200GB
+maintenance_work_mem = 4GB
 checkpoint_completion_target = 0.9
 wal_buffers = 16MB
 default_statistics_target = 500
-random_page_cost = 1.1
+random_page_cost = 1.05
 effective_io_concurrency = 200
-work_mem = 256MB
+work_mem = 512MB
 min_wal_size = 4GB
 max_wal_size = 8GB
 max_worker_processes = 12
