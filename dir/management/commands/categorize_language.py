@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand, CommandError
+from django.db import IntegrityError, connection
 from optparse import make_option
 from dir.models import *
 from dir.utils import *
@@ -434,7 +435,11 @@ class Command(BaseCommand):
                         site.reason = 8
                         print('Do not have a specific language block reason for language: {0}'.format(langtoblock))
                         break
-                    site.save()
+                    try:
+                        site.save()
+                    except IntegrityError:
+                        print('Site {0} was already blocked, but pages exist in the index.'.format(domain))
+                        connection._rollback()
                     try:
                         dom = DomainInfo.objects.get(url=domain)
                     except:
