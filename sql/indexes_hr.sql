@@ -7,3 +7,4 @@ CREATE INDEX dir_siteinfo_hr_pagefirsth2tag_gin ON dir_siteinfo_hr USING gin(pag
 CREATE INDEX dir_siteinfo_hr_pagefirsth3tag_gin ON dir_siteinfo_hr USING gin(pagefirsth3tag gin_trgm_ops);
 CREATE INDEX dir_siteinfo_hr_pagetext_gin ON dir_siteinfo_hr USING gin(pagetext gin_trgm_ops);
 CREATE INDEX dir_siteinfo_hr_url_gin ON dir_siteinfo_hr USING gin(url gin_trgm_ops);
+CREATE INDEX dir_siteinfo_hr_rooturl_btree ON dir_siteinfo_hr (rooturl);

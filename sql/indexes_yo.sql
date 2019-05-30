@@ -8,3 +8,4 @@ CREATE INDEX dir_siteinfo_yo_pagefirsth3tag_gin ON dir_siteinfo_yo USING gin(pag
 CREATE INDEX dir_siteinfo_yo_pagetext_gin ON dir_siteinfo_yo USING gin(pagetext gin_trgm_ops);
 CREATE INDEX dir_siteinfo_yo_url_gin ON dir_siteinfo_yo USING gin(url gin_trgm_ops);
 CREATE INDEX dir_siteinfo_yo_rooturl_gin ON dir_siteinfo_yo USING gin(rooturl gin_trgm_ops);
+CREATE INDEX dir_siteinfo_yo_rooturl_btree ON dir_siteinfo_yo (rooturl);
