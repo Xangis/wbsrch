@@ -153,7 +153,10 @@ def RemoveWordFromSearchResults(search_result, word):
     for idx, result in search_result.search_results:
         tmp_urls = []
         for page in result['urls']:
-            resultitems = page['description'].lower().split(' ')
+            try:
+                resultitems = page['description'].lower().split(' ')
+            except AttributeError:
+                resultitems = []
             titleitems = page['title'].lower().split(' ')
             # TODO: Remove page-by-page instead of skipping entire result if one page matches.
             if word in resultitems or word in titleitems:
