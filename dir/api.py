@@ -189,6 +189,7 @@ def domain_pages_in_index(request):
     altdomain = ReverseWWW(domain, False)
     print 'Domain: {0}'.format(domain)
     domainfound = False
+    altdomainfound = False
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
         domainfound = True
@@ -210,7 +211,7 @@ def domain_pages_in_index(request):
         print u'{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages+added)
         pages = pages + added
 
-    if not domaininfo.language_association or (domaininfo.language_association == 'en'):
+    if domaininfo and not (domaininfo.language_association or (domaininfo.language_association == 'en')):
         return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages }, status=200)
     else:
         return Response({'domain': domain, 'total_pages_crawled': pages, domaininfo.language_association: pages }, status=200)
@@ -229,6 +230,7 @@ def domain_keywords_ranked(request):
     altdomain = ReverseWWW(domain, False)
     print 'Domain: {0}'.format(domain)
     domainfound = False
+    altdomainfound = False
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
         domainfound = True
