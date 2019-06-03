@@ -190,6 +190,7 @@ def domain_pages_in_index(request):
     print 'Domain: {0}'.format(domain)
     domainfound = False
     altdomainfound = False
+    domaininfo = None
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
         domainfound = True
