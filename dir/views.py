@@ -1143,7 +1143,7 @@ def autocomplete(request):
         else:
             return HttpResponse(status=404)
     else:
-        raise HttpResponse(status=404)
+        return HttpResponse(status=404)
 
 def go(request):
     lang = request.GET.get('lang', None)
