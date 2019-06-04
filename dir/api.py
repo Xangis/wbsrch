@@ -214,8 +214,10 @@ def domain_pages_in_index(request):
 
     if domaininfo and not (domaininfo.language_association or (domaininfo.language_association == 'en')):
         return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages }, status=200)
-    else:
+    elif domaininfo:
         return Response({'domain': domain, 'total_pages_crawled': pages, domaininfo.language_association: pages }, status=200)
+    else:
+        return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages }, status=200)
 
 @api_view(['GET'])
 def domain_keywords_ranked(request):
