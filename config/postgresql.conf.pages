@@ -658,17 +658,20 @@ include_dir = 'conf.d'			# include files ending in '.conf' from
 # Add settings for extensions here
 
 max_connections = 400
-shared_buffers = 80GB
-effective_cache_size = 200GB
-maintenance_work_mem = 4GB
+shared_buffers = 128GB
+effective_cache_size = 220GB
+maintenance_work_mem = 8GB
 checkpoint_completion_target = 0.9
 wal_buffers = 16MB
 default_statistics_target = 500
-random_page_cost = 1.05
-effective_io_concurrency = 200
+random_page_cost = 1.04
+effective_io_concurrency = 300
 work_mem = 512MB
 min_wal_size = 4GB
 max_wal_size = 8GB
 max_worker_processes = 12
 max_parallel_workers_per_gather = 6
 max_parallel_workers = 12
+autovacuum_vacuum_scale_factor = 0.04
+autovacuum_analyze_scale_factor = 0.08
+autovacuum_max_workers = 6
