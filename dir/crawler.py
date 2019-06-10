@@ -110,6 +110,10 @@ def GetSiteInfoModelFromURL(url, descriptive=False):
 
 
 def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
+    """
+    Populates a SiteInfo object from HTML. When parsing the HTML, also creates
+    and saves any IFrame and JavaScript objects. Does not save PageLink objects.
+    """
     soup = BeautifulSoup(html)
     if soup.title:
         try:
@@ -363,6 +367,11 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
         site_model = GetSiteInfoModelFromURL(realurl, descriptive)
     except InvalidLanguageException, e:
         print('InvalidLanguageException: {0} (not saving page)'.format(e))
+        # If we're re-crawling, then we need to remove the old page. The only place we can
+        # realistically remove it from is SiteInfo.
+        if recrawl:
+            count = RemoveFromDatabase(realurl, descriptive, all_languages=True, model=SiteInfo)
+            print('Removed {0} instances of invalid language page {1} from the {2} database.'.format(count, realurl, SiteInfo))
         return False
     info = site_model()
     info.rooturl = rooturl
@@ -408,7 +417,10 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
         RemoveFromPending(pendinglinks, url)
     # Clear out old iframes and javascripts.
     # We have to do this before calling PopulateSiteInfoFromHtml because
-    # that creates the PageIFrame and PageJavaScript objects.
+    # that creates the PageIFrame and PageJavaScript objects. There will be
+    # churn every time we recrawl a URL, but the alternative is having old links and
+    # iframes build up as the page changes when they aren't on the current
+    # version of the page..
     elinks = PageIFrame.objects.filter(url_source = info.url)
     if descriptive:
         print('Deleting {0} existing IFrames.'.format(elinks.count()))
@@ -417,6 +429,11 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
     elinks = PageJavaScript.objects.filter(url_source = info.url)
     if descriptive:
         print('Deleting {0} existing JavaScripts.'.format(elinks.count()))
+    for elink in elinks:
+        elink.delete()
+    elinks = PageLink.objects.filter(url_source = info.url)
+    if descriptive:
+        print('Deleting {0} existing links.'.format(elinks.count()))
     for elink in elinks:
         elink.delete()
 
@@ -433,12 +450,6 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
         elif recrawl:
             if descriptive:
                 print('Updating existing URL in database: {0}'.format(realurl))
-            # Delete links for existing pages because we'll re-add them farther down.
-            elinks = PageLink.objects.filter(url_source = info.url)
-            if descriptive:
-                print('Deleting {0} existing links.'.format(elinks.count()))
-            for elink in elinks:
-                elink.delete()
             # TODO: See if this and CopySiteData are duplicate code. They probably are.
             previous.pagecontents = info.pagecontents
             previous.pagesize = info.pagesize
