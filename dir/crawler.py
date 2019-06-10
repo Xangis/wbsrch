@@ -715,17 +715,17 @@ def RemoveFromDatabase(url, descriptive=False, all_languages=True, model=None):
                 pass
 
     # Remove all links from all link tables (JavaScript, Iframe, PageLink).
-    links = PageLink.objects.filter(source=url)
+    links = PageLink.objects.filter(url_source=url)
     num = len(links)
     if num > 0:
         print('Deleting {0} PageLink items for {1}'.format(num, url))
         links.delete()
-    links = PageIFrame.objects.filter(source=url)
+    links = PageIFrame.objects.filter(url_source=url)
     num = len(links)
     if num > 0:
         print('Deleting {0} PageIFrame items for {1}'.format(num, url))
         links.delete()
-    links = PageJavaScript.objects.filter(rooturl_source=url)
+    links = PageJavaScript.objects.filter(url_source=url)
     num = len(links)
     if num > 0:
         print('Deleting {0} PageJavaScript items for {1}'.format(num, url))
