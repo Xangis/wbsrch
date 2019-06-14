@@ -251,6 +251,34 @@ class IsValidHtmlUrlTestCase(TestCase):
         url = u"http://wbsrch.com/run.exe"
         self.assertFalse(IsHtmlUrl(url))
 
+    def test_zip_domain(self):
+        """
+        Tests that a URL ending with exe does not register as valid.
+        """
+        url = u"http://wbsrch.zip"
+        self.assertTrue(IsHtmlUrl(url))
+
+    def test_mov_domain(self):
+        """
+        Tests that a URL ending with exe does not register as valid.
+        """
+        url = u"http://wbsrch.mov/"
+        self.assertTrue(IsHtmlUrl(url))
+
+    def test_mov_url(self):
+        """
+        Tests that a URL ending with exe does not register as valid.
+        """
+        url = u"http://wbsrch.com/wbsrch.mov"
+        self.assertFalse(IsHtmlUrl(url))
+
+    def test_mov_url(self):
+        """
+        Tests that a URL ending with exe does not register as valid.
+        """
+        url = u"http://wbsrch.com/wbsrch.mov?t=30s"
+        self.assertFalse(IsHtmlUrl(url))
+
     def test_xpi_url(self):
         url = u"http://wbsrch.com/addon.xpi"
         self.assertFalse(IsHtmlUrl(url))

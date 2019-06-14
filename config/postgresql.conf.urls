@@ -518,7 +518,6 @@ stats_temp_directory = '/var/run/postgresql/10-main.pg_stat_tmp'
 					# vacuum
 #autovacuum_analyze_threshold = 50	# min number of row updates before
 					# analyze
-#autovacuum_vacuum_scale_factor = 0.2	# fraction of table size before vacuum
 #autovacuum_analyze_scale_factor = 0.1	# fraction of table size before analyze
 #autovacuum_freeze_max_age = 200000000	# maximum XID age before forced vacuum
 					# (change requires restart)
@@ -657,20 +656,20 @@ include_dir = 'conf.d'			# include files ending in '.conf' from
 
 # Add settings for extensions here
 
-max_connections = 200
-shared_buffers = 18GB
-effective_cache_size = 54GB
-maintenance_work_mem = 2GB
+max_connections = 300
+shared_buffers = 24GB
+effective_cache_size = 60GB
+maintenance_work_mem = 4GB
 checkpoint_completion_target = 0.7
 wal_buffers = 16MB
-default_statistics_target = 100
-random_page_cost = 1.1
+default_statistics_target = 250
+random_page_cost = 1.05
 effective_io_concurrency = 200
-work_mem = 31457kB
+work_mem = 32768kB
 min_wal_size = 1GB
 max_wal_size = 2GB
 max_worker_processes = 6
 max_parallel_workers_per_gather = 3
 max_parallel_workers = 6
-
-
+autovacuum_vacuum_scale_factor = 0.04
+autovacuum_max_workers = 4
