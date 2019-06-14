@@ -490,7 +490,7 @@ class AllowedDomain(models.Model):
 
 
 class DomainSuffix(models.Model):
-    extension = models.CharField(max_length=24, null=False, blank=False, db_index=True)
+    extension = models.CharField(max_length=30, null=False, blank=False, db_index=True)
     num_known = models.IntegerField(null=True, blank=True)
     num_crawled = models.IntegerField(null=True, blank=True)
     num_blocked = models.IntegerField(null=True, blank=True)
