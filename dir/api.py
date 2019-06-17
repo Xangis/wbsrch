@@ -24,6 +24,7 @@ import binascii
 # Note: In order to use the API, the user must have both a valid token AND
 # a valid subscription entered in the admin.
 
+
 def CreateToken(user):
     # We may want to use a better salt, but at least we're not using b'salt'.
     dk = hashlib.pbkdf2_hmac('sha256', str(uuid.uuid4()).encode(), b'saltedcaramel', 250000)
@@ -32,6 +33,7 @@ def CreateToken(user):
     token = APIToken()
     token.key = key
     token.save()
+
 
 def GetToken(request):
     auth = get_authorization_header(request).split()
@@ -58,6 +60,7 @@ def GetToken(request):
     apitoken = APIToken.objects.get(key=token)
     return apitoken
 
+
 def NormalizeDomain(domain):
     # Normalize URL
     if domain.startswith(u'http:') or domain.startswith(u'https:'):
@@ -66,12 +69,14 @@ def NormalizeDomain(domain):
         domain = parsedurl.netloc
     return domain
 
+
 def SwapHttps(url):
     if url.startswith('http:'):
         url = 'https:' + url[5:]
     elif url.startswith('https:'):
         url = 'http:' + url[6:]
     return url
+
 
 def IncrementAPICallCount(user):
     """
@@ -98,6 +103,7 @@ def IncrementAPICallCount(user):
     else:
         return False
 
+
 @api_view(['GET'])
 def ip_to_country(request):
     token = GetToken(request)
@@ -117,6 +123,7 @@ def ip_to_country(request):
         return Response({'ip': ip, 'country': country }, status=200)
     else:
         return Response(status=404)
+
 
 @api_view(['GET'])
 def domain_link_rank(request):
@@ -176,6 +183,7 @@ def domain_link_rank(request):
     # TODO: Include domains_linking_in_last_updated in response.
     return Response({'domain': domain, 'wbrank': link_rank, 'excluded': is_excluded, 'domains_linking_in': domains_linking_in}, status=200)
 
+
 @api_view(['GET'])
 def domain_pages_in_index(request):
     token = GetToken(request)
@@ -219,6 +227,7 @@ def domain_pages_in_index(request):
     else:
         return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages }, status=200)
 
+
 @api_view(['GET'])
 def domain_keywords_ranked(request):
     token = GetToken(request)
@@ -256,6 +265,7 @@ def domain_keywords_ranked(request):
 
     return Response({'domain': domain, '{0}_ranked'.format(language): keywords }, status=200)
 
+
 @api_view(['GET'])
 def autocomplete(request):
     token = GetToken(request)
@@ -266,6 +276,7 @@ def autocomplete(request):
     print 'Word: {0}'.format(word)
     return Response({'word': word}, status=200)
 
+
 @api_view(['GET'])
 def check_typo(request):
     token = GetToken(request)
@@ -275,6 +286,7 @@ def check_typo(request):
     word = request.GET.get('word', None)
     print 'Word: {0}'.format(word)
     return Response({'word': word}, status=200)
+
 
 # Gets the full page info for a URL (number of javascript and CSS items, size, etc.)
 @api_view(['GET'])
@@ -314,9 +326,10 @@ def get_page_details(request):
     image_title_tags = models.TextField(null=True, blank=True)
     """
 
-# Gets the Alexa rank for a domain (from whenever we had it last).
+
+# Gets the Alexa, Majestic, Quantcast, and Domcop rank for a domain (from whenever we had it last). Leaves unranked ones blank.
 @api_view(['GET'])
-def get_alexa_rank(request):
+def get_ranks(request):
     token = GetToken(request)
 
     if not IncrementAPICallCount(token.user):
@@ -326,9 +339,14 @@ def get_alexa_rank(request):
     print 'Domain: {0}'.format(domain)
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
-        return Response({'domain': domain, 'alexa_rank': domaininfo.alexa_rank, 'alexa_rank_date': domaininfo.alexa_rank_date}, status=200)
+        return Response({'domain': domain, 'alexa_rank': domaininfo.alexa_rank, 'alexa_rank_date': domaininfo.alexa_rank_date,
+                         'majestic_rank': domaininfo.majestic_rank, 'majestic_rank_date': domaininfo.majestic_rank_date,
+                         'domcop_pagerank': domaininfo.majestic_rank, 'domcop_pagerank_date': domaininfo.majestic_rank_date,
+                         'quantcast_rank': domaininfo.majestic_rank, 'quantcast_rank_date': domaininfo.majestic_rank_date
+                        }, status=200)
     except ObjectDoesNotExist:
         return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
+
 
 # Gets the whois info for a domain if we have it.
 @api_view(['GET'])
@@ -351,6 +369,7 @@ def get_whois_info(request):
           'whois_zipcode': domaininfo.whois_zipcode, 'whois_nameservers': domaininfo.whois_nameservers, 'whois_emails': domaininfo.whois_emails}, status=200)
     except ObjectDoesNotExist:
         return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
+
 
 # Gets the robots.txt info for a domain if we have it.
 @api_view(['GET'])
