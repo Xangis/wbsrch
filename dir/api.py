@@ -341,8 +341,8 @@ def get_ranks(request):
         domaininfo = DomainInfo.objects.get(url=domain)
         return Response({'domain': domain, 'alexa_rank': domaininfo.alexa_rank, 'alexa_rank_date': domaininfo.alexa_rank_date,
                          'majestic_rank': domaininfo.majestic_rank, 'majestic_rank_date': domaininfo.majestic_rank_date,
-                         'domcop_pagerank': domaininfo.majestic_rank, 'domcop_pagerank_date': domaininfo.majestic_rank_date,
-                         'quantcast_rank': domaininfo.majestic_rank, 'quantcast_rank_date': domaininfo.majestic_rank_date
+                         'domcop_pagerank': domaininfo.domcop_pagerank, 'domcop_pagerank_date': domaininfo.domcop_pagerank_date, 'domcop_rank': domaininfo.domcop_rank,
+                         'quantcast_rank': domaininfo.quantcast_rank, 'quantcast_rank_date': domaininfo.quantcast_rank_date
                         }, status=200)
     except ObjectDoesNotExist:
         return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
