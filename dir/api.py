@@ -93,7 +93,12 @@ def IncrementAPICallCount(user):
         usage = APIUsage.objects.get(user=user, month=time.month, year=time.year)
     except ObjectDoesNotExist:
         usage = APIUsage()
-        usage.user = user
+        apiuser = APIUser.objects.get(id=user.id)
+        if not apiuser:
+            apiuser = APIUser()
+            apiuser.userid = user.id
+            apiuser.name = user.name
+        usage.user = apiuser
         usage.month = time.month
         usage.year = time.year
     if usage.calls_used < subscription.monthly_calls:
@@ -165,6 +170,8 @@ def domain_link_rank(request):
                 altdomaininfo.domains_linking_in = 0
             print 'Alt domain DomainInfo found'
             domainfound = True
+            if not domains_linking_in:
+                domains_linking_in = 0
             print u'{0} domains linking in to domain {1} and {2} linking in to {3} for a total of {4}'.format(domains_linking_in,
                 domain, altdomaininfo.domains_linking_in, altdomain, domains_linking_in + altdomaininfo.domains_linking_in)
             domains_linking_in += altdomaininfo.domains_linking_in
