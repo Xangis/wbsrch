@@ -2837,6 +2837,8 @@ admin.site.register(ResultClick_tr, ResultClickAdmin)
 admin.site.register(Screenshot)
 admin.site.register(APISubscription, APISubscriptionAdmin)
 admin.site.register(APIUsage, APIUsageAdmin)
+admin.site.register(APIToken)
+admin.site.register(APIUser)
 admin.site.register(CrawlableUrl)
 admin.site.register(Favicon)
 
