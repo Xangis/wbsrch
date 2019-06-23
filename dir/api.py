@@ -38,7 +38,8 @@ def CreateToken(user):
 def GetToken(request):
     auth = get_authorization_header(request).split()
     if not auth or auth[0].lower() != b'token':
-        return None
+        msg = "Invalid request: No API token supplied."
+        raise exceptions.AuthenticationFailed(msg)
 
     if len(auth) == 1:
         msg = 'Invalid token header. No credentials provided.'
