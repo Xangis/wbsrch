@@ -152,9 +152,15 @@ def domain_link_rank(request):
     except ObjectDoesNotExist:
         pass
     is_excluded = False
+    excluded_reason = None
     try:
         excluded = BlockedSite.objects.get(url=domain)
         is_excluded = True
+        excluded_reason = 'Unknown'
+        for reason in EXCLUDED_SITE_REASONS:
+            if reason[0] == excluded.reason:
+                excluded_reason = reason[1]
+                break
     except ObjectDoesNotExist:
         pass
     if domainfound:
@@ -189,7 +195,7 @@ def domain_link_rank(request):
     if link_rank > 8:
         link_rank = 8
     # TODO: Include domains_linking_in_last_updated in response.
-    return Response({'domain': domain, 'wbrank': link_rank, 'excluded': is_excluded, 'domains_linking_in': domains_linking_in}, status=200)
+    return Response({'domain': domain, 'wbrank': link_rank, 'excluded': is_excluded, 'domains_linking_in': domains_linking_in, 'excluded_reason': excluded_reason}, status=200)
 
 
 @api_view(['GET'])
