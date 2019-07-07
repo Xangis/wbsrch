@@ -95,8 +95,10 @@ def MergeSearchResult(search_result, index_term, bonus_existing=False):
         search_result.date_indexed = '{0}'.format(index_term.date_indexed)
     else:
         search_result.date_indexed = '{0}, {1}'.format(search_result.date_indexed, index_term.date_indexed)
-
-    tmp_result = ujson.loads(index_term.search_results)
+    if not index_term.search_results:
+        tmp_result = []
+    else:
+        tmp_result = ujson.loads(index_term.search_results)
     if search_result.allfromdomain:
         found = False
         for result in tmp_result:

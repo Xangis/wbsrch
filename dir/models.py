@@ -2772,6 +2772,7 @@ class ResultClick_tr(ResultClickBase):
 
 class APIUser(models.Model):
     name = models.CharField(max_length=100)
+    userid = models.IntegerField(null=True, blank=True)
 
     class Meta:
         in_db = 'indexes'

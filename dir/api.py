@@ -38,7 +38,8 @@ def CreateToken(user):
 def GetToken(request):
     auth = get_authorization_header(request).split()
     if not auth or auth[0].lower() != b'token':
-        return None
+        msg = "Invalid request: No API token supplied."
+        raise exceptions.AuthenticationFailed(msg)
 
     if len(auth) == 1:
         msg = 'Invalid token header. No credentials provided.'
@@ -93,7 +94,12 @@ def IncrementAPICallCount(user):
         usage = APIUsage.objects.get(user=user, month=time.month, year=time.year)
     except ObjectDoesNotExist:
         usage = APIUsage()
-        usage.user = user
+        apiuser = APIUser.objects.get(id=user.id)
+        if not apiuser:
+            apiuser = APIUser()
+            apiuser.userid = user.id
+            apiuser.name = user.name
+        usage.user = apiuser
         usage.month = time.month
         usage.year = time.year
     if usage.calls_used < subscription.monthly_calls:
@@ -146,9 +152,15 @@ def domain_link_rank(request):
     except ObjectDoesNotExist:
         pass
     is_excluded = False
+    excluded_reason = None
     try:
         excluded = BlockedSite.objects.get(url=domain)
         is_excluded = True
+        excluded_reason = 'Unknown'
+        for reason in EXCLUDED_SITE_REASONS:
+            if reason[0] == excluded.reason:
+                excluded_reason = reason[1]
+                break
     except ObjectDoesNotExist:
         pass
     if domainfound:
@@ -165,6 +177,8 @@ def domain_link_rank(request):
                 altdomaininfo.domains_linking_in = 0
             print 'Alt domain DomainInfo found'
             domainfound = True
+            if not domains_linking_in:
+                domains_linking_in = 0
             print u'{0} domains linking in to domain {1} and {2} linking in to {3} for a total of {4}'.format(domains_linking_in,
                 domain, altdomaininfo.domains_linking_in, altdomain, domains_linking_in + altdomaininfo.domains_linking_in)
             domains_linking_in += altdomaininfo.domains_linking_in
@@ -181,7 +195,7 @@ def domain_link_rank(request):
     if link_rank > 8:
         link_rank = 8
     # TODO: Include domains_linking_in_last_updated in response.
-    return Response({'domain': domain, 'wbrank': link_rank, 'excluded': is_excluded, 'domains_linking_in': domains_linking_in}, status=200)
+    return Response({'domain': domain, 'wbrank': link_rank, 'excluded': is_excluded, 'domains_linking_in': domains_linking_in, 'excluded_reason': excluded_reason}, status=200)
 
 
 @api_view(['GET'])
