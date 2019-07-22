@@ -48,6 +48,8 @@ def LoadQuantcastFile(filename):
         cursor.execute('UPDATE dir_domaininfo SET quantcast_outdated = true WHERE quantcast_outdated = false;')
         print u'Updating ranks.'
         for row in reader:
+            if (len(row) > 1) and ((row[0] == 'Rank') or (row[0] == 'Hidden profile')):
+                continue
             if len(row) == 2:
                 print('Domain ' + row[1] + ' ranks ' + row[0])
                 root = GetRootDomain(row[1])
