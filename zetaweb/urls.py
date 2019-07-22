@@ -64,7 +64,7 @@ urlpatterns = patterns('',
     url(r'^api/autocomplete/$', 'dir.api.autocomplete', name='api_autocomplete'),
     url(r'^api/check_typo/$', 'dir.api.check_typo', name='api_check_typo'),
     url(r'^api/get_page_details/$', 'dir.api.get_page_details', name='get_page_details'),
-    url(r'^api/get_alexa_rank/$', 'dir.api.get_alexa_rank', name='api_get_alexa_rank'),
+    url(r'^api/get_ranks/$', 'dir.api.get_ranks', name='api_get_ranks'),
     url(r'^api/get_whois_info/$', 'dir.api.get_whois_info', name='api_get_whois_info'),
     url(r'^api/get_robots_info/$', 'dir.api.get_robots_info', name='api_get_robots_info'),
     # End API methods

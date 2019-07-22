@@ -13,18 +13,12 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import django
 import os
-from appoptics_apm import djangoware # appoptics
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "zetaweb.settings")
-django.setup() # appoptics
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
-#from django.core.wsgi import get_wsgi_application # noappoptics
-#application = get_wsgi_application() # noappoptics
-
-# Apply WSGI middleware here.
-application = djangoware.AppOpticsApmWSGIHandler()
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()

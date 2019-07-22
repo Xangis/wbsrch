@@ -1,8 +1,11 @@
 from django.utils import timezone
+from django.utils.dateparse import parse_date
 from django.core.exceptions import ValidationError
 from django.core import serializers
 from django.db.utils import DataError
+from django.db import models
 from pytz import AmbiguousTimeError
+from pytz.exceptions import NonExistentTimeError
 import dateutil.parser
 import datetime
 import whois
@@ -121,6 +124,11 @@ def UpdateDomainWhois(domain, detailed=False):
                     print('domain_created: "{0}"'.format(domain.domain_created))
                     print('domain_expires: "{0}"'.format(domain.domain_expires))
                     print('domain_updated: "{0}"'.format(domain.domain_updated))
+            except NonExistentTimeError as e:
+                domain.domain_created = None
+                domain.domain_expires = None
+                domain.domain_updated = None
+                domain.save()
 
 def GetDomainAge(domain):
     """
@@ -167,7 +175,10 @@ def GetDomainInfo(domain):
         info = whois.whois(domain)
         return info
     except whois.parser.PywhoisError, e:
-        print('PywhoisError (setting creation and expiration to None): {0}'.format(e))
+        try:
+            print('PywhoisError (setting creation and expiration to None): {0}'.format(e))
+        except:
+            print('PywhoisError (setting creation and expiration to None): {0}'.format(domain))
         return None
     except gaierror:
         print('Could not look up domain {0}: socket.gaierror'.format(domain))

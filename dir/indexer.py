@@ -25,8 +25,9 @@ import codecs
 import math
 from unidecode import unidecode
 
+
 def Indexer(options):
-    print options
+    print(options)
     if options['justthisterm']:
         pendingindexes = [options['justthisterm']]
     elif options['pending']:
@@ -36,10 +37,11 @@ def Indexer(options):
     elif options['file']:
         pendingindexes = LoadKeywordsFromFile(options['file'])
     else:
-        print "You didn't give me anything to do. Anyhow, I'm done doing it."
+        print("You didn't give me anything to do. Anyhow, I'm done doing it.")
         return
     type = options.get('type', None)
     Index(pendingindexes, options['maxindexes'], options['sleep'], options['language'], options['verbose'], options['abbreviated'], type)
+
 
 def RemoveFromPending(keywords, language=None):
     try:
@@ -50,6 +52,7 @@ def RemoveFromPending(keywords, language=None):
     except:
         return False
 
+
 def Index(pendingindexes, max, sleep=2, language=None, verbose=False, abbreviated=False, type=None):
     processedkeywords = 0
     removedfrompending = 0
@@ -57,7 +60,7 @@ def Index(pendingindexes, max, sleep=2, language=None, verbose=False, abbreviate
     notsaved = 0
     for keywords in pendingindexes:
         if verbose:
-            print u'Indexing: ' + keywords
+            print('Indexing: {0}'.format(keywords))
         was_saved = BuildIndexForTerm(keywords, language, verbose, abbreviated, type)
         if was_saved:
             saved = saved + 1
@@ -69,20 +72,22 @@ def Index(pendingindexes, max, sleep=2, language=None, verbose=False, abbreviate
         if processedkeywords >= max:
             break
         time.sleep(sleep)
-    print u'Indexed {0} terms. {1} were saved and {2} were not saved. {3} terms were removed from the pending term database.'.format(
-        processedkeywords, saved, notsaved, removedfrompending)
+    print('Indexed {0} terms. {1} were saved and {2} were not saved. {3} terms were removed from the pending term database.'.format(
+        processedkeywords, saved, notsaved, removedfrompending))
+
 
 def LoadKeywordsFromFile(filename):
     pendingindexes = []
     numloaded = 0
-    print u'Loading pending indexes from file: ' + filename
+    print('Loading pending indexes from file: '.format(filename))
     f = open(filename, 'rb')
     reader = codecs.getreader('utf8')(f)
     for line in reader.readlines():
         pendingindexes.append(line)
         numloaded = numloaded + 1
-    print unicode(numloaded) + u' Keywords loaded from ' + filename + u'.'
+    print('{0} Keywords loaded from {1}.'.format(numloaded, filename))
     return pendingindexes
+
 
 def GetPendingIndexes(max, offset=0, language='en', verbose=False, random=False):
     pendingindexes = []
@@ -91,13 +96,14 @@ def GetPendingIndexes(max, offset=0, language='en', verbose=False, random=False)
         pending = index_model.objects.all().order_by('?')[offset:max+offset]
     else:
         pending = index_model.objects.all().order_by('date_added')[offset:max+offset]
-    print u'Loading pending indexes from ' + language + u' database: '
+    print('Loading pending indexes from {0} database: '.format(language))
     for item in pending:
         pendingindexes.append(item.keywords)
         if verbose:
-            print item.keywords
-    print u'Loaded ' + unicode(len(pendingindexes)) + u' pending indexes from database.'
+            print(item.keywords)
+    print('Loaded {0} pending indexes from database.'.format(len(pendingindexes)))
     return pendingindexes
+
 
 def GetReindexes(max, offset=0, language='en', verbose=False, random=False, quickness=None, days=None):
     pendingindexes = []
@@ -121,9 +127,10 @@ def GetReindexes(max, offset=0, language='en', verbose=False, random=False, quic
                 continue
         pendingindexes.append(item.keywords)
         if verbose:
-            print item.keywords
+            print(item.keywords)
     print('Loaded {0} stale indexes from database.'.format(len(pendingindexes)))
     return pendingindexes
+
 
 def AddIndividualWords(ratings, keywords, type, lang='en'):
     """
@@ -150,7 +157,7 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
     squareroot1025
     squareroot1000
     """
-    print 'We need to apply multiword algorithm {0} to our data.'.format(type)
+    print('We need to apply multiword algorithm {0} to our data.'.format(type))
     start = timezone.now()
     singlewords = keywords.split(' ')
     term_model = GetIndexModelFromLanguage(lang)
@@ -163,13 +170,13 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
             # For now we're just skipping them. They'll theoretically eventually be indexed
             # if there are any results for them.
             try:
-                print u'Index term {0} not found, cannot use for calculations.'.format(singleword)
+                print('Index term {0} not found, cannot use for calculations.'.format(singleword))
             except:
-                print u'Index term (unprintable) not found, cannot use for calculations.'.format(singleword)
+                print('Index term (unprintable) not found, cannot use for calculations.'.format(singleword))
             continue
         # No point in adding up a word with no results, and this way we don't have to worry about divide by zero.
         if word.num_results == 0:
-            print u'Index term {0} has zero results, nothing to calculate.'
+            print('Index term {0} has zero results, nothing to calculate.')
             continue
         # All formula comments are spreadsheet formulas (assuming number of results for word in cell B2)
         # These formulas were calculated based on 8.8 million URLs in the English index and the index page
@@ -222,12 +229,12 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
             # =(1000 - SQRT(B2)) / 1000
             factor = (1000.0 - math.sqrt(word.num_results)) / 1000.0
         else:
-            print u'Invalid merge type algorithm {0}'.format(type)
+            print('Invalid merge type algorithm {0}'.format(type))
             return ratings
         try:
-            print u'Merge factor for term {0} is {1} with {2} results'.format(singleword, factor, word.num_results)
+            print('Merge factor for term {0} is {1} with {2} results'.format(singleword, factor, word.num_results))
         except:
-            print u'Merge factor for term (unprintable) is {1} with {2} results'.format(singleword, factor, word.num_results)
+            print('Merge factor for term (unprintable) is {1} with {2} results'.format(singleword, factor, word.num_results))
         page_rankings = ujson.loads(word.page_rankings)
         for item in page_rankings:
             #print 'Checking {0} in page_rankings.'.format(item)
@@ -244,10 +251,11 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
             if not found:
                 #print u'Adding [ {0} , {1} ]'.format(item[0], points)
                 ratings.append([item[0], points])
-    ratings.sort(key=lambda tup: tup[1], reverse=True)      
+    ratings.sort(key=lambda tup: tup[1], reverse=True)
     end_delta = timezone.now() - start
-    print u'Merging existing index terms took {0} seconds.'.format(end_delta.total_seconds())
+    print('Merging existing index terms took {0} seconds.'.format(end_delta.total_seconds()))
     return ratings
+
 
 def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, type=None):
     """
@@ -332,7 +340,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
                      u"%s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, kp, kp, kp, akp, kp, kp, kp])
     if verbose:
-        print sql_query.replace("%s", ("'" + kp + "'"))
+        print(sql_query.replace("%s", ("'" + kp + "'")))
     ratings = []
     if verbose:
         querydelta = timezone.now() - querystart
