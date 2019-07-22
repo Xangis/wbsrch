@@ -21,8 +21,6 @@
 <a href="/contact/">{% trans "Contact Information" %}</a></p>
 <p class="centered">
 <a href="https://stats.wbsrch.com">WbSrch Stats</a> | 
-<a href="https://analytics.wbsrch.com">WbSrch Analytics</a> |
-<a href="https://maps.wbsrch.com">WbSrch Maps</a> |  
 <a href="https://musicsrch.com">MusicSrch Music Search</a>
 </p>
 </div>
