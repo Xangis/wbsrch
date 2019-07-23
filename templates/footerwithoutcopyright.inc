@@ -8,7 +8,6 @@
 <a href="/index-stats/">{% trans "Index Statistics" %}</a> |
 <a href="/howto/">{% trans "How to Use WbSrch" %}</a> |
 <a href="/most-linked-to-domains/">Top 100 Most-Linked-To Domains</a> |
-<a href="/articles/">Articles</a>
 </p>
 <p class="centered">
 <a href="/terms/">{% trans "Terms of Service" %}</a> |
