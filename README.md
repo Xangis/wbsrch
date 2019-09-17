@@ -296,6 +296,13 @@ nginx.conf to it manually, since the one in this source distribution is from an 
 
 This uses Certbot for certificates. See config/certbot.txt for how to set up Certbot.
 
+# Settings
+
+By default when someone searches for a term that's not indexed yet, the engine will create a "placeholder" index
+term by retrieving a handful of title matches from the pages table. This is a load-intensive query if the
+database is of any significant size. Add a Setting to the database that is "create_placeholders" and set it
+to "False" to disable this.
+
 # Conclusion
 
 You should absolutely not use the WbSrch engine if you want to build a full-sized consumer-facing search engine.
