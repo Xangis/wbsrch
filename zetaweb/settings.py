@@ -492,13 +492,14 @@ import django.conf.locale
 LANG_INFO = dict(django.conf.locale.LANG_INFO.items() + EXTRA_LANG_INFO.items())
 django.conf.locale.LANG_INFO = LANG_INFO
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-        'KEY_FUNCTION': 'memcachedkeys.make_key',
-    }
-}
+# TODO Find a replacement for this, probably using Redis.
+#CACHES = {
+#    'default': {
+#        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#        'LOCATION': '127.0.0.1:11211',
+#        'KEY_FUNCTION': 'memcachedkeys.make_key',
+#    }
+#}
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
