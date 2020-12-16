@@ -114,12 +114,12 @@ def IncrementAPICallCount(user):
 def ip_to_country(request):
     token = GetToken(request)
 
-    print 'ip_to_country called by {0}'.format(token.user.name)
+    print('ip_to_country called by {0}'.format(token.user.name))
     if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
 
     ip = request.GET.get('ip', None)
-    print 'IP: {0}'.format(ip)
+    print('IP: {0}'.format(ip))
     gi = GeoIP()
     country = gi.country_code(ip)
     latlon = gi.lat_lon(ip)
@@ -135,7 +135,7 @@ def ip_to_country(request):
 def domain_link_rank(request):
     token = GetToken(request)
 
-    print 'domain_link_rank called by {0}'.format(request.user)
+    print('domain_link_rank called by {0}'.format(request.user))
     if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
@@ -143,7 +143,7 @@ def domain_link_rank(request):
     if not domain:
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
-    print 'Domain: {0}'.format(domain)
+    print('Domain: {0}'.format(domain))
     altdomain = ReverseWWW(domain, False)
     domainfound = False
     try:
@@ -169,23 +169,23 @@ def domain_link_rank(request):
         domains_linking_in = 0
     altdomain = ReverseWWW(domain, False)
     if altdomain:
-        print u'Altdomain is {0}'.format(altdomain)
+        print('Altdomain is {0}'.format(altdomain))
         try:
             altdomaininfo = DomainInfo.objects.get(url=altdomain)
             # Handle Nones temporarily.
             if not altdomaininfo.domains_linking_in:
                 altdomaininfo.domains_linking_in = 0
-            print 'Alt domain DomainInfo found'
+            print('Alt domain DomainInfo found')
             domainfound = True
             if not domains_linking_in:
                 domains_linking_in = 0
-            print u'{0} domains linking in to domain {1} and {2} linking in to {3} for a total of {4}'.format(domains_linking_in,
-                domain, altdomaininfo.domains_linking_in, altdomain, domains_linking_in + altdomaininfo.domains_linking_in)
+            print('{0} domains linking in to domain {1} and {2} linking in to {3} for a total of {4}'.format(domains_linking_in,
+                domain, altdomaininfo.domains_linking_in, altdomain, domains_linking_in + altdomaininfo.domains_linking_in))
             domains_linking_in += altdomaininfo.domains_linking_in
         except ObjectDoesNotExist:
             pass
     elif domainfound:
-        print u'{0} domains linking in to domain {1}'.format(domains_linking_in, domain)
+        print('{0} domains linking in to domain {1}'.format(domains_linking_in, domain))
     if not domainfound:
         return Response({'error': 'Domain {0} not found.'.format(domain)}, status=404)
     link_rank = GetLinkRank(domains_linking_in)
@@ -209,7 +209,7 @@ def domain_pages_in_index(request):
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
     altdomain = ReverseWWW(domain, False)
-    print 'Domain: {0}'.format(domain)
+    print('Domain: {0}'.format(domain))
     domainfound = False
     altdomainfound = False
     domaininfo = None
@@ -228,10 +228,10 @@ def domain_pages_in_index(request):
     pages = 0
     if domainfound:
         pages = GetNumberOfDomainPages(domaininfo)
-        print u'{0} pages for domain {1}'.format(pages, domain)
+        print('{0} pages for domain {1}'.format(pages, domain))
     if altdomainfound:
         added = GetNumberOfDomainPages(altdomaininfo)
-        print u'{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages+added)
+        print('{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages+added))
         pages = pages + added
 
     if domaininfo and not (domaininfo.language_association or (domaininfo.language_association == 'en')):
@@ -254,7 +254,7 @@ def domain_keywords_ranked(request):
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
     altdomain = ReverseWWW(domain, False)
-    print 'Domain: {0}'.format(domain)
+    print('Domain: {0}'.format(domain))
     domainfound = False
     altdomainfound = False
     try:
@@ -272,10 +272,10 @@ def domain_keywords_ranked(request):
     keywords = 0
     if domainfound:
         keywords = GetNumberOfDomainKeywordsRanked(domaininfo)
-        print u'{0} keywords for domain {1}'.format(keywords, domain)
+        print('{0} keywords for domain {1}'.format(keywords, domain))
     if altdomainfound:
         added = GetNumberOfDomainKeywordsRanked(altdomaininfo)
-        print u'{0} keywords for domain {1} and {2} keywords for domain {3} for a total of {4}'.format(keywords, domain, added, altdomain, keywords+added)
+        print('{0} keywords for domain {1} and {2} keywords for domain {3} for a total of {4}'.format(keywords, domain, added, altdomain, keywords+added))
 
     return Response({'domain': domain, '{0}_ranked'.format(language): keywords }, status=200)
 
@@ -287,7 +287,7 @@ def autocomplete(request):
     if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     word = request.GET.get('word', None)
-    print 'Word: {0}'.format(word)
+    print('Word: {0}'.format(word))
     return Response({'word': word}, status=200)
 
 
@@ -298,7 +298,7 @@ def check_typo(request):
     if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     word = request.GET.get('word', None)
-    print 'Word: {0}'.format(word)
+    print('Word: {0}'.format(word))
     return Response({'word': word}, status=200)
 
 
@@ -350,7 +350,7 @@ def get_ranks(request):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
     domain = NormalizeDomain(domain)
-    print 'Domain: {0}'.format(domain)
+    print('Domain: {0}'.format(domain))
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
         return Response({'domain': domain, 'alexa_rank': domaininfo.alexa_rank, 'alexa_rank_date': domaininfo.alexa_rank_date,
@@ -371,7 +371,7 @@ def get_whois_info(request):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
     domain = NormalizeDomain(domain)
-    print 'Domain: {0}'.format(domain)
+    print('Domain: {0}'.format(domain))
     # TODO: Query the domain if it does not have whois_last_updated set.
     try:
         domaininfo = DomainInfo.objects.get(url=domain)
@@ -394,7 +394,7 @@ def get_robots_info(request):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
     domain = NormalizeDomain(domain)
-    print 'Domain: {0}'.format(domain)
+    print('Domain: {0}'.format(domain))
     # TODO: Query the domain if it does not have robots_last_updated set.
     try:
         domaininfo = DomainInfo.objects.get(url=domain)

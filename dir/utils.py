@@ -276,7 +276,7 @@ def GetPendingIndexModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'PendingIndex_' + language)
-    except LookupError, e:
+    except LookupError as e:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -294,7 +294,7 @@ def GetIndexModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'IndexTerm_' + language)
-    except LookupError, e:
+    except LookupError as e:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -312,7 +312,7 @@ def GetSiteInfoModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'SiteInfo_' + language)
-    except LookupError, e:
+    except LookupError as e:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -330,7 +330,7 @@ def GetSearchLogModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'SearchLog_' + language)
-    except LookupError, e:
+    except LookupError as e:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -348,7 +348,7 @@ def GetKeywordRankingModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'KeywordRanking_' + language)
-    except LookupError, e:
+    except LookupError as e:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -366,7 +366,7 @@ def GetAutoCompleteModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'AutoComplete_' + language)
-    except LookupError, e:
+    except LookupError as e:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -384,7 +384,7 @@ def GetResultClickModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'ResultClick_' + language)
-    except LookupError, e:
+    except LookupError as e:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -1570,7 +1570,7 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
         # Set ranked keywords for that domain to reindex.
         existing_model = type(site)
         if verbose:
-            print u'MoveSiteTo: Existing model is: {0}'.format(existing_model.__name__)
+            print('MoveSiteTo: Existing model is: {0}'.format(existing_model.__name__))
         # Handle SiteInfo, SiteInfoAfterZ, SiteInfoBeforeZero
         if existing_model.__name__ == 'SiteInfo' or not '_' in existing_model.__name__:
             existlang = 'en'
@@ -1578,14 +1578,14 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
             existlang = existing_model.__name__[-2:]
         ranking_model = GetKeywordRankingModelFromLanguage(existlang)
         if verbose:
-            print u'MoveSiteTo: Ranking model is: {0}'.format(ranking_model)
+            print('MoveSiteTo: Ranking model is: {0}'.format(ranking_model))
         keywords = ranking_model.objects.filter(rooturl=site.rooturl)
         for keyword in keywords:
             if verbose:
                 try:
-                    print u"MoveSiteTo: Keywords '{0}' added to {1} pending index.".format(keyword.keywords, existlang)
+                    print("MoveSiteTo: Keywords '{0}' added to {1} pending index.".format(keyword.keywords, existlang))
                 except:
-                    print u"MoveSiteTo: Keywords added to {0} pending index.".format(existlang)
+                    print("MoveSiteTo: Keywords added to {0} pending index.".format(existlang))
             AddPendingTerm(keyword.keywords, existlang, u'Site {0} moved to {1} and it ranks {2} for {3}'.format(site, language, keyword.rank, keyword.keywords))
         # Set the domain's language. If we're moving a URL parameter or langid page, this is a noop.
         SetDomainLanguage(site.rooturl, language)
@@ -1676,13 +1676,13 @@ def IsHtmlExtension(url):
 
 def IsDomainBlocked(checkdomain, verbose=False):
     if verbose:
-        print u'Checking domain for exclusion: ' + checkdomain
+        print('Checking domain for exclusion: ' + checkdomain)
     if checkdomain.endswith('/'):
         checkdomain = checkdomain[0:-1]
     try:
         blocked_domain = BlockedSite.objects.get(url=checkdomain)
         if verbose:
-            print checkdomain + u' is a blocked domain.'
+            print(checkdomain + u' is a blocked domain.')
         return True
     except ObjectDoesNotExist:
         pass
@@ -1692,12 +1692,12 @@ def IsDomainBlocked(checkdomain, verbose=False):
             blocked_domain = BlockedSite.objects.get(url=root_domain)
             if blocked_domain.exclude_subdomains:
                 if verbose:
-                    print root_domain + u' is a blocked domain with all subdomains blocked.'
+                    print(root_domain + u' is a blocked domain with all subdomains blocked.')
                 return True
     except ObjectDoesNotExist:
         pass
     if verbose:
-        print u'Domain is OK.'
+        print('Domain is OK.')
     return False
 
 def DomainLimitReached(checkdomain, verbose=False):
@@ -1706,14 +1706,14 @@ def DomainLimitReached(checkdomain, verbose=False):
         if not domain.max_urls:
             return False
         if verbose:
-            print u'Domain max urls: {0}, Language: {1}'.format(domain.max_urls, domain.language_association)
+            print('Domain max urls: {0}, Language: {1}'.format(domain.max_urls, domain.language_association))
         if domain.language_association:
             site_model = GetSiteInfoModelFromLanguage(domain.language_association)
         else:
             site_model = GetSiteInfoModelFromLanguage('en')
         total = site_model.objects.filter(rooturl=checkdomain).count()
         if verbose:
-            print u'Number of domain urls: {0}'.format(total)
+            print('Number of domain urls: {0}'.format(total))
         if domain.max_urls and (total >= domain.max_urls):
             return True
     except ObjectDoesNotExist:
@@ -1807,7 +1807,7 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
                     elif pre_crawl_replacement and param.replace_before_crawl:
                         queryparams[param.parameter] = param.replace_with
                     elif post_crawl_replacement and param.remove_or_replace_after_crawl:
-                        #print u'Deleting {0} from URL'.format(param.parameter)
+                        # print u'Deleting {0} from URL'.format(param.parameter)
                         if queryparams.has_key(param.parameter) and not param.replace_with:
                             del queryparams[param.parameter]
                         elif param.replace_with:
@@ -1835,7 +1835,7 @@ def CanCrawlUrl(url, verbose=False):
     if not CanReCrawlUrl(url, verbose):
         return False
     if verbose:
-        print u'Testing CanCrawlURL for: ' + url
+        print('Testing CanCrawlURL for: ' + url)
     # Check 'no new urls' setting for domain extension.
     rooturl = GetRootUrl(url)
     # We only count domain limit on crawl, not recrawl.
@@ -1848,27 +1848,27 @@ def CanCrawlUrl(url, verbose=False):
 def CanReCrawlUrl(url, verbose=False):
     if verbose:
         try:
-            print u'Testing CanReCrawlURL for: ' + url
+            print('Testing CanReCrawlURL for: ' + url)
         except:
-            print u'URL is unprintable. Weird.'
+            print('URL is unprintable. Weird.')
     if not IsHtmlUrl(url):
         if verbose:
-            print u'This is not an HTML URL.'
+            print('This is not an HTML URL.')
         return False
     rooturl = GetRootUrl(url)
     if IsDomainBlocked(rooturl, verbose):
         if verbose:
-            print u'This domain is blocked'
+            print('This domain is blocked')
         return False
     # Check "only root domain" crawl
     try:
         di = DomainInfo.objects.get(url=rooturl)
         if di.only_crawl_rooturl:
             if verbose:
-                print u'This domain has only crawl root url set.'
+                print('This domain has only crawl root url set.')
             if url != rooturl and url != (rooturl + u'/') and url != (u'http://' + rooturl) and url != (u'https://' + rooturl) and url != (u'http://' + rooturl + u'/') and url != (u'https://' + rooturl + u'/'):
                if verbose:
-                   print u'Cannot crawl url because this domain has only crawl root url set and this is not the root url.'
+                   print('Cannot crawl url because this domain has only crawl root url set and this is not the root url.')
                return False
     except:
         pass
@@ -2104,9 +2104,9 @@ def MarkURLContentsAsSpam(html, ip=None):
     domains = []
     for link in soup.find_all('a'):
         hr = link.get('href')
-        #print 'Found URL: ' + hr
+        # print 'Found URL: ' + hr
         rooturl = GetRootUrl(hr)
-        #print 'Tag domain as spam: ' + rooturl
+        # print 'Tag domain as spam: ' + rooturl
         if rooturl not in domains:
             domains.append(rooturl)
     for dom in domains:
@@ -2194,15 +2194,15 @@ def BuildJsonIndex(language='en', limit=None, only_empty=True, sleep=0):
     for term in terms:
         x = x + 1
         if limit and x > limit:
-            print 'Reached limit of ' + str(limit) + ', exiting.'
+            print('Reached limit of ' + str(limit) + ', exiting.')
             return
-        print 'Importing term ' + str(x) + ' of ' + str(term_count) + ': ' + term.keywords
+        print('Importing term ' + str(x) + ' of ' + str(term_count) + ': ' + term.keywords)
         JsonifyIndexTerm(term, language)
         size = len(term.search_results)
         cumulative = cumulative + size
         if sleep:
             time.sleep(sleep)
-        print 'Search results size: ' + str(size) + ', Total Size: ' + str(cumulative)
+        print('Search results size: ' + str(size) + ', Total Size: ' + str(cumulative))
 
 # Requires an IndexTerm, will JSONify and save its search rankings.
 def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
@@ -2539,7 +2539,7 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
 
     try:
         report = MonthlySearchReport.objects.get(month=month, year=year, language=lang)
-        print u'Report already exists for {0}-{1} in {2}. Replacing.'.format(year, month, lang)
+        print('Report already exists for {0}-{1} in {2}. Replacing.'.format(year, month, lang))
     except ObjectDoesNotExist:
         report = MonthlySearchReport()
         report.month = first.month
@@ -2552,7 +2552,7 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
     report.top_searches = ujson.dumps(list(searches))
     if save:
         report.save()
-    print str(report.total_searches) + ' searches in ' + report.language + ' in ' + str(report.year) + '-' + str(report.month)
+    print(str(report.total_searches) + ' searches in ' + report.language + ' in ' + str(report.year) + '-' + str(report.month))
     return report
 
 def GenerateMonthlySearchReports(month=None, year=None, language=None):
@@ -2566,7 +2566,7 @@ def GenerateMonthlySearchReports(month=None, year=None, language=None):
 
 
 def LogQueries(queries):
-    print "Queries: %s" % len(queries)
+    print("Queries: %s" % len(queries))
     totaltime = 0.0
     domaininfo = 0.0
     domaininfototal = 0
@@ -2722,33 +2722,33 @@ def LogQueries(queries):
             settingselect += float(query['time'])
             settingselecttotal += 1
         else:
-            print query
+            print(query)
             other += float(query['time'])
             othertotal += 1
 
-    print 'Domain Info Selects: {0} ({1} seconds)'.format(domaininfototal, domaininfo)
-    print 'Domain Info Updates: {0} ({1} seconds)'.format(domaininfoupdatetotal, domaininfoupdate)
-    print 'Domain Info Inserts: {0} ({1} seconds)'.format(domaininfoinserttotal, domaininfoinsert)
-    print 'Site Info Selects: {0} ({1} seconds)'.format(siteinfototal, siteinfo)
-    print 'Site Info Inserts: {0} ({1} seconds)'.format(siteinfoinserttotal, siteinfoinsert)
-    print 'Site Info Updates: {0} ({1} seconds)'.format(siteinfoupdatetotal, siteinfoupdate)
-    print 'Index Term Selects: {0} ({1} seconds)'.format(indextermtotal, indexterm)
-    print 'Index Term Updates: {0} ({1} seconds)'.format(indextermupdatetotal, indextermupdate)
-    print 'Index Term Inserts: {0} ({1} seconds)'.format(indexterminserttotal, indexterminsert)
-    print 'Pending Index Selects: {0} ({1} seconds)'.format(pendingindextotal, pendingindex)
-    print 'Pending Index Deletes: {0} ({1} seconds)'.format(pendingindexdeletetotal, pendingindexdelete)
-    print 'Crawlable URL Selects: {0} ({1} seconds)'.format(pendingurltotal, pendingurl)
-    print 'Crawlable URL Inserts: {0} ({1} seconds)'.format(pendingurlinserttotal, pendingurlinsert)
-    print 'Crawlable URL Deletes: {0} ({1} seconds)'.format(pendingurldeletetotal, pendingurldelete)
-    print 'URL Parameter Selects: {0} ({1} seconds)'.format(urlparamselecttotal, urlparamselect)
-    print 'URL Link Selects: {0} ({1} seconds)'.format(urllinkselecttotal, urllinkselect)
-    print 'URL Link Inserts: {0} ({1} seconds)'.format(urllinkinserttotal, urllinkinsert)
-    print 'Blocked Site Selects: {0} ({1} seconds)'.format(BlockedSitetotal, BlockedSite)
-    print 'Domain Suffix Selects: {0} ({1} seconds)'.format(domainextensiontotal, domainextension)
-    print 'Setting Selects: {0} ({1} seconds)'.format(settingselecttotal, settingselect)
-    print 'Keyword Ranking Selects, Inserts, and Deletes: {0} ({1} seconds)'.format(keywordrankingtotal, keywordranking)
-    print 'Big Select Selects: {0} ({1} seconds)'.format(bigselecttotal, bigselect)
-    print 'Other: {0} ({1} seconds)'.format(othertotal, other)
+    print('Domain Info Selects: {0} ({1} seconds)'.format(domaininfototal, domaininfo))
+    print('Domain Info Updates: {0} ({1} seconds)'.format(domaininfoupdatetotal, domaininfoupdate))
+    print('Domain Info Inserts: {0} ({1} seconds)'.format(domaininfoinserttotal, domaininfoinsert))
+    print('Site Info Selects: {0} ({1} seconds)'.format(siteinfototal, siteinfo))
+    print('Site Info Inserts: {0} ({1} seconds)'.format(siteinfoinserttotal, siteinfoinsert))
+    print('Site Info Updates: {0} ({1} seconds)'.format(siteinfoupdatetotal, siteinfoupdate))
+    print('Index Term Selects: {0} ({1} seconds)'.format(indextermtotal, indexterm))
+    print('Index Term Updates: {0} ({1} seconds)'.format(indextermupdatetotal, indextermupdate))
+    print('Index Term Inserts: {0} ({1} seconds)'.format(indexterminserttotal, indexterminsert))
+    print('Pending Index Selects: {0} ({1} seconds)'.format(pendingindextotal, pendingindex))
+    print('Pending Index Deletes: {0} ({1} seconds)'.format(pendingindexdeletetotal, pendingindexdelete))
+    print('Crawlable URL Selects: {0} ({1} seconds)'.format(pendingurltotal, pendingurl))
+    print('Crawlable URL Inserts: {0} ({1} seconds)'.format(pendingurlinserttotal, pendingurlinsert))
+    print('Crawlable URL Deletes: {0} ({1} seconds)'.format(pendingurldeletetotal, pendingurldelete))
+    print('URL Parameter Selects: {0} ({1} seconds)'.format(urlparamselecttotal, urlparamselect))
+    print('URL Link Selects: {0} ({1} seconds)'.format(urllinkselecttotal, urllinkselect))
+    print('URL Link Inserts: {0} ({1} seconds)'.format(urllinkinserttotal, urllinkinsert))
+    print('Blocked Site Selects: {0} ({1} seconds)'.format(BlockedSitetotal, BlockedSite))
+    print('Domain Suffix Selects: {0} ({1} seconds)'.format(domainextensiontotal, domainextension))
+    print('Setting Selects: {0} ({1} seconds)'.format(settingselecttotal, settingselect))
+    print('Keyword Ranking Selects, Inserts, and Deletes: {0} ({1} seconds)'.format(keywordrankingtotal, keywordranking))
+    print('Big Select Selects: {0} ({1} seconds)'.format(bigselecttotal, bigselect))
+    print('Other: {0} ({1} seconds)'.format(othertotal, other))
 
     return totaltime
 
@@ -2774,7 +2774,7 @@ def PornBlock(item=None, url=None):
         # If this domain is unblockable, then just delete the URL, because if someone checked
         # blog they at least want to nuke the URLs they just selected.
         if domain.is_unblockable:
-            print 'Domain is unblockable, just deleting URL {0}'.format(item.url)
+            print('Domain is unblockable, just deleting URL {0}'.format(item.url))
             item.delete()
             return
     except ObjectDoesNotExist:
@@ -2792,26 +2792,26 @@ def PornBlock(item=None, url=None):
     elif url:
         rooturl = GetRootUrl(parsedurl)
         rootdomain = GetRootDomain(parsedurl)
-    print u'Rootdomain is {0}'.format(rootdomain)
+    print('Rootdomain is {0}'.format(rootdomain))
     # Track whether the root domain is unblockable.
     unblockable = False
     try:
         domain = DomainInfo.objects.get(url=rootdomain)
         if domain.is_unblockable:
-            print u'Root domain {0} is unblockable.'.format(rootdomain)
+            print('Root domain {0} is unblockable.'.format(rootdomain))
             unblockable = True
     except ObjectDoesNotExist:
         pass
     # If the root domain does not match the current domain, block the root and clear out its
     # URLs, provided the root is not unblockable.
     if (rootdomain != rooturl) and not unblockable:
-        print u'Removing URLs for root domain {0}.'.format(rootdomain)
+        print('Removing URLs for root domain {0}.'.format(rootdomain))
         RemoveURLsForDomain(rootdomain)
         try:
             site = BlockedSite.objects.get(url=rootdomain)
-            print u'Root domain {0} was already blocked. That is odd.'.format(rootdomain)
+            print('Root domain {0} was already blocked. That is odd.'.format(rootdomain))
         except ObjectDoesNotExist:
-            print u'Adding BlockedSite for root domain {0}.'.format(rootdomain)
+            print('Adding BlockedSite for root domain {0}.'.format(rootdomain))
             site = BlockedSite()
             site.url = rootdomain
             site.reason = 4
@@ -2822,13 +2822,13 @@ def PornBlock(item=None, url=None):
     # Or, if this *is* the root domain, clear out all of the URLs, provided they are not blockable.
     # Technically, the "domain is root" and blockable case will never be true due to the check at the
     # beginning of this function, so we just go ahead and block.
-    print u'Blocking URLs for domain {0}'.format(parsedurl)
+    print('Blocking URLs for domain {0}'.format(parsedurl))
     RemoveURLsForDomain(parsedurl)
     try:
         existing = BlockedSite.objects.get(url=parsedurl)
-        print u'Domain {0} was already blocked. That is odd.'.format(parsedurl)
+        print('Domain {0} was already blocked. That is odd.'.format(parsedurl))
     except ObjectDoesNotExist:
-        print u'Adding BlockedSite for domain {0}.'.format(parsedurl)
+        print('Adding BlockedSite for domain {0}.'.format(parsedurl))
         site = BlockedSite()
         site.url = parsedurl
         site.reason = 4
@@ -2844,7 +2844,7 @@ def PornBlock(item=None, url=None):
         pass
 
 def BannedSearchString(text):
-    #print 'Checking {0} for banned search string.'.format(text)
+    # print 'Checking {0} for banned search string.'.format(text)
     if '\0' in text:
         return True
     if (text.endswith(u'a=0') or text.endswith(u'A=0') or u'11111111' in text or u'999999' in text or u'sleep(3)' in text or
@@ -3365,19 +3365,19 @@ def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=Fals
         raise ValueError(u"Keywords '{0}' not found.".format(keywords))
     result = CalculateTermValue(siteinfo, keywords, lang=lang, verbose=False)
     if verbose:
-        print u'Term {0} value for {1} is {2}'.format(keywords, siteinfo.url, result)
+        print('Term {0} value for {1} is {2}'.format(keywords, siteinfo.url, result))
         reasons = CalculateTermValue(siteinfo, keywords, lang=lang, verbose=True)
-        print u'Term {0} reasons for {1} is {2}'.format(keywords, siteinfo.url, reasons)
+        print('Term {0} reasons for {1} is {2}'.format(keywords, siteinfo.url, reasons))
     search_results = ujson.loads(existing.search_results)
     rank = 0
     for idx, item in enumerate(search_results):
         if verbose and idx == 0:
-            print u'Index {0} score is {1}'.format(idx, item[1]['score'])
+            print('Index {0} score is {1}'.format(idx, item[1]['score']))
         if item[1]['score'] < result:
             rank = idx
             break
     if verbose:
-        print u'Page {0} would rank {1} for {2}'.format(siteinfo.url, rank, keywords)
+        print('Page {0} would rank {1} for {2}'.format(siteinfo.url, rank, keywords))
     return rank
 
 def SplitTitleAndGetPageRanks(siteinfo, minlength=3):
@@ -3401,14 +3401,14 @@ def SplitTitleAndGetPageRanks(siteinfo, minlength=3):
             results.append(u'{0} = {1}'.format(term, place))
             if place != 0 and place <= 200:
                 need_to_index.append(term)
-        except ValueError, e:
+        except ValueError as e:
             notfound.append(term)
             try:
-                print e
+                print(e)
             except:
-                print 'ValueError - one of the words in the title was not found, but it is unprintable.'
+                print('ValueError - one of the words in the title was not found, but it is unprintable.')
     for result in results:
-        print result
+        print(result)
     return need_to_index
 
 

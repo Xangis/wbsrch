@@ -44,11 +44,11 @@ class Command(BaseCommand):
                     di = DomainInfo.objects.get(url=line)
                 except ObjectDoesNotExist:
                     if info:
-                        print u'{0}'.format(line)
+                        print('{0}'.format(line))
                     else:
                         di = DomainInfo()
                         di.url = line
-                        print u'Added domain entry for {0}'.format(di.url)
+                        print('Added domain entry for {0}'.format(di.url))
                         di.save()
             exit()
         start = timezone.now()
@@ -69,7 +69,7 @@ class Command(BaseCommand):
             else:
                 dom = domain['rooturl']
             if dom.startswith('http:') or dom.startswith('https:'):
-                print u'{0} has an incorrect rooturl.'.format(dom)
+                print('{0} has an incorrect rooturl.'.format(dom))
                 continue
             try:
                 di = DomainInfo.objects.get(url=dom)
@@ -79,7 +79,7 @@ class Command(BaseCommand):
                     di.url = domain['url']
                 else:
                     di.url = domain['rooturl']
-                print u'Added domain entry for {0}'.format(di.url)
+                print('Added domain entry for {0}'.format(di.url))
                 di.save()
                 added = added + 1
             if options['tagverify'] and options['language'] != 'en':
@@ -87,9 +87,9 @@ class Command(BaseCommand):
                     di.language_association = options['language']
                     di.save()
                     langassoc = langassoc + 1
-                    print u'Domain {0} marked as {1}'.format(di.url, options['language'])
+                    print('Domain {0} marked as {1}'.format(di.url, options['language']))
             processed = processed + 1
             if processed >= max:
                 break
         elapsed = timezone.now() - start
-        print u'Processed {0} domains from {1} and added {2} new entries in {3} seconds and set {4} languages.'.format(processed, site_model, added, elapsed.total_seconds(), langassoc)
+        print('Processed {0} domains from {1} and added {2} new entries in {3} seconds and set {4} languages.'.format(processed, site_model, added, elapsed.total_seconds(), langassoc))

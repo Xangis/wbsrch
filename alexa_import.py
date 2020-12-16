@@ -43,10 +43,10 @@ def LoadAlexaFile(filename):
     with open(filename, 'rb') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         # Set all Alexa results as old.
-        print u'Marking all previous alexa rank data as outdated.'
+        print('Marking all previous alexa rank data as outdated.')
         cursor = connection.cursor()
         cursor.execute('UPDATE dir_domaininfo SET alexa_outdated = true WHERE alexa_outdated = false;')
-        print u'Updating ranks.'
+        print('Updating ranks.')
         for row in reader:
             if len(row) == 2:
                 print('Domain ' + row[1] + ' ranks ' + row[0])
@@ -86,13 +86,13 @@ def LoadAlexaFile(filename):
         for item in processed:
             outfile.write('%s\n' % item)
         outfile.close()
-    print 'Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.'
+    print('Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.')
 
 if not os.path.isfile('top-1m.csv'):
-    print u'File top-1m.csv does not exist. Retrieving.'
+    print('File top-1m.csv does not exist. Retrieving.')
     filename = wget.download('http://s3.amazonaws.com/alexa-static/top-1m.csv.zip')
     if not filename:
-        print u'Failed to download Alexa file.'
+        print('Failed to download Alexa file.')
         exit(0)
     zip_ref = zipfile.ZipFile('./top-1m.csv.zip', 'r')
     zip_ref.extractall('.')

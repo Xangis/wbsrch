@@ -44,7 +44,7 @@ def LoadAlexaFile(filename):
         print('Marking all previous Majestic rank data as outdated.')
         cursor = connection.cursor()
         cursor.execute('UPDATE dir_domaininfo SET majestic_outdated = true WHERE majestic_outdated = false;')
-        print u'Updating ranks.'
+        print('Updating ranks.')
         # GlobalRank,TldRank,Domain,TLD,RefSubNets,RefIPs,IDN_Domain,IDN_TLD,PrevGlobalRank,PrevTldRank,PrevRefSubNets,PrevRefIPs
         # 1,1,google.com,com,492996,3120968,google.com,com,1,1,491732,3118138
         # 2,2,facebook.com,com,477119,3140009,facebook.com,com,2,2,475930,3138386
@@ -77,12 +77,12 @@ def LoadAlexaFile(filename):
         for item in processed:
             outfile.write('%s\n' % item)
         outfile.close()
-    print 'Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.'
+    print('Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.')
 
 if not os.path.isfile('majestic_million.csv'):
-    print u'File majestic_million.csv does not exist. Retrieving.'
+    print('File majestic_million.csv does not exist. Retrieving.')
     filename = wget.download('http://downloads.majestic.com/majestic_million.csv')
     if not filename:
-        print u'Failed to download Majestic file.'
+        print('Failed to download Majestic file.')
         exit(0)
 LoadAlexaFile('majestic_million.csv')

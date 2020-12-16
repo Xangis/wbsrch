@@ -36,27 +36,27 @@ class Command(BaseCommand):
         nonumbers = options.get('nonumbers', False)
         index_model = GetIndexModelFromLanguage(language)
         check = index_model.objects.filter(num_results__lt=under, typo_for__isnull=True, refused=False).order_by('keywords')[skip:]
-        print u'Found {0} items to check.'.format(check.count())
+        print('Found {0} items to check.'.format(check.count()))
         for pos, item in enumerate(check):
             if nonumbers and any(i.isdigit() for i in item.keywords):
                 continue
-            print u'{1}: Checking {0}'.format(item.keywords, pos+skip)
+            print('{1}: Checking {0}'.format(item.keywords, pos+skip))
             cursor = connections['indexes'].cursor()
             cursor.execute("SELECT keywords, num_results FROM dir_indexterm WHERE KEYWORDS != %s AND num_results > {1} AND levenshtein(keywords, %s) <= {0} ORDER BY num_results DESC;".format(distance, over), [item.keywords, item.keywords])
             possible_words = cursor.fetchall()
             for word in possible_words:
-                print word
+                print(word)
             if len(possible_words) < 1:
-                print 'No matches found, skipping.'
+                print('No matches found, skipping.')
                 continue
             if len(possible_words) == 1:
                 word = str(possible_words[0])
                 # Adding or removing an S is not a match.
                 if (item.keywords + u's') == word:
-                    print 'No matches found, skipping.'
+                    print('No matches found, skipping.')
                     continue
                 if (word + u's') == item.keywords:
-                    print 'No matches found, skipping.'
+                    print('No matches found, skipping.')
                     continue
             input = raw_input(u'Enter correct word, s to skip, q to quit: ')
             input = input.lower()
@@ -65,7 +65,7 @@ class Command(BaseCommand):
             elif input == 's' or len(input) < 2:
                 continue
             else:
-                print u'Setting "{0}" as typo_for on {1}'.format(input, item.keywords)
+                print('Setting "{0}" as typo_for on {1}'.format(input, item.keywords))
                 item.typo_for = input
                 item.save()
 

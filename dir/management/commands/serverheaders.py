@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         url = options['justthisurl']
-        print u'Retrieving ' + unicode(url)
+        print('Retrieving ' + unicode(url))
         req = urllib2.Request(url)
         try:
             user_agent = Setting.objects.get(name='wbsrch_user_agent')
@@ -25,13 +25,13 @@ class Command(BaseCommand):
         try:
             response = urllib2.urlopen(req, timeout=20)
         except:
-            print u'Failed to retrieve URL.'
+            print('Failed to retrieve URL.')
 
         info = response.info()
-        print info
+        print(info)
         idict = dict(info)
-        print idict        
-        print u'Server = {0}'.format(idict.get('server', None))
-        print u'Content Type = {0}'.format(idict.get('content-type', None))
-        print idict['server']
-        print idict['content-type']
+        print(idict)
+        print('Server = {0}'.format(idict.get('server', None)))
+        print('Content Type = {0}'.format(idict.get('content-type', None)))
+        print(idict['server'])
+        print(idict['content-type'])

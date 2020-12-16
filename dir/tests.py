@@ -832,7 +832,7 @@ class InfixLanguageTestCase(TestCase):
         language = None
         try:
             GetInfixLanguage(url)
-        except InvalidLanguageException, e:
+        except InvalidLanguageException as e:
             self.assertEqual(e.language, u'ru')
 
     def test_zh_cn_infix(self):
@@ -840,7 +840,7 @@ class InfixLanguageTestCase(TestCase):
         language = None
         try:
             GetInfixLanguage(url)
-        except InvalidLanguageException, e:
+        except InvalidLanguageException as e:
             self.assertEqual(e.language, u'zh')
 
     def test_uk_uk_infix(self):
@@ -848,7 +848,7 @@ class InfixLanguageTestCase(TestCase):
         language = None
         try:
             GetInfixLanguage(url)
-        except InvalidLanguageException, e:
+        except InvalidLanguageException as e:
             self.assertEqual(e.language, u'uk')
 
     def test_somali_infix(self):
@@ -2082,47 +2082,47 @@ class ModelStringsTestCase(TestCase):
 
     def testSetting(self):
         s = Setting()
-        print s
+        print(s)
 
     def testChangeLogItem(self):
         i = ChangelogItem()
-        print i    
+        print(i)
 
     def testBlockedSite(self):
         e = BlockedSite()
-        print e
+        print(e)
 
     def testDomainInfo(self):
         e = DomainInfo()
-        print e
+        print(e)
 
     def testDomainExtension(self):
         e = DomainSuffix()
-        print e
+        print(e)
 
     def testPendingUrl(self):
         e = CrawlableUrl()
-        print e
+        print(e)
 
     def testSiteInfo(self):
         e = SiteInfo()
-        print e
+        print(e)
 
     def testSearchLog(self):
         e = SearchLog()
-        print e
+        print(e)
 
     def testPendingIndex(self):
         e = PendingIndex()
-        print e
+        print(e)
 
     def testIndexTerm(self):
         e = IndexTerm()
-        print e
+        print(e)
 
     def testIPAddress(self):
         e = IPAddress()
-        print e
+        print(e)
 
     def tearDown(self):
         pass
@@ -2448,7 +2448,7 @@ class PornBlockTestCase(TestCase):
 class WhoisTestCase(TestCase):
     def testDomainAge(self):
         ages = GetDomainAge(u'zetacentauri.com')
-        print ages
+        print(ages)
         self.assertNotEqual(ages, None)
 
 class ReverseWWWTestCase(TestCase):

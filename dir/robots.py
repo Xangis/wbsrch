@@ -12,11 +12,11 @@ def GetIPAddress(url, descriptive=False):
     try:
         ip = socket.gethostbyname(url)
         if descriptive:
-            print u'IP address is: {0}'.format(ip)
+            print('IP address is: {0}'.format(ip))
         return ip
     except:
         if descriptive:
-            print u'IP address not found.'
+            print(('IP address not found.')
 
 def AllowedByRobots(url, domaininfo, use_google_agent=True):
     """
@@ -50,7 +50,7 @@ def CheckUrlAgainstRobotsFile(url):
     rooturl = GetRootUrl(url)
     rp.set_url(rooturl + '/robots.txt')
     allowed = rp.is_allowed('*', url)
-    print 'URL "{0}" allowed by robots: {1}'.format(url, allowed)
+    print('URL "{0}" allowed by robots: {1}'.format(url, allowed))
     return allowed
 
 def GetRobotsFile(domain, descriptive=False, save_failures=False):
@@ -63,7 +63,7 @@ def GetRobotsFile(domain, descriptive=False, save_failures=False):
     """
     # TODO: Get the robots.txt file for a domain and store it.
     url = u'http://{0}/robots.txt'.format(domain.url)
-    print u'GetRobotsFile: {0}'.format(url)
+    print('GetRobotsFile: {0}'.format(url))
     req = urllib2.Request(url)
 
     try:
@@ -83,9 +83,9 @@ def GetRobotsFile(domain, descriptive=False, save_failures=False):
                     pass
             if realurl[7:] == url [8:] or realurl[8:] == url[7:]:
                 if descriptive:
-                    print 'ITS ONLY AN HTTP => HTTPS REDIRECT, WE ARE OK'
+                    print('ITS ONLY AN HTTP => HTTPS REDIRECT, WE ARE OK')
             else:
-                print u'Request returned different URL: {0}, marking as no robots.txt'.format(realurl)
+                print('Request returned different URL: {0}, marking as no robots.txt'.format(realurl))
                 # We cannot set the IP here because we didn't get the server we asked for.
                 domain.robots_txt = ''
                 domain.robots_last_updated = timezone.now()
@@ -98,14 +98,14 @@ def GetRobotsFile(domain, descriptive=False, save_failures=False):
         except LookupError:
             text = response.read().strip()
         if text.startswith('<html') or text.startswith('<HTML') or text.startswith('<!DOCTYPE') or text.startswith('<doctype') or text.startswith('<head') or text.startswith('<!doctype') or text.startswith('<script') or text.startswith('<?php') or text.startswith('<br />') or text.startswith('<head') or text.startswith('<h1'):
-            print u'Request returned HTML, marking as no robots.txt'
+            print('Request returned HTML, marking as no robots.txt')
             domain.robots_ip = GetIPAddress(domain.url, descriptive)
             domain.robots_txt = ''
             domain.robots_last_updated = timezone.now()
             domain.save()
         try:
             if descriptive:
-                print u'Robots Response: {0}'.format(text)
+                print('Robots Response: {0}'.format(text))
         except:
             pass
         if response:

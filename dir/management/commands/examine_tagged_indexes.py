@@ -38,7 +38,7 @@ class Command(BaseCommand):
         cutoff = options.get('cutoff', None)
         shutup = options.get('shutup', None)
         if not language and not blocked and not refused:
-            print u'One of language, blocked, or refused is required.'
+            print('One of language, blocked, or refused is required.')
             return
         if language:
             items = IndexTerm.objects.filter(is_language=language)
@@ -47,12 +47,12 @@ class Command(BaseCommand):
         elif blocked:
             items = IndexTerm.objects.filter(actively_blocked=True)
         counts = Counter()
-        print u'Processing {0} index terms.'.format(items.count())
+        print('Processing {0} index terms.'.format(items.count()))
         for item in items:
             sites = json.loads(item.search_results)
             for site in sites:
                 num = len(site[1]['urls'])
-                #print "{0} = {1}".format(site[0], num)
+                # print "{0} = {1}".format(site[0], num)
                 if includeall:
                     counts.update({ site[0] : num })
                 else:
@@ -72,11 +72,11 @@ class Command(BaseCommand):
                             counts.update({ site[0] : num })
                     except ObjectDoesNotExist:
                         if not shutup:
-                            print 'Domain {0} not found for term {1}'.format(site[0], item.keywords)
+                            print('Domain {0} not found for term {1}'.format(site[0], item.keywords))
                         counts.update({ site[0] : num })
         for item in counts.most_common():
             if threshold and item[1] < threshold:
                 break
             if cutoff and item[1] > cutoff:
                 continue
-            print '{0} {1}  https://wbsrch.com/domain/?q={1}'.format(item[1], item[0], item[0])
+            print('{0} {1}  https://wbsrch.com/domain/?q={1}'.format(item[1], item[0], item[0]))

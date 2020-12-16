@@ -19,6 +19,6 @@ import datetime
 import csv
 
 for exclude in ExcludedSite.objects.all():
-    print 'Removing ' + exclude.url
+    print('Removing ' + exclude.url)
     RemoveURLsForDomain(exclude.url)
-    time.sleep(0.05)    
+    time.sleep(0.05)

@@ -45,7 +45,7 @@ class Command(BaseCommand):
         offset = 0
         if options.has_key('offset'):
             offset = int(options['offset'])
-        print u'Checking robots.txt rules for urls with a max of ' + str(max) + u' and offset ' + str(offset) + u'.'
+        print('Checking robots.txt rules for urls with a max of ' + str(max) + u' and offset ' + str(offset) + u'.')
         if onlyfromdomain:
             pending = site_model.objects.filter(rooturl=onlyfromdomain)[offset:offset+max]
         else:
@@ -57,7 +57,7 @@ class Command(BaseCommand):
                 domain = DomainInfo.objects.get(url=link.rooturl)
                 if forcerobots and domain.robots_last_updated is None:
                     if verbose:
-                        print 'Need to retrieve robots file for {0}'.format(link.rooturl)
+                        print('Need to retrieve robots file for {0}'.format(link.rooturl))
                     GetRobotsFile(domain, descriptive=verbose, save_failures=True)
                     gotrobots = gotrobots + 1
                 if domain.robots_last_updated is None:
@@ -83,22 +83,22 @@ class Command(BaseCommand):
             else:
                 blocked = blocked + 1
                 if verbose:
-                    print u'{0} is blocked for all sites.'.format(link.url)
+                    print('{0} is blocked for all sites.'.format(link.url))
             if rerp.is_allowed('Mozilla/5.0 (compatible; WbSrch/1.1; +https://wbsrch.com)', link.url):
                 wbok = wbok + 1
             else:
                 wbblocked = wbblocked + 1
                 if verbose:
-                    print u'{0} is blocked for WbSrch.'.format(link.url)
+                    print('{0} is blocked for WbSrch.'.format(link.url))
             if rerp.is_allowed('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', link.url):
                 gok = gok + 1
             else:
                 gblocked = gblocked + 1
                 if verbose:
-                    print u'{0} is blocked for Google.'.format(link.url)
+                    print('{0} is blocked for Google.'.format(link.url))
                 if nuke:
-                    print u'{0} is nuked because it is blocked for Google.'.format(link.url)
+                    print('{0} is nuked because it is blocked for Google.'.format(link.url))
                     link.delete()
-        print u'Of the existing {0} urls, {1} are blocked for all sites by robots.txt and {2} are OK. attempted to retrieve {4} robots files and {3} failed to retrieve robots.txt.'.format(
-              totalurls, blocked, ok, norobots, gotrobots)
-        print u'{0} are blocked for Google, {1} blocked for WbSrch, {2} are OK for Google, {3} are OK for WbSrch.'.format(gblocked, wbblocked, gok, wbok)
+        print('Of the existing {0} urls, {1} are blocked for all sites by robots.txt and {2} are OK. attempted to retrieve {4} robots files and {3} failed to retrieve robots.txt.'.format(
+              totalurls, blocked, ok, norobots, gotrobots))
+        print('{0} are blocked for Google, {1} blocked for WbSrch, {2} are OK for Google, {3} are OK for WbSrch.'.format(gblocked, wbblocked, gok, wbok))

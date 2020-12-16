@@ -39,14 +39,14 @@ class Command(BaseCommand):
         domains = {}
 
         for page in pages:
-            #print page
+            # print page
             id = page.get('id')
             rooturl = page.get('rooturl')
             title = page.get('pagetitle', None)
             if title:
                 for n in re.findall(u'[\u4e00-\u9fff]+', title):
-                    #print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
-                    #print title
+                    # print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
+                    # print title
                     if domains.has_key(rooturl):
                         domains[rooturl] = domains[rooturl] + 1
                     else:
@@ -54,9 +54,9 @@ class Command(BaseCommand):
                     break
             pagefirstheadtag = page.get('pagefirstheadtag', None)
             if pagefirstheadtag:
-                for n in re.findall(ur'[\u4e00-\u9fff]+', pagefirstheadtag):
-                    #print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
-                    #print pagefirstheadtag
+                for n in re.findall(r'[\u4e00-\u9fff]+', pagefirstheadtag):
+                    # print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
+                    # print pagefirstheadtag
                     if domains.has_key(rooturl):
                         domains[rooturl] = domains[rooturl] + 1
                     else:
@@ -64,9 +64,9 @@ class Command(BaseCommand):
                     break
             pagefirsth2tag = page.get('pagefirsth2tag', None)
             if pagefirsth2tag:
-                for n in re.findall(ur'[\u4e00-\u9fff]+', pagefirsth2tag):
-                    #print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
-                    #print pagefirstheadtag
+                for n in re.findall(r'[\u4e00-\u9fff]+', pagefirsth2tag):
+                    # print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
+                    # print pagefirstheadtag
                     if domains.has_key(rooturl):
                         domains[rooturl] = domains[rooturl] + 1
                     else:
@@ -74,9 +74,9 @@ class Command(BaseCommand):
                     break
             pagefirsth3tag = page.get('pagefirsth3tag', None)
             if pagefirsth3tag:
-                for n in re.findall(ur'[\u4e00-\u9fff]+', pagefirsth3tag):
-                    #print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
-                    #print pagefirstheadtag
+                for n in re.findall(r'[\u4e00-\u9fff]+', pagefirsth3tag):
+                    # print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
+                    # print pagefirstheadtag
                     if domains.has_key(rooturl):
                         domains[rooturl] = domains[rooturl] + 1
                     else:
@@ -86,6 +86,6 @@ class Command(BaseCommand):
         results = sorted(domains.iteritems(), key=lambda item: item[1], reverse=False)
         for result in results:
             if result[1] >= threshold:
-                print '{0} - {1}'.format(result[1], result[0])
+                print('{0} - {1}'.format(result[1], result[0]))
                 printed = printed + 1
-        print u'Processed {0} urls and found {1} domains that are probably asian and {2} met print threshold.'.format(processed, len(results), printed)
+        print('Processed {0} urls and found {1} domains that are probably asian and {2} met print threshold.'.format(processed, len(results), printed))

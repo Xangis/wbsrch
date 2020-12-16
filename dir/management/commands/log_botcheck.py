@@ -10,7 +10,7 @@ def CheckLogsForBots(lang, options):
     log_model = GetSearchLogModelFromLanguage(lang)
     total = log_model.objects.all().count()
     logs = log_model.objects.filter(is_bot=False, browserstring__isnull=False)
-    print u'{0} total log entries in {1}, {2} need to be checked'.format(total, lang, logs.count())
+    print('{0} total log entries in {1}, {2} need to be checked'.format(total, lang, logs.count()))
     changed = 0
     checked = 0
     for log in logs:
@@ -20,8 +20,8 @@ def CheckLogsForBots(lang, options):
             changed += 1
         checked = checked + 1
         if checked % 100000 == 0:
-            print u'{0} checked.'.format(checked)
-    print u'{0} of {1} log entries in {2} were checked. {3} newly marked as bots. Others were already bots or had no browser string.'.format(checked, total, lang, changed)
+            print('{0} checked.'.format(checked))
+    print('{0} of {1} log entries in {2} were checked. {3} newly marked as bots. Others were already bots or had no browser string.'.format(checked, total, lang, changed))
 
 class Command(BaseCommand):
     help = """

@@ -57,7 +57,7 @@ class Command(BaseCommand):
             scores = sorted(langcounts.iteritems(), key=lambda item: item[1], reverse=True)
             if len(scores) < 1:
                 continue
-            print u'Scores for "{0}": {1}'.format(keyword, scores)
+            print('Scores for "{0}": {1}'.format(keyword, scores))
             if scores[0][0] == 'en':
                 notprompted = notprompted + 1
                 continue

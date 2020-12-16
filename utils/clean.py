@@ -15,7 +15,7 @@ def CleanFile(filename):
         for item in crawl_needed:
             outfile.write('%s\n' % item)
         outfile.close()
-    print u'{0} domains copied into {1}.txt'.format(len(crawl_needed), filename[0:(len(filename)-4)])
+    print('{0} domains copied into {1}.txt'.format(len(crawl_needed), filename[0:(len(filename)-4)]))
 
 for item in os.listdir('.'):
     if os.path.isfile(item) and item.endswith('.csv'):

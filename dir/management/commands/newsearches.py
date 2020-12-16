@@ -21,4 +21,4 @@ class Command(BaseCommand):
             logmodel = GetSearchLogModelFromLanguage(item)
             logs = logmodel.objects.filter(indexed=False, is_bot=False, last_search__gte=start).distinct('keywords') #.order_by('-search_time')
             for log in logs:
-                print u"{0} (in {1})".format(log.keywords, item)
+                print("{0} (in {1})".format(log.keywords, item))

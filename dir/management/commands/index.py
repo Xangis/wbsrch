@@ -35,6 +35,6 @@ class Command(BaseCommand):
                 pimodel = GetPendingIndexModelFromLanguage(item)
                 cnt = pimodel.objects.all().count()
                 if cnt:
-                    print u'{0} pending in {1}'.format(cnt, item)
+                    print('{0} pending in {1}'.format(cnt, item))
             exit()
         Indexer(options)

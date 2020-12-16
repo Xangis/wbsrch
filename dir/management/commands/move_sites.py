@@ -37,7 +37,7 @@ class Command(BaseCommand):
         else:
             site_model = GetSiteInfoModelFromLanguage(sourcelang)
         items = site_model.objects.filter(rooturl__endswith=extension).values('rooturl').distinct().order_by('rooturl')
-        print u'Num domains to check: {0}'.format(items.count())
+        print('Num domains to check: {0}'.format(items.count()))
         processed = 0
         pagesmoved = 0
         domainsmoved = 0
@@ -55,7 +55,7 @@ class Command(BaseCommand):
                     domain = DomainInfo()
                     domain.url = item['rooturl']
                     domain.save()
-                print u'Blocking {0}'.format(item['rooturl'])
+                print('Blocking {0}'.format(item['rooturl']))
                 try:
                     existing = BlockedSite.objects.get(url=item['rooturl'])
                     # If the domain is already blocked, the URL must have been added erroneously.
@@ -71,12 +71,12 @@ class Command(BaseCommand):
             try:
                 di = DomainInfo.objects.get(url = item['rooturl'])
                 if di.uses_language_subdirs or di.uses_langid:
-                    print 'Domain {0} uses a language categorization scheme but we do not handle those yet. Skipping.'.format(item['rooturl'])
+                    print('Domain {0} uses a language categorization scheme but we do not handle those yet. Skipping.'.format(item['rooturl']))
                     continue
                 elif di.language_association and (di.language_association != lang):
                     if di.language_association != 'en' and lang != 'en':
                         # Moving one language's items to another's table
-                        print u'Language association changed to {0}'.format(lang)
+                        print('Language association changed to {0}'.format(lang))
                         di.language_association = lang
                         di.save()
                     else:
@@ -85,7 +85,7 @@ class Command(BaseCommand):
                 if createinfo:
                     di = DomainInfo()
                     di.url = item['rooturl']
-                    print u'Added domain entry for {0}'.format(di.url)
+                    print('Added domain entry for {0}'.format(di.url))
                     di.save()
             pages = site_model.objects.filter(rooturl=item['rooturl'])
             domainpages = 0
@@ -93,6 +93,6 @@ class Command(BaseCommand):
                 MoveSiteTo(page, lang, True)
                 pagesmoved = pagesmoved + 1
                 domainpages = domainpages + 1
-            print u'Moved {0} pages for {1} to {2}'.format(domainpages, item['rooturl'], lang)
+            print('Moved {0} pages for {1} to {2}'.format(domainpages, item['rooturl'], lang))
             domainsmoved = domainsmoved + 1
-        print u'Processed {0} domains and moved {1} domains totaling {2} pages to {3}'.format(processed, domainsmoved, pagesmoved, lang)
+        print('Processed {0} domains and moved {1} domains totaling {2} pages to {3}'.format(processed, domainsmoved, pagesmoved, lang))

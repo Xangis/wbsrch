@@ -81,7 +81,7 @@ class Command(BaseCommand):
         onlysuffix = options['urlsuffix']
         onlyprefix = options.get('urlprefix', None)
         rank = options.get('rank', False)
-        print 'Max Items to Process: {0}, Max Num URLs Starting Point: {1}, Min starting point: {2}'.format(maxitems, maxurls, numpageminimum)
+        print('Max Items to Process: {0}, Max Num URLs Starting Point: {1}, Min starting point: {2}'.format(maxitems, maxurls, numpageminimum))
         counts = []
         result = None
         cursor = connection.cursor()
@@ -186,10 +186,10 @@ class Command(BaseCommand):
         for domain in uncategorized_domains:
             urls = SiteInfo.objects.filter(rooturl=domain)
             if rank and urls.count() < 1:
-                print u'Domain {0} has no crawled pages.'.format(domain)
+                print('Domain {0} has no crawled pages.'.format(domain))
                 try:
                     blocked = BlockedSite.objects.get(domain)
-                    print 'Because it is marked as blocked for reason {0}'.foramt(blocked.reason)
+                    print('Because it is marked as blocked for reason {0}'.foramt(blocked.reason))
                 except:
                     pass
                 continue
@@ -199,7 +199,7 @@ class Command(BaseCommand):
             for url in urls:
                 if textminimum and len(url.pagetext) < 100:
                     if verbosity >=2:
-                        print 'Skipping page with less than 100 chars of text.'
+                        print('Skipping page with less than 100 chars of text.')
                     continue
                 total = total + 1
                 idlang = IdentifyLanguage(url.pagetext)
@@ -225,44 +225,44 @@ class Command(BaseCommand):
             # as can happen running multi-day language processing, or running more than one, this prevents
             # divide by zero crashes.
             scores = sorted(scores.iteritems(), key=lambda item: item[1], reverse=True)
-            print u'Scores for {0}: {1}'.format(domain, scores)
+            print('Scores for {0}: {1}'.format(domain, scores))
             if total:
                 englishratio = (english * 100) / total
             else:
                 englishratio = 0
                 continue
             if autotagenglish and englishratio > 95:
-                print u'Site {0} is mostly English - ratio {1} from {2} of {3}, auto-tagging as English'.format(domain, englishratio, english, total)
+                print('Site {0} is mostly English - ratio {1} from {2} of {3}, auto-tagging as English'.format(domain, englishratio, english, total))
                 input = 'en'
                 tagged_count = tagged_count + 1
             elif autotagenglish and onlyautotag:
-                print u'Not English. Skipping.'
+                print('Not English. Skipping.')
                 continue
             elif justnotenglish and englishratio > 45:
                 if not quiet:
-                    print u'Site is more than slightly English - {0} of {1}, skipping categorization.'.format(english, total)
+                    print('Site is more than slightly English - {0} of {1}, skipping categorization.'.format(english, total))
                 continue
             elif confident and (scores[0][1] < (0.86 * total)):
                 if not quiet:
-                    print u'Site is not at least 86% one language - {0}/{1} {2}, skipping categorization.'.format(scores[0][1], total, scores[0][0])
+                    print('Site is not at least 86% one language - {0}/{1} {2}, skipping categorization.'.format(scores[0][1], total, scores[0][0]))
                 continue
             else:
                 # Prompt for what to do. If c
                 if confident and autotag and (scores[0][0] in autotag):
-                    print u'Auto-Tagging {0} as language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1])
+                    print('Auto-Tagging {0} as language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1]))
                     input = scores[0][0]
                     tagged_count += 1
                 elif confident and autoblock and (scores[0][0] in autoblock):
-                    print u'Auto-Blocking {0} as unindexed language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1])
+                    print('Auto-Blocking {0} as unindexed language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1]))
                     input = 'del'
                     tagged_count += 1
                 elif autotag and onlyautotag:
                     if not quiet:
-                        print u'Skipping {0} because we are in only-auto-tag mode and it could not be automatically tagged.'.format(domain)
+                        print('Skipping {0} because we are in only-auto-tag mode and it could not be automatically tagged.'.format(domain))
                     input = 's'
                 elif autoblock:
                     if not quiet:
-                        print u'Skipping {0} because we are in auto-block mode and it could not be automatically blocked.'.format(domain)
+                        print('Skipping {0} because we are in auto-block mode and it could not be automatically blocked.'.format(domain))
                     input = 's'
                 else:
                     input = raw_input(u'Tag {0} as: [q]uit/[s]kip/[i]nfix-tag/[u]rlparam-tag/[del]ete/[xx] lang ({1}/{2} En, {3}/{2} {4})]? '.format(total, english, total, scores[0][1], scores[0][0]))
@@ -450,7 +450,7 @@ class Command(BaseCommand):
                 continue
                 RequeueRankedKeywordsForDomain(domain)
                 DeleteDomainLinks(domain)
-                print 'Site {0} language blocked and all URLs deleted.'.format(domain)
+                print('Site {0} language blocked and all URLs deleted.'.format(domain))
             else:
                 if input in language_list or input in ['fo', 'fy', 'oc', 'om', 'nap', 'eo']:
                     model = GetSiteInfoModelFromLanguage(input)
@@ -465,10 +465,10 @@ class Command(BaseCommand):
                         if input != 'en':
                             urls = SiteInfo.objects.filter(rooturl=domain)
                             for url in urls:
-                                print u'Moving ' + unicode(url) + u' to ' + input
+                                print('Moving ' + unicode(url) + u' to ' + input)
                                 MoveSiteTo(url, input)
                 else:
-                    print '{0} is not a valid language. Skipping'.format(input)
+                    print('{0} is not a valid language. Skipping'.format(input))
                     continue
         print('Finished. Processed {0} domains and {1} were not tagged. Number of auto-tagged items: {2}'.format(
           processed, len(uncategorized_domains), tagged_count))

@@ -76,17 +76,17 @@ class Command(BaseCommand):
             # To do this right, we may need to store a dictionary containing counts for each language along with a site-wide total.
             if urlcounts:
                 num_urls = PageLink.objects.filter(rooturl_destination=domain.url).values('rooturl_source').distinct().count()
-                print u'{0} urls crawled for {1}'.format(num_urls, domain.url)
+                print('{0} urls crawled for {1}'.format(num_urls, domain.url))
                 domain.num_urls = num_urls
                 domain.num_urls_last_updated = timezone.now()
             elif keywordcounts:
                 num_keywords_ranked = PageLink.objects.filter(rooturl_destination=domain.url).values('rooturl_source').distinct().count()
-                print u'{0} keywords ranked for {1}'.format(num_keywords_ranked, domain.url)
+                print('{0} keywords ranked for {1}'.format(num_keywords_ranked, domain.url))
                 domain.nuM_keywords_ranked = num_keywords_ranked
                 domain.num_keywords_ranked_last_updated = timezone.now()
             else:
                 num_domains_linking_in = PageLink.objects.filter(rooturl_destination=domain.url).values('rooturl_source').distinct().count()
-                print u'{0} incoming links for {1}'.format(num_domains_linking_in, domain.url)
+                print('{0} incoming links for {1}'.format(num_domains_linking_in, domain.url))
                 domain.domains_linking_in = num_domains_linking_in
                 domain.domains_linking_in_last_updated = timezone.now()
             domain.save()
@@ -96,5 +96,5 @@ class Command(BaseCommand):
         elapsed = timezone.now() - start
         if total:
             nototal = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=True).count()
-            print u'{0} domains still do not have link count information.'.format(nototal)
-        print u'{0} domains updated in {1} seconds.'.format(updated, elapsed.total_seconds())
+            print('{0} domains still do not have link count information.'.format(nototal))
+        print('{0} domains updated in {1} seconds.'.format(updated, elapsed.total_seconds()))

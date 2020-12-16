@@ -23,15 +23,15 @@ class Command(BaseCommand):
         possibly_unindexed = []
         blockedlinkcounts = {}
         total = sources.count()
-        print u'Checking as many as {1} starting with {2}. Retrieved {0}.'.format(total, options['max'], options['offset'])
+        print('Checking as many as {1} starting with {2}. Retrieved {0}.'.format(total, options['max'], options['offset']))
         for source in sources:
             unindexeddomains = 0
             thisstart = timezone.now()
             domain = source['rooturl_source']
-            print 'Domain: {0}'.format(domain)
+            print('Domain: {0}'.format(domain))
             try:
                 excluded = BlockedSite.objects.get(url=domain)
-                print u'Domain {0} already blocked, no need to check.'.format(domain)
+                print('Domain {0} already blocked, no need to check.'.format(domain))
                 continue
             except ObjectDoesNotExist:
                 pass
@@ -40,7 +40,7 @@ class Command(BaseCommand):
                 try:
                     dest = destination['rooturl_destination']
                     excluded = BlockedSite.objects.get(url=dest, reason=8)
-                    print u'Domain {0} links to {1}, which is blocked as unindexed language.'.format(domain, dest)
+                    print('Domain {0} links to {1}, which is blocked as unindexed language.'.format(domain, dest))
                     unindexeddomains = unindexeddomains + 1
                     if blockedlinkcounts.has_key(dest):
                         blockedlinkcounts[dest] = blockedlinkcounts[dest] + 1
@@ -51,31 +51,31 @@ class Command(BaseCommand):
                     pass
             thisend = timezone.now() - thisstart
             if unindexeddomains > 5:
-                print u'Domain {0} links to {1} unindexed lang domains, calculated in {2} seconds.'.format(domain, unindexeddomains, thisend.total_seconds())
+                print('Domain {0} links to {1} unindexed lang domains, calculated in {2} seconds.'.format(domain, unindexeddomains, thisend.total_seconds()))
                 definitely_unindexed.append(domain)
             elif unindexeddomains > 3:
-                print u'Domain {0} links to {1} unindexed lang domains, calculated in {2} seconds.'.format(domain, unindexeddomains, thisend.total_seconds())
+                print('Domain {0} links to {1} unindexed lang domains, calculated in {2} seconds.'.format(domain, unindexeddomains, thisend.total_seconds()))
                 probably_unindexed.append(domain)
             elif unindexeddomains > 1:
-                print u'Domain {0} links to {1} unindexed lang domains, calculated in {2} seconds.'.format(domain, unindexeddomains, thisend.total_seconds())
+                print('Domain {0} links to {1} unindexed lang domains, calculated in {2} seconds.'.format(domain, unindexeddomains, thisend.total_seconds()))
                 possibly_unindexed.append(domain)
             else:
                 pass
-                #print u'Domain {0} is clean, calculated in {1} seconds.'.format(domain, thisend.total_seconds())
+                # print u'Domain {0} is clean, calculated in {1} seconds.'.format(domain, thisend.total_seconds())
             if options['sleep'] > 0:
                 time.sleep(options['sleep'])
-        print u'--- THESE DOMAINS ARE POSSIBLY UNINDEXED LANGUAGE ---'
+        print('--- THESE DOMAINS ARE POSSIBLY UNINDEXED LANGUAGE ---')
         for domainurl in possibly_unindexed:
-            print u'http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl)
-        print u'--- THESE DOMAINS ARE PROBABLY UNINDEXED LANGUAGE ---'
+            print('http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl))
+        print('--- THESE DOMAINS ARE PROBABLY UNINDEXED LANGUAGE ---')
         for domainurl in probably_unindexed:
-            print u'http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl)
-        print u'--- THESE DOMAINS ARE DEFINITELY UNINDEXED LANGUAGE ---'
+            print('http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl))
+        print('--- THESE DOMAINS ARE DEFINITELY UNINDEXED LANGUAGE ---')
         for domainurl in definitely_unindexed:
-            print u'http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl)
+            print('http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl))
         topblocked = sorted(blockedlinkcounts.iteritems(), key=operator.itemgetter(1), reverse=True)
-        print u"--- THESE DOMAINS SHOULD BE CHECKED TO MAKE SURE THEY REALLY SHOULD BE BLOCKED ---"
+        print("--- THESE DOMAINS SHOULD BE CHECKED TO MAKE SURE THEY REALLY SHOULD BE BLOCKED ---")
         for item in topblocked[0:20]:
-            print u'({0}) {1}'.format(item[1], item[0])
+            print('({0}) {1}'.format(item[1], item[0]))
         elapsed = timezone.now() - start
-        print u'Task completed in {0} seconds.'.format(elapsed.total_seconds())
+        print('Task completed in {0} seconds.'.format(elapsed.total_seconds()))

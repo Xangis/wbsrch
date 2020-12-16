@@ -60,13 +60,13 @@ class Command(BaseCommand):
                 except ObjectDoesNotExist:
                     if domains or printem:
                         try:
-                            print u'{0}'.format(line)
+                            print('{0}'.format(line))
                             numadded = numadded + 1
                         except:
                             pass
                     else:
                         AddPendingTerm(line, language, 'add_new_to_pending from file {0}'.format(filename))
-                        print u'Added {0}.'.format(line)
+                        print('Added {0}.'.format(line))
                         numadded = numadded + 1
                 if not noindividual and not domains:
                     if ' ' in line:
@@ -81,7 +81,7 @@ class Command(BaseCommand):
                                     except:
                                         pass
                                 try:
-                                    print u'{0}.'.format(word)
+                                    print('{0}.'.format(word))
                                 except:
                                     pass
                                 numadded = numadded + 1
@@ -91,6 +91,6 @@ class Command(BaseCommand):
         except UnicodeDecodeError:
             print('UnicodeDecodeError on line {0}'.format(numlines))
         if domains:
-            print 'Processed {0} lines and {1} domains need to be crawled.'.format(numdone, numadded, language)
+            print('Processed {0} lines and {1} domains need to be crawled.'.format(numdone, numadded, language))
         else:
-            print 'Processed {0} words and added {1} to the pending {2} index.'.format(numdone, numadded, language)
+            print('Processed {0} words and added {1} to the pending {2} index.'.format(numdone, numadded, language))

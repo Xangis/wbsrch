@@ -19,12 +19,12 @@ class Command(BaseCommand):
         maxurls = options.get('maxurls', 100000)
         websearches = options.get('websearches', False)
         if websearches:
-            print u'Getting web search data.'
+            print('Getting web search data.')
             searches = SearchLog.objects.filter(keywords__contains='.', is_bot=False, indexed=False).order_by('keywords')
         else:
-            print u'Getting domain search data.'
+            print('Getting domain search data.')
             searches = DomainSearchLog.objects.filter(is_bot=False, result_count=0, indexed=False).order_by('keywords')
-        print u'{0} searches found. Analyzing domains for crawl status.'.format(searches.count())
+        print('{0} searches found. Analyzing domains for crawl status.'.format(searches.count()))
         unknown_domains = []
         for domain in searches:
             domain.keywords = domain.keywords.lower()
@@ -104,12 +104,12 @@ class Command(BaseCommand):
             if domain.keywords not in unknown_domains:
                 unknown_domains.append(domain.keywords)
         if not websearches:
-            print u'Re-getting domain search data for update.'
+            print('Re-getting domain search data for update.')
             searches = DomainSearchLog.objects.filter(is_bot=False, result_count=0, indexed=False).order_by('keywords')
-            print u'Domains checked. Marking all queried domains as indexed (which means it has been checked)'
+            print('Domains checked. Marking all queried domains as indexed (which means it has been checked)')
             for domain in searches:
                 domain.indexed = True
                 domain.save()
-        print u'{0} domains need to be crawled.'.format(len(unknown_domains))
+        print('{0} domains need to be crawled.'.format(len(unknown_domains)))
         for domain in unknown_domains:
-            print domain
+            print(domain)

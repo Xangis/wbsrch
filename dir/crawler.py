@@ -62,7 +62,7 @@ def Crawler(options):
     if options['noop']:
         print('These are the URLs that would be crawled:')
         for item in pendinglinks:
-            print item
+            print(item)
         return
     Crawl(pendinglinks, options['maxurls'], options['seconds'], options['descriptive'], options['recrawl'])
 
@@ -278,7 +278,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
             pjs.save()
     siteinfo.num_javascripts = num_external_scripts
     if descriptive:
-        print 'Num Scripts: {0}, Total Script Links (num_javascripts): {1}'.format(len(scripts), num_external_scripts)
+        print('Num Scripts: {0}, Total Script Links (num_javascripts): {1}'.format(len(scripts), num_external_scripts))
 
     try:
         sitehtml = unicode(soup)
@@ -365,7 +365,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
     info = None
     try:
         site_model = GetSiteInfoModelFromURL(realurl, descriptive)
-    except InvalidLanguageException, e:
+    except InvalidLanguageException as e:
         print('InvalidLanguageException: {0} (not saving page)'.format(e))
         # If we're re-crawling, then we need to remove the old page. The only place we can
         # realistically remove it from is SiteInfo.
@@ -439,7 +439,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
 
     try:
         soup = PopulateSiteInfoFromHtml(info, html, descriptive)
-    except HTMLParser.HTMLParseError, e:
+    except HTMLParser.HTMLParseError as e:
         RemoveFromPending(pendinglinks, realurl)
         print('HTMLParseError: {0}.'.format(e))
         return False
@@ -517,7 +517,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
                     hr = MakeRealUrl(hr, rooturl, secure=True)
                 else:
                     hr = MakeRealUrl(hr, rooturl)
-                #print 'MAKEREALURL: {0} IS NOW {1} WITH ROOT URL {2}'.format(prehr, hr, rooturl)
+                # print('MAKEREALURL: {0} IS NOW {1} WITH ROOT URL {2}'.format(prehr, hr, rooturl))
                 destroot = GetRootUrl(hr)
                 if destroot and destroot != rooturl and '.' in destroot and destroot != '.' and not IsHtmlExtension(destroot):
                     try:
@@ -536,7 +536,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
                             pass
                         try:
                             ulink.save()
-                        except DataError, e:
+                        except DataError as e:
                             # We can get this if a root url is too log (>260 chars) or full URL is too long (>2048 chars)
                             connection._rollback()
                             print('Problem saving PageLink: {0}'.format(e))
@@ -750,7 +750,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
             print('Robots file never checked for database {0}, retrieving now.'.format(root))
             try:
                 GetRobotsFile(domain)
-            except Exception, e:
+            except Exception as e:
                 print('Could not get robots file. Acting as if no robots file exists. Exception: {0}'.format(e))
             if not AllowedByRobots(url, domain):
                 print('This URL is blocked by the robots.txt file.')
@@ -774,7 +774,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                 if descriptive:
                     print('Failed to parse HTML.')
                 return False
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             # 4XX errors are immediately fatal and we remove the URL.
             if e.code == 404 or e.code == 403 or e.code == 401 or e.code == 400 or e.code == 410 or e.code == 406:
                 if descriptive:
@@ -823,7 +823,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                         AddError(info, unicode(e.code), 'HTTP Error {0}'.format(e.code))
                     except:
                         pass
-        except urllib2.URLError, e:
+        except urllib2.URLError as e:
             print('Unable to crawl URL {0}: urllib2.URLError is {1}'.format(url, e.args))
             RemoveFromPending(pendinglinks, url)
             if isinstance(e.args, (tuple,)):
@@ -835,7 +835,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                     if recrawl:
                         try:
                             site_model = GetSiteInfoModelFromURL(url)
-                            print 'Logging Error to {0}'.format(site_model)
+                            print('Logging Error to {0}'.format(site_model))
                             info = site_model.objects.get(url=url)
                             AddError(info, "socket.timeout", 'Timed out Retrieving URL')
                         except ObjectDoesNotExist:
@@ -856,7 +856,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                 except ObjectDoesNotExist:
                     pass
             return False
-        except socket.timeout, e:
+        except socket.timeout as e:
             print('Timed out retrieving URL: {0} - {1}'.format(url,e))
             RemoveFromPending(pendinglinks, url)
             if recrawl:
@@ -867,7 +867,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                 except:
                     pass
             return False
-        except socket.error, e:
+        except socket.error as e:
             print('Socket error {0} retrieving URL: {1}'.format(e, url))
             RemoveFromPending(pendinglinks, url)
             if recrawl:
@@ -878,7 +878,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                 except:
                     pass
             return False
-        except ValueError, e:
+        except ValueError as e:
             try:
                 print('Value error, cannot crawl URL: {0} - {1}'.format(url,e))
             except:
@@ -891,7 +891,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
             except:
                 pass
             return False
-        except httplib.HTTPException, e:
+        except httplib.HTTPException as e:
             print('httplib.HTTPException retrieving URL: {0} - {1}'.format(url,e))
             RemoveFromPending(pendinglinks, url)
             try:
@@ -901,15 +901,15 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
             except:
                 pass
             return False
-        except httplib.BadStatusLine, e:
+        except httplib.BadStatusLine as e:
             print('httplib.BadStatusLine retrieving URL: {0} - {1}'.format(url,e))
             RemoveFromPending(pendinglinks, url)
             return False
-        except httplib.IncompleteRead, e:
+        except httplib.IncompleteRead as e:
             print('httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url,e))
             RemoveFromPending(pendinglinks, url)
             return False
-        except httplib.InvalidURL, e:
+        except httplib.InvalidURL as e:
             print('Invalid URL: {0} - {1}'.format(url,e))
             RemoveFromPending(pendinglinks, url)
             return False
@@ -952,7 +952,7 @@ def CrawlSingleUrl(url):
     try:
         AddPendingLink(pendinglinks, url, descriptive=True, recrawl=True)
         Crawl(pendinglinks, 1, descriptive=True, recrawl=True)
-    except Exception, e:
+    except Exception as e:
         try:
             print('Failure in CrawlSingleUrl for {0}: {1}'.format(url, e))
         except:

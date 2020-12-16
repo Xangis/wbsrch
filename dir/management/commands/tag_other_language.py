@@ -44,15 +44,15 @@ class Command(BaseCommand):
             for lang in language_list:
                 tmpmodel = GetSiteInfoModelFromLanguage(lang)
                 language_counts[lang] = float(tmpmodel.objects.all().count())
-            print u'Language Page Counts: {0}'.format(language_counts)
+            print('Language Page Counts: {0}'.format(language_counts))
             queryset = term_model.objects.filter(is_language__isnull=True, verified_english=False, typo_for__isnull=True).order_by('id')[offset:offset+maxwords]
         else:
             term_model = GetIndexModelFromLanguage(language)
             if not language:
-                print u'Language is required.'
+                print('Language is required.')
                 return
             queryset = term_model.objects.all()[offset:offset+maxwords]
-        print u'Tagging other languages with {1} max words and language {2}.'.format(file, maxwords, language)
+        print('Tagging other languages with {1} max words and language {2}.'.format(file, maxwords, language))
         numdone = 0
         numadded = 0
         for item in queryset:
@@ -104,28 +104,28 @@ class Command(BaseCommand):
                     except ObjectDoesNotExist:
                         continue
                 results = sorted(percents.iteritems(), key=lambda x: x[1], reverse=True)
-                print u'Results for [{0}] {1} ({2} in English):'.format(item.id, item.keywords, item.num_results)
+                print('Results for [{0}] {1} ({2} in English):'.format(item.id, item.keywords, item.num_results))
                 resultstr = ''
                 for rval in results:
                     resultstr += '{0} = {1:.2f}%, '.format(rval[0], rval[1])
-                print resultstr
+                print(resultstr)
                 prompt = u'Enter the two-letter language to tag as, or e for english, q to quit, anything else to skip: '
                 input = raw_input(prompt.encode(sys.stdout.encoding)).lower()
                 if input == 'e' or input == 'en':
-                    print u'{0} tagged as English.'.format(item.keywords, input)
+                    print('{0} tagged as English.'.format(item.keywords, input))
                     item.verified_english = True
                     item.is_language = None
                     verifiedenglish = verifiedenglish + 1
                     newenglish = newenglish + 1
                     item.save(keep_date=True)
                 elif input in language_list:
-                    print u'{0} tagged as {1}'.format(item.keywords, input)
+                    print('{0} tagged as {1}'.format(item.keywords, input))
                     item.is_language = input
                     item.save(keep_date=True)
                 elif input == 'q':
                     break
                 else:
-                    print u'Skipping ({0})'.format(input)
-        print 'Processed {0} words and {1} were not found, {2} hit the threshold of {3}, and {4} were already tagged, {5} ignored short words, {6} verified English ({7} newly so).'.format(
-            numdone, notfound, numfound, threshold, alreadytagged, ignored, verifiedenglish, newenglish)
+                    print('Skipping ({0})'.format(input))
+        print('Processed {0} words and {1} were not found, {2} hit the threshold of {3}, and {4} were already tagged, {5} ignored short words, {6} verified English ({7} newly so).'.format(
+            numdone, notfound, numfound, threshold, alreadytagged, ignored, verifiedenglish, newenglish))
 

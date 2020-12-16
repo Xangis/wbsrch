@@ -46,6 +46,6 @@ def UnzipFile(file):
 
 for file in os.listdir('.'):
     if file.endswith('.zip'):
-        print file
+        print(file)
         UnzipFile(file)
         ProcessCSVFile('top-1m.csv')

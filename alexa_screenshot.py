@@ -97,10 +97,10 @@ def LoadAlexaFile(filename):
 #exit(0)
 
 if not os.path.isfile('top-1m.csv'):
-    print u'File top-1m.csv does not exist. Retrieving.'
+    print('File top-1m.csv does not exist. Retrieving.')
     filename = wget.download('http://s3.amazonaws.com/alexa-static/top-1m.csv.zip')
     if not filename:
-        print u'Failed to download Alexa file.'
+        print('Failed to download Alexa file.')
         exit(0)
     zip_ref = zipfile.ZipFile('./top-1m.csv.zip', 'r')
     zip_ref.extractall('.')

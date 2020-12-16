@@ -20,15 +20,15 @@ class Command(BaseCommand):
         possibly_spam = []
         definitely_spam = []
         total = sources.count()
-        print u'Checking as many as {1} starting with {2}. Retrieved {0}.'.format(total, options['max'], options['offset'])
+        print('Checking as many as {1} starting with {2}. Retrieved {0}.'.format(total, options['max'], options['offset']))
         for source in sources:
             spamdomains = 0
             thisstart = timezone.now()
             domain = source['rooturl_source']
-            print 'Domain: {0}'.format(domain)
+            print('Domain: {0}'.format(domain))
             try:
                 excluded = BlockedSite.objects.get(url=domain)
-                print u'Domain {0} already excluded, no need to check.'.format(domain)
+                print('Domain {0} already excluded, no need to check.'.format(domain))
                 continue
             except ObjectDoesNotExist:
                 pass
@@ -36,14 +36,14 @@ class Command(BaseCommand):
             for destination in destinations:
                 try:
                     excluded = BlockedSite.objects.get(url=destination['rooturl_destination'], reason=7)
-                    print u'Domain {0} links to {1}, which is blocked as spam.'.format(domain, destination['rooturl_destination'])
+                    print('Domain {0} links to {1}, which is blocked as spam.'.format(domain, destination['rooturl_destination']))
                     spamdomains = spamdomains + 1
                     continue
                 except ObjectDoesNotExist:
                     pass
             thisend = timezone.now() - thisstart
             if spamdomains > 0:
-                print u'Domain {0} links to {1} spam domains, calculated in {2} seconds.'.format(domain, spamdomains, thisend.total_seconds())
+                print('Domain {0} links to {1} spam domains, calculated in {2} seconds.'.format(domain, spamdomains, thisend.total_seconds()))
             language = 'en'
             rank = 9999999
             try:
@@ -62,17 +62,17 @@ class Command(BaseCommand):
                 time.sleep(options['sleep'])
         definitely_spam = sorted(definitely_spam, key=lambda item: item[2], reverse=False)
         possibly_spam = sorted(possibly_spam, key=lambda item: item[2], reverse=False)
-        print u'--- THESE DOMAINS ARE POSSIBLY SPAM ---'
+        print('--- THESE DOMAINS ARE POSSIBLY SPAM ---')
         for domainurl in possibly_spam:
             if domainurl[1] == 'en':
-                print u'{1} http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl[0], domainurl[2])
+                print('{1} http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl[0], domainurl[2]))
             else:
-                print u'{2} http://wbsrch.com/adm/dir/siteinfo_{0}/?q={1}'.format(domainurl[1], domainurl[0], domainurl[2])
-        print u'--- THESE DOMAINS ARE DEFINITELY SPAM ---'
+                print('{2} http://wbsrch.com/adm/dir/siteinfo_{0}/?q={1}'.format(domainurl[1], domainurl[0], domainurl[2]))
+        print('--- THESE DOMAINS ARE DEFINITELY SPAM ---')
         for domainurl in definitely_spam:
             if domainurl[1] == 'en':
-                print u'{1} http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl[0], domainurl[2])
+                print('{1} http://wbsrch.com/adm/dir/siteinfo/?q={0}'.format(domainurl[0], domainurl[2]))
             else:
-                print u'{2} http://wbsrch.com/adm/dir/siteinfo_{0}/?q={1}'.format(domainurl[1], domainurl[0], domainurl[2])
+                print('{2} http://wbsrch.com/adm/dir/siteinfo_{0}/?q={1}'.format(domainurl[1], domainurl[0], domainurl[2]))
         elapsed = timezone.now() - start
-        print u'Task completed in {0} seconds.'.format(elapsed.total_seconds())
+        print('Task completed in {0} seconds.'.format(elapsed.total_seconds()))

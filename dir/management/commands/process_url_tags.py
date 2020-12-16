@@ -37,10 +37,10 @@ class Command(BaseCommand):
                 records = SiteInfo.objects.filter(rooturl__gt=alphastart).distinct('rooturl').values('rooturl').order_by('rooturl')
             else:
                 records = SiteInfo.objects.distinct('rooturl').values('rooturl').order_by('rooturl')
-            print u'{0} domains found.'.format(records.count())
+            print('{0} domains found.'.format(records.count()))
             rcount = 0
             for record in records:
-                #print record['rooturl']
+                # print(record['rooturl'])
                 domains.append(record['rooturl'])
         elif force and domain:
             domains.append(domain)
@@ -53,18 +53,18 @@ class Command(BaseCommand):
                 site_model = GetSiteInfoModelFromLanguage(di.language_association)
             except:
                 site_model = GetSiteInfoModelFromLanguage('en')
-            print u'Updating {0} with data from {1}'.format(dom, site_model)
+            print('Updating {0} with data from {1}'.format(dom, site_model))
             urls = site_model.objects.filter(rooturl=dom)
-            print u'{0} urls found.'.format(urls.count())
+            print('{0} urls found.'.format(urls.count()))
             for url in urls:
                 num_links_updated = 0
                 num_links_deleted = 0
                 try:
                     normed = NormalizeUrl(url.url, post_crawl_replacement=True)
                 except UnicodeEncodeError:
-                    print u'URL has a unicode encode error and is not valid. Deleting.'
+                    print('URL has a unicode encode error and is not valid. Deleting.')
                     try:
-                        print u'OFFENDING URL IS: {0}'.format(url.url)
+                        print('OFFENDING URL IS: {0}'.format(url.url))
                     except:
                         pass
                     links = PageLink.objects.filter(url_source=url.url)
@@ -75,10 +75,10 @@ class Command(BaseCommand):
                     numurls = numurls + 1
                     continue
                 if normed != url.url:
-                    print u'{0} IS NOW {1}'.format(url.url, normed)
+                    print('{0} IS NOW {1}'.format(url.url, normed))
                     try:
                         existing = site_model.objects.get(url=normed)
-                        print u'DUPLICATE URL FOUND. DELETING.'
+                        print('DUPLICATE URL FOUND. DELETING.')
                         url.delete()
                     except ObjectDoesNotExist:
                         links = PageLink.objects.filter(url_source=url.url)
@@ -94,10 +94,10 @@ class Command(BaseCommand):
                         url.url = normed
                         try:
                             url.save()
-                        except AmbiguousTimeError, e:
-                            print u'AmbiguousTimeError saving url {0}, not saved'.format(url.url)
+                        except AmbiguousTimeError as e:
+                            print('AmbiguousTimeError saving url {0}, not saved'.format(url.url))
                     if num_links_updated > 0 or num_links_deleted > 0:
-                        print u'{0} URL LINKS UPDATED AND {1} DLETED'.format(num_links_updated, num_links_deleted)
+                        print('{0} URL LINKS UPDATED AND {1} DLETED'.format(num_links_updated, num_links_deleted))
                 numurls = numurls + 1
                 if numurls > maxurls:
                     break

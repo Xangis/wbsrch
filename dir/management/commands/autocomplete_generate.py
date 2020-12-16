@@ -25,10 +25,10 @@ class Command(BaseCommand):
             autocomplete_model = GetAutoCompleteModelFromLanguage(language)
             searchlog_model = GetSearchLogModelFromLanguage(language)
             items = index_model.objects.filter(actively_blocked=False, refused=False, typo_for__isnull=True, is_language__isnull=True).values('keywords')
-            print u'{0} keywords found for {1} language.'.format(items.count(), language)
-            print u'Deleting {0} old keywords.'.format(autocomplete_model.objects.all().count())
+            print('{0} keywords found for {1} language.'.format(items.count(), language))
+            print('Deleting {0} old keywords.'.format(autocomplete_model.objects.all().count()))
             autocomplete_model.objects.all().delete()
-            print u'Creating new {0} keywords.'.format(language)
+            print('Creating new {0} keywords.'.format(language))
             yearago = timezone.now() - datetime.timedelta(days=365)
             for item in items:
                 word = autocomplete_model()
@@ -40,4 +40,4 @@ class Command(BaseCommand):
                 # results much.
                 word.score = searchlog_model.objects.filter(is_bot=False, keywords=word.keywords, last_search__gt=yearago).count()
                 word.save()
-                print u'Added keyword {0} with {1} score.'.format(word.keywords, word.score)
+                print('Added keyword {0} with {1} score.'.format(word.keywords, word.score))

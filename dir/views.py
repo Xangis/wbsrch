@@ -13,7 +13,7 @@ import ujson
 import json # Needed for autocomplete encoding handling.
 from models import *
 from utils import *
-from django_q.tasks import async
+from django_q.tasks import async_task
 from language import language_name_reverse
 from crawler import CrawlSingleUrl, Crawler
 from urlparse import urlparse
@@ -162,7 +162,7 @@ def RemoveWordFromSearchResults(search_result, word):
             titleitems = page['title'].lower().split(' ')
             # TODO: Remove page-by-page instead of skipping entire result if one page matches.
             if word in resultitems or word in titleitems:
-                print 'Word {0} found in page {1}, removing.'.format(word, page['url'])
+                print('Word {0} found in page {1}, removing.'.format(word, page['url']))
             else:
                 tmp_urls.append(page)
         if len(tmp_urls) > 0:
@@ -463,7 +463,7 @@ def domain(request):
             if country:
                 searchlog.ip_country = country
         try:
-            async(SaveLogEntry, searchlog)
+            async_task(SaveLogEntry, searchlog)
         except:
             print('Cannot save log entry. Redis server may not be running.')
 
@@ -536,7 +536,7 @@ def ipaddry(request):
             if country:
                 searchlog.ip_country = country
         try:
-            async(SaveLogEntry, searchlog)
+            async_task(SaveLogEntry, searchlog)
         except:
             print('Cannot save log entry. Redis server may not be running.')
 
@@ -767,7 +767,7 @@ def search(request):
                 if IsBotAgent(log.browserstring):
                     log.is_bot = True
             try:
-                async(SaveLogEntry, log)
+                async_task(SaveLogEntry, log)
             except:
                 print('Cannot save log entry. Redis server may not be running.')
     is_language_name = None

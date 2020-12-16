@@ -43,10 +43,10 @@ def LoadQuantcastFile(filename):
     with open(filename, 'rb') as csvfile:
         reader = csv.reader(csvfile, delimiter='\t')
         # Set all Quantcast results as old.
-        print u'Marking all previous quantcast rank data as outdated.'
+        print('Marking all previous quantcast rank data as outdated.')
         cursor = connection.cursor()
         cursor.execute('UPDATE dir_domaininfo SET quantcast_outdated = true WHERE quantcast_outdated = false;')
-        print u'Updating ranks.'
+        print('Updating ranks.')
         for row in reader:
             if (len(row) > 1) and ((row[0] == 'Rank') or (row[0] == 'Hidden profile')):
                 continue
@@ -76,14 +76,14 @@ def LoadQuantcastFile(filename):
         for item in processed:
             outfile.write('%s\n' % item)
         outfile.close()
-    print 'Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.'
+    print('Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.')
 
 # /usr/bin/wget -O $MYFILENAME https://ak.quantcast.com/quantcast-top-sites.zip
 if not os.path.isfile('Quantcast-Top-Million.txt'):
-    print u'File Quantcast-Top-Million.txt does not exist. Retrieving.'
+    print('File Quantcast-Top-Million.txt does not exist. Retrieving.')
     filename = wget.download('https://ak.quantcast.com/quantcast-top-sites.zip')
     if not filename:
-        print u'Failed to download Quantcast file.'
+        print('Failed to download Quantcast file.')
         exit(0)
     zip_ref = zipfile.ZipFile('./quantcast-top-sites.zip', 'r')
     zip_ref.extractall('.')
