@@ -15,7 +15,7 @@ numpy==1.15.4
 csscompressor==0.9.5
 python-dateutil==2.7.5
 robotexclusionrulesparser==1.7.1
-protobuf==2.6.1
+protobuf==3.14.0
 protobuf.socketrpc==1.3.2
 django-tagging==0.4
 # We're no longer using a local version of langid (local folder can be deleted)
@@ -35,15 +35,16 @@ hiredis==0.2.0
 # Requires python-dev
 ujson==1.35
 Unidecode==0.04.19
-django-memcachedkeys==0.1.0
+# Installer does not work with python3
+# django-memcachedkeys==0.1.0
 simhash==1.9.0
 Jinja2==2.10
 backports.functools-lru-cache==1.5
 favicon==0.5.1
-psycopg2-binary==2.7.7
-psycopg2==2.7.7
-Pillow==5.4.1
+psycopg2-binary==2.8.6
+Pillow==8.0.1
 selenium==3.141.0
 requests==2.21.0
 zone-file==0.1.5
 tlds==2019051700
+tox==3.20.1
