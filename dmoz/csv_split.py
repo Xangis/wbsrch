@@ -4,9 +4,8 @@
 #
 # This should be run after split.sh if processing DMOZ urls.
 
-import os
-import sys
 import csv
+
 
 def ProcessCSVFile(filename):
     num_domains = 0
@@ -23,6 +22,7 @@ def ProcessCSVFile(filename):
             outfile.write('{0}\n'.format(item))
         outfile.close()
     print('Processed {0} domains in {1}.'.format(num_domains, filename))
+
 
 for file in ('ca.csv', 'cs.csv', 'da.csv', 'de.csv', 'el.csv', 'en.csv', 'es.csv', 'et.csv', 'fi.csv', 'fr.csv', 'hr.csv',
              'hu.csv', 'is.csv', 'it.csv', 'lt.csv', 'lv.csv', 'nl.csv', 'no.csv', 'pl.csv', 'pt.csv', 'ro.csv', 'sk.csv',
