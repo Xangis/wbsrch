@@ -18,7 +18,7 @@ import zipfile
 django.setup()
 
 import time
-from urllib.parse import urlparsefrom urllib.parse import urlparse
+from urllib.parse import urlparse
 from dir.models import *
 from dir.utils import *
 from django.db.utils import DatabaseError
