@@ -20,7 +20,7 @@ django.setup()
 
 import time
 #import optparse
-from urlparse import urlparse
+from urllib.parse import urlparse
 from dir.models import *
 from dir.utils import *
 from django.db.utils import DatabaseError

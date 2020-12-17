@@ -1,9 +1,9 @@
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from dir.models import Setting
-import robotparser
-import urllib2
-import httplib
+import urllib.robotparser
+import urllib.request, urllib.error, urllib.parse
+import http.client
 import socket
 import cgi
 import robotexclusionrulesparser
@@ -16,7 +16,8 @@ def GetIPAddress(url, descriptive=False):
         return ip
     except:
         if descriptive:
-            print(('IP address not found.')
+            print('IP address not found.')
+
 
 def AllowedByRobots(url, domaininfo, use_google_agent=True):
     """
@@ -35,6 +36,7 @@ def AllowedByRobots(url, domaininfo, use_google_agent=True):
         return rerp.is_allowed('*', url)
         #return rerp.is_allowed('Mozilla/5.0 (compatible; WbSrch/1.1; +https://wbsrch.com)', url):
 
+
 def CheckUrlAgainstRobotsFile(url):
     """
     Retrieves robots.txt file for URL and returns a boolean stating whether crawling the URL is allowed.
@@ -46,12 +48,13 @@ def CheckUrlAgainstRobotsFile(url):
     #
     # Or just don't bother updating the robots.txt for a domain if it doesn't exist -- we will have a daemon
     # for that.
-    rp = robotparser.RobotFileParser()
+    rp = urllib.robotparser.RobotFileParser()
     rooturl = GetRootUrl(url)
     rp.set_url(rooturl + '/robots.txt')
     allowed = rp.is_allowed('*', url)
     print('URL "{0}" allowed by robots: {1}'.format(url, allowed))
     return allowed
+
 
 def GetRobotsFile(domain, descriptive=False, save_failures=False):
     """
@@ -62,9 +65,9 @@ def GetRobotsFile(domain, descriptive=False, save_failures=False):
     Returns True if successful, false if not.
     """
     # TODO: Get the robots.txt file for a domain and store it.
-    url = u'http://{0}/robots.txt'.format(domain.url)
+    url = 'http://{0}/robots.txt'.format(domain.url)
     print('GetRobotsFile: {0}'.format(url))
-    req = urllib2.Request(url)
+    req = urllib.request.Request(url)
 
     try:
         user_agent = Setting.objects.get(name='wbsrch_user_agent')
@@ -73,12 +76,12 @@ def GetRobotsFile(domain, descriptive=False, save_failures=False):
         req.add_header('User-agent', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:36.0) Gecko/20100101 Firefox/34.0')
 
     try:
-        response = urllib2.urlopen(req, timeout=20)
+        response = urllib.request.urlopen(req, timeout=20)
         realurl = response.geturl()
         if realurl != url:
             if descriptive:
                 try:
-                    print 'Robots request file for {0} returned {1}'.format(url, realurl)
+                    print('Robots request file for {0} returned {1}'.format(url, realurl))
                 except:
                     pass
             if realurl[7:] == url [8:] or realurl[8:] == url[7:]:
@@ -115,52 +118,52 @@ def GetRobotsFile(domain, descriptive=False, save_failures=False):
             domain.save()
         return True
     except UnicodeDecodeError:
-        print u'Content Decoding Problem, marked as no robots.txt'
+        print('Content Decoding Problem, marked as no robots.txt')
         # We got content, it was just bad. So we can set the IP
         domain.robots_ip = GetIPAddress(domain.url, descriptive)
         domain.robots_txt = ''
         domain.robots_last_updated = timezone.now()
         domain.save()
         return False
-    except socket.error, e:
-        print u'Socket Error: {0}'.format(e)
+    except socket.error as e:
+        print('Socket Error: {0}'.format(e))
         return False
-    except httplib.BadStatusLine, e:
-        print u'httplib.BadStatusLine Error: {0}'.format(e)
+    except http.client.BadStatusLine as e:
+        print('httplib.BadStatusLine Error: {0}'.format(e))
         return False
-    except httplib.IncompleteRead, e:
-        print u'httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url,e)
+    except http.client.IncompleteRead as e:
+        print('httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url,e))
         return False
     # This needs to be before URLError due to subclassing.
-    except urllib2.HTTPError, e:
-        print u'Error Code: {0}'.format(e.code)
+    except urllib.error.HTTPError as e:
+        print('Error Code: {0}'.format(e.code))
         if e.code == 404 or e.code == 403 or e.code == 410 or e.code == 500:
             # We got the server, it just didn't have the file we wanted, so we should be able to get the IP.
             # but response is empty. Balls.
             domain.robots_ip = GetIPAddress(domain.url, descriptive)
-            print e
-            print u'Domain marked as no robots.txt'
+            print(e)
+            print('Domain marked as no robots.txt')
             domain.robots_txt = ''
             domain.robots_last_updated = timezone.now()
             domain.save()
         return False
-    except urllib2.URLError, e:
-        print u'URL Error: {0}'.format(e)
-        if isinstance(e.args, (tuple,)):
-            print u'Error: {0} [{1}]]'.format(e.args[0], type(e.args[0])) + u']'
-            if isinstance(e.args[0], (socket.timeout,)):
-                print u'Timed out retrieving URL: ' + url
-            elif isinstance(e.args[0], (socket.gaierror,)):
-                print u'This is a socket.gaierror - Error: ' + unicode(e.args[0].errno) + u', Message: ' + e.args[0].strerror
+    except urllib.error.URLError as e:
+        print('URL Error: {0}'.format(e))
+        if isinstance(e.args, tuple):
+            print('Error: {0} [{1}]]'.format(e.args[0], type(e.args[0])) + ']')
+            if isinstance(e.args[0], socket.timeout):
+                print('Timed out retrieving URL: ' + url)
+            elif isinstance(e.args[0], socket.gaierror):
+                print('This is a socket.gaierror - Error: ' + str(e.args[0].errno) + ', Message: ' + e.args[0].strerror)
                 # A DNS lookup failure means we should remove it from the database.
-                print 'Domain lookup failed.'
+                print('Domain lookup failed.')
                 if save_failures:
                     if e.args[0].errno == -2 or e.args[0].errno == -5 or e.args[0].errno == -8:
                         # We cannot set the IP here because we didn't get one.
-                        print 'Domain lookup failed, marking as no robots.txt.'
+                        print('Domain lookup failed, marking as no robots.txt.')
                         domain.robots_txt = ''
                         domain.robots_last_updated = timezone.now()
                         domain.save()
                     else:
-                        print 'Domain lookup failed, error number is {0}, NOT marking as no robots.txt.'.format(e.args[0].errno)
+                        print('Domain lookup failed, error number is {0}, NOT marking as no robots.txt.'.format(e.args[0].errno))
         return False

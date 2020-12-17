@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup, Comment, Doctype, Declaration, Tag, NavigableString
 from bs4.element import ProcessingInstruction
-import urllib2
-import httplib
+import urllib.request, urllib.error, urllib.parse
+import http.client
 import time
 import optparse
 from dir.models import *
@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.utils.timezone import utc
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-import HTMLParser
+import html.parser
 import datetime
 import socket
 import codecs
@@ -78,7 +78,7 @@ def GetSiteInfoModelFromURL(url, descriptive=False):
             if not language and domain.language_association:
                 language = domain.language_association
                 print('GetSiteInfoModelFromURL: No Subdir language, defaulting to {0}'.format(language))
-            if language and language != u'en':
+            if language and language != 'en':
                 site_model = GetSiteInfoModelFromLanguage(language)
             else:
                 site_model = GetSiteInfoModelFromLanguage('en')
@@ -88,7 +88,7 @@ def GetSiteInfoModelFromURL(url, descriptive=False):
                 language = domain.language_association
             if descriptive and language:
                 print('GetSiteInfoModelFromURL: URL Parameter language is {0}'.format(language))
-            if language and language != u'en':
+            if language and language != 'en':
                 site_model = GetSiteInfoModelFromLanguage(language)
             else:
                 site_model = GetSiteInfoModelFromLanguage('en')
@@ -168,22 +168,22 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
             frame = PageIFrame()
             frame.rooturl_source = siteinfo.rooturl
             frame.url_source = siteinfo.url
-            if src.startswith(u'http:') or src.startswith(u'https:'):
+            if src.startswith('http:') or src.startswith('https:'):
                 frame.url_destination = src[0:2048]
                 frame.rooturl_destination = GetRootUrl(src)
-            elif src.startswith(u'//'):
-                if frame.url_source.startswith(u'https'):
-                    frame.url_destination = (u'https:' + src)[0:2048]
+            elif src.startswith('//'):
+                if frame.url_source.startswith('https'):
+                    frame.url_destination = ('https:' + src)[0:2048]
                     frame.rooturl_destination = GetRootUrl(frame.url_destination)
                 else:
-                    frame.url_destination = (u'http:' + src)[0:2048]
+                    frame.url_destination = ('http:' + src)[0:2048]
                     frame.rooturl_destination = GetRootUrl(frame.url_destination)
             else:
-                if frame.url_source.startswith(u'https'):
-                    frame.url_destination = (u'https://' + frame.rooturl_destination + src)[0:2048]
+                if frame.url_source.startswith('https'):
+                    frame.url_destination = ('https://' + frame.rooturl_destination + src)[0:2048]
                     frame.rooturl_destination = GetRootUrl(src)
                 else:
-                    frame.url_destination = (u'http://' + frame.rooturl_destination + src)[0:2048]
+                    frame.url_destination = ('http://' + frame.rooturl_destination + src)[0:2048]
                     frame.rooturl_destination = frame.rooturl_source
             frame.save()
             if descriptive:
@@ -235,9 +235,9 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
         rel = link.attrs.get('rel', None)
         type = link.attrs.get('type', None)
         href = link.attrs.get('href', None)
-        if rel and rel[0].lower() == u'stylesheet':
+        if rel and rel[0].lower() == 'stylesheet':
             num_stylesheets += 1
-        elif rel and rel[0].lower() == u'canonical':
+        elif rel and rel[0].lower() == 'canonical':
             canonical = True
     if descriptive:
         print('Total Links: {0}, Total Stylesheets: {1}, Canonical Link: {2}'.format(len(links), num_stylesheets, canonical))
@@ -252,23 +252,23 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
             pjs = PageJavaScript()
             pjs.rooturl_source = siteinfo.rooturl
             pjs.url_source = siteinfo.url
-            if src.startswith(u'http:') or src.startswith(u'https:'):
+            if src.startswith('http:') or src.startswith('https:'):
                 pjs.rooturl_destination = GetRootUrl(src)
                 pjs.url_destination = src[0:2048]
-            elif src.startswith(u'//'):
-                if pjs.url_source.startswith(u'https'):
-                    pjs.url_destination = (u'https:' + src)[0:2048]
+            elif src.startswith('//'):
+                if pjs.url_source.startswith('https'):
+                    pjs.url_destination = ('https:' + src)[0:2048]
                     pjs.rooturl_destination = GetRootUrl(pjs.url_destination)
                 else:
-                    pjs.url_destination = (u'http:' + src)[0:2048]
+                    pjs.url_destination = ('http:' + src)[0:2048]
                     pjs.rooturl_destination = GetRootUrl(pjs.url_destination)
             else:
-                if pjs.url_source.startswith(u'https'):
+                if pjs.url_source.startswith('https'):
                     pjs.rooturl_destination = pjs.rooturl_source
-                    pjs.url_destination = (u'https://' + pjs.rooturl_destination + src)[0:2048]
+                    pjs.url_destination = ('https://' + pjs.rooturl_destination + src)[0:2048]
                 else:
                     pjs.rooturl_destination = pjs.rooturl_source
-                    pjs.url_destination = (u'http://' + pjs.rooturl_destination + src)[0:2048]
+                    pjs.url_destination = ('http://' + pjs.rooturl_destination + src)[0:2048]
             fname = pjs.url_destination.split('/')[-1]
             if fname:
                 pjs.filename = fname[0:255]
@@ -281,7 +281,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
         print('Num Scripts: {0}, Total Script Links (num_javascripts): {1}'.format(len(scripts), num_external_scripts))
 
     try:
-        sitehtml = unicode(soup)
+        sitehtml = str(soup)
         if not siteinfo.pagesize:
             siteinfo.pagesize = len(sitehtml)
             if descriptive:
@@ -439,7 +439,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
 
     try:
         soup = PopulateSiteInfoFromHtml(info, html, descriptive)
-    except HTMLParser.HTMLParseError as e:
+    except html.parser.HTMLParseError as e:
         RemoveFromPending(pendinglinks, realurl)
         print('HTMLParseError: {0}.'.format(e))
         return False
@@ -513,7 +513,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
         if hr:
             if IsHtmlUrl(hr):
                 #prehr = hr
-                if realurl.startswith(u'https:'):
+                if realurl.startswith('https:'):
                     hr = MakeRealUrl(hr, rooturl, secure=True)
                 else:
                     hr = MakeRealUrl(hr, rooturl)
@@ -531,7 +531,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
                         try:
                             title = link.contents[0]
                             if title:
-                                ulink.anchor_text = unicode(title)[0:255]
+                                ulink.anchor_text = str(title)[0:255]
                         except IndexError:
                             pass
                         try:
@@ -764,17 +764,17 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
             print('Retrieving {0}'.format(url))
         except:
             print('Retrieving URL')
-        req = urllib2.Request(url)
+        req = urllib.request.Request(url)
         req.add_header('User-agent', 'Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)')
         try:
-            response = urllib2.urlopen(req, timeout=20)
+            response = urllib.request.urlopen(req, timeout=20)
             if ParseHtml(pendinglinks, url, response, descriptive, recrawl):
                 return True
             else:
                 if descriptive:
                     print('Failed to parse HTML.')
                 return False
-        except urllib2.HTTPError as e:
+        except urllib.error.HTTPError as e:
             # 4XX errors are immediately fatal and we remove the URL.
             if e.code == 404 or e.code == 403 or e.code == 401 or e.code == 400 or e.code == 410 or e.code == 406:
                 if descriptive:
@@ -797,7 +797,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                         # this code block. Those errors will be infinite redirect loop errors.
                         site_model = GetSiteInfoModelFromURL(url)
                         info = site_model.objects.get(url=url)
-                        AddError(info, unicode(e.code), u'HTTP Error {0} - {1}'.format(e.code, e.reason))
+                        AddError(info, str(e.code), 'HTTP Error {0} - {1}'.format(e.code, e.reason))
                     except:
                         pass
                     # May want to return False in all cases, not just recrawl.
@@ -811,7 +811,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                 try:
                     site_model = GetSiteInfoModelFromURL(url)
                     info = site_model.objects.get(url=url)
-                    AddError(info, unicode(e.code), 'HTTP Error {0}'.format(e.code))
+                    AddError(info, str(e.code), 'HTTP Error {0}'.format(e.code))
                 except:
                     pass
             else:
@@ -820,16 +820,16 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                     try:
                         site_model = GetSiteInfoModelFromURL(url)
                         info = site_model.objects.get(url=url)
-                        AddError(info, unicode(e.code), 'HTTP Error {0}'.format(e.code))
+                        AddError(info, str(e.code), 'HTTP Error {0}'.format(e.code))
                     except:
                         pass
-        except urllib2.URLError as e:
+        except urllib.error.URLError as e:
             print('Unable to crawl URL {0}: urllib2.URLError is {1}'.format(url, e.args))
             RemoveFromPending(pendinglinks, url)
-            if isinstance(e.args, (tuple,)):
+            if isinstance(e.args, tuple):
                 if descriptive:
                     print('Error: {0} [{1}]'.format(e.args[0], type(e.args[0])))
-                if isinstance(e.args[0], (socket.timeout,)):
+                if isinstance(e.args[0], socket.timeout):
                     print('Timed out retrieving URL: {0}'.format(url))
                     RemoveFromPending(pendinglinks, url)
                     if recrawl:
@@ -841,7 +841,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                         except ObjectDoesNotExist:
                             pass
                     return False
-                if isinstance(e.args[0], (socket.gaierror,)):
+                if isinstance(e.args[0], socket.gaierror):
                     print('This is a socket.gaierror - Error: {0}, Message: {1}'.format(e.args[0].errno, e.args[0].strerror))
                     # A DNS lookup failure means we should remove it from the database.
                     if e.args[0].errno == -2 and recrawl:
@@ -852,7 +852,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                 try:
                     site_model = GetSiteInfoModelFromURL(url)
                     info = site_model.objects.get(url=url)
-                    AddError(info, u"urllib2.URLError", 'e.args: {0} ({1}) [{2}] '.format(e.args[0], type(e.args[0]), dir(e.args[0])))
+                    AddError(info, "urllib2.URLError", 'e.args: {0} ({1}) [{2}] '.format(e.args[0], type(e.args[0]), dir(e.args[0])))
                 except ObjectDoesNotExist:
                     pass
             return False
@@ -874,7 +874,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                 try:
                     site_model = GetSiteInfoModelFromURL(url)
                     info = site_model.objects.get(url=url)
-                    AddError(info, u"socket.error", unicode(e))
+                    AddError(info, "socket.error", str(e))
                 except:
                     pass
             return False
@@ -887,29 +887,29 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
             try:
                 site_model = GetSiteInfoModelFromURL(url)
                 info = site_model.objects.get(url=url)
-                AddError(info, u'ValueError', unicode(e))
+                AddError(info, 'ValueError', str(e))
             except:
                 pass
             return False
-        except httplib.HTTPException as e:
+        except http.client.HTTPException as e:
             print('httplib.HTTPException retrieving URL: {0} - {1}'.format(url,e))
             RemoveFromPending(pendinglinks, url)
             try:
                 site_model = GetSiteInfoModelFromURL(url)
                 info = site_model.objects.get(url=url)
-                AddError(info, u'HttpError', unicode(e))
+                AddError(info, 'HttpError', str(e))
             except:
                 pass
             return False
-        except httplib.BadStatusLine as e:
+        except http.client.BadStatusLine as e:
             print('httplib.BadStatusLine retrieving URL: {0} - {1}'.format(url,e))
             RemoveFromPending(pendinglinks, url)
             return False
-        except httplib.IncompleteRead as e:
+        except http.client.IncompleteRead as e:
             print('httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url,e))
             RemoveFromPending(pendinglinks, url)
             return False
-        except httplib.InvalidURL as e:
+        except http.client.InvalidURL as e:
             print('Invalid URL: {0} - {1}'.format(url,e))
             RemoveFromPending(pendinglinks, url)
             return False

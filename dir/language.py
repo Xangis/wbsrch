@@ -1,15 +1,15 @@
 from django.core.exceptions import ObjectDoesNotExist
 from nltk import wordpunct_tokenize
 from nltk.corpus import stopwords
-from utils import GetRootUrl, GetDomainExtension
-from models import DomainSuffix, language_list, blocked_language_list, language_names, blocked_language_names
+from dir.utils import GetRootUrl, GetDomainExtension
+from dir.models import DomainSuffix, language_list, blocked_language_list, language_names, blocked_language_names
 from bs4 import BeautifulSoup
-from exceptions import InvalidLanguageException
+from dir.exceptions import InvalidLanguageException
 import codecs
 import os
 from langid.langid import LanguageIdentifier, model
 identifier = LanguageIdentifier.from_modelstring(model, norm_probs=True)
-import urlparse
+from urllib.parse import urlparse
 
 language_name_reverse = {
 'catalan': 'ca',
@@ -57,59 +57,59 @@ language_name_reverse = {
 def GetInfixLanguage(url, descriptive=False):
     # Remove query parameters from the URL before testing.
     parsedurl = urlparse.urlparse(url)
-    url = parsedurl.scheme + u'://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
+    url = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
     # fr
     for language in language_list:
-        if (u'/' + language + u'/') in url:
+        if ('/' + language + '/') in url:
             if descriptive:
                 print('Selected language {0} using /fr/ method'.format(language))
             return language
         # FR
-        if (u'/' + language.upper() + u'/') in url:
+        if ('/' + language.upper() + '/') in url:
             if descriptive:
                 print('Selected language {0} using /FR/ method'.format(language))
             return language
         # Fr
-        if (u'/' + language[0].upper() + language[1:] + u'/') in url:
+        if ('/' + language[0].upper() + language[1:] + '/') in url:
             if descriptive:
                 print('Selected language {0} using /Fr/ method'.format(language))
             return language
         # Lang_FR (www.spamfighter.com, for example)
-        if (u'/Lang_' + language.upper() + u'/') in url:
+        if ('/Lang_' + language.upper() + '/') in url:
             if descriptive:
                 print('Selected language {0} using /Lang_FR/ method'.format(language))
             return language
     # fr-fr
     for language in locales:
-        if (u'/' + language[1] + u'/') in url:
+        if ('/' + language[1] + '/') in url:
             if descriptive:
                 print('Selected language {0} using /fr-fr/ method'.format(language[0]))
             return language[0]
     # fr_fr
     for language in locales:
         underscored = language[1].replace('-', '_')
-        if (u'/' + underscored + u'/') in url:
+        if ('/' + underscored + '/') in url:
             if descriptive:
                 print('Selected language {0} using /fr-fr/ method'.format(language[0]))
             return language[0]
     # fr-FR and fr_FR
     for language in locales:
-        if u'-' in language[1]:
-            pieces = language[1].split(u'-')
-            uppercased = pieces[0] + u'-' + pieces[1].upper()
-            if (u'/' + uppercased + u'/') in url:
+        if '-' in language[1]:
+            pieces = language[1].split('-')
+            uppercased = pieces[0] + '-' + pieces[1].upper()
+            if ('/' + uppercased + '/') in url:
                 if descriptive:
                     print('Selected language {0} using /fr-FR/ method'.format(language[0]))
                 return language[0]
-            uppercased_under = pieces[0] + u'_' + pieces[1].upper()
-            if (u'/' + uppercased_under + u'/') in url:
+            uppercased_under = pieces[0] + '_' + pieces[1].upper()
+            if ('/' + uppercased_under + '/') in url:
                 if descriptive:
                     print('Selected language {0} using /fr_FR/ method'.format(language[0]))
                 return language[0]
     # fr.fr
     for language in locales:
         underscored = language[1].replace('-', '.')
-        if (u'/' + underscored + u'/') in url:
+        if ('/' + underscored + '/') in url:
             if descriptive:
                 print('Selected language {0} using /fr.fr/ method'.format(language[0]))
             return language[0]
@@ -117,7 +117,7 @@ def GetInfixLanguage(url, descriptive=False):
     for language in locales:
         pieces = list(reversed(language[1].split('-')))
         underscored = '-'.join(pieces)
-        if (u'/' + underscored + u'/') in url:
+        if ('/' + underscored + '/') in url:
             if descriptive:
                 print('Selected language {0} using /br-pt/ method (reversed locale)'.format(language[0]))
             return language[0]
@@ -125,108 +125,108 @@ def GetInfixLanguage(url, descriptive=False):
     for language in locales:
         pieces = list(reversed(language[1].split('-')))
         underscored = '_'.join(pieces)
-        if (u'/' + underscored + u'/') in url:
+        if ('/' + underscored + '/') in url:
             if descriptive:
                 print('Selected language {0} using /br_pt/ method (reversed locale)'.format(language[0]))
             return language[0]
     # /french
-    for language in language_name_reverse.keys():
-        if (u'/' + language) in url:
+    for language in list(language_name_reverse.keys()):
+        if ('/' + language) in url:
             if descriptive:
                 print('Selected language {0} using /french method'.format(language_name_reverse[language]))
             return language_name_reverse[language]
-    if u'/gahuza' in url:
+    if '/gahuza' in url:
         if descriptive:
             print('Selected language rw using /gahuza method')
-        return u'rw'
+        return 'rw'
     # /fr
     for language in language_list:
-        if url.endswith(u'/' + language):
+        if url.endswith('/' + language):
             if descriptive:
                 print('Selected language {0} using /fr method'.format(language))
             return language
     # /french/
-    for language in language_names.keys():
-        if (u'/' + language_names[language].lower() + u'/') in url:
+    for language in list(language_names.keys()):
+        if ('/' + language_names[language].lower() + '/') in url:
             if descriptive:
                 print('Selected language {0} using /french/ method'.format(language))
             return language
     # /fre/
-    for language in language_names.keys():
-        if (u'/' + language_names[language][0:3].lower() + u'/') in url:
+    for language in list(language_names.keys()):
+        if ('/' + language_names[language][0:3].lower() + '/') in url:
             if descriptive:
                 print('Selected language {0} using /fre/ method'.format(language))
             return language
-    if u'/us/' in url or u'/gb/' in url:
+    if '/us/' in url or '/gb/' in url:
         if descriptive:
             print('Selected language en using /us/ or /gb/'.format(url))
-        return u'en'
-    if u'/mx/' in url:
+        return 'en'
+    if '/mx/' in url:
         if descriptive:
             print('Selected language es using /mx/')
-        return u'es'
-    if u'/br/' in url:
+        return 'es'
+    if '/br/' in url:
         if descriptive:
             print('Selected language pt using /br/')
-        return u'pt'
-    if u'/cz/' in url:
+        return 'pt'
+    if '/cz/' in url:
         if descriptive:
             print('Selected language cs using /cz/')
-        return u'cs'
-    if u'/se/' in url:
+        return 'cs'
+    if '/se/' in url:
         if descriptive:
             print('Selected language sv using /se/')
-        return u'sv'
+        return 'sv'
     # /ru/
     for language in blocked_language_list:
-        if (u'/' + language + u'/') in url:
+        if ('/' + language + '/') in url:
             if descriptive:
                 print('Selected invalid language {0} using /ru/ method'.format(language))
             raise InvalidLanguageException(language)
         # RU
-        if (u'/' + language.upper() + u'/') in url:
+        if ('/' + language.upper() + '/') in url:
             if descriptive:
                 print('Selected invalid language {0} using /RU/ method'.format(language))
             raise InvalidLanguageException(language)
         # Ru
-        if (u'/' + language[0].upper() + language[1:] + u'/') in url:
+        if ('/' + language[0].upper() + language[1:] + '/') in url:
             if descriptive:
                 print('Selected invalid language {0} using /Ru/ method'.format(language))
             raise InvalidLanguageException(language)
         # Lang_RU (www.spamfighter.com, for example)
-        if (u'/Lang_' + language.upper() + u'/') in url:
+        if ('/Lang_' + language.upper() + '/') in url:
             if descriptive:
                 print('Selected invalid language {0} using /Lang_RU/ method'.format(language))
             raise InvalidLanguageException(language)
     # /ru-ru/
     for language in blocked_locales:
-        if (u'/' + language[1] + u'/') in url:
+        if ('/' + language[1] + '/') in url:
             if descriptive:
                 print('Selected invalid language {0} using /ru-ru/ method'.format(language))
             raise InvalidLanguageException(language[0])
     # Ends with /ru
     for language in blocked_language_list:
-        if url.endswith(u'/' + language):
+        if url.endswith('/' + language):
             if descriptive:
                 print('Selected invalid language {0} using /ru method'.format(language))
             raise InvalidLanguageException(language)
     # /russian/
-    for language in blocked_language_names.keys():
-        if (u'/' + language + u'/') in url:
+    for language in list(blocked_language_names.keys()):
+        if ('/' + language + '/') in url:
             if descriptive:
                 print('Selected invalid language {0} using /russian/ method'.format(blocked_language_names[language]))
             raise InvalidLanguageException(blocked_language_names[language])
     # ru-RU and ru_RU
     for language in blocked_locales:
-        if u'-' in language[1]:
-            pieces = language[1].split(u'-')
-            uppercased = pieces[0] + u'-' + pieces[1].upper()
-            if (u'/' + uppercased + u'/') in url:
+        if '-' in language[1]:
+            pieces = language[1].split('-')
+            uppercased = pieces[0] + '-' + pieces[1].upper()
+            if ('/' + uppercased + '/') in url:
                 if descriptive:
                     print('Selected invalid language {0} using /ru-RU/ method'.format(language[0]))
                 return language[0]
-            uppercased_under = pieces[0] + u'_' + pieces[1].upper()
-            if (u'/' + uppercased_under + u'/') in url:
+            uppercased_under = pieces[0] + '_' + pieces[1].upper()
+            if ('/' + uppercased_under + '/') in url:
                 if descriptive:
                     print('Selected invalid language {0} using /ru_RU/ method'.format(language[0]))
                 return language[0]
@@ -239,21 +239,21 @@ def GetUrlParameterLanguage(url):
     parsedurl = urlparse.urlparse(url)
     if parsedurl.query:
         queryparams = dict(urlparse.parse_qsl(parsedurl.query))
-        if queryparams.has_key('lang'):
+        if 'lang' in queryparams:
             lang = queryparams['lang']
-        elif queryparams.has_key('Lang'):
+        elif 'Lang' in queryparams:
             lang = queryparams['Lang']
-        elif queryparams.has_key('language'):
+        elif 'language' in queryparams:
             lang = queryparams['language']
-        elif queryparams.has_key('lan'):
+        elif 'lan' in queryparams:
             lang = queryparams['lan']
-        elif queryparams.has_key('setLang'):
+        elif 'setLang' in queryparams:
             lang = queryparams['setLang']
-        elif queryparams.has_key('hl'):
+        elif 'hl' in queryparams:
             lang = queryparams['hl']
-        elif queryparams.has_key('lg'):
+        elif 'lg' in queryparams:
             lang = queryparams['lg']
-        elif queryparams.has_key('loc'):
+        elif 'loc' in queryparams:
             lang = queryparams['loc']
     if lang and '-' in lang:
         lang = lang.split('-')[0]
@@ -280,7 +280,7 @@ def GetUrlParameterLanguage(url):
     if lang == "[u'it']":
         lang = 'it'
     if lang not in language_list:
-        if language_name_reverse.has_key(lang):
+        if lang in language_name_reverse:
             lang = language_name_reverse[lang]
     return lang
 
@@ -471,20 +471,20 @@ def IdentifyPageLanguage(url, html):
     infixlangs = []
     rooturl = GetRootUrl(url)
     # First we extract what we can from the URL
-    for lang in languages.keys():
-        if rooturl.startswith(lang + u'.'):
+    for lang in list(languages.keys()):
+        if rooturl.startswith(lang + '.'):
             prefix = lang
             break
     if not prefix:
-        for lang in language_blocks.keys():
-            if rooturl.startswith(lang + u'.'):
+        for lang in list(language_blocks.keys()):
+            if rooturl.startswith(lang + '.'):
                 prefix = lang
                 break
-    for lang in languages.keys():
+    for lang in list(languages.keys()):
         for suffix in languages[lang]:
             if rooturl.endswith(suffix):
                 suffixlangs.append(lang)
-    for lang in language_blocks.keys():
+    for lang in list(language_blocks.keys()):
         for suffix in language_blocks[lang]:
             if rooturl.endswith(suffix):
                 suffixlangs.append(lang)

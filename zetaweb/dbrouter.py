@@ -1,3 +1,6 @@
+from django.apps import apps
+
+
 class ModelDatabaseRouter(object):
     """Allows each model to set its own destiny"""
 
@@ -30,13 +33,21 @@ class ModelDatabaseRouter(object):
             else:
                 return False
 
-    def allow_migrate(self, db, model):
-        if hasattr(model._meta, 'in_db'):
-            # print u'Model has database: {0}'.format(model._meta.in_db)
-            if model._meta.in_db == db:
-                return True
+    def allow_migrate(self, db, app_label, model_name=None, **hints):
+        if model_name:
+            model = apps.get_model(app_label, model_name)
+            if hasattr(model._meta, 'in_db'):
+                # print u'Model has database: {0}'.format(model._meta.in_db)
+                if model._meta.in_db == db:
+                    return True
+                else:
+                    return False
             else:
-                return False
+                # Random models that don't specify a database can only go to 'default'
+                if db == 'default':
+                    return True
+                else:
+                    return False
         else:
             # Random models that don't specify a database can only go to 'default'
             if db == 'default':

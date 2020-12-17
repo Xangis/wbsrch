@@ -11,12 +11,12 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import ujson
 import json # Needed for autocomplete encoding handling.
-from models import *
-from utils import *
+from dir.models import *
+from dir.utils import *
 from django_q.tasks import async_task
-from language import language_name_reverse
-from crawler import CrawlSingleUrl, Crawler
-from urlparse import urlparse
+from dir.language import language_name_reverse
+from dir.crawler import CrawlSingleUrl, Crawler
+from urllib.parse import urlparse
 from datetime import datetime, date, timedelta
 import itertools
 import uuid
@@ -355,14 +355,14 @@ def domain(request):
         site_model = GetSiteInfoModelFromLanguage(language_code)
         ranking_model = GetKeywordRankingModelFromLanguage(language_code)
         # Normalize URL
-        if domain.startswith(u'http:') or domain.startswith(u'https:'):
+        if domain.startswith('http:') or domain.startswith('https:'):
             parsedurl = urlparse(domain)
             domain = parsedurl.geturl()
             rawdomain = parsedurl.netloc
-        if u'/' in rawdomain:
+        if '/' in rawdomain:
             pieces = rawdomain.split('/')
             rawdomain = pieces[0]
-        if not u'.' in domain or u' ' in domain:
+        if not '.' in domain or ' ' in domain:
             notdomain = True
         # Prevent crawling excluded sites.
         domains = DomainInfo.objects.filter(url=rawdomain)
@@ -373,7 +373,7 @@ def domain(request):
         extra = None
         parent = None
         pieces = rawdomain.split('.')
-        if not rawdomain.startswith(u'www.'):
+        if not rawdomain.startswith('www.'):
             if len(pieces) > 2:
                 parentdomain = '.'.join(pieces[1:])
                 try:
@@ -381,7 +381,7 @@ def domain(request):
                 except ObjectDoesNotExist:
                     pass
             try:
-                extra = DomainInfo.objects.get(url=(u'www.' + rawdomain))
+                extra = DomainInfo.objects.get(url=('www.' + rawdomain))
             except ObjectDoesNotExist:
                 pass
         else:
@@ -442,13 +442,13 @@ def domain(request):
                 except ObjectDoesNotExist:
                     domains = []
         searchlog.indexed = False
-        if request.META.has_key('HTTP_REFERER'):
+        if 'HTTP_REFERER' in request.META:
             searchlog.referer = request.META['HTTP_REFERER']
             if len(searchlog.referer) > 255:
                 searchlog.referer = searchlog.referer[0:252] + '...'
-        if request.META.has_key('REMOTE_ADDR'):
+        if 'REMOTE_ADDR' in request.META:
             searchlog.ip = request.META['REMOTE_ADDR']
-        if request.META.has_key('HTTP_USER_AGENT'):
+        if 'HTTP_USER_AGENT' in request.META:
             searchlog.browserstring = request.META['HTTP_USER_AGENT']
             if len(searchlog.browserstring) > 255:
                 searchlog.browserstring = searchlog.browserstring[0:252] + '...'
@@ -515,13 +515,13 @@ def ipaddry(request):
         searchlog.keywords = ip
         searchlog.result_count = len(domains)
         searchlog.indexed = False
-        if request.META.has_key('HTTP_REFERER'):
+        if 'HTTP_REFERER' in request.META:
             searchlog.referer = request.META['HTTP_REFERER']
             if len(searchlog.referer) > 255:
                 searchlog.referer = searchlog.referer[0:252] + '...'
-        if request.META.has_key('REMOTE_ADDR'):
+        if 'REMOTE_ADDR' in request.META:
             searchlog.ip = request.META['REMOTE_ADDR']
-        if request.META.has_key('HTTP_USER_AGENT'):
+        if 'HTTP_USER_AGENT' in request.META:
             searchlog.browserstring = request.META['HTTP_USER_AGENT']
             if len(searchlog.browserstring) > 255:
                 searchlog.browserstring = searchlog.browserstring[0:252] + '...'
@@ -588,12 +588,12 @@ def search(request):
         result.searchterm = request.POST.get('q', None)
         result.allfromdomain = request.POST.get('domain', False)
         if request.POST.get('s') == 'fp':
-            return HttpResponsePermanentRedirect(u'/search/?q={0}'.format(result.searchterm))
+            return HttpResponsePermanentRedirect('/search/?q={0}'.format(result.searchterm))
     elif request.method == 'GET':
         result.searchterm = request.GET.get('q', None)
         result.allfromdomain = request.GET.get('domain', False)
         if request.GET.get('s') == 'fp':
-            return HttpResponsePermanentRedirect(u'/search/?q={0}'.format(result.searchterm))
+            return HttpResponsePermanentRedirect('/search/?q={0}'.format(result.searchterm))
     # Search
     if result.searchterm:
         result.searchterm = CleanSearchTerm(result.searchterm)
@@ -616,18 +616,18 @@ def search(request):
                     result.searchterm = result.searchterm.replace('  ', ' ')
                     if result.searchterm.endswith(' '):
                         result.searchterm = result.searchterm[0:-1]
-            if language_name_reverse.has_key(piece) and (language_name_reverse[piece] != request.LANGUAGE_CODE):
+            if piece in language_name_reverse and (language_name_reverse[piece] != request.LANGUAGE_CODE):
                 result.names_language = language_name_reverse[piece]
                 result.names_language_search = result.searchterm.replace(piece, '')
                 # Collapse extra spaces if necessary.
                 result.names_language_search = result.names_language_search.replace('  ', ' ')
                 result.names_language_search = result.names_language_search.strip()
                 break
-        if u'site:' in result.searchterm:
+        if 'site:' in result.searchterm:
             dom = None
             queries = []
             for piece in pieces:
-                if piece.startswith(u'site:'):
+                if piece.startswith('site:'):
                     dom = piece[5:]
                 else:
                     queries.append(piece)
@@ -636,9 +636,9 @@ def search(request):
             elif dom and len(queries) == 0:
                 return HttpResponseRedirect('/domain/?q={0}'.format(dom))
         # Check whether it's a domain search.
-        if u'.' in result.searchterm:
+        if '.' in result.searchterm:
             for piece in pieces:
-                if u'.' in piece:
+                if '.' in piece:
                     domain_url = GetRootUrl(piece)
                     if IsIPAddress(piece):
                         result.is_ip = piece
@@ -705,7 +705,7 @@ def search(request):
         term = TrySearchTerm(result.searchterm, result.language_code)
         if term:
             if term.date_indexed < (timezone.now() - timedelta(days=INDEX_TERM_STALE_DAYS)) and not term.actively_blocked and not term.refused and (len(term.keywords) > 2):
-                AddPendingTerm(term.keywords, result.language_code, u'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
+                AddPendingTerm(term.keywords, result.language_code, 'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
             result = MergeSearchResult(result, term)
         else:
             create_placeholders = True
@@ -721,7 +721,7 @@ def search(request):
                 try:
                     term = term_model.objects.get(keywords=item)
                     if term.date_indexed < (timezone.now() - timedelta(days=INDEX_TERM_STALE_DAYS)) and not term.actively_blocked and not term.refused and (len(term.keywords) > 2):
-                        AddPendingTerm(term.keywords, result.language_code, u'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
+                        AddPendingTerm(term.keywords, result.language_code, 'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
                     result = MergeSearchResult(result, term, bonus_existing=True)
                 except ObjectDoesNotExist:
                     if create_placeholders:
@@ -749,18 +749,18 @@ def search(request):
             log.result_count = result.result_count
             log.indexed = result.indexed
             log.search_time = end_delta.total_seconds()
-            if request.META.has_key('HTTP_REFERER'):
+            if 'HTTP_REFERER' in request.META:
                 log.referer = request.META['HTTP_REFERER']
                 if len(log.referer) > 255:
                     log.referer = log.referer[0:252] + '...'
-            if request.META.has_key('REMOTE_ADDR'):
+            if 'REMOTE_ADDR' in request.META:
                 log.ip = request.META['REMOTE_ADDR']
             if log.ip:
                 gi = GeoIP()
                 country = gi.country_code(log.ip)
                 if country:
                     log.ip_country = country
-            if request.META.has_key('HTTP_USER_AGENT'):
+            if 'HTTP_USER_AGENT' in request.META:
                 log.browserstring = request.META['HTTP_USER_AGENT']
                 if len(log.browserstring) > 255:
                     log.browserstring = log.browserstring[0:252] + '...'
@@ -816,7 +816,7 @@ def adminpanel(request):
     query_string = request.META.get('QUERY_STRING', None)
     language = LanguageFromDomain(request)
     message = 'You are on host: {0}, language: {1}, request language: {2},  query_string: {3}'.format(host, language, request.LANGUAGE_CODE, query_string)
-    if request.GET.has_key('crawlurl'):
+    if 'crawlurl' in request.GET:
         randomfromdomain = request.GET.get('randomfromdomain', None)
         if not randomfromdomain:
             result = CrawlSingleUrl(request.GET['crawlurl'])
@@ -872,11 +872,11 @@ def adminpanel_blocksite(request):
         reason = request.POST.get('reason', None)
         if reason:
             reason = int(reason)
-        message = u'Site block requested for {0} for reason {1}. '.format(sitename, reason)
+        message = 'Site block requested for {0} for reason {1}. '.format(sitename, reason)
         try:
             domain = DomainInfo.objects.get(url=sitename)
             if domain.is_unblockable:
-                message += u'Domain is set as unblockable.'
+                message += 'Domain is set as unblockable.'
         except ObjectDoesNotExist:
             # Always create domain info if the domain doesn't exist yet.
             domain = DomainInfo()
@@ -896,7 +896,7 @@ def adminpanel_blocksite(request):
                 num_after_urls += site_model.objects.filter(rooturl=sitename).count()
             RequeueRankedKeywordsForDomain(sitename)
             DeleteDomainLinks(sitename)
-            message += u'Domain was already blocked. {0} urls were in the database and now there are {1}.'.format(
+            message += 'Domain was already blocked. {0} urls were in the database and now there are {1}.'.format(
                 num_before_urls, num_after_urls)
         except ObjectDoesNotExist:
             num_before_urls = SiteInfo.objects.filter(rooturl=sitename).count()
@@ -912,9 +912,9 @@ def adminpanel_blocksite(request):
                 num_after_urls += site_model.objects.filter(rooturl=sitename).count()
             RequeueRankedKeywordsForDomain(sitename)
             DeleteDomainLinks(sitename)
-            message += u'Domain blocked. {0} urls were in the database and now there are {1}.'.format(
+            message += 'Domain blocked. {0} urls were in the database and now there are {1}.'.format(
                 num_before_urls, num_after_urls)
-    elif request.method == 'GET' and request.GET.has_key('site'):
+    elif request.method == 'GET' and 'site' in request.GET:
         sitename = request.GET['site']
         sitename = GetRootUrl(sitename)
         reason = request.GET.get('reason', None)
@@ -927,7 +927,7 @@ def adminpanel_topsites(request):
     counts = []
     result = None
     cursor = connection.cursor()
-    if request.GET.has_key('crawlurl'):
+    if 'crawlurl' in request.GET:
         result = CrawlSingleUrl(request.GET['crawlurl'])
     for language in language_list:
         if language == 'en':
@@ -944,7 +944,7 @@ def adminpanel_topsites(request):
 def adminpanel_pagescore(request):
     url = request.GET.get('url', None)
     keyword = request.GET.get('keyword', None)
-    language_code = request.GET.get('language', u'en')
+    language_code = request.GET.get('language', 'en')
     pagescore = None
     calctime = None
     reasons = None
@@ -994,9 +994,9 @@ def adminpanel_searchlogs(request):
         for log in logs:
             if not log.referer:
                 continue
-            if bingsearches and u'bing.com' in log.referer:
+            if bingsearches and 'bing.com' in log.referer:
                 tmplogs.append(log)
-            if googlesearches and u'google.com' in log.referer:
+            if googlesearches and 'google.com' in log.referer:
                 tmplogs.append(log)
             if len(tmplogs) > maxresults:
                 logs = tmplogs
@@ -1026,8 +1026,8 @@ def adminpanel_sitelimits(request):
     cursor = connection.cursor()
     sites = DomainInfo.objects.filter(max_urls__isnull=False).order_by('-alexa_rank')
     for site in sites:
-        table = u'site_info'
-        if site.language_association and site.language_association != u'en':
+        table = 'site_info'
+        if site.language_association and site.language_association != 'en':
             table = 'dir_siteinfo_' + site.language_association
         cursor.execute("SELECT count(*) FROM " + table + " WHERE rooturl = '" + site.url + "'");
         domain_counts = cursor.fetchall()
@@ -1167,7 +1167,7 @@ def go(request):
     click.search_id = request.GET.get('id', None)
     click.url = request.GET.get('url', None)
     click.position = request.GET.get('pos', None)
-    if request.META.has_key('REMOTE_ADDR'):
+    if 'REMOTE_ADDR' in request.META:
         click.ip = request.META['REMOTE_ADDR']
     click.xpos = 0
     click.ypos = 0

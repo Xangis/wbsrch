@@ -2,11 +2,11 @@
 from django.contrib import admin
 from django.forms import TextInput, Textarea
 from django.db import IntegrityError, models
-from models import *
-from crawler import CrawlSingleUrl
-from utils import MoveSiteTo, RemoveURLsForDomain, MarkURLContentsAsSpam, SetDomainLanguage, SetDomainInfixLanguage, GetRootDomain, GenerateSearchReport, PornBlock, RequeueRankedKeywordsForDomain, CalculateDomainSuffixStats
-from urlparse import urlparse
-from indexer import BuildIndexForTerm
+from dir.models import *
+from dir.crawler import CrawlSingleUrl
+from dir.utils import MoveSiteTo, RemoveURLsForDomain, MarkURLContentsAsSpam, SetDomainLanguage, SetDomainInfixLanguage, GetRootDomain, GenerateSearchReport, PornBlock, RequeueRankedKeywordsForDomain, CalculateDomainSuffixStats
+from urllib.parse import urlparse
+from dir.indexer import BuildIndexForTerm
 from django.core.exceptions import ObjectDoesNotExist
 
 def LanguageBlock(siteinfo, language=None):
@@ -696,7 +696,7 @@ class IndexTermAdmin(admin.ModelAdmin):
     def reindex_these_terms(modeladmin, request, queryset):
         for item in queryset:
             name = item.__class__.__name__
-            if name is 'IndexTerm':
+            if name == 'IndexTerm':
                 lang = 'en'
             else:
                 lang = name[-2:]
@@ -730,19 +730,19 @@ class PendingIndexAdmin(admin.ModelAdmin):
     def index_these_terms(modeladmin, request, queryset):
         for item in queryset:
             name = item.__class__.__name__
-            if name is 'PendingIndex':
+            if name == 'PendingIndex':
                 lang = 'en'
             else:
                 lang = name[-2:]
             BuildIndexForTerm(item.keywords, lang=lang, type='fourthrootandlog')
             item.delete()
-    
+
     index_these_terms.short_description = "Index these term(s). (may time out)"
 
     def block_these_terms(modeladmin, request, queryset):
         for item in queryset:
             name = item.__class__.__name__
-            if name is 'PendingIndex':
+            if name == 'PendingIndex':
                 lang = 'en'
             else:
                 lang = name[-2:]
@@ -753,7 +753,7 @@ class PendingIndexAdmin(admin.ModelAdmin):
                 bad.keywords = item.keywords
                 bad.save()
             item.delete()
-    
+
     block_these_terms.short_description = "Add terms to bad query list and delete."
 
     def delete_all_moved_terms(modeladmin, request, queryset):

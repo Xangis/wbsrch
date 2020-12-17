@@ -4,13 +4,13 @@ from django.db.models import Count
 from django.db import connection
 from django.core.cache import cache
 from django.utils import timezone
-from models import *
-from utils import *
-from exceptions import *
-from domain import UpdateDomainWhois
-from language import language_name_reverse
-from crawler import CrawlSingleUrl, Crawler
-from urlparse import urlparse
+from dir.models import *
+from dir.utils import *
+from dir.exceptions import *
+from dir.domain import UpdateDomainWhois
+from dir.language import language_name_reverse
+from dir.crawler import CrawlSingleUrl, Crawler
+from urllib.parse import urlparse
 from datetime import datetime, date, timedelta
 from django.contrib.gis.geoip import GeoIP
 from rest_framework import exceptions
@@ -64,7 +64,7 @@ def GetToken(request):
 
 def NormalizeDomain(domain):
     # Normalize URL
-    if domain.startswith(u'http:') or domain.startswith(u'https:'):
+    if domain.startswith('http:') or domain.startswith('https:'):
         parsedurl = urlparse(domain)
         parseddomain = parsedurl.geturl()
         domain = parsedurl.netloc

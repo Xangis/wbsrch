@@ -8,7 +8,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
 import time
 #import optparse
-from urlparse import urlparse
+from urllib.parse import urlparse
 from dir.models import *
 from django.db.utils import DatabaseError
 from django.db import connection

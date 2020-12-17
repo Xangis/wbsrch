@@ -7,7 +7,7 @@ from django.utils.timezone import utc
 from django.utils import timezone
 from simhash import Simhash
 import random
-import urlparse
+import urllib.parse as urlparse
 import datetime
 import time
 import re
