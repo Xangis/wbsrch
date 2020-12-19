@@ -1,26 +1,23 @@
 # -*- coding: utf-8 -*-
 # Django settings for zetaweb project.
 from django.utils.translation import gettext_noop
-
-DEBUG = False
+from socket import gethostname, gethostbyname
 import os
 
-# Add this line to /etc/environment or local vars to enable debug mode:
-# DJANGO_ENVIRONMENT=debug
-environment = os.getenv('DJANGO_ENVIRONMENT')
-if environment == 'debug' or environment == 'development':
-    DEBUG = True
+DEBUG = os.getenv('DEBUG', False)
 
 ADMINS = (
     ('Jason Champion', 'jchampion@sigmacentauri.com'),
 )
 
 ALLOWED_HOSTS = [
-        '.wbsrch.com',  # Domain and subdomains.
-        '.wbsrch.com.',  # Allow FQDN and subdomains.
+    '.wbsrch.com',  # Domain and subdomains.
+    '.wbsrch.com.',  # Allow FQDN and subdomains.
+    gethostname(), gethostbyname(gethostname())
 ]
 if DEBUG:
     ALLOWED_HOSTS.append('.localhost')
+    ALLOWED_HOSTS.append('10.0.0.137')
 
 MANAGERS = ADMINS
 
@@ -29,75 +26,48 @@ SERVER_EMAIL = 'jchampion@wbsrch.com'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
 
+ZETAWEB_PASSWORD = os.getenv('ZETAWEB_PASSWORD', 'password')
+URLS_PASSWORD = os.getenv('URLS_PASSWORD', 'password')
+INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'password')
+NEWS_PASSWORD = os.getenv('NEWS_PASSWORD', 'password')
+ZETAWEB_HOST = os.getenv('ZETAWEB_HOST', '127.0.0.1')
+URLS_HOST = os.getenv('URLS_HOST', '127.0.0.1')
+INDEXES_HOST = os.getenv('INDEXES_HOST', '127.0.0.1')
+NEWS_HOST = os.getenv('NEWS_HOST', '127.0.0.1')
 
-if environment != 'development':
+if True:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'zetaweb',               # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',               # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',  # Not used with sqlite3.
-            'HOST': '216.151.3.109',         # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            'NAME': 'zetaweb',
+            'USER': 'zetaweb',
+            'PASSWORD': ZETAWEB_PASSWORD,
+            'HOST': ZETAWEB_HOST,
+            'PORT': '',
         },
         'urls': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'urls',                  # Or path to database file if using sqlite3.
-            'USER': 'urls',                  # Not used with sqlite3.
-            'PASSWORD': 'ExplodingUnderwear9099321',
-            'HOST': '216.151.3.108',         # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            'NAME': 'urls',
+            'USER': 'urls',
+            'PASSWORD': URLS_PASSWORD,
+            'HOST': URLS_HOST,
+            'PORT': '',
         },
         'indexes': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'indexes',               # Or path to database file if using sqlite3.
-            'USER': 'indexes',               # Not used with sqlite3.
-            'PASSWORD': 'Fracking,TheW3b02211',
-            'HOST': '216.151.3.106',         # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        },
-        'news': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'news',                  # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',               # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',
-            'HOST': '45.56.74.154',          # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'zetaweb',                      # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',                      # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',        # Not used with sqlite3.
-            'HOST': 'localhost',                    # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
-        },
-        'urls': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'urls',                         # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',                      # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',        # Not used with sqlite3.
-            'HOST': 'localhost',                    # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
-        },
-        'indexes': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'indexes',                      # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',                      # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',        # Not used with sqlite3.
-            'HOST': 'localhost',                    # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
+            'NAME': 'indexes',
+            'USER': 'indexes',
+            'PASSWORD': INDEXES_PASSWORD,
+            'HOST': INDEXES_HOST,
+            'PORT': '',
         },
         'news': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'news',                         # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',                      # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',        # Not used with sqlite3.
-            'HOST': 'localhost',                    # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
+            'NAME': 'news',
+            'USER': 'zetaweb',
+            'PASSWORD': NEWS_PASSWORD,
+            'HOST': NEWS_HOST,
+            'PORT': '',
         }
     }
 
@@ -180,15 +150,6 @@ TEMPLATES = [
                 "django.core.context_processors.media",
                 "django.core.context_processors.tz",
                 "django.contrib.messages.context_processors.messages"],
-            'allowed_include_roots': ['/var/django/wbsrch/templates/', ],
-            # 'debug': DEBUG,
-        },
-    },
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': ['/var/django/wbsrch/jinjatemplates/', ],
-        'APP_DIRS': False,
-        'OPTIONS': {
             # 'debug': DEBUG,
         },
     },

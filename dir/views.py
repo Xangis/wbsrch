@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect, Http404, HttpResponseForbidden, HttpResponseBadRequest
 from django.template import Context, loader, RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.apps import apps
@@ -193,7 +193,7 @@ def index(request):
     else:
         cached = True
 
-    return render_to_response('index.htm', {'language_code': language_code, 'recent_terms': recent_terms, 'superuser': superuser, 'cached': cached }, context_instance=RequestContext(request))
+    return render(request, 'index.htm', {'language_code': language_code, 'recent_terms': recent_terms, 'superuser': superuser, 'cached': cached })
 
 def ads(request):
     return HttpResponsePermanentRedirect('https://ads.wbsrch.com')

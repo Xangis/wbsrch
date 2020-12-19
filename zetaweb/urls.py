@@ -5,6 +5,7 @@ from zetaweb import settings
 from dir import views
 from dir import api
 from blog.views import *
+import django
 admin.autodiscover()
 
 
@@ -78,4 +79,4 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += patterns('', url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, }),)
+    urlpatterns.append(url(r'^(?P<path>.*)$', django.views.static.serve, {'document_root': settings.MEDIA_ROOT, }))
