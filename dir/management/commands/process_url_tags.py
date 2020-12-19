@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils import timezone
 from optparse import make_option
 from dir.models import QueryParameter, DomainInfo, PageLink, SiteInfo
 from dir.utils import GetSiteInfoModelFromLanguage, NormalizeUrl
 from pytz.exceptions import AmbiguousTimeError
 import time
+
 
 class Command(BaseCommand):
     help = "Processes URL parameter rules for domains with specifically tagged URL parameters to ensure their URLs are clean."
@@ -27,7 +27,7 @@ class Command(BaseCommand):
         if domain:
             params = QueryParameter.objects.filter(domain=domain)
         else:
-            params = QueryParameter.objects.all()[options['offset']:(options['max']+options['offset'])]
+            params = QueryParameter.objects.all()[options['offset']:(options['max'] + options['offset'])]
         maxurls = options['urls']
         numurls = 0
         domains = []

@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Q
 from django.template.defaultfilters import truncatechars
-from django.utils.timezone import utc
 from django.utils import timezone
 from simhash import Simhash
 import random
-import urllib.parse as urlparse
-import datetime
-import time
-import re
 import uuid
 
 import django.db.models.options as options
@@ -18,7 +11,7 @@ options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
 
 language_list = ['en', 'an', 'ca', 'cs', 'cy', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'it', 'lt', 'lv', 'nl', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
 hidden_language_list = ['ha', 'rw', 'sn', 'so', 'wo', 'xh', 'yo', 'zu']
-#language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'ro', 'el', 'sv', 'da', 'hu', 'hr', 'sk', 'lt', 'no', 'fi', 'et', 'lv', 'sl', 'is', 'sw', 'yo', 'so', 'wo', 'ha', 'rw', 'sn', 'ca']
+# language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'ro', 'el', 'sv', 'da', 'hu', 'hr', 'sk', 'lt', 'no', 'fi', 'et', 'lv', 'sl', 'is', 'sw', 'yo', 'so', 'wo', 'ha', 'rw', 'sn', 'ca']
 
 # Only including languages that aren't also a valid country. This means that "ar", which could be argentina,
 # and "uk" which could be the united kingdom, are not listed as blocked. Doing so could cause it to auto-delete
@@ -218,7 +211,7 @@ class BlockedSite(models.Model):
     class Meta:
         in_db = 'urls'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
     def save(self, remove=True, *args, **kwargs):
@@ -250,12 +243,12 @@ class BadQuery(models.Model):
     keywords = models.CharField(max_length=260, null=False, unique=True)
     date_added = models.DateField(auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
     class Meta:
         in_db = 'indexes'
-        ordering = ['keywords',]
+        ordering = ['keywords', ]
 
 class URLInfo(models.Model):
     rooturl = models.CharField(max_length=260, blank=True, null=False)
@@ -270,7 +263,7 @@ class URLInfo(models.Model):
     pagetext = models.TextField(blank=True, null=True)
     pagesize = models.IntegerField(null=True, blank=True)
     lastcrawled = models.DateTimeField(null=True, blank=True)
-    firstcrawled = models.DateTimeField(null=True, blank=True) # Note that this won't be accurate for pages recrawled before 2015-09-22.
+    firstcrawled = models.DateTimeField(null=True, blank=True)  # Note that this won't be accurate for pages recrawled before 2015-09-22.
     ip = models.CharField(max_length=16, blank=True, null=True, db_index=True)
     num_errors = models.IntegerField(blank=True, default=0)
     error_info = models.TextField(blank=True, default='')
@@ -315,7 +308,7 @@ class URLInfo(models.Model):
             hashval = Simhash(self.pagetext, f=128).value
         else:
             hashval = 0
-        self.simhash_value = '{:0128b}'.format(hashval)      
+        self.simhash_value = '{:0128b}'.format(hashval)
         super(URLInfo, self).save(*args, **kwargs)
 
     @property
@@ -329,72 +322,72 @@ class SiteInfo(URLInfo):
     class Meta:
         db_table = 'site_info'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_cs(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_de(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_el(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_es(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_fi(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_fr(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_hu(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_it(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_nl(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_pl(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_pt(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_sv(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class SiteInfo_tr(URLInfo):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class DomainInfo(models.Model):
@@ -425,7 +418,7 @@ class DomainInfo(models.Model):
     is_unblockable = models.BooleanField(blank=True, default=False, help_text='Is this domain unblockable, even by an idiot?')
     domain_created = models.DateTimeField(null=True, blank=True)
     domain_expires = models.DateTimeField(null=True, blank=True)
-    domain_updated = models.DateTimeField(null=True, blank=True) # The last time WbSrch updated the domain.
+    domain_updated = models.DateTimeField(null=True, blank=True)  # The last time WbSrch updated the domain.
     whois_last_updated = models.DateTimeField(null=True, blank=True)
     robots_ip = models.CharField(max_length=16, null=True, blank=True, db_index=True, help_text='The IP address of the server we retrieved (or tried to retrieve) the robots.txt from.')
     robots_txt = models.TextField(null=True, blank=True)
@@ -453,7 +446,7 @@ class DomainInfo(models.Model):
     whois_nameservers = models.TextField(null=True, blank=True)
     whois_emails = models.TextField(null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 class Screenshot(models.Model):
@@ -462,7 +455,7 @@ class Screenshot(models.Model):
     file_small = models.TextField(null=True, blank=True, help_text='320x200px image file location.')
     date_taken = models.DateField(auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.domain.url
 
 class Favicon(models.Model):
@@ -473,19 +466,19 @@ class Favicon(models.Model):
     width = models.IntegerField()
     height = models.IntegerField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.domain.url
 
 class AllowedDomain(models.Model):
     """
-    When the crawler is in allowed-domain-only mode, this controls what domains can be added 
+    When the crawler is in allowed-domain-only mode, this controls what domains can be added
     to the index and the pending URL list.
 
     All other settings are controlled by the DomainInfo class.
     """
     url = models.CharField(max_length=255, unique=True, db_index=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 
@@ -503,15 +496,17 @@ class DomainSuffix(models.Model):
     score_adjustment = models.IntegerField(default=0)
     last_updated = models.DateField(null=True, blank=True, auto_now=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.extension
 
     class Meta:
         in_db = 'urls'
-        ordering = ['extension',]
+        ordering = ['extension', ]
+
 
 def RandomValue():
-    return random.randint(0,2000000000)
+    return random.randint(0, 2000000000)
+
 
 class CrawlableUrl(models.Model):
     rooturl = models.CharField(max_length=260, db_index=True, null=False, blank=False)
@@ -523,7 +518,7 @@ class CrawlableUrl(models.Model):
         self.randval = RandomValue()
         super(CrawlableUrl, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
     class Meta:
@@ -549,106 +544,106 @@ class SearchLogBase(models.Model):
 
 class SearchLog(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_cs(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_da(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_de(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_el(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_es(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_fi(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_fr(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_hu(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_is(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_it(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_nl(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_no(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_pl(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_pt(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_sk(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_sv(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class SearchLog_tr(SearchLogBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class DomainSearchLog(SearchLogBase):
     # What language site was this domain searched from?
     language = models.CharField(max_length=6)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IPSearchLog(SearchLogBase):
     # What language site was this domain searched from?
     language = models.CharField(max_length=6)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndexBase(models.Model):
@@ -662,7 +657,7 @@ class PendingIndexBase(models.Model):
 
 class PendingIndex(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
     class Meta:
@@ -671,67 +666,67 @@ class PendingIndex(PendingIndexBase):
 
 class PendingIndex_cs(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_de(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_el(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_es(PendingIndexBase):
-    
-    def __unicode__(self):
+
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_fi(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_fr(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_hu(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_it(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_nl(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_pl(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_pt(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_sv(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class PendingIndex_tr(PendingIndexBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTermBase(models.Model):
@@ -753,7 +748,7 @@ class IndexTermBase(models.Model):
     def save(self, keep_date=False, *args, **kwargs):
         if not keep_date:
             self.date_indexed = timezone.now()
-        super(IndexTermBase,self).save(*args, **kwargs)
+        super(IndexTermBase, self).save(*args, **kwargs)
 
     class Meta:
         in_db = 'indexes'
@@ -763,72 +758,72 @@ class IndexTerm(IndexTermBase):
     show_ad = models.BooleanField(blank=True, default=False)
     verified_english = models.BooleanField(blank=True, default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_cs(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_de(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_el(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_es(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_fi(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_fr(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_hu(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_it(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_nl(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_pl(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_pt(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_sv(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class IndexTerm_tr(IndexTermBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class FeedbackItem(models.Model):
@@ -843,7 +838,7 @@ class FeedbackItem(models.Model):
     class Meta:
         in_db = 'indexes'
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Feedback on ' + self.keywords
 
 class ChangelogItem(models.Model):
@@ -858,7 +853,7 @@ class ChangelogItem(models.Model):
     class Meta:
         in_db = 'indexes'
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.date_added) + ': ' + self.comment
 
 class Setting(models.Model):
@@ -868,7 +863,7 @@ class Setting(models.Model):
     class Meta:
         in_db = 'indexes'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name + ': ' + self.value
 
 class SiteInfoFull(SiteInfo):
@@ -2454,12 +2449,12 @@ class IndexStats(models.Model):
     last_most_linked_to = models.DateField(null=True, blank=True)
     generation_time = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=8)
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Index Stats on ' + str(self.create_date)
 
     class Meta:
         in_db = 'indexes'
-        ordering = ['-create_date',]
+        ordering = ['-create_date', ]
         verbose_name_plural = 'Index Stats'
 
 # Model for holding a monthly report of the most popular searches.
@@ -2472,12 +2467,12 @@ class MonthlySearchReport(models.Model):
     top_searches = models.TextField()
     create_date = models.DateField(auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.language + ' search report for ' + str(self.year) + '-' + str(self.month)
 
     class Meta:
         in_db = 'indexes'
-        ordering = ['-year','-month', 'language']
+        ordering = ['-year', '-month', 'language']
 
 class PageLink(models.Model):
     rooturl_source = models.CharField(max_length=260, blank=True, null=False, db_index=True)
@@ -2486,7 +2481,7 @@ class PageLink(models.Model):
     rooturl_destination = models.CharField(max_length=260, blank=True, null=False, db_index=True)
     anchor_text = models.CharField(max_length=255, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url_source + ' links to ' + self.url_destination
 
     class Meta:
@@ -2498,8 +2493,8 @@ class KeywordRank(models.Model):
     rooturl = models.CharField(max_length=260, blank=True, null=False, db_index=True)
     show = models.BooleanField(default=True, blank=True)
 
-    def __unicode__(self):
-       return self.rooturl + ' ranks ' + str(self.rank) + ' for ' + self.keywords
+    def __str__(self):
+        return self.rooturl + ' ranks ' + str(self.rank) + ' for ' + self.keywords
 
     class Meta:
         in_db = 'indexes'
@@ -2565,8 +2560,8 @@ class QueryParameter(models.Model):
     remove_or_replace_after_crawl = models.BooleanField(blank=True, default=True, help_text='Should this parameter be removed or replaced after crawling?')
     only_replace_if_present = models.BooleanField(blank=True, default=False, help_text='Only replace the URL parameter if it is already present.')
 
-    def __unicode__(self):
-       return 'Change parameter {0} for {1}'.format(self.parameter, self.domain)
+    def __str__(self):
+        return 'Change parameter {0} for {1}'.format(self.parameter, self.domain)
 
     class Meta:
         in_db = 'urls'
@@ -2577,7 +2572,7 @@ class PageIFrame(models.Model):
     url_destination = models.CharField(max_length=2048, blank=True, null=False)
     rooturl_destination = models.CharField(max_length=260, blank=True, null=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url_source + ' has an iframe to ' + self.url_destination
 
     class Meta:
@@ -2590,7 +2585,7 @@ class PageJavaScript(models.Model):
     rooturl_destination = models.CharField(max_length=260, blank=True, null=False)
     filename = models.CharField(max_length=255, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url_source + ' loads the JavaScript at ' + self.url_destination
 
     class Meta:
@@ -2614,8 +2609,8 @@ class NewsSite(models.Model):
     """
     url = models.CharField(max_length=260, blank=True, null=False, db_index=True)
 
-    def __unicode__(self):
-       return self.url
+    def __str__(self):
+        return self.url
 
     class Meta:
         in_db = 'news'
@@ -2626,77 +2621,77 @@ class AutoCompleteBase(models.Model):
 
     class Meta:
         in_db = 'indexes'
-        ordering = ['-score',]
+        ordering = ['-score', ]
         abstract = True
 
 class AutoComplete(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_cs(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_de(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_el(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_es(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_fi(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_fr(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_hu(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_it(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_nl(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_pl(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_pt(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_sv(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class AutoComplete_tr(AutoCompleteBase):
 
-    def __unicode__(self):
+    def __str__(self):
         return self.keywords
 
 class ResultClickBase(models.Model):
@@ -2713,7 +2708,7 @@ class ResultClickBase(models.Model):
         in_db = 'indexes'
         abstract = True
 
-    def __unicode__(self):
+    def __str__(self):
         return '{0} at position {1} in search {2}'.format(self.url, self.position, self.keywords)
 
 class ResultClick(ResultClickBase):
@@ -2801,21 +2796,22 @@ class APIUsage(models.Model):
     class Meta:
         in_db = 'indexes'
 
+
 if 'an' in language_list:
 
     class SiteInfo_an(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_an(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_an(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_an(KeywordRank):
@@ -2823,7 +2819,7 @@ if 'an' in language_list:
 
     class SearchLog_an(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_an(ResultClickBase):
@@ -2831,7 +2827,7 @@ if 'an' in language_list:
 
     class AutoComplete_an(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -2839,17 +2835,17 @@ if 'ca' in language_list:
 
     class SiteInfo_ca(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_ca(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_ca(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_ca(KeywordRank):
@@ -2857,7 +2853,7 @@ if 'ca' in language_list:
 
     class SearchLog_ca(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_ca(ResultClickBase):
@@ -2865,7 +2861,7 @@ if 'ca' in language_list:
 
     class AutoComplete_ca(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -2873,17 +2869,17 @@ if 'cy' in language_list:
 
     class SiteInfo_cy(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_cy(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_cy(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_cy(KeywordRank):
@@ -2891,7 +2887,7 @@ if 'cy' in language_list:
 
     class SearchLog_cy(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_cy(ResultClickBase):
@@ -2899,7 +2895,7 @@ if 'cy' in language_list:
 
     class AutoComplete_cy(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -2907,17 +2903,17 @@ if 'et' in language_list:
 
     class SiteInfo_et(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_et(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_et(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_et(KeywordRank):
@@ -2925,7 +2921,7 @@ if 'et' in language_list:
 
     class SearchLog_et(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_et(ResultClickBase):
@@ -2933,7 +2929,7 @@ if 'et' in language_list:
 
     class AutoComplete_et(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -2941,17 +2937,17 @@ if 'eu' in language_list:
 
     class SiteInfo_eu(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_eu(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_eu(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_eu(KeywordRank):
@@ -2959,7 +2955,7 @@ if 'eu' in language_list:
 
     class SearchLog_eu(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_eu(ResultClickBase):
@@ -2967,7 +2963,7 @@ if 'eu' in language_list:
 
     class AutoComplete_eu(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -2975,17 +2971,17 @@ if 'gl' in language_list:
 
     class SiteInfo_gl(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_gl(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_gl(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_gl(KeywordRank):
@@ -2993,7 +2989,7 @@ if 'gl' in language_list:
 
     class SearchLog_gl(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_gl(ResultClickBase):
@@ -3001,7 +2997,7 @@ if 'gl' in language_list:
 
     class AutoComplete_gl(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3009,17 +3005,17 @@ if 'ha' in language_list:
 
     class SiteInfo_ha(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_ha(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_ha(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_ha(KeywordRank):
@@ -3027,7 +3023,7 @@ if 'ha' in language_list:
 
     class SearchLog_ha(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_ha(ResultClickBase):
@@ -3035,7 +3031,7 @@ if 'ha' in language_list:
 
     class AutoComplete_ha(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3043,17 +3039,17 @@ if 'hr' in language_list:
 
     class SiteInfo_hr(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_hr(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_hr(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_hr(KeywordRank):
@@ -3061,7 +3057,7 @@ if 'hr' in language_list:
 
     class SearchLog_hr(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_hr(ResultClickBase):
@@ -3069,24 +3065,24 @@ if 'hr' in language_list:
 
     class AutoComplete_hr(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 if 'lt' in language_list:
 
     class SiteInfo_lt(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_lt(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_lt(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_lt(KeywordRank):
@@ -3094,7 +3090,7 @@ if 'lt' in language_list:
 
     class SearchLog_lt(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_lt(ResultClickBase):
@@ -3102,24 +3098,24 @@ if 'lt' in language_list:
 
     class AutoComplete_lt(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 if 'lv' in language_list:
 
     class SiteInfo_lv(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_lv(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_lv(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_lv(KeywordRank):
@@ -3127,7 +3123,7 @@ if 'lv' in language_list:
 
     class SearchLog_lv(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_lv(ResultClickBase):
@@ -3135,24 +3131,24 @@ if 'lv' in language_list:
 
     class AutoComplete_lv(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 if 'ro' in language_list:
 
     class SiteInfo_ro(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_ro(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_ro(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_ro(KeywordRank):
@@ -3160,7 +3156,7 @@ if 'ro' in language_list:
 
     class SearchLog_ro(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_ro(ResultClickBase):
@@ -3168,7 +3164,7 @@ if 'ro' in language_list:
 
     class AutoComplete_ro(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3176,17 +3172,17 @@ if 'rw' in language_list:
 
     class SiteInfo_rw(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_rw(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_rw(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_rw(KeywordRank):
@@ -3194,7 +3190,7 @@ if 'rw' in language_list:
 
     class SearchLog_rw(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_rw(ResultClickBase):
@@ -3202,7 +3198,7 @@ if 'rw' in language_list:
 
     class AutoComplete_rw(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3210,17 +3206,17 @@ if 'sl' in language_list:
 
     class SiteInfo_sl(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_sl(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_sl(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_sl(KeywordRank):
@@ -3228,7 +3224,7 @@ if 'sl' in language_list:
 
     class SearchLog_sl(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_sl(ResultClickBase):
@@ -3236,26 +3232,25 @@ if 'sl' in language_list:
 
     class AutoComplete_sl(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
-
 
 
 if 'sn' in language_list:
 
     class SiteInfo_sn(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_sn(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_sn(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_sn(KeywordRank):
@@ -3263,7 +3258,7 @@ if 'sn' in language_list:
 
     class SearchLog_sn(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_sn(ResultClickBase):
@@ -3271,7 +3266,7 @@ if 'sn' in language_list:
 
     class AutoComplete_sn(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3279,17 +3274,17 @@ if 'so' in language_list:
 
     class SiteInfo_so(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_so(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_so(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_so(KeywordRank):
@@ -3297,7 +3292,7 @@ if 'so' in language_list:
 
     class SearchLog_so(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_so(ResultClickBase):
@@ -3305,7 +3300,7 @@ if 'so' in language_list:
 
     class AutoComplete_so(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3313,17 +3308,17 @@ if 'sw' in language_list:
 
     class SiteInfo_sw(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_sw(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_sw(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_sw(KeywordRank):
@@ -3331,7 +3326,7 @@ if 'sw' in language_list:
 
     class SearchLog_sw(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_sw(ResultClickBase):
@@ -3339,7 +3334,7 @@ if 'sw' in language_list:
 
     class AutoComplete_sw(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3347,17 +3342,17 @@ if 'wo' in language_list:
 
     class SiteInfo_wo(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_wo(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_wo(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_wo(KeywordRank):
@@ -3365,7 +3360,7 @@ if 'wo' in language_list:
 
     class SearchLog_wo(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_wo(ResultClickBase):
@@ -3373,7 +3368,7 @@ if 'wo' in language_list:
 
     class AutoComplete_wo(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3381,17 +3376,17 @@ if 'xh' in language_list:
 
     class SiteInfo_xh(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_xh(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_xh(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_xh(KeywordRank):
@@ -3399,7 +3394,7 @@ if 'xh' in language_list:
 
     class SearchLog_xh(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_xh(ResultClickBase):
@@ -3407,7 +3402,7 @@ if 'xh' in language_list:
 
     class AutoComplete_xh(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3415,17 +3410,17 @@ if 'yo' in language_list:
 
     class SiteInfo_yo(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_yo(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_yo(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_yo(KeywordRank):
@@ -3433,7 +3428,7 @@ if 'yo' in language_list:
 
     class SearchLog_yo(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_yo(ResultClickBase):
@@ -3441,7 +3436,7 @@ if 'yo' in language_list:
 
     class AutoComplete_yo(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
 
@@ -3449,17 +3444,17 @@ if 'zu' in language_list:
 
     class SiteInfo_zu(URLInfo):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.url
 
     class PendingIndex_zu(PendingIndexBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class IndexTerm_zu(IndexTermBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class KeywordRanking_zu(KeywordRank):
@@ -3467,7 +3462,7 @@ if 'zu' in language_list:
 
     class SearchLog_zu(SearchLogBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
 
     class ResultClick_zu(ResultClickBase):
@@ -3475,6 +3470,5 @@ if 'zu' in language_list:
 
     class AutoComplete_zu(AutoCompleteBase):
 
-        def __unicode__(self):
+        def __str__(self):
             return self.keywords
-

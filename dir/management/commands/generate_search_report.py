@@ -1,7 +1,8 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from dir.utils import GenerateMonthlySearchReports
 from optparse import make_option
 import datetime
+
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -9,6 +10,7 @@ class Command(BaseCommand):
         make_option('-y', '--year', default=None, action='store', type='int', dest='year', help='Year to index.'),
         make_option('-l', '--language', default=None, action='store', type='str', dest='language', help='2-letter code of language to index, leave blank for all.'),
     )
+
     def handle(self, *args, **options):
         language = options.get('language', None)
         if language:

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from optparse import make_option
 from dir.models import DomainInfo, PageLink, BlockedSite
 import time
+
 
 class Command(BaseCommand):
     help = "Checks link and block data to create a list of domains that are probably spam."
@@ -16,7 +17,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         start = timezone.now()
-        sources = PageLink.objects.all().values('rooturl_source').distinct().order_by('rooturl_source')[options['offset']:options['offset']+options['max']]
+        sources = PageLink.objects.all().values('rooturl_source').distinct().order_by('rooturl_source')[options['offset']:options['offset'] + options['max']]
         possibly_spam = []
         definitely_spam = []
         total = sources.count()
@@ -27,7 +28,7 @@ class Command(BaseCommand):
             domain = source['rooturl_source']
             print('Domain: {0}'.format(domain))
             try:
-                excluded = BlockedSite.objects.get(url=domain)
+                BlockedSite.objects.get(url=domain)
                 print('Domain {0} already excluded, no need to check.'.format(domain))
                 continue
             except ObjectDoesNotExist:
@@ -35,7 +36,7 @@ class Command(BaseCommand):
             destinations = PageLink.objects.filter(rooturl_source=domain).values('rooturl_destination').distinct()
             for destination in destinations:
                 try:
-                    excluded = BlockedSite.objects.get(url=destination['rooturl_destination'], reason=7)
+                    BlockedSite.objects.get(url=destination['rooturl_destination'], reason=7)
                     print('Domain {0} links to {1}, which is blocked as spam.'.format(domain, destination['rooturl_destination']))
                     spamdomains = spamdomains + 1
                     continue

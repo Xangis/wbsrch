@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.db import IntegrityError, connection
 from optparse import make_option
 from dir.models import *
 from dir.utils import *
 from dir.language import IdentifyLanguage
 import codecs
+
 
 class Command(BaseCommand):
     help = """Performs semi-manual or automatic language categorization for domains.
@@ -198,7 +199,7 @@ class Command(BaseCommand):
             scores = {}
             for url in urls:
                 if textminimum and len(url.pagetext) < 100:
-                    if verbosity >=2:
+                    if verbosity >= 2:
                         print('Skipping page with less than 100 chars of text.')
                     continue
                 total = total + 1
@@ -427,7 +428,7 @@ class Command(BaseCommand):
                     elif langtoblock == 'zh':
                         # (21, 'Unindexed Language - Chinese'),
                         site.reason = 21
-                    #elif langtoblock == 'or':
+                    # elif langtoblock == 'or':
                     #    # TDOO: Add a reason for and 'or'
                     #    site.reason = 8
                     else:

@@ -9,7 +9,7 @@ from dir.utils import MoveSiteTo, GetSiteInfoModelFromLanguage, RemoveURLsForDom
 class Command(BaseCommand):
     help = """
     Checks all of the sites with the specified extension to see whether they should be moved to the target language.
-    Unlike the admin command, this is domain-language-aware, so pages from domains tagged as a specific language or 
+    Unlike the admin command, this is domain-language-aware, so pages from domains tagged as a specific language or
     as an infix or url parameter language will only be moved if they fit those rules.
     """
     option_list = BaseCommand.option_list + (
@@ -57,7 +57,7 @@ class Command(BaseCommand):
                     domain.save()
                 print('Blocking {0}'.format(item['rooturl']))
                 try:
-                    existing = BlockedSite.objects.get(url=item['rooturl'])
+                    BlockedSite.objects.get(url=item['rooturl'])
                     # If the domain is already blocked, the URL must have been added erroneously.
                     # in that case, just delete it.
                     RemoveURLsForDomain(item.rooturl)
@@ -69,7 +69,7 @@ class Command(BaseCommand):
                     domainsmoved = domainsmoved + 1
                 continue
             try:
-                di = DomainInfo.objects.get(url = item['rooturl'])
+                di = DomainInfo.objects.get(url=item['rooturl'])
                 if di.uses_language_subdirs or di.uses_langid:
                     print('Domain {0} uses a language categorization scheme but we do not handle those yet. Skipping.'.format(item['rooturl']))
                     continue

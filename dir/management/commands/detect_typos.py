@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import connections
-from django.core.management.base import BaseCommand, CommandError
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.management.base import BaseCommand
 from optparse import make_option
-from dir.models import IndexTerm, language_list, SiteInfo, DomainInfo, BlockedSite
-from dir.utils import GetIndexModelFromLanguage, GetSiteInfoModelFromLanguage
-import sys
-import operator
-import json
-from collections import Counter
+from dir.utils import GetIndexModelFromLanguage
+
 
 class Command(BaseCommand):
     help = """
@@ -40,7 +35,7 @@ class Command(BaseCommand):
         for pos, item in enumerate(check):
             if nonumbers and any(i.isdigit() for i in item.keywords):
                 continue
-            print('{1}: Checking {0}'.format(item.keywords, pos+skip))
+            print('{1}: Checking {0}'.format(item.keywords, pos + skip))
             cursor = connections['indexes'].cursor()
             cursor.execute("SELECT keywords, num_results FROM dir_indexterm WHERE KEYWORDS != %s AND num_results > {1} AND levenshtein(keywords, %s) <= {0} ORDER BY num_results DESC;".format(distance, over), [item.keywords, item.keywords])
             possible_words = cursor.fetchall()
@@ -68,4 +63,3 @@ class Command(BaseCommand):
                 print('Setting "{0}" as typo_for on {1}'.format(input, item.keywords))
                 item.typo_for = input
                 item.save()
-

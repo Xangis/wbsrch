@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
-from django.utils import timezone
+from django.core.management.base import BaseCommand
 from optparse import make_option
 from dir.utils import GetSearchLogModelFromLanguage, IsBotAgent
 from dir.models import language_list
-import time
+
 
 def CheckLogsForBots(lang, options):
     log_model = GetSearchLogModelFromLanguage(lang)
@@ -22,6 +21,7 @@ def CheckLogsForBots(lang, options):
         if checked % 100000 == 0:
             print('{0} checked.'.format(checked))
     print('{0} of {1} log entries in {2} were checked. {3} newly marked as bots. Others were already bots or had no browser string.'.format(checked, total, lang, changed))
+
 
 class Command(BaseCommand):
     help = """

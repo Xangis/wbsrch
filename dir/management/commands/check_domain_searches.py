@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from optparse import make_option
 from dir.models import *
 from dir.utils import *
 
+
 def is_ascii(s):
     return all(ord(c) < 128 for c in s)
+
 
 class Command(BaseCommand):
     help = """Checks search results for domain names and prints a list of domains that need to be crawled. However, this command is

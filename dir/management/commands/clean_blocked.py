@@ -1,13 +1,11 @@
 
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils import timezone
+from django.core.management.base import BaseCommand
 from optparse import make_option
 from dir.models import BlockedSite
 from dir.utils import DeleteDomainLinks
 import time
-import codecs
+
 
 class Command(BaseCommand):
     help = """
@@ -30,4 +28,3 @@ class Command(BaseCommand):
                 print('{0} items processed'.format(processed))
             if sleep:
                 time.sleep(sleep)
-

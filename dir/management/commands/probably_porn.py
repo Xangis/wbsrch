@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from optparse import make_option
 from dir.models import DomainInfo, PageLink, BlockedSite, SiteInfo
 from dir.utils import PornBlock
-import time
 import codecs
 import sys
 
 UTF8Writer = codecs.getwriter('utf8')
 sys.stdout = UTF8Writer(sys.stdout)
+
 
 class Command(BaseCommand):
     help = "Checks link and block data to create a list of domains that are probably porn."

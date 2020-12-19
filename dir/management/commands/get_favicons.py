@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
-from django.core import serializers
+from django.core.management.base import BaseCommand
+from django.core.exceptions import ObjectDoesNotExist
 from optparse import make_option
 from dir.models import DomainInfo
-from dir.domain import GetDomainInfo
-from django.db.utils import DataError
 import time
 import codecs
 from dir.utils import GetFavicons
+
 
 class Command(BaseCommand):
     help = "This command retrieves favicons for domains."
@@ -35,7 +34,7 @@ class Command(BaseCommand):
                 try:
                     domain = DomainInfo.objects.get(url=line)
                     domains.append(domain)
-                except:
+                except ObjectDoesNotExist:
                     # Create domain if not found. This could be problematic if we have a file full of garbage text.
                     print('Domain {0} not found, creating before favicon harvest.'.format(line))
                     domain = DomainInfo()

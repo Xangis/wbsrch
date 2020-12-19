@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from optparse import make_option
-from dir.models import PendingIndex, IndexTerm, DomainInfo
+from dir.models import DomainInfo
 from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
 import codecs
 import sys
 
 UTF8Writer = codecs.getwriter('utf8')
 sys.stdout = UTF8Writer(sys.stdout)
+
 
 class Command(BaseCommand):
     help = """
@@ -87,7 +88,7 @@ class Command(BaseCommand):
                                 numadded = numadded + 1
                 numdone = numdone + 1
                 if numdone >= maxwords:
-                     break
+                    break
         except UnicodeDecodeError:
             print('UnicodeDecodeError on line {0}'.format(numlines))
         if domains:

@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import truncatewords
-from django.db import models
-from django.db.models import Q, Count
+from django.db.models import Count
 from django.apps import apps
 from django.db.utils import DatabaseError
-from django.template.defaultfilters import truncatechars
 from django.db import IntegrityError, connection
 from django.utils.timezone import utc
 from django.utils import timezone
-from operator import itemgetter, attrgetter
 import io
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -24,12 +21,13 @@ import os
 import requests
 import favicon
 import urllib.parse
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import datetime
 import time
 import re
 import ipaddr
-import whois
 from nltk.corpus import stopwords
 from unidecode import unidecode
 
@@ -74,7 +72,7 @@ top_level_domains = [
 # New TLDs (many still needed)
 '.accountant', '.academy', '.adult', '.aero', '.agency', '.apartments', '.app', '.archi', '.associates', '.audio',
 '.bar', '.bargains', '.best', '.bike', '.biz', '.black', '.blackfriday', '.blog', '.blue', '.boo', '.builders',
-'.cab', '.cafe', '.camera', '.camp', '.cancerresearch', '.cards', '.center', '.ceo', '.cheap', '.christmas', '.church', '.click', '.clothing', 
+'.cab', '.cafe', '.camera', '.camp', '.cancerresearch', '.cards', '.center', '.ceo', '.cheap', '.christmas', '.church', '.click', '.clothing',
 '.club', '.codes', '.coffee', '.college', '.coop',
 '.dance', '.date', '.dating', '.design', '.diet', '.directory', '.download',
 '.education', '.email', '.events', '.exposed',
@@ -104,25 +102,25 @@ top_level_domains = [
 ]
 
 second_level_domains = [
-'.ac.uk', '.co.uk', '.gov.uk', '.judiciary.uk', '.ltd.uk', '.me.uk', '.net.uk', '.nhs.uk', '.nic.uk', '.org.uk', '.parliament.uk', '.plc.uk', '.police.uk', '.sch.uk', # UK
-'.ac.jp', '.ad.jp', '.co.jp', '.ed.jp', '.go.jp', '.gr.jp', '.lg.jp', '.ne.jp', '.or.jp', # Japan
-'.adm.br', '.adv.br', '.am.br', '.arq.br', '.art.br', '.b.br', '.bio.br', '.blog.br', '.cim.br', '.cnt.br', '.com.br', '.coop.br', '.ecn.br', '.eng.br', '.esp.br', '.etc.br', 'eti.br', '.edu.br', '.fm.br', '.fst.br', '.g12.br', '.imb.br', '.ind.br', '.inf.br', '.lel.br', '.gov.br', '.jor.br', '.jus.br', '.mat.br', '.med.br', '.mil.br', '.mus.br', '.net.br', '.nom.br', '.ntr.br', '.org.br', '.ppg.br', '.pro.br', '.psi.br', '.rec.br', '.srv.br', '.trd.br', '.tur.br', '.tv.br', '.vet.br', '.vlog.br', '.wiki.br', # Brazil
-'.ab.ca', '.bc.ca', '.gc.ca', '.mb.ca', '.nb.ca', '.nf.ca', '.nl.ca', '.ns.ca', '.nt.ca', '.nu.ca', '.on.ca', '.pe.ca', '.qc.ca', '.sk.ca', '.yk.ca', # Canada
-'.ak.us', '.al.us', '.ar.us', '.az.us', '.ca.us', '.co.us', '.ct.us', '.dc.us', '.de.us', '.fl.us', '.ga.us', '.hi.us', '.ia.us', '.id.us', '.il.us', '.in.us', '.ks.us', '.ky.us', '.la.us', '.ma.us', '.md.us', '.me.us', '.mi.us', '.mn.us', '.mo.us', '.ms.us', '.mt.us', '.nc.us', '.nd.us', '.ne.us', '.nh.us', '.nj.us', '.nm.us', '.nv.us', '.ny.us', '.oh.us', '.ok.us', '.or.us', '.pa.us', '.ri.us', '.sc.us', '.sd.us', '.tn.us', '.tx.us', '.ut.us', '.va.us', '.vt.us', '.wa.us', '.wi.us', '.wv.us', '.wy.us', # US States
-'.asn.au', '.com.au', '.csiro.au', '.edu.au', '.gov.au', '.id.au', '.net.au', '.org.au', # Australia
-'.ac.in', '.co.in', '.edu.in', '.ernet.in', '.firm.in', '.gen.in', '.gov.in', '.ind.in', '.mil.in', '.net.in', '.nic.in', '.org.in', '.res.in', # India
-'.ac.id', '.biz.id', '.co.id', '.desa.id', '.go.id', '.mil.id', '.my.id', '.net.id', '.or.id', '.sch.id', '.web.id', # Indonesia
-'.asso.fr', '.gouv.fr', '.tm.fr', # France
-'.gov.it', # Italy
-'.com.pt', '.edu.pt', '.gov.pt', '.org.pt', '.int.pt', '.net.pt', '.nome.pt', '.org.pt', '.publ.pt', # Portugal
-'.com.es', '.edu.es', '.gob.es', '.nom.es', '.org.es', # Spain
-'.art.pl', '.bialystok.pl', '.biz.pl', '.bydgoszcz.pl', '.com.pl', '.czest.pl', '.edu.pl', '.elk.pl', '.gda.pl', '.gdansk.pl', '.gov.pl', '.gorzow.pl', '.info.pl', '.kalisz.pl', '.katowice.pl', '.konin.pl', '.krakow.pl', '.lodz.pl', '.lublin.pl', '.malopolska.pl', '.nysa.pl', '.olsztyn.pl', '.media.pl', '.mil.pl', '.net.pl', '.ngo.pl', '.org.pl', '.opole.pl', '.pila.pl', '.poznan.pl', '.radom.pl', '.rzeszow.pl', '.slupsk.pl', '.szczecin.pl', '.torun.pl', '.tychy.pl', '.warszawa.pl', '.waw.pl', '.wroc.pl', '.wroclaw.pl', '.zgora.pl', # Poland
-'.gv.at', '.ac.at', '.co.at', '.or.at', # Austria
-'.av.tr', '.bel.tr', '.biz.tr', '.com.tr', '.edu.tr', '.gen.tr', '.gov.tr', '.info.tr', '.k12.tr', '.name.tr','.net.tr', '.org.tr', '.pol.tr', '.tsk.tr', '.tv.tr', '.web.tr', # Turkey
-'.co.hu', '.info.hu', '.net.hu', '.org.hu', # Hungary
-'.com.ro', '.info.ro', '.nom.ro', '.org.ro', '.arts.ro', '.firm.ro', '.nt.ro', '.rec.ro', '.store.ro', '.tm.ro', '.www.ro', # Romania
-'.ac.be', # Belgium
-'.com.gr', '.edu.gr', '.gov.gr', '.mil.gr', '.mod.gr', '.net.gr', '.org.gr', '.sch.gr', # Greece
+'.ac.uk', '.co.uk', '.gov.uk', '.judiciary.uk', '.ltd.uk', '.me.uk', '.net.uk', '.nhs.uk', '.nic.uk', '.org.uk', '.parliament.uk', '.plc.uk', '.police.uk', '.sch.uk',  # UK
+'.ac.jp', '.ad.jp', '.co.jp', '.ed.jp', '.go.jp', '.gr.jp', '.lg.jp', '.ne.jp', '.or.jp',  # Japan
+'.adm.br', '.adv.br', '.am.br', '.arq.br', '.art.br', '.b.br', '.bio.br', '.blog.br', '.cim.br', '.cnt.br', '.com.br', '.coop.br', '.ecn.br', '.eng.br', '.esp.br', '.etc.br', 'eti.br', '.edu.br', '.fm.br', '.fst.br', '.g12.br', '.imb.br', '.ind.br', '.inf.br', '.lel.br', '.gov.br', '.jor.br', '.jus.br', '.mat.br', '.med.br', '.mil.br', '.mus.br', '.net.br', '.nom.br', '.ntr.br', '.org.br', '.ppg.br', '.pro.br', '.psi.br', '.rec.br', '.srv.br', '.trd.br', '.tur.br', '.tv.br', '.vet.br', '.vlog.br', '.wiki.br',  # Brazil
+'.ab.ca', '.bc.ca', '.gc.ca', '.mb.ca', '.nb.ca', '.nf.ca', '.nl.ca', '.ns.ca', '.nt.ca', '.nu.ca', '.on.ca', '.pe.ca', '.qc.ca', '.sk.ca', '.yk.ca',  # Canada
+'.ak.us', '.al.us', '.ar.us', '.az.us', '.ca.us', '.co.us', '.ct.us', '.dc.us', '.de.us', '.fl.us', '.ga.us', '.hi.us', '.ia.us', '.id.us', '.il.us', '.in.us', '.ks.us', '.ky.us', '.la.us', '.ma.us', '.md.us', '.me.us', '.mi.us', '.mn.us', '.mo.us', '.ms.us', '.mt.us', '.nc.us', '.nd.us', '.ne.us', '.nh.us', '.nj.us', '.nm.us', '.nv.us', '.ny.us', '.oh.us', '.ok.us', '.or.us', '.pa.us', '.ri.us', '.sc.us', '.sd.us', '.tn.us', '.tx.us', '.ut.us', '.va.us', '.vt.us', '.wa.us', '.wi.us', '.wv.us', '.wy.us',  # US States
+'.asn.au', '.com.au', '.csiro.au', '.edu.au', '.gov.au', '.id.au', '.net.au', '.org.au',  # Australia
+'.ac.in', '.co.in', '.edu.in', '.ernet.in', '.firm.in', '.gen.in', '.gov.in', '.ind.in', '.mil.in', '.net.in', '.nic.in', '.org.in', '.res.in',  # India
+'.ac.id', '.biz.id', '.co.id', '.desa.id', '.go.id', '.mil.id', '.my.id', '.net.id', '.or.id', '.sch.id', '.web.id',  # Indonesia
+'.asso.fr', '.gouv.fr', '.tm.fr',  # France
+'.gov.it',  # Italy
+'.com.pt', '.edu.pt', '.gov.pt', '.org.pt', '.int.pt', '.net.pt', '.nome.pt', '.org.pt', '.publ.pt',  # Portugal
+'.com.es', '.edu.es', '.gob.es', '.nom.es', '.org.es',  # Spain
+'.art.pl', '.bialystok.pl', '.biz.pl', '.bydgoszcz.pl', '.com.pl', '.czest.pl', '.edu.pl', '.elk.pl', '.gda.pl', '.gdansk.pl', '.gov.pl', '.gorzow.pl', '.info.pl', '.kalisz.pl', '.katowice.pl', '.konin.pl', '.krakow.pl', '.lodz.pl', '.lublin.pl', '.malopolska.pl', '.nysa.pl', '.olsztyn.pl', '.media.pl', '.mil.pl', '.net.pl', '.ngo.pl', '.org.pl', '.opole.pl', '.pila.pl', '.poznan.pl', '.radom.pl', '.rzeszow.pl', '.slupsk.pl', '.szczecin.pl', '.torun.pl', '.tychy.pl', '.warszawa.pl', '.waw.pl', '.wroc.pl', '.wroclaw.pl', '.zgora.pl',  # Poland
+'.gv.at', '.ac.at', '.co.at', '.or.at',  # Austria
+'.av.tr', '.bel.tr', '.biz.tr', '.com.tr', '.edu.tr', '.gen.tr', '.gov.tr', '.info.tr', '.k12.tr', '.name.tr', '.net.tr', '.org.tr', '.pol.tr', '.tsk.tr', '.tv.tr', '.web.tr',  # Turkey
+'.co.hu', '.info.hu', '.net.hu', '.org.hu',  # Hungary
+'.com.ro', '.info.ro', '.nom.ro', '.org.ro', '.arts.ro', '.firm.ro', '.nt.ro', '.rec.ro', '.store.ro', '.tm.ro', '.www.ro',  # Romania
+'.ac.be',  # Belgium
+'.com.gr', '.edu.gr', '.gov.gr', '.mil.gr', '.mod.gr', '.net.gr', '.org.gr', '.sch.gr',  # Greece
 '.kommune.no', '.priv.no', '.stat.no', '.dep.no', '.fhs.no', 'mil.no', # Norway
 '.com.hr', '.iz.hr', # Croatia
 '.com.mt', '.org.mt', '.net.mt', '.edu.mt', '.gov.mt', # Malta
@@ -178,7 +176,7 @@ second_level_domains = [
 '.com.ar', '.edu.ar', '.gob.ar', '.gov.ar', '.int.ar', '.mil.ar', '.net.ar', '.org.ar', '.tur.ar', # Argentina
 '.com.co', '.edu.co', '.gov.co', '.mil.co', '.net.co', '.nom.co', '.org.co', # Colombia
 '.arts.ve', '.co.ve', '.com.ve', '.edu.ve', '.gob.ve', '.gov.ve', '.info.ve', '.int.ve', '.mil.ve', '.net.ve', '.org.ve', '.radio.ve', '.tec.ve', '.web.ve', # Venezuela
-'.com.bo', '.edu.bo',  '.org.bo', # Bolivia
+'.com.bo', '.edu.bo', '.org.bo', # Bolivia
 '.ac.ni', '.co.ni', '.com.ni', '.edu.ni', '.gob.ni', '.mil.ni', '.nom.ni', '.net.ni', '.org.ni', # Nicaragua
 '.com.pe', '.edu.pe', '.gob.pe', '.mil.pe', '.net.pe', '.ngo.pe', '.nom.pe', '.org.pe', '.sld.pe', # Peru
 '.com.ec', '.edu.ec', '.fin.ec', '.gob.ec', '.gov.ec', '.info.ec', '.mil.ec', '.org.ec', # Ecuador
@@ -205,7 +203,7 @@ second_level_domains = [
 '.gov.bi', # Burundi
 '.com.gh', '.edu.gh', '.gov.gh', '.mil.gh', '.net.gh', '.org.gh', # Ghana
 '.adv.mz', '.ac.mz', '.co.mz', '.edu.mz', '.gov.mz', '.org.mz', # Mozambique
-'.co.ao', '.ed.ao', '.gv.ao', '.it.ao', # Angola 
+'.co.ao', '.ed.ao', '.gv.ao', '.it.ao', # Angola
 '.com.cm', '.gov.cm', # Cameroon
 '.gov.bf', # Burkina Faso
 '.co.bw', '.gov.bw', # Botswana
@@ -276,7 +274,7 @@ def GetPendingIndexModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'PendingIndex_' + language)
-    except LookupError as e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -294,7 +292,7 @@ def GetIndexModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'IndexTerm_' + language)
-    except LookupError as e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -312,7 +310,7 @@ def GetSiteInfoModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'SiteInfo_' + language)
-    except LookupError as e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -330,7 +328,7 @@ def GetSearchLogModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'SearchLog_' + language)
-    except LookupError as e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -348,7 +346,7 @@ def GetKeywordRankingModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'KeywordRanking_' + language)
-    except LookupError as e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -366,7 +364,7 @@ def GetAutoCompleteModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'AutoComplete_' + language)
-    except LookupError as e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -384,7 +382,7 @@ def GetResultClickModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'ResultClick_' + language)
-    except LookupError as e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -427,11 +425,11 @@ def GetRootUrl(url, secure=False):
     if not url.startswith('http:') and not url.startswith('https:'):
         if url.startswith('//'):
             url = 'http:' + url
-        elif  url.startswith('://'):
+        elif url.startswith('://'):
             url = 'http' + url
         else:
             url = 'http://' + url
-    parsed_uri = urllib.parse.urlparse( url )
+    parsed_uri = urllib.parse.urlparse(url)
     loc = parsed_uri.netloc
     loc = loc.lower()
     if loc.endswith('.'):
@@ -468,7 +466,7 @@ def MakeRealUrl(url, domain=None, secure=False):
             url = 'http' + url
     elif url.startswith('/'):
         url = scheme + domain + url
-    elif domain and not '/' in url:
+    elif domain and '/' not in url:
         url = scheme + domain + '/' + url
     elif not url.startswith('http'):
         url = scheme + '//' + url
@@ -488,7 +486,7 @@ def IsIPAddress(url):
 def GetRootDomain(url):
     if not url.startswith('http:') and not url.startswith('https:'):
         url = 'http://' + url
-    parsed_uri = urllib.parse.urlparse( url )
+    parsed_uri = urllib.parse.urlparse(url)
     loc = parsed_uri.netloc
     if IsIPAddress(loc):
         return loc
@@ -533,7 +531,7 @@ def GetTerms(keywords):
     keywords = keywords.lower()
     if keywords.startswith('"') and keywords.endswith('"'):
         keywords = re.sub('"', '', keywords)
-        return [keywords,]
+        return [keywords, ]
     # TODO: Escape quote so this is a single operation.
     # Note: We were removing periods, but that breaks searches for things like 'google.com'.
     keywords = re.sub('[,;"]', '', keywords)
@@ -584,25 +582,25 @@ def GetLinkRank(domains_linking_in):
     """
     bonus = 0
     if domains_linking_in >= 1875000:
-        bonus += 10.0 + (0.000000128 * (domains_linking_in-1953125))
+        bonus += 10.0 + (0.000000128 * (domains_linking_in - 1953125))
     elif domains_linking_in >= 375000:
-        bonus += 9.0 + (0.00000064 * (domains_linking_in-390625))
+        bonus += 9.0 + (0.00000064 * (domains_linking_in - 390625))
     elif domains_linking_in >= 75000:
-        bonus += 8.0 + (0.0000032 * (domains_linking_in-78125))
+        bonus += 8.0 + (0.0000032 * (domains_linking_in - 78125))
     elif domains_linking_in >= 15000:
-        bonus += 7.0 + (0.000016 * (domains_linking_in-15625))
+        bonus += 7.0 + (0.000016 * (domains_linking_in - 15625))
     elif domains_linking_in >= 3000:
-        bonus += 6.0 + (0.00008 * (domains_linking_in-3125))
+        bonus += 6.0 + (0.00008 * (domains_linking_in - 3125))
     elif domains_linking_in >= 625:
-        bonus += 5.0 + (0.0004 * (domains_linking_in-625))
+        bonus += 5.0 + (0.0004 * (domains_linking_in - 625))
     elif domains_linking_in >= 125:
-        bonus += 4.0 + (0.002 * (domains_linking_in-125))
+        bonus += 4.0 + (0.002 * (domains_linking_in - 125))
     elif domains_linking_in >= 25:
-        bonus += 3.0 + (0.01 * (domains_linking_in-25))
+        bonus += 3.0 + (0.01 * (domains_linking_in - 25))
     elif domains_linking_in >= 5:
-        bonus += 2.0 + (0.05 * (domains_linking_in-5))
+        bonus += 2.0 + (0.05 * (domains_linking_in - 5))
     elif domains_linking_in >= 1:
-        bonus += 1.0 + (0.25 * (domains_linking_in-1))
+        bonus += 1.0 + (0.25 * (domains_linking_in - 1))
     return bonus
 
 def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=False):
@@ -720,7 +718,7 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
         if domain.domcop_pagerank and not domain.domcop_pagerank_outdated:
             bonus += domain.domcop_pagerank
             if verbose:
-                rulematches.append('Bonus {0} for Domcop PageRank {1}'.format(domain.domcop_pagerank))
+                rulematches.append('Bonus {0} for Domcop PageRank {0}'.format(domain.domcop_pagerank))
         if domain.domains_linking_in:
             linkrank = GetLinkRank(domain.domains_linking_in)
             if verbose:
@@ -738,7 +736,7 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
         if len(hyphens) > 1:
             bonus -= (len(hyphens) - 1)
             if verbose:
-                rulematches.append('-{0} points for {1} hyphens'.format((len(hyphens)-1), len(hyphens)))
+                rulematches.append('-{0} points for {1} hyphens'.format((len(hyphens) - 1), len(hyphens)))
         if domain.domain_created:
             mod = GetDomainAgeModifier(domain)
             value *= mod
@@ -760,7 +758,7 @@ def IsBadMimeType(mimetype):
     Is this a MIME type we don't want to save in our index?
     """
     if mimetype in ['application/pdf', 'image/jpeg', 'application/x-shockwave-flash', 'image/png', 'image/gif', 'application/octet-stream',
-                    'application/x-gzip', 'application/zip', 'video/x-ms-asf', 'application/x-bittorrent', 'application/epub+zip', 
+                    'application/x-gzip', 'application/zip', 'video/x-ms-asf', 'application/x-bittorrent', 'application/epub+zip',
                     'application/x-icq', 'audio/x-pn-realaudio', 'audio/mpeg', 'audio/mid', 'image', 'application/pdf;charset=UTF-8',
                     'audio/midi', 'video/mp4', 'image/tiff', 'video/x-msvideo', 'audio/x-ms-wma', 'text/calendar', 'image/pjpeg',
                     'application/vnd.oasis.opendocument.text', 'application/x-msdownload', 'audio/x-scpls', 'text/x-c; charset=UTF-8',
@@ -799,16 +797,16 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
                     'text/html;charset=UTF8', 'text/html; Charset=UTF8', 'text/html; charset=utf-8; boundary=xYzZY',
                     'text/html; charset: UTF-8; charset=UTF-8', 'text/html; Charset=UTF-8;charset=UTF-8', 'text/html; encoding=utf-8;charset=UTF-8',
                     'text/HTML; charset=utf-8', 'text/HTML; Charset=utf-8', 'Text/html; charset=UTF-8', 'Text/Html; Charset=Utf-8',
-                    'text/html; UTF-8; charset=UTF-8', 'TEXT/HTML; charset=UTF-8', 'text/html; Charset=utf8', 'text/html;charset=utf-8;', 
+                    'text/html; UTF-8; charset=UTF-8', 'TEXT/HTML; charset=UTF-8', 'text/html; Charset=utf8', 'text/html;charset=utf-8;',
                     'Text/HTML; charset=utf-8', 'text/HTML; charset=UTF-8', 'text/html;Charset=UTF-8', 'text/html ; charset=UTF-8',
                     'text/html; Charset=windows-65001', 'text/HTML; Charset=UTF-8']:
         return 1.0
     # I have no idea how to treat the xhtml+xml MIME type. No effect right now.
-    elif mimetype in ['application/xhtml+xml; charset=utf-8',]:
+    elif mimetype in ['application/xhtml+xml; charset=utf-8', ]:
         return 0.0
     # Half a point for ISO-8859-1 or unidentified HTML or UTF-7. It's not UTF-8, but at least it's HTML text likely to be readable. ASCII here too.
     # Windows-28591 is equivalent.
-    elif mimetype in ['text/html', 'text/html;', 'text/html; charset=ISO-8859-1', 'text/html;charset=ISO-8859-1', 'text/html; charset=iso-8859-1', 
+    elif mimetype in ['text/html', 'text/html;', 'text/html; charset=ISO-8859-1', 'text/html;charset=ISO-8859-1', 'text/html; charset=iso-8859-1',
                       'text/html; Charset=ISO-8859-1', 'text/html; Charset=iso-8859-1', 'text/html; charset=iso8859-1', 'text/html;charset=iso-8859-1',
                       'text/html, text/html; charset=iso-8859-1', 'text/html; charset=latin1', 'text/html; charset=',
                       'text/html; charset: ISO-8859-1; charset=UTF-8', 'text/html; charset=ISO_8859-1', 'text/html;charset=ascii',
@@ -833,7 +831,7 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
                       'text/html; charset="ISO-8859-15"', 'text/html; charset=cp1252']:
         return 0.25
     # No point modifier for unknown or undeclared charset.
-    elif mimetype in ['text/html; charset=_CHARSET',]:
+    elif mimetype in ['text/html; charset=_CHARSET', ]:
         return 0.0
     # Lose half a point for plain text. It's not HTML, but it may still be readable. Also lose half a point for text/html with no charset.
     elif mimetype in ['text/plain', 'text/plain; charset=UTF-8', 'text/html; charset=none', 'text/plain;charset=ISO-8859-1',
@@ -844,11 +842,11 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
     # just as if it's Windows-1252, otherwise neutral.
     elif mimetype in ['text/html; charset=ISO-8859-2', 'text/html; charset=iso-8859-2', 'text/html;charset=WINDOWS-1250',
                       'text/html; charset=windows-1250', 'text/html;charset=iso-8859-2', 'text/html; charset=WINDOWS-1250'
-                      'text/html; ISO8859-2; charset=ISO-8859-2', 'text/html;charset=ISO-8859-2', 'text/html;charset=windows-1250', 
+                      'text/html; ISO8859-2; charset=ISO-8859-2', 'text/html;charset=ISO-8859-2', 'text/html;charset=windows-1250',
                       'text/html; charset=Windows-1250', 'text/html; charset=WINDOWS-1250', 'text/html; charset=cp1250',
                       'text/html; Charset=windows-1250', "text/html; charset='iso-8859-2'", 'text/html; Charset=ISO-8859-2',
                       'text/html; charset=iso8859-2', 'text/html; Charset=iso-8859-2', 'text/html; ISO-8859-2; charset=ISO-8859-2',
-                      'type: text/html; charset=windows-1250;', 'text/html; charset=win-1250', 'text/html; charset=win1250', 
+                      'type: text/html; charset=windows-1250;', 'text/html; charset=win-1250', 'text/html; charset=win1250',
                       'text/html; charset= windows-1250', 'text/html; Charset=Windows-1250', 'text/html; charset=iso-8859-2;',
                       'text/html; charset=CP-1250', 'text/html; charset=CP1250', 'text/html; charset: ISO-8859-2', 'text/html; charset=ISO8859-2',
                       'text/html; charset="iso-8859-2"', 'text/html;  charset=iso-8859-2', 'text/html; charset=latin2', 'text/html; charset=Latin2',
@@ -860,27 +858,27 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
         else:
             return 0.0
     # Windows-1257 is for latvian, lithuanian, and estonian, but sometimes used for German and Polish.
-    elif mimetype in ['text/html; charset=windows-1257',]:
+    elif mimetype in ['text/html; charset=windows-1257', ]:
         if language in ['lt', 'lv', 'et', 'pl', 'de']:
             return 1.0
         else:
             return -1.0
     # ISO-8859-10, Latvian and Lithuanian.
-    elif mimetype in ['text/html;charset=ISO-8859-13',]:
-        if languagein ['lt', 'lv']:
+    elif mimetype in ['text/html;charset=ISO-8859-13', ]:
+        if language in ['lt', 'lv']:
             return 1.0
         else:
             return -3.0
     # ISO-8859-7 for Greek, as is Windows-28597 and Windows-1253
-    elif mimetype in ['text/html; charset=iso-8859-7', 'text/html; charset=windows-1253', 'text/html; charset=ISO-8859-7', 
+    elif mimetype in ['text/html; charset=iso-8859-7', 'text/html; charset=windows-1253', 'text/html; charset=ISO-8859-7',
                       'text/html; charset=Windows-1253', 'text/html;charset=iso-8859-7', 'text/html; Charset=windows-1253',
                       'text/html;charset=windows-1253', 'text/html; Charset=Windows-1253', 'text/html; Charset=ISO-8859-7']:
-        if language in ['el',]:
+        if language in ['el', ]:
             return 1.0
         else:
             return -3.0
     # ISO-8859-9 and Windows-1254 and Latin-5 for Turkish
-    elif mimetype in ['text/html; charset=ISO-8859-9', 'text/html; charset=iso-8859-9', 'text/html; Charset=windows-1254', 
+    elif mimetype in ['text/html; charset=ISO-8859-9', 'text/html; charset=iso-8859-9', 'text/html; Charset=windows-1254',
                       'text/html; Charset=windows-1254', 'text/html; Charset=Windows-1254', 'text/html; Charset=iso-8859-9',
                       'text/html; charset=windows-1254', 'text/html; charset=WINDOWS-1254', 'text/html;Windows-1254',
                       'text/HTML; Charset=Windows-1254', 'text/html; charset=8859-9', 'text/html;charset=ISO-8859-9',
@@ -906,10 +904,10 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
         else:
             return -7.0
     # Windows-1255 and ISO-8859-8 are for Hebrew.
-    elif mimetype in ['text/html; charset=windows-1255',]:
+    elif mimetype in ['text/html; charset=windows-1255', ]:
         return -5.0
     # A diff file. Minor negative, I suppose. Not sure whether these are good or bad.
-    elif mimetype in ['text/x-diff',]:
+    elif mimetype in ['text/x-diff', ]:
         return -4.0
     # Broken IIS configurations. Not sure how much to adjust.
     elif mimetype in ['text/vnd.wap.wml; charset=UTF-8', 'text/vnd.wap.wml']:
@@ -943,10 +941,10 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
                       'application/xml; charset=ISO-8859-1', 'application/rss+xml; charset: utf-8', 'text/xml; charset=windows-1250',
                       'application/xml; charset=UTF-8', 'application/rss+xml; charset=utf8', 'application/xml; charset=windows-1252',
                       'text/xml; charset=windows-1251', 'application/atom+xml', 'application/xml;', 'application/rss+xml; charset=UTF-8;',
-                      'application/rss+xml;', 'application/atom+xml; charset=iso-8859-1', 'text/xml;charset=iso-8859-1', 
+                      'application/rss+xml;', 'application/atom+xml; charset=iso-8859-1', 'text/xml;charset=iso-8859-1',
                       'application/rss+xml; charset=ISO-8859-1', 'text/xml;charset=iso-8859-1', 'text/html;charset=iso-8859-1;',
                       'application/rss+xml; charset=iso-8859-1', 'text/xml;', 'text/xml; charset=tis-620', 'text/xml; charset=ISO-8859-15',
-                      'text/html; Charset=ISO-8859-9', 'text/xml; charset=windows-1254', 'text/xml; charset=Windows-1254', 
+                      'text/html; Charset=ISO-8859-9', 'text/xml; charset=windows-1254', 'text/xml; charset=Windows-1254',
                       'text/xml; charset=WINDOWS-1254', 'text/xml;charset=iso-8859-2', 'text/xml; charset=ISO-8859-9',
                       'text/xml; charset=utf8']:
         return -12.0
@@ -1000,15 +998,15 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if numsub > 2 and spliturl[0] == 'www':
             numsub -= 1
         if numsub > 2:
-            value -= (numsub-2) * 4
+            value -= (numsub - 2) * 4
             if verbose:
-                rulematches.append('-{0} points for having more than 2 subdomains.'.format((numsub-2)*4))
+                rulematches.append('-{0} points for having more than 2 subdomains.'.format((numsub - 2) * 4))
     # Exact url match, matches "cheese.com" when the URL is "cheese.com".
     if item.rooturl and asciikeywords == item.rooturl.lower():
         keywordisdomain = True
         value += 50
         if verbose:
-            rulematches.append('50 points for exact domain match.'.format((numsub-2)*4))
+            rulematches.append('50 points for exact domain match.')
     # Matches "cheese.com" when the URL is cheese.com
     elif item.rooturl and '.' in asciikeywords and asciikeywords in item.rooturl and len(spliturl) > 1:
         splitk = asciikeywords.split('.')
@@ -1129,7 +1127,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if numwordsfound:
             value += (20.0 * numwordsfound) / len(splitkeywords)
             if verbose:
-                rulematches.append('{0} points for matching {1} of {2} keywords.'.format((20*numwordsfound)/len(splitkeywords), numwordsfound, len(splitkeywords)))
+                rulematches.append('{0} points for matching {1} of {2} keywords.'.format((20 * numwordsfound) / len(splitkeywords), numwordsfound, len(splitkeywords)))
     # If this is the root URL for the site, add a few points.
     if (item.rooturl and (item.url == item.rooturl) or (item.url == ('http://' + item.rooturl)) or
        (item.url == ('https://' + item.rooturl)) or (item.url == ('http://' + item.rooturl + '/')) or
@@ -1158,9 +1156,9 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if verbose:
             rulematches.append('-2 points for comma in url.')
     if len(underscores) > 1:
-        value -= (2 * (len(underscores) -1))
+        value -= (2 * (len(underscores) - 1))
         if verbose:
-            rulematches.append('-{0} points for underscores in url.'.format((2*(len(underscores)-1))))
+            rulematches.append('-{0} points for underscores in url.'.format((2 * (len(underscores) - 1))))
     # Lose a point for having query parameters. site.com/page.php?q=222 one point lower than site.com/page.php
     parsed = urllib.parse.urlparse(item.url)
     if parsed.query:
@@ -1444,7 +1442,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
-        if (item.pagetext.startswith('Buy this domain.') or ('This website is for sale' in item.pagetitle) or ('This website is for sale' in item.pagetext) or 
+        if (item.pagetext.startswith('Buy this domain.') or ('This website is for sale' in item.pagetitle) or ('This website is for sale' in item.pagetext) or
           ('The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or (' is for sale' in item.pagetext)):
             if verbose:
                 rulematches.append('Lose half of points for parked domain.')
@@ -1546,7 +1544,7 @@ def CopySiteData(site, newsite):
     newsite.content_type_header = site.content_type_header
     newsite.num_iframes = site.num_iframes
     newsite.num_javascripts = site.num_javascripts
-    newsite.num_images = site.num_images 
+    newsite.num_images = site.num_images
     newsite.num_css_files = site.num_css_files
     newsite.num_video_tags = site.num_video_tags
     newsite.num_audio_tags = site.num_audio_tags
@@ -1572,7 +1570,7 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
         if verbose:
             print('MoveSiteTo: Existing model is: {0}'.format(existing_model.__name__))
         # Handle SiteInfo, SiteInfoAfterZ, SiteInfoBeforeZero
-        if existing_model.__name__ == 'SiteInfo' or not '_' in existing_model.__name__:
+        if existing_model.__name__ == 'SiteInfo' or '_' not in existing_model.__name__:
             existlang = 'en'
         else:
             existlang = existing_model.__name__[-2:]
@@ -1623,7 +1621,7 @@ def RemoveURLsForDomain(rooturl):
                 # like Armenian, that doesn't have a language table.
                 pass
     except ObjectDoesNotExist:
-         pass
+        pass
     # Now we nuke all crawlable URLs.
     CrawlableUrl.objects.filter(rooturl=rooturl).delete()
 
@@ -1730,8 +1728,8 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
         else:
             url = 'http:' + url
     # Remove Tomcat session IDs if there are idiots who have managed to set up stupid URLs.
-    url = re.sub(';jsessionid=.*?(?=\\?|$)','', url)
-    url = re.sub('jsessionid=.*?(?=\\?|$)','', url)
+    url = re.sub(';jsessionid=.*?(?=\\?|$)', '', url)
+    url = re.sub('jsessionid=.*?(?=\\?|$)', '', url)
     parsedurl = urllib.parse.urlparse(url)
     if parsedurl.query:
         queryparams = dict(urllib.parse.parse_qsl(parsedurl.query))
@@ -1813,9 +1811,9 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
                         elif param.replace_with:
                             queryparams[param.parameter] = param.replace_with
         if len(queryparams) > 0:
-            #try:
+            # try:
             newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params + '?' + urllib.parse.urlencode(queryparams)
-            #except ValueError:
+            # except ValueError:
             #    print u'ValueError encoding query params, using URL without query.'
             #    newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
             #    print u'Was: {0}, Now: {1}'.format(url, newurl)
@@ -1867,9 +1865,9 @@ def CanReCrawlUrl(url, verbose=False):
             if verbose:
                 print('This domain has only crawl root url set.')
             if url != rooturl and url != (rooturl + '/') and url != ('http://' + rooturl) and url != ('https://' + rooturl) and url != ('http://' + rooturl + '/') and url != ('https://' + rooturl + '/'):
-               if verbose:
-                   print('Cannot crawl url because this domain has only crawl root url set and this is not the root url.')
-               return False
+                if verbose:
+                    print('Cannot crawl url because this domain has only crawl root url set and this is not the root url.')
+                return False
     except:
         pass
     return True
@@ -1889,7 +1887,7 @@ def UpdateAlexaRank(domain_name, rank):
         # Consider both to be the same thing and make them match.
         try:
             if not domain.url.startswith('www.'):
-                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.alexa_rank = rank
                 domain.alexa_rank_date = datetime.date.today()
                 domain.alexa_outdated = False
@@ -1915,7 +1913,7 @@ def UpdateAlexaRank(domain_name, rank):
             # Update the www. version or non-www. version of the domain if it exists.
             try:
                 if not domain.url.startswith('www.'):
-                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.alexa_rank = rank
                     domain.alexa_rank_date = datetime.date.today()
                     domain.alexa_outdated = False
@@ -1932,7 +1930,7 @@ def UpdateAlexaRank(domain_name, rank):
             # to-be-crawled list so it eventually makes it into the index.
             # But only if it's not blocked.
             try:
-                blocked_domain = BlockedSite.objects.get(url=domain_name)
+                BlockedSite.objects.get(url=domain_name)
             except ObjectDoesNotExist:
                 # Exception on a get means that it wasn't found in the block list.
                 url = CrawlableUrl()
@@ -1962,7 +1960,7 @@ def UpdateQuantcastRank(domain_name, rank):
         # Consider both to be the same thing and make them match.
         try:
             if not domain.url.startswith('www.'):
-                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.quantcast_rank = rank
                 domain.quantcast_rank_date = datetime.date.today()
                 domain.quantcast_outdated = False
@@ -1988,7 +1986,7 @@ def UpdateQuantcastRank(domain_name, rank):
             # Update the www. version or non-www. version of the domain if it exists.
             try:
                 if not domain.url.startswith('www.'):
-                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.quantcast_rank = rank
                     domain.quantcast_rank_date = datetime.date.today()
                     domain.quantcast_outdated = False
@@ -2005,7 +2003,7 @@ def UpdateQuantcastRank(domain_name, rank):
             # to-be-crawled list so it eventually makes it into the index.
             # But only if it's not blocked.
             try:
-                blocked_domain = BlockedSite.objects.get(url=domain_name)
+                BlockedSite.objects.get(url=domain_name)
             except ObjectDoesNotExist:
                 # Exception on a get means that it wasn't found in the block list.
                 url = CrawlableUrl()
@@ -2036,7 +2034,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
         # Consider both to be the same thing and make them match.
         try:
             if not domain.url.startswith('www.'):
-                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.domcop_rank = rank
                 domain.domcop_pagerank = pagerank
                 domain.domcop_rank_date = datetime.date.today()
@@ -2065,7 +2063,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
             # Update the www. version or non-www. version of the domain if it exists.
             try:
                 if not domain.url.startswith('www.'):
-                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.domcop_rank = rank
                     domain.domcop_pagerank = pagerank
                     domain.domcop_rank_date = datetime.date.today()
@@ -2084,7 +2082,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
             # to-be-crawled list so it eventually makes it into the index.
             # But only if it's not blocked.
             try:
-                blocked_domain = BlockedSite.objects.get(url=domain_name)
+                BlockedSite.objects.get(url=domain_name)
             except ObjectDoesNotExist:
                 # Exception on a get means that it wasn't found in the block list.
                 url = CrawlableUrl()
@@ -2226,35 +2224,35 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
             if item.pagetitle:
                 title = item.pagetitle[0:120]
             if item.rooturl in search_result:
-                search_result[item.rooturl]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
+                search_result[item.rooturl]['urls'].append({'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description})
             # If the item has "www." but we have a non-www of the domain in the search results.
             elif item.rooturl.startswith('www.') and item.rooturl[4:] in search_result:
                 if verbose:
                     print('JsonifyIndexTerm: WWW site {0} has non-WWW version in results.'.format(item.rooturl))
-                search_result[item.rooturl[4:]]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
+                search_result[item.rooturl[4:]]['urls'].append({'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description})
                 search_result[item.rooturl[4:]]['alternateurl'] = item.rooturl
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
                 # in already has the highest score.
-                #topurl = search_result[item.rooturl[4:]]['urls'][0]['url']
-                #highest = urlparse.urlparse(topurl).netloc
-                #if highest != item.rooturl[4:]:
+                # topurl = search_result[item.rooturl[4:]]['urls'][0]['url']
+                # highest = urlparse.urlparse(topurl).netloc
+                # if highest != item.rooturl[4:]:
                 #    print u'WWW is most prominently shown and highest scoring item is {0}. We will switch these'.format(highest)
                 #    search_result[highest] = search_result.pop(item.rooturl[4:])
             # If the item does not have "www." but we have a "www." version of the domain in the search results.
             elif not item.rooturl.startswith('www.') and 'www.' + item.rooturl in search_result:
                 if verbose:
                     print('JsonifyIndexTerm: non-WWW site {0} has WWW version in results.'.format(item.rooturl))
-                search_result['www.' + item.rooturl]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
+                search_result['www.' + item.rooturl]['urls'].append({'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description})
                 search_result['www.' + item.rooturl]['alternateurl'] = item.rooturl
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
                 # in already has the highest score.
-                #topurl = search_result['www.' + item.rooturl]['urls'][0]['url']
-                #highest = urlparse.urlparse(topurl).netloc
-                #if highest != ('www.' + item.rooturl):
+                # topurl = search_result['www.' + item.rooturl]['urls'][0]['url']
+                # highest = urlparse.urlparse(topurl).netloc
+                # if highest != ('www.' + item.rooturl):
                 #    print u'non-WWW is most prominently shown and highest scoring item is {0}. We will switch these'.format(highest)
                 #    search_result[highest] = search_result.pop('www.' + item.rooturl)
             else:
-                search_result[item.rooturl] = { 'score': record[1], 'urls': [{ 'url': item.url, 'id': item.id, 'score': record[1], 'title': title, 'description': description },] }
+                search_result[item.rooturl] = {'score': record[1], 'urls': [{'url': item.url, 'id': item.id, 'score': record[1], 'title': title, 'description': description}, ]}
         except ObjectDoesNotExist:
             pass
     for key, value in search_result.items():
@@ -2279,7 +2277,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
     if term.refused:
         show = False
     for result in search_results:
-        #print u'{0} ranks {1} for {2}'.format(result[0], rank, term)
+        # print u'{0} ranks {1} for {2}'.format(result[0], rank, term)
         rankitem = ranking_model()
         rankitem.rooturl = result[0]
         rankitem.keywords = term
@@ -2363,7 +2361,7 @@ def AddPendingTerm(item, language_code='en', reason=None):
         item = item[0:-1]
     item = item.lower()
     try:
-        existing = pending_model.objects.get(keywords=item)
+        pending_model.objects.get(keywords=item)
     except ObjectDoesNotExist:
         new_index = pending_model()
         new_index.keywords = item
@@ -2406,7 +2404,7 @@ def TrySearchTerm(text, language_code):
 
 # Try to search for a specific term or collection of terms from a list.
 # Combine these terms and return the result.
-#def TrySearchTerms(terms, language_code):
+# def TrySearchTerms(terms, language_code):
 
 # Do a title-only search for a phrase and create an index term for it.
 # Make sure that what is searched for is added to the pending terms so
@@ -2525,7 +2523,7 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
     d = datetime.date.today()
     if not month and not year:
         first = datetime.date(d.year, d.month, 1)
-        last = datetime.date(d.year, d.month+1, 1)
+        last = datetime.date(d.year, d.month + 1, 1)
     else:
         yea = int(year)
         mon = int(month)
@@ -2535,7 +2533,7 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
         if mon == 12:
             mon = 0
             yea += 1
-        last = datetime.date(yea, mon+1, 1)
+        last = datetime.date(yea, mon + 1, 1)
 
     try:
         report = MonthlySearchReport.objects.get(month=month, year=year, language=lang)
@@ -3426,9 +3424,9 @@ def TakeScreenshot(url):
     except:
         driver.service.process.send_signal(signal.SIGTERM)
         try:
-           driver.quit()
+            driver.quit()
         except OSError:
-           pass
+            pass
         return False
     try:
         shot = Screenshot.objects.get(domain__url=url)
@@ -3446,9 +3444,9 @@ def TakeScreenshot(url):
     except:
         driver.service.process.send_signal(signal.SIGTERM)
         try:
-           driver.quit()
+            driver.quit()
         except OSError:
-           pass
+            pass
         return False
     # Crop it back to the window size (it may be taller)
     box = (0, 0, WIDTH, HEIGHT)
@@ -3457,9 +3455,9 @@ def TakeScreenshot(url):
     except:
         driver.service.process.send_signal(signal.SIGTERM)
         try:
-           driver.quit()
+            driver.quit()
         except OSError:
-           pass
+            pass
         return False
     region = im.crop(box)
     region.save('screenshots/{0}.png'.format(url), 'PNG')
@@ -3473,10 +3471,10 @@ def TakeScreenshot(url):
     # Terminate phantomjs process. See: https://adiyatmubarak.wordpress.com/2017/03/29/python-fix-oserror-errno-9-bad-file-descriptor-in-selenium-using-phantomjs/
     driver.service.process.send_signal(signal.SIGTERM)
     try:
-       driver.quit()
+        driver.quit()
     except OSError:
-       # We can still get these errors, but at least the phantomjs process will terminate.
-       pass
+        # We can still get these errors, but at least the phantomjs process will terminate.
+        pass
     return shot
 
 def GetFavicons(domain):
@@ -3554,7 +3552,7 @@ def UpdateMajesticRank(domain_name, rank, refsubnets):
         # Consider both to be the same thing and make them match.
         try:
             if not domain.url.startswith('www.'):
-                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.majestic_rank = rank
                 domain.majestic_rank_date = datetime.date.today()
                 domain.majestic_refsubnets = refsubnets
@@ -3583,7 +3581,7 @@ def UpdateMajesticRank(domain_name, rank, refsubnets):
             # Update the www. version or non-www. version of the domain if it exists.
             try:
                 if not domain.url.startswith('www.'):
-                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.majestic_rank = rank
                     domain.majestic_rank_date = datetime.date.today()
                     domain.majestic_refsubnets = refsubnets
@@ -3602,7 +3600,7 @@ def UpdateMajesticRank(domain_name, rank, refsubnets):
             # to-be-crawled list so it eventually makes it into the index.
             # But only if it's not blocked.
             try:
-                blocked_domain = BlockedSite.objects.get(url=domain_name)
+                BlockedSite.objects.get(url=domain_name)
             except ObjectDoesNotExist:
                 # Exception on a get means that it wasn't found in the block list.
                 url = CrawlableUrl()

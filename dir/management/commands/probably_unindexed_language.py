@@ -31,7 +31,7 @@ class Command(BaseCommand):
             domain = source['rooturl_source']
             print('Domain: {0}'.format(domain))
             try:
-                excluded = BlockedSite.objects.get(url=domain)
+                BlockedSite.objects.get(url=domain)
                 print('Domain {0} already blocked, no need to check.'.format(domain))
                 continue
             except ObjectDoesNotExist:

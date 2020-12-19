@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.utils import timezone
 from optparse import make_option
 from dir.models import DomainInfo, PageLink
 import time
 import codecs
+
 
 class Command(BaseCommand):
     help = "This command updates domain metadata. It's used for updating domain link counts and domain keyword counts."
