@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from optparse import make_option
-from dir.models import IndexTerm, language_list
+from dir.models import language_list
 from dir.utils import GetIndexModelFromLanguage
 import sys
-import operator
 import codecs
 
 UTF8Writer = codecs.getwriter('utf8')
 sys.stdout = UTF8Writer(sys.stdout)
+
 
 class Command(BaseCommand):
     help = """

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from optparse import make_option
 from dir.indexer import Indexer
 from django.conf import settings
 from dir.models import language_list
 from dir.utils import GetPendingIndexModelFromLanguage
+
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (

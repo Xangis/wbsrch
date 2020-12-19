@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from optparse import make_option
-from dir.models import SiteInfo, DomainInfo, SiteInfoAfterZ, BlockedSite
+from dir.models import DomainInfo, SiteInfoAfterZ, BlockedSite
 from dir.utils import MoveSiteTo, GetSiteInfoModelFromLanguage, RemoveURLsForDomain
-import dateutil.parser
+
 
 class Command(BaseCommand):
     help = """

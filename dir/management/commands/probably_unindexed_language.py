@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from optparse import make_option
-from dir.models import DomainInfo, PageLink, BlockedSite
+from dir.models import PageLink, BlockedSite
 import time
 import operator
+
 
 class Command(BaseCommand):
     help = "Checks link and block data to create a list of domains that are probably in languages that we don't index."
@@ -17,7 +18,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         start = timezone.now()
-        sources = PageLink.objects.all().values('rooturl_source').distinct().order_by('rooturl_source')[options['offset']:options['offset']+options['max']]
+        sources = PageLink.objects.all().values('rooturl_source').distinct().order_by('rooturl_source')[options['offset']:options['offset'] + options['max']]
         definitely_unindexed = []
         probably_unindexed = []
         possibly_unindexed = []
@@ -39,10 +40,10 @@ class Command(BaseCommand):
             for destination in destinations:
                 try:
                     dest = destination['rooturl_destination']
-                    excluded = BlockedSite.objects.get(url=dest, reason=8)
+                    BlockedSite.objects.get(url=dest, reason=8)
                     print('Domain {0} links to {1}, which is blocked as unindexed language.'.format(domain, dest))
                     unindexeddomains = unindexeddomains + 1
-                    if blockedlinkcounts.has_key(dest):
+                    if dest in blockedlinkcounts:
                         blockedlinkcounts[dest] = blockedlinkcounts[dest] + 1
                     else:
                         blockedlinkcounts[dest] = 1

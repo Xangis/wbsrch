@@ -3,9 +3,11 @@ from django.utils import translation
 
 register = template.Library()
 
+
 @register.filter()
 def to_int(value):
     return int(value)
+
 
 @register.filter()
 def language_name_safe(value):

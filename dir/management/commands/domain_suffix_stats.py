@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from optparse import make_option
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from dir.models import language_list, DomainInfo, SiteInfo, BlockedSite, DomainSuffix
+from dir.models import DomainSuffix
 from dir.utils import CalculateDomainSuffixStats
 from tlds import tld_set
+
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -23,7 +23,7 @@ class Command(BaseCommand):
         if tld:
             if tld.startswith('.'):
                 tld = tld[1:]
-            tlds = [tld,]
+            tlds = [tld, ]
         for tld in tlds:
             if after and tld < after:
                 continue

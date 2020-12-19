@@ -4,6 +4,7 @@ from optparse import make_option
 from dir.models import language_list
 from dir.utils import GetPagesAverageAge, GetOldestPageAge
 
+
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('-l', '--language', default='all', action='store', type='string', dest='language', help='Language to use for index ages, or "all" for all. (default=all).'),
