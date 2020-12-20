@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.management.base import BaseCommand
 
 # Script to import Majestic top 1 million site ratings into the database.
 # This file can be obtained from:
@@ -7,7 +8,6 @@
 
 import os
 import sys
-from zetaweb import settings
 sys.path.append('/var/django/wbsrch/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
@@ -17,23 +17,13 @@ import wget
 import zipfile
 django.setup()
 
-import time
-from urllib.parse import urlparse
 from dir.models import *
 from dir.utils import *
-from django.db.utils import DatabaseError
 from django.db import connection
-from django.utils.timezone import utc
-from django.core.exceptions import ValidationError
-from django.db import transaction
-import datetime
 import csv
 
+
 def LoadDomcopFile(filename):
-    added_to_pending = 0
-    added_domains = 0
-    blocked_domains = 0
-    updated_domains = 0
     crawl_needed = []
     crawl_blocked = []
     processed = []
@@ -57,7 +47,7 @@ def LoadDomcopFile(filename):
             # Column 2 = pagerank.
             if len(row) >= 3:
                 print('Domain {0} ranks {1}'.format(row[2], row[0]))
-                root = GetRootDomain(row[2])
+                GetRootDomain(row[2])
                 if UpdateDomcopRank(row[1], row[0], row[2]):
                     if not CanCrawlUrl(row[2]):
                         print('Domain {0} cannot be crawled, not adding to crawl needed'.format(row[2]))
@@ -79,14 +69,17 @@ def LoadDomcopFile(filename):
         outfile.close()
     print('Updated {0} domains. {1} need to be crawled.'.format(processed, len(crawl_needed)))
 
-# /usr/bin/wget -nv -O $MYFILENAME https://www.domcop.com/files/top/top10milliondomains.csv.zip
-if not os.path.isfile('top10milliondomains.csv'):
-    print('File top10milliondomains.csv does not exist. Retrieving.')
-    filename = wget.download('https://www.domcop.com/files/top/top10milliondomains.csv.zip')
-    if not filename:
-        print('Failed to download Domcop file.')
-        exit(0)
-    zip_ref = zipfile.ZipFile('./top10milliondomains.csv.zip', 'r')
-    zip_ref.extractall('.')
-    zip_ref.close()
-LoadDomcopFile('top10milliondomains.csv')
+
+class Command(BaseCommand):
+    def handle(self, *args, **options):
+        # /usr/bin/wget -nv -O $MYFILENAME https://www.domcop.com/files/top/top10milliondomains.csv.zip
+        if not os.path.isfile('top10milliondomains.csv'):
+            print('File top10milliondomains.csv does not exist. Retrieving.')
+            filename = wget.download('https://www.domcop.com/files/top/top10milliondomains.csv.zip')
+            if not filename:
+                print('Failed to download Domcop file.')
+                exit(0)
+            zip_ref = zipfile.ZipFile('./top10milliondomains.csv.zip', 'r')
+            zip_ref.extractall('.')
+            zip_ref.close()
+        LoadDomcopFile('top10milliondomains.csv')

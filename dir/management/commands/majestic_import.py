@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.management.base import BaseCommand
 
 # Script to import Majestic top 1 million site ratings into the database.
 # This file can be obtained from:
@@ -7,33 +8,20 @@
 
 import os
 import sys
-from zetaweb import settings
 sys.path.append('/var/django/wbsrch/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
 # Required now that we're on Django 1.7. Otherwise we get "Models aren't loaded yet" error.
 import django
 import wget
-import zipfile
 django.setup()
 
-import time
-from urllib.parse import urlparse
 from dir.models import *
 from dir.utils import *
-from django.db.utils import DatabaseError
 from django.db import connection
-from django.utils.timezone import utc
-from django.core.exceptions import ValidationError
-from django.db import transaction
-import datetime
 import csv
 
 def LoadAlexaFile(filename):
-    added_to_pending = 0
-    added_domains = 0
-    blocked_domains = 0
-    updated_domains = 0
     crawl_needed = []
     crawl_blocked = []
     processed = []
@@ -57,7 +45,7 @@ def LoadAlexaFile(filename):
             # Column 2 = domain.
             if len(row) >= 3:
                 print('Domain ' + row[2] + ' ranks ' + row[0])
-                root = GetRootDomain(row[2])
+                GetRootDomain(row[2])
                 if UpdateMajesticRank(row[2], row[0], row[4]):
                     if not CanCrawlUrl(row[2]):
                         print('Domain {0} cannot be crawled, not adding to crawl needed'.format(row[2]))
@@ -79,10 +67,13 @@ def LoadAlexaFile(filename):
         outfile.close()
     print('Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.')
 
-if not os.path.isfile('majestic_million.csv'):
-    print('File majestic_million.csv does not exist. Retrieving.')
-    filename = wget.download('http://downloads.majestic.com/majestic_million.csv')
-    if not filename:
-        print('Failed to download Majestic file.')
-        exit(0)
-LoadAlexaFile('majestic_million.csv')
+
+class Command(BaseCommand):
+    def handle(self, *args, **options):
+        if not os.path.isfile('majestic_million.csv'):
+            print('File majestic_million.csv does not exist. Retrieving.')
+            filename = wget.download('http://downloads.majestic.com/majestic_million.csv')
+            if not filename:
+                print('Failed to download Majestic file.')
+                exit(0)
+        LoadAlexaFile('majestic_million.csv')
