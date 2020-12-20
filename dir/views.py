@@ -90,7 +90,7 @@ def MergeSearchResult(search_result, index_term, bonus_existing=False):
     try:
         if index_term.show_sd_ad:
             search_result.show_sd_ad = True
-    except:
+    except Exception:
         pass
 
     # Set the index date. Add dates to string for multiple terms.
@@ -347,7 +347,7 @@ def index_stats(request, realtime=False):
     else:
         try:
             stats = IndexStats.objects.all()[0]
-        except:
+        except Exception:
             # Will only happen with an empty database.
             stats = GenerateIndexStats(True)
         stats.langs = ujson.loads(stats.langs)
@@ -492,7 +492,7 @@ def domain(request):
                 searchlog.ip_country = country
         try:
             async_task(SaveLogEntry, searchlog)
-        except:
+        except Exception:
             print('Cannot save log entry. Redis server may not be running.')
 
         return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
@@ -566,7 +566,7 @@ def ipaddry(request):
                 searchlog.ip_country = country
         try:
             async_task(SaveLogEntry, searchlog)
-        except:
+        except Exception:
             print('Cannot save log entry. Redis server may not be running.')
 
         return render_to_response('ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
@@ -744,7 +744,7 @@ def search(request):
                 setting = Setting.objects.get(key='create_placeholders')
                 if setting.value == 'False' or setting.value == '0' or setting.value == 'F':
                     create_placeholders = False
-            except:
+            except Exception:
                 print('Not creating placeholder index term -- create_placeholders setting is false')
             result.indexed = False
             searchterms = GetTerms(result.searchterm)
@@ -799,7 +799,7 @@ def search(request):
                     log.is_bot = True
             try:
                 async_task(SaveLogEntry, log)
-            except:
+            except Exception:
                 print('Cannot save log entry. Redis server may not be running.')
     is_language_name = None
     if result.is_language:
@@ -1087,7 +1087,7 @@ def adminpanel_unclassified(request):
             domaininfo = DomainInfo.objects.get(url=domain[1])
             if domaininfo.language_association or domaininfo.uses_language_subdirs or domain.uses_langid:
                 continue
-        except:
+        except Exception:
             pass
         uncategorized_domains.append(domain)
     counts.append(('en', uncategorized_domains))
@@ -1140,7 +1140,7 @@ def most_linked_domains(request):
 
     try:
         stats = IndexStats.objects.all()[0]
-    except:
+    except Exception:
         # Will only happen with an empty database.
         stats = GenerateIndexStats(True)
     try:
@@ -1164,7 +1164,7 @@ def popular_searches(request, year=None, month=None):
         current = True
     try:
         report = MonthlySearchReport.objects.get(month=month, year=year, language=language_code)
-    except:
+    except Exception:
         # Only auto-generate the report for the current month.
         if not current:
             raise Http404

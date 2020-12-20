@@ -2,7 +2,9 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from dir.models import Setting
 import urllib.robotparser
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 import http.client
 import socket
 import cgi
@@ -14,7 +16,7 @@ def GetIPAddress(url, descriptive=False):
         if descriptive:
             print('IP address is: {0}'.format(ip))
         return ip
-    except:
+    except Exception:
         if descriptive:
             print('IP address not found.')
 
@@ -41,7 +43,7 @@ def CheckUrlAgainstRobotsFile(url):
     """
     Retrieves robots.txt file for URL and returns a boolean stating whether crawling the URL is allowed.
 
-    Always retrieves the file. 
+    Always retrieves the file.
     """
     # TODO: Query the domain info first. If that doesn't have a robots.txt file, or if it's more than X out of
     # date, update it.
@@ -82,9 +84,9 @@ def GetRobotsFile(domain, descriptive=False, save_failures=False):
             if descriptive:
                 try:
                     print('Robots request file for {0} returned {1}'.format(url, realurl))
-                except:
+                except Exception:
                     pass
-            if realurl[7:] == url [8:] or realurl[8:] == url[7:]:
+            if realurl[7:] == url[8:] or realurl[8:] == url[7:]:
                 if descriptive:
                     print('ITS ONLY AN HTTP => HTTPS REDIRECT, WE ARE OK')
             else:
@@ -109,7 +111,7 @@ def GetRobotsFile(domain, descriptive=False, save_failures=False):
         try:
             if descriptive:
                 print('Robots Response: {0}'.format(text))
-        except:
+        except Exception:
             pass
         if response:
             domain.robots_ip = GetIPAddress(domain.url, descriptive)
@@ -132,7 +134,7 @@ def GetRobotsFile(domain, descriptive=False, save_failures=False):
         print('httplib.BadStatusLine Error: {0}'.format(e))
         return False
     except http.client.IncompleteRead as e:
-        print('httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url,e))
+        print('httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url, e))
         return False
     # This needs to be before URLError due to subclassing.
     except urllib.error.HTTPError as e:

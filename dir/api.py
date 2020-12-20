@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect, Http404, HttpResponseForbidden, HttpResponseBadRequest
-from django.db.models import Count
-from django.db import connection
-from django.core.cache import cache
+from django.http import HttpResponse
 from django.utils import timezone
 from dir.models import *
 from dir.utils import *
 from dir.exceptions import *
 from dir.domain import UpdateDomainWhois
-from dir.language import language_name_reverse
-from dir.crawler import CrawlSingleUrl, Crawler
 from urllib.parse import urlparse
-from datetime import datetime, date, timedelta
 from django.contrib.gis.geoip import GeoIP
 from rest_framework import exceptions
 from rest_framework.response import Response
@@ -50,7 +44,7 @@ def GetToken(request):
 
     try:
         token = auth[1]
-        if token=="null":
+        if token == "null":
             msg = 'Null token not allowed'
             raise exceptions.AuthenticationFailed(msg)
     except UnicodeError:
@@ -124,9 +118,9 @@ def ip_to_country(request):
     country = gi.country_code(ip)
     latlon = gi.lat_lon(ip)
     if country and latlon:
-        return Response({'ip': ip, 'country': country, 'lat': latlon[0], 'lon': latlon[1] }, status=200)
+        return Response({'ip': ip, 'country': country, 'lat': latlon[0], 'lon': latlon[1]}, status=200)
     elif country:
-        return Response({'ip': ip, 'country': country }, status=200)
+        return Response({'ip': ip, 'country': country}, status=200)
     else:
         return Response(status=404)
 
@@ -231,15 +225,15 @@ def domain_pages_in_index(request):
         print('{0} pages for domain {1}'.format(pages, domain))
     if altdomainfound:
         added = GetNumberOfDomainPages(altdomaininfo)
-        print('{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages+added))
+        print('{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages + added))
         pages = pages + added
 
     if domaininfo and not (domaininfo.language_association or (domaininfo.language_association == 'en')):
-        return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages }, status=200)
+        return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages}, status=200)
     elif domaininfo:
-        return Response({'domain': domain, 'total_pages_crawled': pages, domaininfo.language_association: pages }, status=200)
+        return Response({'domain': domain, 'total_pages_crawled': pages, domaininfo.language_association: pages}, status=200)
     else:
-        return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages }, status=200)
+        return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages}, status=200)
 
 
 @api_view(['GET'])
@@ -275,9 +269,9 @@ def domain_keywords_ranked(request):
         print('{0} keywords for domain {1}'.format(keywords, domain))
     if altdomainfound:
         added = GetNumberOfDomainKeywordsRanked(altdomaininfo)
-        print('{0} keywords for domain {1} and {2} keywords for domain {3} for a total of {4}'.format(keywords, domain, added, altdomain, keywords+added))
+        print('{0} keywords for domain {1} and {2} keywords for domain {3} for a total of {4}'.format(keywords, domain, added, altdomain, keywords + added))
 
-    return Response({'domain': domain, '{0}_ranked'.format(language): keywords }, status=200)
+    return Response({'domain': domain, '{0}_ranked'.format(language): keywords}, status=200)
 
 
 @api_view(['GET'])

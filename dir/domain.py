@@ -1,9 +1,7 @@
 from django.utils import timezone
-from django.utils.dateparse import parse_date
 from django.core.exceptions import ValidationError
 from django.core import serializers
 from django.db.utils import DataError
-from django.db import models
 from pytz import AmbiguousTimeError
 from pytz.exceptions import NonExistentTimeError
 import dateutil.parser

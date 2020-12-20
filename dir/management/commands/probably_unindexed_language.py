@@ -10,7 +10,7 @@ import operator
 class Command(BaseCommand):
     help = "Checks link and block data to create a list of domains that are probably in languages that we don't index."
 
-    def add_argument(self, parser):
+    def add_arguments(self, parser):
         parser.add_argument('-m', '--max', default=100, action='store', type=int, dest='max', help='Max number of domains to check. (default=100)')
         parser.add_argument('-s', '--sleep', default=0, action='store', type=int, dest='sleep', help='Time to sleep between domain checks. (default=0)')
         parser.add_argument('-o', '--offset', default=0, action='store', type=int, dest='offset', help='Domain slice offset - distance from beginning to start. (default=0)')

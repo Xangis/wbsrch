@@ -7,7 +7,6 @@
 
 import os
 import sys
-from zetaweb import settings
 #sys.path.append(settings.APP_DIRECTORY)
 sys.path.append('/var/django/wbsrch/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
@@ -18,17 +17,10 @@ import wget
 import zipfile
 django.setup()
 
-import time
 #import optparse
-from urllib.parse import urlparse
 from dir.models import *
 from dir.utils import *
-from django.db.utils import DatabaseError
 from django.db import connection
-from django.utils.timezone import utc
-from django.core.exceptions import ValidationError
-from django.db import transaction
-import datetime
 import csv
 
 def LoadQuantcastFile(filename):

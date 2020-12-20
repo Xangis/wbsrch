@@ -26,7 +26,7 @@ from indexer import *
 from language import *
 from domain import *
 from zetaweb.settings import *
-from datetime import datetime, date, timedelta
+from datetime import timedelta
 
 class GetRootUrlTestCase(TestCase):
 
@@ -653,7 +653,7 @@ class MakeRealUrlTestCase(TestCase):
     def test_colonslash_url7(self):
         url = u'//tutorial.site/tutorial/'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://tutorial.site/tutorial/')
-	
+
     def test_slash_url5(self):
         url = u'/tutorial/tutorial.htm'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/tutorial.htm')
@@ -999,22 +999,24 @@ class PageLanguageTestCase(TestCase):
         html = u'<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
         self.assertEqual(IdentifyPageLanguage(url, html)[0], 'ar')
 
+
 class DomainExtensionTestCase(TestCase):
-   def test_de_extension(self):
-       domain = 'http://website.de'
-       self.assertEqual('.de', GetDomainExtension(domain))
+    def test_de_extension(self):
+        domain = 'http://website.de'
+        self.assertEqual('.de', GetDomainExtension(domain))
 
-   def test_com_extension(self):
-       domain = 'example.com'
-       self.assertEqual('.com', GetDomainExtension(domain))
+    def test_com_extension(self):
+        domain = 'example.com'
+        self.assertEqual('.com', GetDomainExtension(domain))
 
-   def test_subdomain_extension(self):
-       domain = 'http://en.us.wbsrch.com'
-       self.assertEqual('.com', GetDomainExtension(domain))
+    def test_subdomain_extension(self):
+        domain = 'http://en.us.wbsrch.com'
+        self.assertEqual('.com', GetDomainExtension(domain))
 
-   def test_no_extension(self):
-       domain = 'domain-name'
-       self.assertEqual('domain-name', GetDomainExtension(domain))
+    def test_no_extension(self):
+        domain = 'domain-name'
+        self.assertEqual('domain-name', GetDomainExtension(domain))
+
 
 class DomainExtensionLanguageTestCase(TestCase):
     def setUp(self):
@@ -1046,6 +1048,7 @@ class DomainExtensionLanguageTestCase(TestCase):
     def tearDown(self):
         for domain in DomainSuffix.objects.all():
             domain.delete()
+
 
 class LanguageModelTestCase(TestCase):
     def setUp(self):
@@ -1146,6 +1149,7 @@ class LanguageModelTestCase(TestCase):
     def tearDown(self):
         pass
 
+
 class UpdateAlexaRankTestCase(TestCase):
     def setUp(self):
         domain = DomainInfo()
@@ -1236,6 +1240,7 @@ class UpdateAlexaRankTestCase(TestCase):
         for obj in DomainInfo.objects.all():
             obj.delete()
 
+
 class RecrawlUrlTestCase(TestCase):
     def setUp(self):
         info = SiteInfo()
@@ -1276,6 +1281,7 @@ class RecrawlUrlTestCase(TestCase):
         for item in SiteInfo.objects.all():
             item.delete()
 
+
 class MarkURLAsSpamTestCase(TestCase):
     def setUp(self):
         pass
@@ -1301,6 +1307,7 @@ class MarkURLAsSpamTestCase(TestCase):
             item.delete()
         for item in IPAddress.objects.all():
             item.delete()
+
 
 # If these fail for lack of a corpus, do this at a Python shell prompt:
 # To get corpus, and others.
@@ -1337,6 +1344,7 @@ class NLTKTestCase(TestCase):
 
     def tearDown(self):
         pass
+
 
 class CrawlerTestCase(TestCase):
     htmlpage = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -1384,6 +1392,7 @@ class CrawlerTestCase(TestCase):
 
     def tearDown(self):
         pass
+
 
 class IndexerTestCase(TestCase):
 
@@ -1557,6 +1566,7 @@ class IndexerTestCase(TestCase):
             item.delete()
         for item in IndexTerm_de.objects.all():
             item.delete()
+
 
 # This tests not only searching for indexed and non-indexed terms, but also the correct
 # behavior of partially-indexed phrases and queueing terms for indexing.
@@ -1816,6 +1826,7 @@ class SearchTestCase(TestCase):
         for item in BadQuery.objects.all():
             item.delete()
 
+
 class URLErrorTestCase(TestCase):
     def setUp(self):
         pass
@@ -1856,6 +1867,7 @@ class URLErrorTestCase(TestCase):
     def tearDown(self):
         for url in SiteInfo.objects.all():
             url.delete()
+
 
 class IndexUtilsTestCase(TestCase):
     def setUp(self):
@@ -1922,6 +1934,7 @@ class IndexUtilsTestCase(TestCase):
             item.delete()
         for item in IndexTerm.objects.all():
             item.delete()
+
 
 class ViewsTestCase(TestCase):
     def setUp(self):
@@ -2035,6 +2048,7 @@ class ViewsTestCase(TestCase):
         for item in SearchLog.objects.all():
             item.delete()
 
+
 class BlockedSiteTestCase(TestCase):
     def setUp(self):
         info = SiteInfo()
@@ -2075,6 +2089,7 @@ class BlockedSiteTestCase(TestCase):
             item.delete()
         for item in SiteInfo_cs.objects.all():
             item.delete()
+
 
 class ModelStringsTestCase(TestCase):
     def setUp(self):
@@ -2127,6 +2142,7 @@ class ModelStringsTestCase(TestCase):
     def tearDown(self):
         pass
 
+
 class IndexStatsTestCase(TestCase):
     def setUp(self):
         info = SiteInfo()
@@ -2136,7 +2152,7 @@ class IndexStatsTestCase(TestCase):
         info = SiteInfo_cs()
         info.rooturl = u'spamsite.cz'
         info.url = u'http://spamsite.cz/1/'
-        info.save()       
+        info.save()
         pending = PendingIndex()
         pending.keywords = 'hippo'
         pending.save()
@@ -2190,8 +2206,8 @@ class IndexStatsTestCase(TestCase):
         for item in IndexStats.objects.all():
             item.delete()
 
-class MoveSiteTestCase(TestCase):
 
+class MoveSiteTestCase(TestCase):
     def setUp(self):
         info = SiteInfo()
         info.rooturl = u'example.com'
@@ -2304,6 +2320,7 @@ class MoveSiteTestCase(TestCase):
             item.delete()
         for item in SiteInfo_cs.objects.all():
             item.delete()
+
 
 class PornBlockTestCase(TestCase):
     def setUp(self):
@@ -2450,6 +2467,7 @@ class WhoisTestCase(TestCase):
         ages = GetDomainAge(u'zetacentauri.com')
         print(ages)
         self.assertNotEqual(ages, None)
+
 
 class ReverseWWWTestCase(TestCase):
     def testroot(self):
