@@ -106,14 +106,14 @@ def UpdateDomainWhois(domain, detailed=False):
                 domain.save()
             except DataError as e:
                 print('DataError: Failed to get domain info for {0}: {1}'.format(domain.url, e))
-                print(serializers.serialize("json", [domain,], indent=4))
+                print(serializers.serialize("json", [domain, ], indent=4))
             except AmbiguousTimeError as e:
                 print('AmbiguousTimeError: Failed to get domain info for {0}: {1}'.format(domain.url, e))
-                print(serializers.serialize("json", [domain,], indent=4))
+                print(serializers.serialize("json", [domain, ], indent=4))
             except ValidationError as e:
                 print('ValidationError: Failed to get domain info for {0}: {1}'.format(domain.url, e))
                 try:
-                    print(serializers.serialize("json", [domain,], indent=4))
+                    print(serializers.serialize("json", [domain, ], indent=4))
                 except ValueError:
                     print('domain_created: "{0}"'.format(domain.domain_created))
                     print('domain_expires: "{0}"'.format(domain.domain_expires))
@@ -122,7 +122,7 @@ def UpdateDomainWhois(domain, detailed=False):
                     print('domain_created: "{0}"'.format(domain.domain_created))
                     print('domain_expires: "{0}"'.format(domain.domain_expires))
                     print('domain_updated: "{0}"'.format(domain.domain_updated))
-            except NonExistentTimeError as e:
+            except NonExistentTimeError:
                 domain.domain_created = None
                 domain.domain_expires = None
                 domain.domain_updated = None
@@ -139,7 +139,7 @@ def GetDomainAge(domain):
         return (None, None)
     try:
         print('Domain {0} Creation Date {1}, Expiration Date: {2}'.format(domain, info.creation_date, info.expiration_date))
-    except:
+    except Exception:
         print('Something failed.')
         return (None, None)
     try:
@@ -147,16 +147,16 @@ def GetDomainAge(domain):
             expiration_date = info.expiration_date[0]
         else:
             expiration_date = info.expiration_date
-    except:
-        print('GetDomainAge: Cannot get expiration date. Returned ""'.format(info.expiration_date))
+    except Exception:
+        print('GetDomainAge: Cannot get expiration date. Returned "{0}"'.format(info.expiration_date))
         expiration_date = None
     try:
         if isinstance(info.creation_date, list):
             creation_date = info.creation_date[0]
         else:
             creation_date = info.creation_date
-    except:
-        print('GetDomainAge: Cannot get creation date. Returned ""'.format(info.creation_date))
+    except Exception:
+        print('GetDomainAge: Cannot get creation date. Returned "{0}"'.format(info.creation_date))
         creation_date = None
     if creation_date and not isinstance(creation_date, datetime.datetime):
         creation_date = dateutil.parser.parse(creation_date)
@@ -175,7 +175,7 @@ def GetDomainInfo(domain):
     except whois.parser.PywhoisError as e:
         try:
             print('PywhoisError (setting creation and expiration to None): {0}'.format(e))
-        except:
+        except Exception:
             print('PywhoisError (setting creation and expiration to None): {0}'.format(domain))
         return None
     except gaierror:
@@ -184,6 +184,6 @@ def GetDomainInfo(domain):
     except timeout:
         print('Could not look up domain {0}: socket.timeout'.format(domain))
         return None
-    except:
-        print('Unspecified error in GetDomainInfo for {0}.'.format(domain))
+    except Exception as e:
+        print('Unspecified error in GetDomainInfo for {0}: {1}'.format(domain, e))
         return None

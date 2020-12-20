@@ -1,5 +1,4 @@
 from subprocess import call
-import time
 
 import os
 import sys
@@ -21,4 +20,4 @@ while True:
             if language is 'en':
                 continue
             lang_crawl_count = lang_crawl_counts.get(language, 1)
-            call(['python', 'manage.py', 'crawl', '-r', '-m', str(lang_crawl_count), '-s', '1', '-o', str(x*lang_crawl_count), '-l', language])
+            call(['python', 'manage.py', 'crawl', '-r', '-m', str(lang_crawl_count), '-s', '1', '-o', str(x * lang_crawl_count), '-l', language])

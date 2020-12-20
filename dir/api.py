@@ -60,7 +60,7 @@ def NormalizeDomain(domain):
     # Normalize URL
     if domain.startswith('http:') or domain.startswith('https:'):
         parsedurl = urlparse(domain)
-        parseddomain = parsedurl.geturl()
+        parsedurl.geturl()
         domain = parsedurl.netloc
     return domain
 

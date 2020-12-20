@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponsePermanentRedirect, Http404, HttpResponseForbidden
-from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -839,9 +838,7 @@ def search(request):
 
 @permission_required('is_superuser')
 def adminpanel(request):
-    counts = []
     result = None
-    cursor = connection.cursor()
     host = request.META.get('HTTP_HOST', None)
     query_string = request.META.get('QUERY_STRING', None)
     language = LanguageFromDomain(request)
@@ -889,12 +886,7 @@ def adminpanel_movesite(request):
 @permission_required('is_superuser')
 def adminpanel_blocksite(request):
     domain = None
-    counts = []
     result = None
-    cursor = connection.cursor()
-    host = request.META.get('HTTP_HOST', None)
-    query_string = request.META.get('QUERY_STRING', None)
-    language = LanguageFromDomain(request)
     sitename = None
     reason = None
     message = None
@@ -915,7 +907,7 @@ def adminpanel_blocksite(request):
             domain.url = sitename
             domain.save()
         try:
-            existing = BlockedSite.objects.get(url=sitename)
+            BlockedSite.objects.get(url=sitename)
             # If the domain is already blocked, the URL must have been added erroneously.
             # in that case, just delete it.
             num_before_urls = SiteInfo.objects.filter(rooturl=sitename).count()
@@ -979,8 +971,6 @@ def adminpanel_pagescore(request):
     url = request.GET.get('url', None)
     keyword = request.GET.get('keyword', None)
     language_code = request.GET.get('language', 'en')
-    pagescore = None
-    calctime = None
     reasons = None
     elapsed = None
     message = 'Enter a URL and keywords to check {0} {1}.'.format(url, keyword)
@@ -1100,8 +1090,6 @@ def adminpanel_doctype(request):
         model_name = 'site_info'
     else:
         model_name = 'dir_siteinfo_' + lang
-    counts = []
-    uncategorized_domains = []
     cursor = connection.cursor()
     limit = 200
     cursor.execute("SELECT id, lastcrawled, url FROM {0} WHERE pagetext ILIKE 'html public%' LIMIT {1}".format(model_name, limit))
@@ -1119,8 +1107,6 @@ def adminpanel_oldestcrawls(request):
         model_name = 'site_info'
     else:
         model_name = 'dir_siteinfo_' + lang
-    counts = []
-    uncategorized_domains = []
     cursor = connection.cursor()
     limit = 1000
     cursor.execute("SELECT id, lastcrawled, url FROM {0} ORDER BY lastcrawled ASC LIMIT {1}".format(model_name, limit))

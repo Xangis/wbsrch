@@ -5,8 +5,6 @@ from dir.utils import GetRootUrl, GetDomainExtension
 from dir.models import DomainSuffix, language_list, blocked_language_list, language_names, blocked_language_names
 from bs4 import BeautifulSoup
 from dir.exceptions import InvalidLanguageException
-import codecs
-import os
 from langid.langid import LanguageIdentifier, model
 identifier = LanguageIdentifier.from_modelstring(model, norm_probs=True)
 from urllib.parse import urlparse
@@ -159,7 +157,7 @@ def GetInfixLanguage(url, descriptive=False):
             return language
     if '/us/' in url or '/gb/' in url:
         if descriptive:
-            print('Selected language en using /us/ or /gb/'.format(url))
+            print('Selected language en using /us/ or /gb/')
         return 'en'
     if '/mx/' in url:
         if descriptive:
@@ -284,54 +282,55 @@ def GetUrlParameterLanguage(url):
             lang = language_name_reverse[lang]
     return lang
 
+
 # List of languages and the domain extensions to search for and trust when they declare a language in the page.
 languages = {
-             'cs': ['.cz',],
-             'da': ['.da',],
-             'de': ['.de', '.at', '.ch', '.lu',],
-             'el': ['.gr', '.cy',],
-             'es': ['.mx', '.es', '.pe', '.cl', '.ar', '.co', '.bo', '.gt', '.ni', '.pa', '.cr', '.ec', '.py', '.uy', '.ve', '.pr', '.cu', '.do', '.dm', '.hn', '.sv', '.cv',],
-             'et': ['.ee',],
-             'fi': ['.fi',],
-             'fr': ['.fr', '.cm', '.ch', '.be', '.cd', '.cf', '.cg', '.dj', '.ga', '.ci', '.gf', '.gq', '.gn', '.ht', '.lu', '.ml', '.mq', '.ne', '.pf', '.re', '.rw', '.sn', '.td', '.tg', '.tn',], 
-             'hr': ['.hr',],
-             'hu': ['.hu',],
-             'is': ['.is',],
-             'it': ['.it', '.sm', '.va',],
+             'cs': ['.cz'],
+             'da': ['.da'],
+             'de': ['.de', '.at', '.ch', '.lu'],
+             'el': ['.gr', '.cy'],
+             'es': ['.mx', '.es', '.pe', '.cl', '.ar', '.co', '.bo', '.gt', '.ni', '.pa', '.cr', '.ec', '.py', '.uy', '.ve', '.pr', '.cu', '.do', '.dm', '.hn', '.sv', '.cv'],
+             'et': ['.ee'],
+             'fi': ['.fi'],
+             'fr': ['.fr', '.cm', '.ch', '.be', '.cd', '.cf', '.cg', '.dj', '.ga', '.ci', '.gf', '.gq', '.gn', '.ht', '.lu', '.ml', '.mq', '.ne', '.pf', '.re', '.rw', '.sn', '.td', '.tg', '.tn'],
+             'hr': ['.hr'],
+             'hu': ['.hu'],
+             'is': ['.is'],
+             'it': ['.it', '.sm', '.va'],
              'lv': ['.lv'],
              'lt': ['.lt'],
              'nl': ['.nl', '.be', '.gy', '.sr', '.sx'],
-             'no': ['.no',],
-             'pl': ['.pl',],
-             'pt': ['.pt', '.br', '.mz', '.ao',],
+             'no': ['.no'],
+             'pl': ['.pl'],
+             'pt': ['.pt', '.br', '.mz', '.ao'],
              'ro': ['.ro', '.md'],
-             'sk': ['.sk',],
-             'sl': ['.si',],
-             'sv': ['.sw',], 
-             'tr': ['.tr',],
-             'sw': ['.tz',],
+             'sk': ['.sk'],
+             'sl': ['.si'],
+             'sv': ['.sw'],
+             'tr': ['.tr'],
+             'sw': ['.tz'],
             }
 
 language_blocks = {
              'ar': ['.eg', '.ae', '.ir', '.iq', '.sa', '.om', '.ly', '.pk', '.tr', '.er', '.km', '.dz', '.ma', '.sd', '.ye', '.sy', '.tn', '.so', '.jo', '.lb', '.kw', '.mr', '.qa', '.af', '.bh', '.bn', '.dj', '.mr'],
-             'az': ['.az',],
-             'bg': ['.bg',],
-             'hy': ['.am',],
-             'id': ['.id',],
-             'he': ['.il',],
-             'il': ['.il',],
-             'jp': ['.jp',], # Mistagged pages are somewhat common.
-             'ja': ['.jp',],
-             'ka': ['.ge',],
-             'ko': ['.kp', '.ko', '.asia',],
-             'mn': ['.mn',],
-             'my': ['.my',],
+             'az': ['.az'],
+             'bg': ['.bg'],
+             'hy': ['.am'],
+             'id': ['.id'],
+             'he': ['.il'],
+             'il': ['.il'],
+             'jp': ['.jp'], # Mistagged pages are somewhat common.
+             'ja': ['.jp'],
+             'ka': ['.ge'],
+             'ko': ['.kp', '.ko', '.asia'],
+             'mn': ['.mn'],
+             'my': ['.my'],
              'ru': ['.ru', '.by', '.kz', '.kg', '.ua', '.uz', '.tm', '.bg', '.et', '.lv', '.lt', '.md', '.am', '.ge', '.su', '.tj'],
-             'tg': ['.ph',],
-             'th': ['.th',],
+             'tg': ['.ph'],
+             'th': ['.th'],
              'uk': ['.ua', '.md'],
-             'vn': ['.vn',], # Mistagged pages are somewhat common.
-             'vi': ['.vn',],
+             'vn': ['.vn'], # Mistagged pages are somewhat common.
+             'vi': ['.vn'],
              'zh': ['.cn', '.sg', '.hk', '.mo', '.asia'],
             }
 
@@ -382,8 +381,8 @@ locales = [
            ['nl', 'nl-nl', '.nl'],
            ['no', 'nb-no', '.no'],
            ['no', 'no-no', '.no'],
-           ['no', 'nb',    '.no'],
-           ['no', 'nn',    '.no'],
+           ['no', 'nb', '.no'],
+           ['no', 'nn', '.no'],
            ['pl', 'pl-pl', '.pl'],
            ['pt', 'pt-pt', '.pt'],
            ['pt', 'pt-br', '.br'],
@@ -393,7 +392,7 @@ locales = [
            ['sl', 'sl-si', '.si'],
            ['sv', 'sv-se', '.se'],
            ['sv', 'sw-se', '.se'], # Wrong, but some Swedish sites incorrectly use the "sw" code.
-           ['sv', 'sw',    '.se'],
+           ['sv', 'sw', '.se'],
            ['sw', 'sw-ug', '.ug'],
            ['sw', 'sw-tz', '.tz'],
            ['sw', 'sw-ke', '.ke'],
@@ -453,7 +452,7 @@ blocked_locales = [
            ['th', 'th-th', '.th'],
            ['uk', 'uk-ua', '.ua'],
            ['uk', 'uk-md', '.md'],
-           ['vi', 'vn-vi', '.vn'], 
+           ['vi', 'vn-vi', '.vn'],
            ['vi', 'vn-vn', '.vn'], # Mistagged pages are somewhat common.
            ['zh', 'zh-cn', '.cn'],
            ['zh', 'zh-hk', '.hk'],
@@ -467,7 +466,6 @@ def IdentifyPageLanguage(url, html):
     prefix = None
     lang = None
     suffixlangs = []
-    contentlang = None
     infixlangs = []
     rooturl = GetRootUrl(url)
     # First we extract what we can from the URL
@@ -501,20 +499,20 @@ def IdentifyPageLanguage(url, html):
     content_lang = None
     try:
         html_lang = soup.findAll('html')[0].get('lang', None)
-    except:
+    except Exception:
         pass
     try:
         cl = soup.findAll(attrs={'http-equiv': 'Content-Language'})[0].get('content', None)
         content_lang = cl.get('content', None)
         print('Content Lang: {0} - {1}'.format(cl, content_lang))
-    except:
+    except Exception:
         pass
     if not content_lang:
         try:
             cl = soup.findAll(attrs={'name': 'language'})[0].get('content', None)
             content_lang = cl.get('content', None)
             print('Content Lang: {0} - {1}'.format(cl, content_lang))
-        except:
+        except Exception:
             pass
     #print(u'Infix langs: {0}, Suffix Langs: {1}, Prefix Lang: {2}, HTML Lang: {3}, Content Lang: {4}'.format(
     #    infixlangs, suffixlangs, prefix, html_lang, content_lang))

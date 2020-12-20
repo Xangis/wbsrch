@@ -18,15 +18,14 @@
 #
 # Tested with Python 2.7. See the .py3 version for a Python3 variant.
 
-import os
-import sys
 import codecs
 from urlparse import urlparse
+
 
 def GetRootUrl(url, secure=False):
     if not url.startswith(u'http://') and not url.startswith(u'https://'):
         url = u'http://' + url
-    parsed_uri = urlparse( url )
+    parsed_uri = urlparse(url)
     loc = parsed_uri.netloc
     loc = loc.lower()
     if loc.endswith('.'):
@@ -34,6 +33,7 @@ def GetRootUrl(url, secure=False):
     if loc.endswith(':80'):
         loc = loc[:-3]
     return loc
+
 
 def SplitDomains(filename):
     processed = 0
