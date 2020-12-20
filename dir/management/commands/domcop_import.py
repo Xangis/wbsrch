@@ -23,17 +23,20 @@ from django.db import connection
 import csv
 
 
-def LoadDomcopFile(filename):
+def LoadDomcopFile(filename, skip):
     crawl_needed = []
     crawl_blocked = []
     processed = []
     first = True
-    with open(filename, 'rb') as csvfile:
+    with open(filename, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
-        # Set all Domcop results as old.
-        print('Marking all previous Domcop rank data as outdated.')
-        cursor = connection.cursor()
-        cursor.execute('UPDATE dir_domaininfo SET domcop_pagerank_outdated = true WHERE domcop_pagerank_outdated = false;')
+        if skip:
+            print('Skip is set. Not marking previous Domcop rank data as outdated.')
+        else:
+            # Set all Domcop results as old.
+            print('Marking all previous Domcop rank data as outdated.')
+            cursor = connection.cursor()
+            cursor.execute('UPDATE dir_domaininfo SET domcop_pagerank_outdated = true WHERE domcop_pagerank_outdated = false;')
         print('Updating ranks.')
         for row in reader:
             if first:
@@ -46,8 +49,9 @@ def LoadDomcopFile(filename):
             # Column 1 = domain.
             # Column 2 = pagerank.
             if len(row) >= 3:
-                print('Domain {0} ranks {1}'.format(row[2], row[0]))
+                print('Domain {0} ranks {1}'.format(row[1], row[0]))
                 GetRootDomain(row[2])
+                # UpdateDomcopRank(domain_name, rank, pagerank)
                 if UpdateDomcopRank(row[1], row[0], row[2]):
                     if not CanCrawlUrl(row[2]):
                         print('Domain {0} cannot be crawled, not adding to crawl needed'.format(row[2]))
@@ -71,7 +75,11 @@ def LoadDomcopFile(filename):
 
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument('-s', '--skipoutdated', default=False, action='store_true', dest='skip', help='Skips the step of marking all existing entries as outdated.')
+
     def handle(self, *args, **options):
+        skip = options['skip']
         # /usr/bin/wget -nv -O $MYFILENAME https://www.domcop.com/files/top/top10milliondomains.csv.zip
         if not os.path.isfile('top10milliondomains.csv'):
             print('File top10milliondomains.csv does not exist. Retrieving.')
@@ -82,4 +90,4 @@ class Command(BaseCommand):
             zip_ref = zipfile.ZipFile('./top10milliondomains.csv.zip', 'r')
             zip_ref.extractall('.')
             zip_ref.close()
-        LoadDomcopFile('top10milliondomains.csv')
+        LoadDomcopFile('top10milliondomains.csv', skip)

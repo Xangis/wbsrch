@@ -46,22 +46,22 @@ class Command(BaseCommand):
                 # Don't consider full URLs as valid search terms from file, instead use the root URL, if possible.
                 try:
                     line = GetRootUrl(line.strip().lower())
-                except:
+                except Exception:
                     line = line.strip().lower()
                 # Do not queue anything less than 2 characters long.
                 if len(line) < 2:
                     continue
                 try:
                     if domains:
-                        info = DomainInfo.objects.get(url=line)
+                        DomainInfo.objects.get(url=line)
                     else:
-                        term = term_model.objects.get(keywords=line)
+                        term_model.objects.get(keywords=line)
                 except ObjectDoesNotExist:
                     if domains or printem:
                         try:
                             print('{0}'.format(line))
                             numadded = numadded + 1
-                        except:
+                        except Exception:
                             pass
                     else:
                         AddPendingTerm(line, language, 'add_new_to_pending from file {0}'.format(filename))
@@ -72,16 +72,16 @@ class Command(BaseCommand):
                         words = line.split(' ')
                         for word in words:
                             try:
-                                term = term_model.objects.get(keywords=word)
+                                term_model.objects.get(keywords=word)
                             except ObjectDoesNotExist:
                                 if not printem:
                                     try:
                                         AddPendingTerm(word, language, 'add_new_to_pending from file {0}'.format(filename))
-                                    except:
+                                    except Exception:
                                         pass
                                 try:
                                     print('{0}.'.format(word))
-                                except:
+                                except Exception:
                                     pass
                                 numadded = numadded + 1
                 numdone = numdone + 1
@@ -90,6 +90,6 @@ class Command(BaseCommand):
         except UnicodeDecodeError:
             print('UnicodeDecodeError on line {0}'.format(numlines))
         if domains:
-            print('Processed {0} lines and {1} domains need to be crawled.'.format(numdone, numadded, language))
+            print('Processed {0} lines and {1} domains need to be crawled.'.format(numdone, numadded))
         else:
             print('Processed {0} words and added {1} to the pending {2} index.'.format(numdone, numadded, language))

@@ -81,8 +81,6 @@ class Command(BaseCommand):
         onlyprefix = options.get('urlprefix', None)
         rank = options.get('rank', False)
         print('Max Items to Process: {0}, Max Num URLs Starting Point: {1}, Min starting point: {2}'.format(maxitems, maxurls, numpageminimum))
-        counts = []
-        result = None
         cursor = connection.cursor()
         uncategorized_domains = []
         if options['file']:
@@ -92,7 +90,6 @@ class Command(BaseCommand):
             autotag = language_list
             autoblock = blocked_language_list
             filename = options['file']
-            domains = []
             numloaded = 0
             print('Loading domains to check from file: {0}'.format(filename))
             f = open(filename, 'rb')
@@ -156,7 +153,7 @@ class Command(BaseCommand):
             elif onlyprefix:
                 query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '{0}%' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlyprefix, maxurls, maxitems)
             elif rank:
-                query = 'SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE language_association IS null AND alexa_rank IS NOT null AND uses_language_subdirs = false AND uses_language_query_parameter = false ORDER BY alexa_rank LIMIT {0};'.format(maxurls, maxitems)
+                query = 'SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE language_association IS null AND alexa_rank IS NOT null AND uses_language_subdirs = false AND uses_language_query_parameter = false ORDER BY alexa_rank LIMIT {0};'.format(maxurls)
             elif numpageminimum:
                 query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) >= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(numpageminimum, maxitems)
             else:
@@ -390,7 +387,7 @@ class Command(BaseCommand):
                     elif langtoblock == 'ps':
                         # (40, 'Unindexed Language - Pashto'),
                         site.reason = 40
-                    elif langtoblock == 'ru' or langtoblock =='uk' or langtoblock == 'bg':
+                    elif langtoblock == 'ru' or langtoblock == 'uk' or langtoblock == 'bg':
                         # (28, 'Unindexed Language - Russian or Other Cyrillic'),
                         site.reason = 28
                     elif langtoblock == 'si':

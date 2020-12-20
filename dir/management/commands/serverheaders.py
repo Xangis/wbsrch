@@ -16,8 +16,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         url = options['justthisurl']
-        print('Retrieving ' + unicode(url))
-        req = urllib2.Request(url)
+        print('Retrieving ' + str(url))
+        req = urllib.request.Request(url)
         try:
             user_agent = Setting.objects.get(name='wbsrch_user_agent')
             req.add_header('User-agent', user_agent.value)

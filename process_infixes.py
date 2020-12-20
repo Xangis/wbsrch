@@ -7,18 +7,9 @@ import sys
 sys.path.append('/var/django/wbsrch/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
-import time
-#import optparse
 from dir.models import *
 from dir.utils import MoveSiteTo
 from dir.language import GetInfixLanguage, InvalidLanguageException, GetUrlParameterLanguage
-from django.db.utils import DatabaseError
-from django.db import connection
-from django.utils.timezone import utc
-from django.core.exceptions import ValidationError
-from django.db import transaction
-import datetime
-import csv
 
 # Required now that we're on Django 1.7. Otherwise we get "Models aren't loaded yet" error.
 import django
@@ -81,6 +72,7 @@ def ProcessParametersForDomain(domain):
             invalid = invalid + 1
             url.delete()
 
+
 for domain in DomainInfo.objects.filter(uses_language_subdirs=True).order_by('url'):
     ProcessParametersForDomain(domain)
 for domain in DomainInfo.objects.filter(uses_language_query_parameter=True).order_by('url'):
@@ -94,4 +86,3 @@ with open("unmatched_infixes.txt", 'w') as outfile:
     for item in notmatched:
         outfile.write('%s\n' % item)
     outfile.close()
-

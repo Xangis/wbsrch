@@ -14,4 +14,3 @@ for line in reader.readlines():
             line = line.split(' ')[1]
         call(['firefox', line])
         count = count + 1
-

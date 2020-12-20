@@ -453,7 +453,10 @@ LANG_INFO = django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-GEOIP_PATH = '/var/django/wbsrch/geoip/'
+if not DEBUG:
+    GEOIP_PATH = '/var/django/wbsrch/geoip/'
+else:
+    GEOIP_PATH = '/home/xangis/Desktop/wbsrch/geoip/'
 
 Q_CLUSTER = {
     'name': 'wbsrch',

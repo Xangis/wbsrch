@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from dir.models import Setting
+from dir.utils import GetRootUrl
 import urllib.robotparser
 import urllib.request
 import urllib.error

@@ -24,17 +24,20 @@ from dir.utils import *
 from django.db import connection
 import csv
 
-def LoadAlexaFile(filename):
+def LoadAlexaFile(filename, skip):
     crawl_needed = []
     crawl_blocked = []
     skipped = []
     processed = []
-    with open(filename, 'rb') as csvfile:
+    with open(filename, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         # Set all Alexa results as old.
-        print('Marking all previous alexa rank data as outdated.')
-        cursor = connection.cursor()
-        cursor.execute('UPDATE dir_domaininfo SET alexa_outdated = true WHERE alexa_outdated = false;')
+        if skip:
+            print('Skip is set. Not marking previous alexa rank data as outdated.')
+        else:
+            print('Marking all previous alexa rank data as outdated.')
+            cursor = connection.cursor()
+            cursor.execute('UPDATE dir_domaininfo SET alexa_outdated = true WHERE alexa_outdated = false;')
         print('Updating ranks.')
         for row in reader:
             if len(row) == 2:
@@ -77,8 +80,13 @@ def LoadAlexaFile(filename):
         outfile.close()
     print('Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.')
 
+
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument('-s', '--skipoutdated', default=False, action='store_true', dest='skip', help='Skips the step of marking all existing entries as outdated.')
+
     def handle(self, *args, **options):
+        skip = options['skip']
         if not os.path.isfile('top-1m.csv'):
             print('File top-1m.csv does not exist. Retrieving.')
             filename = wget.download('http://s3.amazonaws.com/alexa-static/top-1m.csv.zip')
@@ -88,4 +96,4 @@ class Command(BaseCommand):
             zip_ref = zipfile.ZipFile('./top-1m.csv.zip', 'r')
             zip_ref.extractall('.')
             zip_ref.close()
-        LoadAlexaFile('top-1m.csv')
+        LoadAlexaFile('top-1m.csv', skip)

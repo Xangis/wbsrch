@@ -21,17 +21,20 @@ from dir.utils import *
 from django.db import connection
 import csv
 
-def LoadAlexaFile(filename):
+def LoadAlexaFile(filename, skip):
     crawl_needed = []
     crawl_blocked = []
     processed = []
     first = True
-    with open(filename, 'rb') as csvfile:
+    with open(filename, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
-        # Set all Majestic results as old.
-        print('Marking all previous Majestic rank data as outdated.')
-        cursor = connection.cursor()
-        cursor.execute('UPDATE dir_domaininfo SET majestic_outdated = true WHERE majestic_outdated = false;')
+        if skip:
+            print('Skip is set. Not marking previous Majestic data as outdated.')
+        else:
+            # Set all Majestic results as old.
+            print('Marking all previous Majestic rank data as outdated.')
+            cursor = connection.cursor()
+            cursor.execute('UPDATE dir_domaininfo SET majestic_outdated = true WHERE majestic_outdated = false;')
         print('Updating ranks.')
         # GlobalRank,TldRank,Domain,TLD,RefSubNets,RefIPs,IDN_Domain,IDN_TLD,PrevGlobalRank,PrevTldRank,PrevRefSubNets,PrevRefIPs
         # 1,1,google.com,com,492996,3120968,google.com,com,1,1,491732,3118138
@@ -69,11 +72,15 @@ def LoadAlexaFile(filename):
 
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument('-s', '--skipoutdated', default=False, action='store_true', dest='skip', help='Skips the step of marking all existing entries as outdated.')
+
     def handle(self, *args, **options):
+        skip = options['skip']
         if not os.path.isfile('majestic_million.csv'):
             print('File majestic_million.csv does not exist. Retrieving.')
             filename = wget.download('http://downloads.majestic.com/majestic_million.csv')
             if not filename:
                 print('Failed to download Majestic file.')
                 exit(0)
-        LoadAlexaFile('majestic_million.csv')
+        LoadAlexaFile('majestic_million.csv', skip)

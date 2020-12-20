@@ -38,7 +38,6 @@ class Command(BaseCommand):
             else:
                 records = SiteInfo.objects.distinct('rooturl').values('rooturl').order_by('rooturl')
             print('{0} domains found.'.format(records.count()))
-            rcount = 0
             for record in records:
                 # print(record['rooturl'])
                 domains.append(record['rooturl'])
@@ -77,7 +76,7 @@ class Command(BaseCommand):
                 if normed != url.url:
                     print('{0} IS NOW {1}'.format(url.url, normed))
                     try:
-                        existing = site_model.objects.get(url=normed)
+                        site_model.objects.get(url=normed)
                         print('DUPLICATE URL FOUND. DELETING.')
                         url.delete()
                     except ObjectDoesNotExist:
@@ -90,11 +89,11 @@ class Command(BaseCommand):
                             except ObjectDoesNotExist:
                                 link.url_source = normed
                                 link.save()
-                                num_links_update = num_links_updated + 1
+                                num_links_updated = num_links_updated + 1
                         url.url = normed
                         try:
                             url.save()
-                        except AmbiguousTimeError as e:
+                        except AmbiguousTimeError:
                             print('AmbiguousTimeError saving url {0}, not saved'.format(url.url))
                     if num_links_updated > 0 or num_links_deleted > 0:
                         print('{0} URL LINKS UPDATED AND {1} DLETED'.format(num_links_updated, num_links_deleted))

@@ -10,7 +10,7 @@ from dir.views import language_list, hidden_language_list
 
 # Index ratio controls how quickly we cycle through terms for a language.
 # Counts for languages not in the index are ignored.
-lang_index_counts = { 'lt': 4, 'lv': 3, 'is': 4, 'sw': 2, 'yo': 2, 'so': 2, 'wo': 2, 'ha': 2, 'rw': 2, 'sn': 2, 'ca': 2, 'cs': 15, 'fi': 10, 'el': 10, 'hu': 8, 'pl': 10, 'tr': 14, 'da': 7, 'et': 4, 'de': 15, 'no': 5, 'pt': 10, 'nl': 8, 'sk': 8, 'sl': 8, 'es': 12, 'sv': 8, 'hr': 5, 'it': 8, 'fr': 12, 'ro': 6 }
+lang_index_counts = {'lt': 4, 'lv': 3, 'is': 4, 'sw': 2, 'yo': 2, 'so': 2, 'wo': 2, 'ha': 2, 'rw': 2, 'sn': 2, 'ca': 2, 'cs': 15, 'fi': 10, 'el': 10, 'hu': 8, 'pl': 10, 'tr': 14, 'da': 7, 'et': 4, 'de': 15, 'no': 5, 'pt': 10, 'nl': 8, 'sk': 8, 'sl': 8, 'es': 12, 'sv': 8, 'hr': 5, 'it': 8, 'fr': 12, 'ro': 6}
 
 while True:
     for language in language_list:
