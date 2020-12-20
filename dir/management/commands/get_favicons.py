@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from optparse import make_option
 from dir.models import DomainInfo
 import time
 import codecs
@@ -11,12 +10,11 @@ from dir.utils import GetFavicons
 class Command(BaseCommand):
     help = "This command retrieves favicons for domains."
 
-    option_list = BaseCommand.option_list + (
-        make_option('-d', '--detailed', default=False, action='store_true', dest='detailed', help='Run in verbose mode.'),
-        make_option('-j', '--justthisdomain', default=None, action='store', type='string', dest='justthisdomain', help='Gets the data for a specific domain'),
-        make_option('-s', '--sleep', default=5, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=5)'),
-        make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load domain list from specified file.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-d', '--detailed', default=False, action='store_true', dest='detailed', help='Run in verbose mode.')
+        parser.add_argument('-j', '--justthisdomain', default=None, action='store', dest='justthisdomain', help='Gets the data for a specific domain')
+        parser.add_argument('-s', '--sleep', default=5, action='store', type=int, dest='sleep', help='Time to sleep between domain queries. (default=5)')
+        parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load domain list from specified file.')
 
     def handle(self, *args, **options):
         if options['justthisdomain']:

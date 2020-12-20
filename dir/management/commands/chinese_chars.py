@@ -1,7 +1,5 @@
-
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from optparse import make_option
 from dir.utils import GetSiteInfoModelFromLanguage
 import re
 
@@ -9,20 +7,19 @@ import re
 class Command(BaseCommand):
     help = "Analyzes page titles looking for Chinese characters and prints a list of domains that are likely Chinese"
 
-    option_list = BaseCommand.option_list + (
-        # make_option('-a', '--abbreviated', default=False, action='store_true', dest='abbreviated', help='Run in abbreviated mode, which does not scan page text.'),
-        # make_option('-d', '--detailed', default=False, action='store_true', dest='verbose', help='Run in verbose mode.'),
-        # make_option('-p', '--pending', default=False, action='store_true', dest='pending', help='Get pending term list from database.'),
-        make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for domains (default=en). It is dumb to use not english because if a domain is in another table, it has been categorized and has a domain info.'),
-        # make_option('-r', '--reindex', default=False, action='store_true', dest='reindex', help='Reindex existing least-recently-indexed terms.'),
-        make_option('-m', '--max', default=5, action='store', type='int', dest='max', help='Max number of domains to update. (default=5)'),
-        make_option('-s', '--sleep', default=15, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=15)'),
-        make_option('-o', '--offset', default=0, action='store', type='int', dest='offset', help='Domain slice offset - distance from beginning to start. (default=0)'),
-        make_option('-t', '--threshold', default=0, action='store', type='int', dest='threshold', help='Min threshold required to count. (default=1, max=4)'),
-        # make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load term list from specified file.'),
+    def add_arguments(self, parser):
+        # parser.add_argument('-a', '--abbreviated', default=False, action='store_true', dest='abbreviated', help='Run in abbreviated mode, which does not scan page text.')
+        # parser.add_argument('-d', '--detailed', default=False, action='store_true', dest='verbose', help='Run in verbose mode.')
+        # parser.add_argument('-p', '--pending', default=False, action='store_true', dest='pending', help='Get pending term list from database.')
+        parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Language to use for domains (default=en). It is dumb to use not english because if a domain is in another table, it has been categorized and has a domain info.')
+        # parser.add_argument('-r', '--reindex', default=False, action='store_true', dest='reindex', help='Reindex existing least-recently-indexed terms.')
+        parser.add_argument('-m', '--max', default=5, action='store', type=int, dest='max', help='Max number of domains to update. (default=5)')
+        parser.add_argument('-s', '--sleep', default=15, action='store', type=int, dest='sleep', help='Time to sleep between domain queries. (default=15)')
+        parser.add_argument('-o', '--offset', default=0, action='store', type=int, dest='offset', help='Domain slice offset - distance from beginning to start. (default=0)')
+        parser.add_argument('-t', '--threshold', default=0, action='store', type=int, dest='threshold', help='Min threshold required to count. (default=1, max=4)')
+        # parser.add_argument('-f', '--file', default=None, action='store', type='string', dest='file', help='Load term list from specified file.')
 
         # TODO: Make an option to fill in nulls vs update already-queried domains.
-    )
 
     def handle(self, *args, **options):
         site_model = GetSiteInfoModelFromLanguage(options['language'])
@@ -31,20 +28,18 @@ class Command(BaseCommand):
         threshold = options['threshold']
         pages = site_model.objects.all().values('pagetitle', 'pagefirstheadtag', 'pagefirsth2tag', 'pagefirsth3tag', 'id', 'rooturl')[offset:offset + max]
         processed = 0
-        added = 0
         printed = 0
         domains = {}
 
         for page in pages:
             # print page
-            id = page.get('id')
             rooturl = page.get('rooturl')
             title = page.get('pagetitle', None)
             if title:
                 for n in re.findall(u'[\u4e00-\u9fff]+', title):
                     # print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
                     # print title
-                    if domains.has_key(rooturl):
+                    if rooturl in domains:
                         domains[rooturl] = domains[rooturl] + 1
                     else:
                         domains[rooturl] = 1
@@ -54,7 +49,7 @@ class Command(BaseCommand):
                 for n in re.findall(r'[\u4e00-\u9fff]+', pagefirstheadtag):
                     # print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
                     # print pagefirstheadtag
-                    if domains.has_key(rooturl):
+                    if rooturl in domains:
                         domains[rooturl] = domains[rooturl] + 1
                     else:
                         domains[rooturl] = 1
@@ -64,7 +59,7 @@ class Command(BaseCommand):
                 for n in re.findall(r'[\u4e00-\u9fff]+', pagefirsth2tag):
                     # print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
                     # print pagefirstheadtag
-                    if domains.has_key(rooturl):
+                    if rooturl in domains:
                         domains[rooturl] = domains[rooturl] + 1
                     else:
                         domains[rooturl] = 1
@@ -74,7 +69,7 @@ class Command(BaseCommand):
                 for n in re.findall(r'[\u4e00-\u9fff]+', pagefirsth3tag):
                     # print 'Chinese stuff found in site ID {0} root {1}:'.format(id, rooturl)
                     # print pagefirstheadtag
-                    if domains.has_key(rooturl):
+                    if rooturl in domains:
                         domains[rooturl] = domains[rooturl] + 1
                     else:
                         domains[rooturl] = 1

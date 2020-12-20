@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from optparse import make_option
 from dir.models import DomainInfo
 from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
 import codecs
@@ -16,14 +15,13 @@ class Command(BaseCommand):
     This command processes a file containing a list of words. If those words are not already indexed for the specified
     language, it adds them to the pending index list so that the indexer will build an index term for them.
     """
-    option_list = BaseCommand.option_list + (
-        make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for pending indexes (default=en).'),
-        make_option('-d', '--domains', default=False, action='store_true', dest='domains', help='Process file as a domain list and print the domains that need to be crawled. Redundant with -p since it only prints (default=no).'),
-        make_option('-p', '--print', default=False, action='store_true', dest='print', help='Just print the terms that are not indexed to the screen, do not create pending terms. (default=no).'),
-        make_option('-n', '--noindividual', default=False, action='store_true', dest='noindividual', help='Make sure individual words of a phrase are not indexed (default=False)'),
-        make_option('-m', '--maxwords', default=100000000, action='store', type='int', dest='maxwords', help='Max number of terms to index. (default=100000000)'),
-        make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load term list from specified file.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Language to use for pending indexes (default=en).')
+        parser.add_argument('-d', '--domains', default=False, action='store_true', dest='domains', help='Process file as a domain list and print the domains that need to be crawled. Redundant with -p since it only prints (default=no).')
+        parser.add_argument('-p', '--print', default=False, action='store_true', dest='print', help='Just print the terms that are not indexed to the screen, do not create pending terms. (default=no).')
+        parser.add_argument('-n', '--noindividual', default=False, action='store_true', dest='noindividual', help='Make sure individual words of a phrase are not indexed (default=False)')
+        parser.add_argument('-m', '--maxwords', default=100000000, action='store', type=int, dest='maxwords', help='Max number of terms to index. (default=100000000)')
+        parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load term list from specified file.')
 
     def handle(self, *args, **options):
         filename = options.get('file', None)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError, connection
-from optparse import make_option
 from dir.models import *
 from dir.utils import *
 from dir.language import IdentifyLanguage
@@ -31,29 +31,27 @@ class Command(BaseCommand):
 
         python manage.py categorize_language -g -t -i 99999999 -u .fi
 """
-
-    option_list = BaseCommand.option_list + (
-        make_option('-m', '--maxurls', default=100000, action='store', type='int', dest='maxurls', help='Max number of URLs in domain to start with, in descending order. (default=100000)'),
-        make_option('-i', '--items', default=100, action='store', type='int', dest='items', help='Number of items to process (default=100)'),
-        make_option('-n', '--numpageminimum', default=1, action='store', type='int', dest='numpageminimum', help='Minimum number of pages required to process a domain (default=1).'),
-        make_option('-o', '--onlyautotag', default=False, action='store_true', dest='onlyautotag', help='Only auto-tag, nothing else. Requires -e or -a switch.'),
-        make_option('-j', '--justnotenglish', default=False, action='store_true', dest='justnotenglish', help='Only prompt for items that detect as mostly (<10%) non-English (default=False)'),
-        make_option('-e', '--autotagenglish', default=False, action='store_true', dest='autotagenglish', help='Auto-tag sites that detect as english (>95%). Supersedes skipping english in -j. (default=False)'),
-        make_option('-c', '--confidentprompt', default=False, action='store_true', dest='confident', help='Only prompt for sites where confidence level in one language is over 90%. Works with -j (default=False)'),
-        make_option('-a', '--autotag', default=None, action='store', type='string', dest='autotag', help='Automatically tag this comma-seperated list of language codes, only works with -c.'),
-        make_option('-b', '--autoblock', default=None, action='store', type='string', dest='autoblock', help='Automatically block this comma-seperated list of language codes, only works with -c.'),
-        make_option('-u', '--urlsuffix', default=None, action='store', type='string', dest='urlsuffix', help='Only check URLs with this suffix.'),
-        make_option('-z', '--afterz', default=False, action='store_true', dest='afterz', help='Only check URLs with pages having a title after z. Can be combined with -0.'),
-        make_option('-0', '--beforezero', default=False, action='store_true', dest='beforezero', help='Only check URLs with pages having a title before zero. Can be combined with -z.'),
-        make_option('-s', '--startafter', default=None, action='store', type='string', dest='startafter', help='Start after <string>. Only useful for resuming an afterz or beforezero categorize.'),
-        make_option('-p', '--urlprefix', default=None, action='store', type='string', dest='urlprefix', help='Only check URLs with this prefix.'),
-        make_option('-r', '--rank', default=False, action='store_true', dest='rank', help='Check untagged domains in order of popularity rank.'),
-        make_option('-q', '--quiet', default=False, action='store_true', dest='quiet', help='Quiet mode - do not log individual pages and titles to the console.'),
-        make_option('-t', '--textminimum', default=False, action='store_true', dest='textminimum', help='Require at least 100 characters of text to count page for categorization.'),
-        make_option('-d', '--domain', default=None, action='store', type='string', dest='domain', help='Only check this domain.'),
-        make_option('-g', '--goahead', default=False, action='store_true', dest='goahead', help='Go ahead and block and tag ALL languages, and do it automatically. Same options as -f, -0, or -z. Combines -e,-a,-b,-c. Overrides everything but -f, -0, and -z. Works with -u,-j,-p,-n,-r,-t. (default=False)'),
-        make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load domain list from specified file. Ignores all options and categorizes/blocks everything.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-m', '--maxurls', default=100000, action='store', type=int, dest='maxurls', help='Max number of URLs in domain to start with, in descending order. (default=100000)')
+        parser.add_argument('-i', '--items', default=100, action='store', type=int, dest='items', help='Number of items to process (default=100)')
+        parser.add_argument('-n', '--numpageminimum', default=1, action='store', type=int, dest='numpageminimum', help='Minimum number of pages required to process a domain (default=1).')
+        parser.add_argument('-o', '--onlyautotag', default=False, action='store_true', dest='onlyautotag', help='Only auto-tag, nothing else. Requires -e or -a switch.')
+        parser.add_argument('-j', '--justnotenglish', default=False, action='store_true', dest='justnotenglish', help='Only prompt for items that detect as mostly (<10%) non-English (default=False)')
+        parser.add_argument('-e', '--autotagenglish', default=False, action='store_true', dest='autotagenglish', help='Auto-tag sites that detect as english (>95%). Supersedes skipping english in -j. (default=False)')
+        parser.add_argument('-c', '--confidentprompt', default=False, action='store_true', dest='confident', help='Only prompt for sites where confidence level in one language is over 90%. Works with -j (default=False)')
+        parser.add_argument('-a', '--autotag', default=None, action='store', dest='autotag', help='Automatically tag this comma-seperated list of language codes, only works with -c.')
+        parser.add_argument('-b', '--autoblock', default=None, action='store', dest='autoblock', help='Automatically block this comma-seperated list of language codes, only works with -c.')
+        parser.add_argument('-u', '--urlsuffix', default=None, action='store', dest='urlsuffix', help='Only check URLs with this suffix.')
+        parser.add_argument('-z', '--afterz', default=False, action='store_true', dest='afterz', help='Only check URLs with pages having a title after z. Can be combined with -0.')
+        parser.add_argument('-0', '--beforezero', default=False, action='store_true', dest='beforezero', help='Only check URLs with pages having a title before zero. Can be combined with -z.')
+        parser.add_argument('-s', '--startafter', default=None, action='store', dest='startafter', help='Start after <string>. Only useful for resuming an afterz or beforezero categorize.')
+        parser.add_argument('-p', '--urlprefix', default=None, action='store', dest='urlprefix', help='Only check URLs with this prefix.')
+        parser.add_argument('-r', '--rank', default=False, action='store_true', dest='rank', help='Check untagged domains in order of popularity rank.')
+        parser.add_argument('-q', '--quiet', default=False, action='store_true', dest='quiet', help='Quiet mode - do not log individual pages and titles to the console.')
+        parser.add_argument('-t', '--textminimum', default=False, action='store_true', dest='textminimum', help='Require at least 100 characters of text to count page for categorization.')
+        parser.add_argument('-d', '--domain', default=None, action='store', dest='domain', help='Only check this domain.')
+        parser.add_argument('-g', '--goahead', default=False, action='store_true', dest='goahead', help='Go ahead and block and tag ALL languages, and do it automatically. Same options as -f, -0, or -z. Combines -e,-a,-b,-c. Overrides everything but -f, -0, and -z. Works with -u,-j,-p,-n,-r,-t. (default=False)')
+        parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load domain list from specified file. Ignores all options and categorizes/blocks everything.')
 
     def handle(self, *args, **options):
         maxurls = options.get('maxurls', 100000)
@@ -123,7 +121,7 @@ class Command(BaseCommand):
                             continue
                         else:
                             uncategorized_domains.append(domainpage)
-                    except:
+                    except Exception:
                         uncategorized_domains.append(domainpage)
             if beforezero:
                 # Should give us SELECT DISTINCT rooturl FROM site_info WHERE pagetitle < '0'
@@ -138,7 +136,7 @@ class Command(BaseCommand):
                             continue
                         else:
                             uncategorized_domains.append(domainpage)
-                    except:
+                    except Exception:
                         uncategorized_domains.append(domainpage)
             if startafter:
                 print('{0} domains found with uncategorized language after "{1}".'.format(len(uncategorized_domains), startafter))
@@ -182,7 +180,7 @@ class Command(BaseCommand):
                         continue
                     else:
                         uncategorized_domains.append(domain[1])
-                except:
+                except Exception:
                     uncategorized_domains.append(domain[1])
         for domain in uncategorized_domains:
             urls = SiteInfo.objects.filter(rooturl=domain)
@@ -191,7 +189,7 @@ class Command(BaseCommand):
                 try:
                     blocked = BlockedSite.objects.get(domain)
                     print('Because it is marked as blocked for reason {0}'.foramt(blocked.reason))
-                except:
+                except ObjectDoesNotExist:
                     pass
                 continue
             total = 0
@@ -206,7 +204,7 @@ class Command(BaseCommand):
                 idlang = IdentifyLanguage(url.pagetext)
                 if idlang[0] == 'en':
                     english = english + idlang[1]
-                if scores.has_key(idlang[0]):
+                if idlang[0] in scores:
                     scores[idlang[0]] = scores[idlang[0]] + idlang[1]
                 else:
                     scores[idlang[0]] = idlang[1]
@@ -275,7 +273,7 @@ class Command(BaseCommand):
             elif input == 'i':
                 try:
                     dom = DomainInfo.objects.get(url=domain)
-                except:
+                except ObjectDoesNotExist:
                     dom = DomainInfo()
                     dom.url = domain
                 dom.uses_language_subdirs = True
@@ -284,7 +282,7 @@ class Command(BaseCommand):
             elif input == 'u':
                 try:
                     dom = DomainInfo.objects.get(url=domain)
-                except:
+                except ObjectDoesNotExist:
                     dom = DomainInfo()
                     dom.url = domain
                 dom.uses_language_query_parameter = True
@@ -292,7 +290,7 @@ class Command(BaseCommand):
                 continue
             elif input == 'del':
                 try:
-                    existing = BlockedSite.objects.get(url=domain)
+                    BlockedSite.objects.get(url=domain)
                     # If the domain is already blocked, the URL must have been added erroneously.
                     # in that case, just delete it.
                     RemoveURLsForDomain(item.rooturl)
@@ -443,7 +441,7 @@ class Command(BaseCommand):
                         connection._rollback()
                     try:
                         dom = DomainInfo.objects.get(url=domain)
-                    except:
+                    except ObjectDoesNotExist:
                         dom = DomainInfo()
                         dom.url = domain
                     dom.language_association = langtoblock
@@ -458,7 +456,7 @@ class Command(BaseCommand):
                     if model:
                         try:
                             dom = DomainInfo.objects.get(url=domain)
-                        except:
+                        except ObjectDoesNotExist:
                             dom = DomainInfo()
                             dom.url = domain
                         dom.language_association = input

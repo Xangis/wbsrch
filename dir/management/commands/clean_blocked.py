@@ -1,7 +1,6 @@
 
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from optparse import make_option
 from dir.models import BlockedSite
 from dir.utils import DeleteDomainLinks
 import time
@@ -12,9 +11,8 @@ class Command(BaseCommand):
     Due to redirects and other things, domains don't always have a DomainInfo record when they have URLs
     in the database. This is used to fix that by creating DomainInfo records where they're missing.
     """
-    option_list = BaseCommand.option_list + (
-        make_option('-s', '--sleep', default=0, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=0)'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-s', '--sleep', default=0, action='store', type=int, dest='sleep', help='Time to sleep between domain queries. (default=0)'),
 
     def handle(self, *args, **options):
         blocked = BlockedSite.objects.all().order_by('url')

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from optparse import make_option
 from dir.utils import GetSearchLogModelFromLanguage, IsBotAgent
 from dir.models import language_list
 
@@ -30,10 +29,9 @@ class Command(BaseCommand):
 
     It is not necessary otherwise, since the logger automatically flags searches as bots as they are done.
     """
-    option_list = BaseCommand.option_list + (
-        make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for search logs (default=en).'),
-        make_option('-e', '--everything', default=False, action='store_true', dest='everything', help='Process everything, all languages.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Language to use for search logs (default=en).')
+        parser.add_argument('-e', '--everything', default=False, action='store_true', dest='everything', help='Process everything, all languages.')
 
     def handle(self, *args, **options):
         lang = options['language']

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from optparse import make_option
 from dir.models import DomainInfo, SiteInfoAfterZ, BlockedSite
 from dir.utils import MoveSiteTo, GetSiteInfoModelFromLanguage, RemoveURLsForDomain
 
@@ -12,14 +11,13 @@ class Command(BaseCommand):
     Unlike the admin command, this is domain-language-aware, so pages from domains tagged as a specific language or
     as an infix or url parameter language will only be moved if they fit those rules.
     """
-    option_list = BaseCommand.option_list + (
-        make_option('-s', '--source', action='store', default='en', dest='source', help='Source language to use (default=en)'),
-        make_option('-e', '--extension', action='store', dest='extension', help='Check domains with this extension.'),
-        make_option('-l', '--language', action='store', dest='language', help='Move domain pages to this language.'),
-        make_option('-m', '--max', default=10, action='store', type='int', dest='max', help='Max number of domains to process. (default=10)'),
-        make_option('-n', '--domaininfo', default=True, action='store_false', dest='domaininfo', help='Do not create DomainInfo records for domains that lack them. (default=Yes)'),
-        make_option('-b', '--block', default=False, action='store_true', dest='block', help='Do not move sites. Block after Z sites with this extension instead. (default=No)'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-s', '--source', action='store', default='en', dest='source', help='Source language to use (default=en)'),
+        parser.add_argument('-e', '--extension', action='store', dest='extension', help='Check domains with this extension.'),
+        parser.add_argument('-l', '--language', action='store', dest='language', help='Move domain pages to this language.'),
+        parser.add_argument('-m', '--max', default=10, action='store', type=int, dest='max', help='Max number of domains to process. (default=10)'),
+        parser.add_argument('-n', '--domaininfo', default=True, action='store_false', dest='domaininfo', help='Do not create DomainInfo records for domains that lack them. (default=Yes)'),
+        parser.add_argument('-b', '--block', default=False, action='store_true', dest='block', help='Do not move sites. Block after Z sites with this extension instead. (default=No)'),
 
     def handle(self, *args, **options):
         extension = options.get('extension', None)

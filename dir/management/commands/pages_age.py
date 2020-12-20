@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from optparse import make_option
 from dir.models import language_list
 from dir.utils import GetPagesAverageAge, GetOldestPageAge
 
 
 class Command(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option('-l', '--language', default='all', action='store', type='string', dest='language', help='Language to use for index ages, or "all" for all. (default=all).'),
-        make_option('-d', '--days', default=None, action='store', type='int', dest='days', help='If specified, only prints details for languages older than this number of days.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-l', '--language', default='all', action='store', dest='language', help='Language to use for index ages, or "all" for all. (default=all).')
+        parser.add_argument('-d', '--days', default=None, action='store', type=int, dest='days', help='If specified, only prints details for languages older than this number of days.')
 
     def handle(self, *args, **options):
         days = options.get('days', None)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from optparse import make_option
 from dir.models import DomainInfo, PageLink
 import time
 import codecs
@@ -10,18 +10,17 @@ import codecs
 class Command(BaseCommand):
     help = "This command updates domain metadata. It's used for updating domain link counts and domain keyword counts."
 
-    option_list = BaseCommand.option_list + (
-        make_option('-m', '--max', default=100000, action='store', type='int', dest='max', help='Max number of domains to update. (default=100000)'),
-        make_option('-s', '--sleep', default=0, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=0)'),
-        make_option('-o', '--offset', default=0, action='store', type='int', dest='offset', help='Domain slice offset - distance from beginning to start. (default=0)'),
-        make_option('-j', '--justthisurl', default=None, action='store', type='string', dest='justthisurl', help='Calculate only for this url.'),
-        make_option('-r', '--recalculate', default=False, action='store_true', dest='recalculate', help='Update already-populated domains instead of uncounted (default=False)'),
-        make_option('-p', '--popularity', default=False, action='store_true', dest='popularity', help='Sort by popularity before processing. (default=False)'),
-        make_option('-u', '--urlcounts', default=False, action='store_true', dest='urlcounts', help='Update domain URL counts, not link counts.. (default=False)'),
-        make_option('-k', '--keywordcounts', default=False, action='store_true', dest='keywordcounts', help='Update domain URL counts, not link counts.. (default=False)'),
-        make_option('-t', '--total', default=False, action='store_true', dest='total', help='After running, show the total number of domains without number of links calculated. (defaul=False)'),
-        make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load domain list from specified file.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-m', '--max', default=100000, action='store', type=int, dest='max', help='Max number of domains to update. (default=100000)')
+        parser.add_argument('-s', '--sleep', default=0, action='store', type=int, dest='sleep', help='Time to sleep between domain queries. (default=0)')
+        parser.add_argument('-o', '--offset', default=0, action='store', type=int, dest='offset', help='Domain slice offset - distance from beginning to start. (default=0)')
+        parser.add_argument('-j', '--justthisurl', default=None, action='store', dest='justthisurl', help='Calculate only for this url.')
+        parser.add_argument('-r', '--recalculate', default=False, action='store_true', dest='recalculate', help='Update already-populated domains instead of uncounted (default=False)')
+        parser.add_argument('-p', '--popularity', default=False, action='store_true', dest='popularity', help='Sort by popularity before processing. (default=False)')
+        parser.add_argument('-u', '--urlcounts', default=False, action='store_true', dest='urlcounts', help='Update domain URL counts, not link counts.. (default=False)')
+        parser.add_argument('-k', '--keywordcounts', default=False, action='store_true', dest='keywordcounts', help='Update domain URL counts, not link counts.. (default=False)')
+        parser.add_argument('-t', '--total', default=False, action='store_true', dest='total', help='After running, show the total number of domains without number of links calculated. (defaul=False)')
+        parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load domain list from specified file.')
 
     def handle(self, *args, **options):
         start = timezone.now()
@@ -51,7 +50,7 @@ class Command(BaseCommand):
                 try:
                     domain = DomainInfo.objects.get(url=line)
                     domains.append(domain)
-                except:
+                except ObjectDoesNotExist:
                     # Create domain if not found. This could be problematic if we have a file full of garbage text.
                     print('Domain {0} not found, creating before update.'.format(line))
                     domain = DomainInfo()
@@ -68,7 +67,7 @@ class Command(BaseCommand):
                 domains = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=True)
         if options['popularity']:
             domains = domains.order_by('alexa_rank')
-        domains = domains[options['offset']:options['offset']+options['max']]
+        domains = domains[options['offset']:options['offset'] + options['max']]
         for domain in domains:
             # PROBLEM: For the number of URLs crawled and number of keywords ranked, we have to take language into account.
             # It's not enough to just count the number of URLs and their ranks for the main language, because subdomain, infix,

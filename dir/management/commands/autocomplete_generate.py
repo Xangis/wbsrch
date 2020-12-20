@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from dir.utils import GetIndexModelFromLanguage, GetAutoCompleteModelFromLanguage, GetSearchLogModelFromLanguage
 from dir.views import language_list
@@ -12,12 +11,8 @@ class Command(BaseCommand):
     Generates autocomplete data based on search popularity in the search logs for all languages. This takes a long time, and autocomplete
     will be broken for the currently running languages because it deletes all existing autocompletes first.
     """
-    # option_list = BaseCommand.option_list + (
-    #    make_option('-d', '--date', default=None, action='store', type='string', dest='date', help='Date to show old index counts from (default=do not show).'),
-    #    make_option('-o', '--oldest', default=False, action='store_true', dest='oldest', help='Show oldest indexes (dfault=False).'),
-    #    make_option('-s', '--showempty', default=False, action='store_true', dest='showempty', help='Show empty index counts (use with -d).'),
-    #    make_option('-u', '--urls', default=False, action='store_true', dest='showurls', help='Show oldest urls by language.'),
-    # )
+    def add_arguments(self, parser):
+        pass
 
     def handle(self, *args, **options):
         for language in language_list:
