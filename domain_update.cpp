@@ -7,7 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <pqxx/pqxx> 
+#include <pqxx/pqxx>
 
 using namespace std;
 using namespace pqxx;
@@ -26,16 +26,16 @@ int main(int argc, char* argv[]) {
    }
 
    try {
-      connection C("dbname = zetaweb user = zetaweb password = d9irk0kfnv,er9kd2 \
-      hostaddr = 216.151.3.109 port = 5432");
+      connection C("dbname = zetaweb user = zetaweb password = password \
+      hostaddr = 127.0.0.1 port = 5432");
       if (C.is_open()) {
          cout << "Opened database successfully: " << C.dbname() << endl;
       } else {
          cout << "Can't open database" << endl;
          return 1;
       }
-      connection D("dbname = urls user = urls password = ExplodingUnderwear9099321 \
-      hostaddr = 216.151.3.108 port = 5432");
+      connection D("dbname = urls user = urls password = password \
+      hostaddr = 127.0.0.1 port = 5432");
       if (D.is_open()) {
          cout << "Opened database successfully: " << D.dbname() << endl;
       } else {

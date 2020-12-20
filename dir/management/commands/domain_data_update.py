@@ -8,7 +8,7 @@ import codecs
 
 
 class Command(BaseCommand):
-    help = "This command updates domain metadata. It's used for updating domain link counts and domain keyword counts."
+    help = "This command updates domain metadata. It's used for updating domain link counts and domain keyword counts. Consider using the domain_update C++ command if only updating link counts since it uses less memory."
 
     def add_arguments(self, parser):
         parser.add_argument('-m', '--max', default=100000, action='store', type=int, dest='max', help='Max number of domains to update. (default=100000)')
@@ -18,8 +18,8 @@ class Command(BaseCommand):
         parser.add_argument('-r', '--recalculate', default=False, action='store_true', dest='recalculate', help='Update already-populated domains instead of uncounted (default=False)')
         parser.add_argument('-p', '--popularity', default=False, action='store_true', dest='popularity', help='Sort by popularity before processing. (default=False)')
         parser.add_argument('-u', '--urlcounts', default=False, action='store_true', dest='urlcounts', help='Update domain URL counts, not link counts.. (default=False)')
-        parser.add_argument('-k', '--keywordcounts', default=False, action='store_true', dest='keywordcounts', help='Update domain URL counts, not link counts.. (default=False)')
-        parser.add_argument('-t', '--total', default=False, action='store_true', dest='total', help='After running, show the total number of domains without number of links calculated. (defaul=False)')
+        parser.add_argument('-k', '--keywordcounts', default=False, action='store_true', dest='keywordcounts', help='Update domain URL counts, not link counts. (default=False)')
+        parser.add_argument('-t', '--total', default=False, action='store_true', dest='total', help='After running, show the total number of domains without number of links calculated. (default=False)')
         parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load domain list from specified file.')
 
     def handle(self, *args, **options):
