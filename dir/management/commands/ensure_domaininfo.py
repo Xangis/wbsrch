@@ -12,6 +12,9 @@ class Command(BaseCommand):
     help = """
     Due to redirects and other things, domains don't always have a DomainInfo record when they have URLs
     in the database. This is used to fix that by creating DomainInfo records where they're missing.
+
+    You should use the C++ version of ensure_domaininfo if you're just updating based on site_info
+    entries because it's FAR faster and uses an order of magnitude less memory.
     """
     def add_arguments(self, parser):
         # parser.add_argument('-a', '--abbreviated', default=False, action='store_true', dest='abbreviated', help='Run in abbreviated mode, which does not scan page text.'),
