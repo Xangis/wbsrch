@@ -495,11 +495,11 @@ def domain(request):
         except Exception:
             print('Cannot save log entry. Redis server may not be running.')
 
-        return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
+        return render(request, 'domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
             'num_records': num_records, 'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
-            'excluded': excluded, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain, 'notdomain': notdomain},
-            context_instance=RequestContext(request))
-    return render_to_response('domain.htm', {'language_code': language_code}, context_instance=RequestContext(request))
+            'excluded': excluded, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain, 'notdomain': notdomain}
+            )
+    return render(request, 'domain.htm', {'language_code': language_code})
 
 
 def ipaddry(request):
@@ -515,7 +515,7 @@ def ipaddry(request):
     if True:
         ip = request.GET.get('q', None)
         if not ip:
-            return render_to_response('ip.htm', {'language_code': language_code, 'superuser': superuser}, context_instance=RequestContext(request))
+            return render(request, 'ip.htm', {'language_code': language_code, 'superuser': superuser})
         pieces = ip.split('.')
         if len(pieces) != 4:
             raise Http404
@@ -569,12 +569,11 @@ def ipaddry(request):
         except Exception:
             print('Cannot save log entry. Redis server may not be running.')
 
-        return render_to_response('ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
-                'num_siteinfos': num_siteinfos, 'cached': cached},
-            context_instance=RequestContext(request))
+        return render(request, 'ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
+                'num_siteinfos': num_siteinfos, 'cached': cached})
     # except:
     #    pass
-    return render_to_response('ip.htm', {'language_code': language_code, 'cached': cached}, context_instance=RequestContext(request))
+    return render(request, 'ip.htm', {'language_code': language_code, 'cached': cached})
 
 
 def CleanSearchTerm(searchterm):
@@ -828,15 +827,14 @@ def search(request):
     # correct multiple typos in a phrase.
     if result.typo_for:
         result.typo_for = result.searchterm.replace(result.typo, result.typo_for)
-    return render_to_response('search.htm',
+    return render(request, 'search.htm',
         {'search_results': result.search_results, 'searchterm': result.searchterm,
           'result_count': result.result_count, 'language_code': result.language_code, 'indexed': result.indexed,
           'allfromdomain': result.allfromdomain, 'actively_blocked': result.actively_blocked, 'show_sd_ad': result.show_sd_ad,
           'show_network_ad': result.show_network_ad, 'typo_for': result.typo_for, 'is_language': result.is_language,
           'is_language_name': is_language_name, 'superuser': superuser, 'refused': result.refused, 'is_domain': result.is_domain,
           'is_ip': result.is_ip, 'names_language': result.names_language, 'names_language_search': result.names_language_search,
-          'names_language_name': names_language_name, 'log': log, 'exclude': exclude, 'date_indexed': result.date_indexed},
-        context_instance=RequestContext(request))
+          'names_language_name': names_language_name, 'log': log, 'exclude': exclude, 'date_indexed': result.date_indexed})
 
 
 @permission_required('is_superuser')
@@ -885,7 +883,7 @@ def adminpanel_movesite(request):
         MoveSiteTo(item, lang)
         numpages = numpages + 1
     message = 'Moved {0} pages to {1} for domain {2}'.format(numpages, lang, domain)
-    return render_to_response('adminpanel.htm', {'message': message}, context_instance=RequestContext(request))
+    return render(request, 'adminpanel.htm', {'message': message})
 
 
 @permission_required('is_superuser')
@@ -953,8 +951,8 @@ def adminpanel_blocksite(request):
         sitename = GetRootUrl(sitename)
         reason = request.GET.get('reason', None)
         message = 'Preparing to block {0}'.format(sitename)
-    return render_to_response('adminpanel.htm', {'result': result, 'message': message, 'blocksite': True, 'sitename': sitename,
-        'reason': reason, 'choices': EXCLUDED_SITE_REASONS}, context_instance=RequestContext(request))
+    return render(request, 'adminpanel.htm', {'result': result, 'message': message, 'blocksite': True, 'sitename': sitename,
+        'reason': reason, 'choices': EXCLUDED_SITE_REASONS})
 
 
 @permission_required('is_superuser')
@@ -995,9 +993,8 @@ def adminpanel_pagescore(request):
         reasons = CalculateTermValue(page, keyword, lang=language_code, verbose=True)
         elapsed = (start - timezone.now()).total_seconds()
 
-    return render_to_response('adminpanel.htm',
-        {'reasons': reasons, 'keyword': keyword, 'myurl': url, 'pagescore': True, 'calctime': elapsed, 'message': message},
-        context_instance=RequestContext(request))
+    return render(request, 'adminpanel.htm',
+        {'reasons': reasons, 'keyword': keyword, 'myurl': url, 'pagescore': True, 'calctime': elapsed, 'message': message})
 
 
 @permission_required('is_superuser')
@@ -1050,11 +1047,10 @@ def adminpanel_searchlogs(request):
     else:
         logs = logs[0:maxresults]
 
-    return render_to_response('adminpanel.htm',
+    return render(request, 'adminpanel.htm',
         {'message': 'Showing recent non-bot {0} logs'.format(lang), 'logs': logs, 'lang': lang, 'twoormore': twoormore, 'zeroresults': zeroresults,
           'threeormore': threeormore, 'bingsearches': bingsearches, 'googlesearches': googlesearches, 'maxresults': maxresults,
-          'unindexed': unindexed, 'nodomains': nodomains},
-        context_instance=RequestContext(request))
+          'unindexed': unindexed, 'nodomains': nodomains})
 
 
 @permission_required('is_superuser')
