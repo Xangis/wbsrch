@@ -8,7 +8,7 @@ from tlds import tld_set
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        parser.add_argument('-a', '--after', default=None, action='store', dest='after', help='Update only AFTER this extension, alphabetically. If not specified, all are updated.')
+        parser.add_argument('-a', '--after', default=None, action='store', dest='after', help='Update only AFTER this extension, alphabetically. If not specified, all are updated. Period is optional.')
         parser.add_argument('-t', '--tld', default=None, action='store', dest='tld', help='Update ONLY this TLD. If not specified, all are updated.')
         parser.add_argument('-o', '--onlynew', default=None, action='store_true', dest='onlynew', help='Calculate ONLY domains that have never been calculated.')
 
@@ -22,6 +22,9 @@ class Command(BaseCommand):
             if tld.startswith('.'):
                 tld = tld[1:]
             tlds = [tld, ]
+        if after:
+            if after.startswith('.'):
+                after = after[1:]
         for tld in tlds:
             if after and tld < after:
                 continue
