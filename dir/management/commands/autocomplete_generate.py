@@ -19,7 +19,7 @@ class Command(BaseCommand):
             index_model = GetIndexModelFromLanguage(language)
             autocomplete_model = GetAutoCompleteModelFromLanguage(language)
             searchlog_model = GetSearchLogModelFromLanguage(language)
-            items = index_model.objects.filter(actively_blocked=False, refused=False, typo_for__isnull=True, is_language__isnull=True).values('keywords')
+            items = index_model.objects.filter(actively_blocked=False, refused=False, typo_for__isnull=True, is_language__isnull=True).order_by('keywords').values('keywords')
             print('{0} keywords found for {1} language.'.format(items.count(), language))
             print('Deleting {0} old keywords.'.format(autocomplete_model.objects.all().count()))
             autocomplete_model.objects.all().delete()
