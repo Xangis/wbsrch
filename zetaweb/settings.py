@@ -140,15 +140,15 @@ SECRET_KEY = 'dv9z&amp;gl$+u5*kxrfgn2ajse24off-z0xge&amp;wcz75rf+8@kf^hw'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/var/django/wbsrch/templates/', ],
+        'DIRS': ['/var/django/wbsrch/templates/', '/home/xangis/Desktop/wbsrch/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 "django.contrib.auth.context_processors.auth",
-                "django.core.context_processors.debug",
-                "django.core.context_processors.i18n",
-                "django.core.context_processors.media",
-                "django.core.context_processors.tz",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages"],
             # 'debug': DEBUG,
         },
@@ -441,7 +441,6 @@ EXTRA_LANG_INFO = {
 
 import django.conf.locale
 LANG_INFO = django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
-django.conf.locale.LANG_INFO = LANG_INFO
 
 # TODO Find a replacement for this, probably using Redis.
 # CACHES = {
