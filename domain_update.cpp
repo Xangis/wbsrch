@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
       //sql = "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated, num_keywords_ranked, num_keywords_last_updated, num_urls, num_urls_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL ORDER BY alexa_rank LIMIT 100000";
       //sql = "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL ORDER BY alexa_rank LIMIT 100000";
       if (!redo ) {
-          sql << "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL LIMIT ";
+          sql << "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NULL ORDER BY url LIMIT ";
       } else {
           sql << "SELECT id, url, alexa_rank, domains_linking_in, domains_linking_in_last_updated FROM dir_domaininfo WHERE domains_linking_in_last_updated IS NOT NULL ORDER BY domains_linking_in_last_updated LIMIT ";
       }
