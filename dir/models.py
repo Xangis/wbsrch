@@ -216,7 +216,7 @@ class BlockedSite(models.Model):
 
     def save(self, remove=True, *args, **kwargs):
         if remove:
-            from utils import RemoveURLsForDomain
+            from dir.utils import RemoveURLsForDomain
             RemoveURLsForDomain(self.url)
             # Delete any URLs that use that scheme if they are in the database.
         super(BlockedSite, self).save(*args, **kwargs)
