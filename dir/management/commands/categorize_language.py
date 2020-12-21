@@ -36,9 +36,9 @@ class Command(BaseCommand):
         parser.add_argument('-i', '--items', default=100, action='store', type=int, dest='items', help='Number of items to process (default=100)')
         parser.add_argument('-n', '--numpageminimum', default=1, action='store', type=int, dest='numpageminimum', help='Minimum number of pages required to process a domain (default=1).')
         parser.add_argument('-o', '--onlyautotag', default=False, action='store_true', dest='onlyautotag', help='Only auto-tag, nothing else. Requires -e or -a switch.')
-        parser.add_argument('-j', '--justnotenglish', default=False, action='store_true', dest='justnotenglish', help='Only prompt for items that detect as mostly (<10%) non-English (default=False)')
-        parser.add_argument('-e', '--autotagenglish', default=False, action='store_true', dest='autotagenglish', help='Auto-tag sites that detect as english (>95%). Supersedes skipping english in -j. (default=False)')
-        parser.add_argument('-c', '--confidentprompt', default=False, action='store_true', dest='confident', help='Only prompt for sites where confidence level in one language is over 90%. Works with -j (default=False)')
+        parser.add_argument('-j', '--justnotenglish', default=False, action='store_true', dest='justnotenglish', help='Only prompt for items that detect as mostly (<10%%) non-English (default=False)')
+        parser.add_argument('-e', '--autotagenglish', default=False, action='store_true', dest='autotagenglish', help='Auto-tag sites that detect as english (>95%%). Supersedes skipping english in -j. (default=False)')
+        parser.add_argument('-c', '--confidentprompt', default=False, action='store_true', dest='confident', help='Only prompt for sites where confidence level in one language is over 90%%. Works with -j (default=False)')
         parser.add_argument('-a', '--autotag', default=None, action='store', dest='autotag', help='Automatically tag this comma-seperated list of language codes, only works with -c.')
         parser.add_argument('-b', '--autoblock', default=None, action='store', dest='autoblock', help='Automatically block this comma-seperated list of language codes, only works with -c.')
         parser.add_argument('-u', '--urlsuffix', default=None, action='store', dest='urlsuffix', help='Only check URLs with this suffix.')
@@ -213,14 +213,14 @@ class Command(BaseCommand):
                     head = url.pagefirsth3tag
                 if not quiet:
                     try:
-                        print(u'{0} {1} [{2}] [{3}]'.format(
+                        print('{0} {1} [{2}] [{3}]'.format(
                             idlang, url.url, url.pagetitle, url.pagefirstheadtag))
                     except UnicodeEncodeError:
                         print('Page info is not valid unicode, cannot print')
             # If the URLs are blocked or removed between the time of querying domains and processing them,
             # as can happen running multi-day language processing, or running more than one, this prevents
             # divide by zero crashes.
-            scores = sorted(scores.iteritems(), key=lambda item: item[1], reverse=True)
+            scores = sorted(iter(scores.items()), key=lambda item: item[1], reverse=True)
             print('Scores for {0}: {1}'.format(domain, scores))
             if total:
                 englishratio = (english * 100) / total
@@ -261,7 +261,7 @@ class Command(BaseCommand):
                         print('Skipping {0} because we are in auto-block mode and it could not be automatically blocked.'.format(domain))
                     input = 's'
                 else:
-                    input = raw_input(u'Tag {0} as: [q]uit/[s]kip/[i]nfix-tag/[u]rlparam-tag/[del]ete/[xx] lang ({1}/{2} En, {3}/{2} {4})]? '.format(total, english, total, scores[0][1], scores[0][0]))
+                    input = input('Tag {0} as: [q]uit/[s]kip/[i]nfix-tag/[u]rlparam-tag/[del]ete/[xx] lang ({1}/{2} En, {3}/{2} {4})]? '.format(total, english, total, scores[0][1], scores[0][0]))
                 input = input.lower()
             if input == 'q':
                 exit()
@@ -461,7 +461,7 @@ class Command(BaseCommand):
                         if input != 'en':
                             urls = SiteInfo.objects.filter(rooturl=domain)
                             for url in urls:
-                                print('Moving ' + unicode(url) + u' to ' + input)
+                                print('Moving ' + str(url) + ' to ' + input)
                                 MoveSiteTo(url, input)
                 else:
                     print('{0} is not a valid language. Skipping'.format(input))
