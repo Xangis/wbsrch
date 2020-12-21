@@ -1,9 +1,9 @@
 from django.db import models
 from tagging.fields import TagField, Tag
-import tagging
 
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
+
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=120, null=False, blank=False)
@@ -11,7 +11,7 @@ class BlogPost(models.Model):
     content = models.TextField(null=False, blank=False, help_text='Use HTML. Include opening and closing <p> tags because they will not be in the template')
     post_time = models.DateTimeField(blank=True, auto_now_add=True)
     # Don't bother to tag with user.
-    #user = models.ForeignKey(User)
+    # user = models.ForeignKey(User)
     author = models.CharField(max_length=80, null=False, blank=False)
     tags = TagField()
     meta_description = models.CharField(max_length=250, null=True, blank=True)
@@ -30,4 +30,3 @@ class BlogPost(models.Model):
 
     def __unicode__(self):
         return self.title
-

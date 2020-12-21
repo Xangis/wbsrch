@@ -14,4 +14,3 @@ while True:
     call(['python', 'manage.py', 'index', '-p', '-m', str(options.maxindexes), '-s', str(options.seconds), '-x'])
     if not options.noreindex:
         call(['python', 'manage.py', 'index', '-r', '-m', str(options.maxindexes), '-s', str(options.seconds), '-x'])
-

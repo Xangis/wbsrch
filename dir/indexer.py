@@ -9,17 +9,17 @@
 
 from bs4 import BeautifulSoup
 #Python 3: import urllib.request, urllib.error, urllib.parse
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import time
 import optparse
-from urlparse import urlparse
+from urllib.parse import urlparse
 from django.db import connection
 from django.utils import timezone
 from django.utils.timezone import utc
 from django.db.utils import DatabaseError
 from django.db import transaction
-from models import *
-from utils import *
+from dir.models import *
+from dir.utils import *
 import datetime
 import codecs
 import math
@@ -308,36 +308,36 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     # and a popularity contest anyway, at least that gives us a chance of succeeding in our indexing.
     querystart = timezone.now()
     if term.num_pages > 100000:
-        sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
-                     u" WHERE (pagetitle ILIKE %s OR url ILIKE " +
-                     u"%s OR pagefirstheadtag ILIKE %s) LIMIT 1000000")
+                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
+                     "%s OR pagefirstheadtag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, akp, kp])
     elif term.num_pages > 40000:
-        sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
-                     u" WHERE (pagetitle ILIKE %s OR url ILIKE " +
-                     u"%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s) LIMIT 1000000")
+                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
+                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, akp, kp, kp])
     elif term.num_pages > 10000:
-        sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
-                     u" WHERE (pagetitle ILIKE %s OR url ILIKE " +
-                     u"%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
+                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
+                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, akp, kp, kp, kp])
     # If we have more than 3000 results, ignore the specific page text because we can get what we
     # need from the head tag, url, keywords, description, and title (mostly).
     elif abbreviated or term.num_pages > 3000:
-        sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
                      site_model._meta.db_table +
-                     u" WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR url ILIKE " +
-                     u"%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
+                     " WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR url ILIKE " +
+                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, kp, kp, akp, kp, kp, kp])
     else:
-        sql_query = (u"SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
                      site_model._meta.db_table +
-                     u" WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR pagetext ILIKE " +
-                     u"%s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
+                     " WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR pagetext ILIKE " +
+                     "%s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, kp, kp, kp, akp, kp, kp, kp])
     if verbose:
         print(sql_query.replace("%s", ("'" + kp + "'")))

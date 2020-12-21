@@ -1,23 +1,20 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
-from django.core import serializers
-from optparse import make_option
+from django.core.management.base import BaseCommand
+from django.core.exceptions import ObjectDoesNotExist
 from dir.models import DomainInfo
-from dir.domain import GetDomainInfo
-from django.db.utils import DataError
 import time
 import codecs
 from dir.utils import GetFavicons
 
+
 class Command(BaseCommand):
     help = "This command retrieves favicons for domains."
 
-    option_list = BaseCommand.option_list + (
-        make_option('-d', '--detailed', default=False, action='store_true', dest='detailed', help='Run in verbose mode.'),
-        make_option('-j', '--justthisdomain', default=None, action='store', type='string', dest='justthisdomain', help='Gets the data for a specific domain'),
-        make_option('-s', '--sleep', default=5, action='store', type='int', dest='sleep', help='Time to sleep between domain queries. (default=5)'),
-        make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load domain list from specified file.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-d', '--detailed', default=False, action='store_true', dest='detailed', help='Run in verbose mode.')
+        parser.add_argument('-j', '--justthisdomain', default=None, action='store', dest='justthisdomain', help='Gets the data for a specific domain')
+        parser.add_argument('-s', '--sleep', default=5, action='store', type=int, dest='sleep', help='Time to sleep between domain queries. (default=5)')
+        parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load domain list from specified file.')
 
     def handle(self, *args, **options):
         if options['justthisdomain']:
@@ -35,7 +32,7 @@ class Command(BaseCommand):
                 try:
                     domain = DomainInfo.objects.get(url=line)
                     domains.append(domain)
-                except:
+                except ObjectDoesNotExist:
                     # Create domain if not found. This could be problematic if we have a file full of garbage text.
                     print('Domain {0} not found, creating before favicon harvest.'.format(line))
                     domain = DomainInfo()

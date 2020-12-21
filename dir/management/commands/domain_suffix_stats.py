@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
-from optparse import make_option
-from django.conf import settings
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from dir.models import language_list, DomainInfo, SiteInfo, BlockedSite, DomainSuffix
+from dir.models import DomainSuffix
 from dir.utils import CalculateDomainSuffixStats
 from tlds import tld_set
 
+
 class Command(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option('-a', '--after', default=None, action='store', type='string', dest='after', help='Update only AFTER this extension, alphabetically. If not specified, all are updated.'),
-        make_option('-t', '--tld', default=None, action='store', type='string', dest='tld', help='Update ONLY this TLD. If not specified, all are updated.'),
-        make_option('-o', '--onlynew', default=None, action='store_true', dest='onlynew', help='Calculate ONLY domains that have never been calculated.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-a', '--after', default=None, action='store', dest='after', help='Update only AFTER this extension, alphabetically. If not specified, all are updated. Period is optional.')
+        parser.add_argument('-t', '--tld', default=None, action='store', dest='tld', help='Update ONLY this TLD. If not specified, all are updated.')
+        parser.add_argument('-o', '--onlynew', default=None, action='store_true', dest='onlynew', help='Calculate ONLY domains that have never been calculated.')
 
     def handle(self, *args, **options):
         counts = []
@@ -23,7 +21,10 @@ class Command(BaseCommand):
         if tld:
             if tld.startswith('.'):
                 tld = tld[1:]
-            tlds = [tld,]
+            tlds = [tld, ]
+        if after:
+            if after.startswith('.'):
+                after = after[1:]
         for tld in tlds:
             if after and tld < after:
                 continue

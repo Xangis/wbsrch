@@ -1,25 +1,23 @@
 # -*- coding: utf-8 -*-
 # Django settings for zetaweb project.
-
-DEBUG = False
+from django.utils.translation import gettext_noop
+from socket import gethostname, gethostbyname
 import os
 
-# Add this line to /etc/environment or local vars to enable debug mode:
-#DJANGO_ENVIRONMENT=debug
-environment = os.getenv('DJANGO_ENVIRONMENT')
-if environment == 'debug' or environment == 'development':
-    DEBUG = True
+DEBUG = os.getenv('DEBUG', False)
 
 ADMINS = (
     ('Jason Champion', 'jchampion@sigmacentauri.com'),
 )
 
 ALLOWED_HOSTS = [
-        '.wbsrch.com', # Domain and subdomains.
-        '.wbsrch.com.', # Allow FQDN and subdomains.
+    '.wbsrch.com',  # Domain and subdomains.
+    '.wbsrch.com.',  # Allow FQDN and subdomains.
+    gethostname(), gethostbyname(gethostname())
 ]
 if DEBUG:
     ALLOWED_HOSTS.append('.localhost')
+    ALLOWED_HOSTS.append('10.0.0.137')
 
 MANAGERS = ADMINS
 
@@ -28,79 +26,52 @@ SERVER_EMAIL = 'jchampion@wbsrch.com'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
 
+ZETAWEB_PASSWORD = os.getenv('ZETAWEB_PASSWORD', 'password')
+URLS_PASSWORD = os.getenv('URLS_PASSWORD', 'password')
+INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'password')
+NEWS_PASSWORD = os.getenv('NEWS_PASSWORD', 'password')
+ZETAWEB_HOST = os.getenv('ZETAWEB_HOST', '127.0.0.1')
+URLS_HOST = os.getenv('URLS_HOST', '127.0.0.1')
+INDEXES_HOST = os.getenv('INDEXES_HOST', '127.0.0.1')
+NEWS_HOST = os.getenv('NEWS_HOST', '127.0.0.1')
 
-if environment != 'development':
+if True:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'zetaweb',               # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',               # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2', # Not used with sqlite3.
-            'HOST': '216.151.3.109',         # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'zetaweb',
+            'USER': 'zetaweb',
+            'PASSWORD': ZETAWEB_PASSWORD,
+            'HOST': ZETAWEB_HOST,
+            'PORT': '',
         },
         'urls': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'urls',                  # Or path to database file if using sqlite3.
-            'USER': 'urls',                  # Not used with sqlite3.
-            'PASSWORD': 'ExplodingUnderwear9099321', # Not used with sqlite3.
-            'HOST': '216.151.3.108',         # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'urls',
+            'USER': 'urls',
+            'PASSWORD': URLS_PASSWORD,
+            'HOST': URLS_HOST,
+            'PORT': '',
         },
         'indexes': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'indexes',               # Or path to database file if using sqlite3.
-            'USER': 'indexes',               # Not used with sqlite3.
-            'PASSWORD': 'Fracking,TheW3b02211', # Not used with sqlite3.
-            'HOST': '216.151.3.106',         # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'indexes',
+            'USER': 'indexes',
+            'PASSWORD': INDEXES_PASSWORD,
+            'HOST': INDEXES_HOST,
+            'PORT': '',
         },
         'news': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'news',                  # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',               # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2', # Not used with sqlite3.
-            'HOST': '45.56.74.154',          # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'zetaweb',                      # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',                      # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',        # Not used with sqlite3.
-            'HOST': 'localhost',                    # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
-        },
-        'urls': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'urls',                         # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',                      # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',        # Not used with sqlite3.
-            'HOST': 'localhost',                    # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
-        },
-        'indexes': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'indexes',                      # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',                      # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',        # Not used with sqlite3.
-            'HOST': 'localhost',                    # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
-        },
-        'news': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'news',                         # Or path to database file if using sqlite3.
-            'USER': 'zetaweb',                      # Not used with sqlite3.
-            'PASSWORD': 'd9irk0kfnv,er9kd2',        # Not used with sqlite3.
-            'HOST': 'localhost',                    # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'news',
+            'USER': 'zetaweb',
+            'PASSWORD': NEWS_PASSWORD,
+            'HOST': NEWS_HOST,
+            'PORT': '',
         }
     }
 
-DATABASE_ROUTERS = ['zetaweb.dbrouter.ModelDatabaseRouter',]
+DATABASE_ROUTERS = ['zetaweb.dbrouter.ModelDatabaseRouter', ]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -166,36 +137,20 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'dv9z&amp;gl$+u5*kxrfgn2ajse24off-z0xge&amp;wcz75rf+8@kf^hw'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/var/django/wbsrch/templates/',],
+        'DIRS': ['/var/django/wbsrch/templates/', '/home/xangis/Desktop/wbsrch/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 "django.contrib.auth.context_processors.auth",
-                "django.core.context_processors.debug",
-                "django.core.context_processors.i18n",
-                "django.core.context_processors.media",
-                "django.core.context_processors.tz",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages"],
-            'allowed_include_roots': ['/var/django/wbsrch/templates/',],
-            #'debug': DEBUG,
-        },
-    },
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': ['/var/django/wbsrch/jinjatemplates/',],
-        'APP_DIRS': False,
-        'OPTIONS': {
-            #'debug': DEBUG,
+            # 'debug': DEBUG,
         },
     },
 ]
@@ -278,10 +233,6 @@ LOGGING = {
 }
 
 SOUTH_TESTS_MIGRATE = False
-
-from django.conf import global_settings
-
-gettext_noop = lambda s: s
 
 LANGUAGES = (
 ('ak', gettext_noop('Akan')),
@@ -489,20 +440,23 @@ EXTRA_LANG_INFO = {
 }
 
 import django.conf.locale
-LANG_INFO = dict(django.conf.locale.LANG_INFO.items() + EXTRA_LANG_INFO.items())
-django.conf.locale.LANG_INFO = LANG_INFO
+LANG_INFO = django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-        'KEY_FUNCTION': 'memcachedkeys.make_key',
-    }
-}
+# TODO Find a replacement for this, probably using Redis.
+# CACHES = {
+#    'default': {
+#        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#        'LOCATION': '127.0.0.1:11211',
+#        'KEY_FUNCTION': 'memcachedkeys.make_key',
+#    }
+# }
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-GEOIP_PATH = '/var/django/wbsrch/geoip/'
+if not DEBUG:
+    GEOIP_PATH = '/var/django/wbsrch/geoip/'
+else:
+    GEOIP_PATH = '/home/xangis/Desktop/wbsrch/geoip/'
 
 Q_CLUSTER = {
     'name': 'wbsrch',

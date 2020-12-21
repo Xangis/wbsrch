@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from optparse import make_option
-from dir.models import PendingIndex, IndexTerm, DomainInfo
+from dir.models import DomainInfo
 from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
 import codecs
 import sys
@@ -10,19 +9,19 @@ import sys
 UTF8Writer = codecs.getwriter('utf8')
 sys.stdout = UTF8Writer(sys.stdout)
 
+
 class Command(BaseCommand):
     help = """
     This command processes a file containing a list of words. If those words are not already indexed for the specified
     language, it adds them to the pending index list so that the indexer will build an index term for them.
     """
-    option_list = BaseCommand.option_list + (
-        make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for pending indexes (default=en).'),
-        make_option('-d', '--domains', default=False, action='store_true', dest='domains', help='Process file as a domain list and print the domains that need to be crawled. Redundant with -p since it only prints (default=no).'),
-        make_option('-p', '--print', default=False, action='store_true', dest='print', help='Just print the terms that are not indexed to the screen, do not create pending terms. (default=no).'),
-        make_option('-n', '--noindividual', default=False, action='store_true', dest='noindividual', help='Make sure individual words of a phrase are not indexed (default=False)'),
-        make_option('-m', '--maxwords', default=100000000, action='store', type='int', dest='maxwords', help='Max number of terms to index. (default=100000000)'),
-        make_option('-f', '--file', default=None, action='store', type='string', dest='file', help='Load term list from specified file.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Language to use for pending indexes (default=en).')
+        parser.add_argument('-d', '--domains', default=False, action='store_true', dest='domains', help='Process file as a domain list and print the domains that need to be crawled. Redundant with -p since it only prints (default=no).')
+        parser.add_argument('-p', '--print', default=False, action='store_true', dest='print', help='Just print the terms that are not indexed to the screen, do not create pending terms. (default=no).')
+        parser.add_argument('-n', '--noindividual', default=False, action='store_true', dest='noindividual', help='Make sure individual words of a phrase are not indexed (default=False)')
+        parser.add_argument('-m', '--maxwords', default=100000000, action='store', type=int, dest='maxwords', help='Max number of terms to index. (default=100000000)')
+        parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load term list from specified file.')
 
     def handle(self, *args, **options):
         filename = options.get('file', None)
@@ -47,50 +46,50 @@ class Command(BaseCommand):
                 # Don't consider full URLs as valid search terms from file, instead use the root URL, if possible.
                 try:
                     line = GetRootUrl(line.strip().lower())
-                except:
+                except Exception:
                     line = line.strip().lower()
                 # Do not queue anything less than 2 characters long.
                 if len(line) < 2:
                     continue
                 try:
                     if domains:
-                        info = DomainInfo.objects.get(url=line)
+                        DomainInfo.objects.get(url=line)
                     else:
-                        term = term_model.objects.get(keywords=line)
+                        term_model.objects.get(keywords=line)
                 except ObjectDoesNotExist:
                     if domains or printem:
                         try:
-                            print u'{0}'.format(line)
+                            print('{0}'.format(line))
                             numadded = numadded + 1
-                        except:
+                        except Exception:
                             pass
                     else:
                         AddPendingTerm(line, language, 'add_new_to_pending from file {0}'.format(filename))
-                        print u'Added {0}.'.format(line)
+                        print('Added {0}.'.format(line))
                         numadded = numadded + 1
                 if not noindividual and not domains:
                     if ' ' in line:
                         words = line.split(' ')
                         for word in words:
                             try:
-                                term = term_model.objects.get(keywords=word)
+                                term_model.objects.get(keywords=word)
                             except ObjectDoesNotExist:
                                 if not printem:
                                     try:
                                         AddPendingTerm(word, language, 'add_new_to_pending from file {0}'.format(filename))
-                                    except:
+                                    except Exception:
                                         pass
                                 try:
-                                    print u'{0}.'.format(word)
-                                except:
+                                    print('{0}.'.format(word))
+                                except Exception:
                                     pass
                                 numadded = numadded + 1
                 numdone = numdone + 1
                 if numdone >= maxwords:
-                     break
+                    break
         except UnicodeDecodeError:
             print('UnicodeDecodeError on line {0}'.format(numlines))
         if domains:
-            print 'Processed {0} lines and {1} domains need to be crawled.'.format(numdone, numadded, language)
+            print('Processed {0} lines and {1} domains need to be crawled.'.format(numdone, numadded))
         else:
-            print 'Processed {0} words and added {1} to the pending {2} index.'.format(numdone, numadded, language)
+            print('Processed {0} words and added {1} to the pending {2} index.'.format(numdone, numadded, language))

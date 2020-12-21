@@ -7,18 +7,9 @@ import sys
 sys.path.append('/var/django/wbsrch/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
-import time
-#import optparse
 from dir.models import *
 from dir.utils import MoveSiteTo
 from dir.language import GetInfixLanguage, InvalidLanguageException, GetUrlParameterLanguage
-from django.db.utils import DatabaseError
-from django.db import connection
-from django.utils.timezone import utc
-from django.core.exceptions import ValidationError
-from django.db import transaction
-import datetime
-import csv
 
 # Required now that we're on Django 1.7. Otherwise we get "Models aren't loaded yet" error.
 import django
@@ -46,7 +37,7 @@ def ProcessParametersForDomain(domain):
     url_count = urls.count()
     totalurls += url_count
     if url_count > 0:
-        print u'Found: ' + str(url_count) + u' for ' + domain.url
+        print('Found: ' + str(url_count) + u' for ' + domain.url)
     for url in urls:
         if url == (u'http://' + url.rooturl) or url == (u'http://' + url.rooturl):
             isroot = isroot + 1
@@ -69,11 +60,11 @@ def ProcessParametersForDomain(domain):
             elif result == u'en':
                 continue
             else:
-                print 'No result for URL {0}'.format(url)
+                print('No result for URL {0}'.format(url))
                 notmatched.append(url)
                 notfound = notfound + 1
-        except InvalidLanguageException, e:
-            print u'URL {0} has invalid language {1} and will be deleted.'.format(url, e.message)
+        except InvalidLanguageException as e:
+            print('URL {0} has invalid language {1} and will be deleted.'.format(url, e.message))
             if e.message in deleted:
                 deleted[e.message] = deleted[e.message] + 1
             else:
@@ -81,17 +72,17 @@ def ProcessParametersForDomain(domain):
             invalid = invalid + 1
             url.delete()
 
+
 for domain in DomainInfo.objects.filter(uses_language_subdirs=True).order_by('url'):
     ProcessParametersForDomain(domain)
 for domain in DomainInfo.objects.filter(uses_language_query_parameter=True).order_by('url'):
     ProcessParametersForDomain(domain)
-print u'Moved {0} urls to other languages out of a possible {1}. {2} not found, {3} blocked languages, {4} ignored root URLs.'.format(totalmoved, totalurls, notfound, invalid, isroot)
+print('Moved {0} urls to other languages out of a possible {1}. {2} not found, {3} blocked languages, {4} ignored root URLs.'.format(totalmoved, totalurls, notfound, invalid, isroot))
 for lang in moved.keys():
-    print u'Moved ' + str(moved[lang]) + u' to language ' + lang
+    print('Moved ' + str(moved[lang]) + u' to language ' + lang)
 for lang in deleted.keys():
-    print u'Deleted ' + str(deleted[lang]) + u' for language ' + lang
+    print('Deleted ' + str(deleted[lang]) + u' for language ' + lang)
 with open("unmatched_infixes.txt", 'w') as outfile:
     for item in notmatched:
         outfile.write('%s\n' % item)
     outfile.close()
-

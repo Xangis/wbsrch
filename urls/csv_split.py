@@ -4,9 +4,8 @@
 #
 # This should be run after split.sh if processing DMOZ urls.
 
-import os
-import sys
 import csv
+
 
 def ProcessCSVFile(filename):
     num_domains = 0

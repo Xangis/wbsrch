@@ -1,23 +1,21 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect, Http404, HttpResponseForbidden, HttpResponseBadRequest
-from django.template import Context, loader, RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
-from django.contrib.auth.decorators import login_required, permission_required
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponsePermanentRedirect, Http404, HttpResponseForbidden
+from django.shortcuts import render_to_response, render
+from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.apps import apps
 from django.db import IntegrityError, connection
 from django.core.cache import cache
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import ujson
-import json # Needed for autocomplete encoding handling.
-from models import *
-from utils import *
-from django_q.tasks import async
-from language import language_name_reverse
-from crawler import CrawlSingleUrl, Crawler
-from urlparse import urlparse
-from datetime import datetime, date, timedelta
+import json  # Needed for autocomplete encoding handling.
+from dir.models import *
+from dir.utils import *
+from django_q.tasks import async_task
+from dir.language import language_name_reverse
+from dir.crawler import CrawlSingleUrl, Crawler
+from urllib.parse import urlparse
+from datetime import date, timedelta
 import itertools
 import uuid
 from django.contrib.gis.geoip import GeoIP
@@ -26,6 +24,7 @@ from django.core.mail import send_mail
 INDEX_TERM_STALE_DAYS = 730
 MAX_SEARCH_RESULTS = 200
 
+
 def SaveLogEntry(log):
     """
     Save a search log entry, be it a domain search or regular search. Intended to
@@ -33,6 +32,7 @@ def SaveLogEntry(log):
     before getting results.
     """
     log.save()
+
 
 def LanguageFromDomain(request):
     prefix = None
@@ -46,6 +46,7 @@ def LanguageFromDomain(request):
         return 'en'
     return prefix
 
+
 class SearchResult():
     def __init__(self, language):
         self.allfromdomain = False
@@ -56,7 +57,7 @@ class SearchResult():
         self.search_results = []
         self.language_code = language
         self.show_sd_ad = False
-        self.show_network_ad = True # Fallback if we shouldn't show the SD ad.
+        self.show_network_ad = True  # Fallback if we shouldn't show the SD ad.
         self.typo_for = None
         self.typo = None
         self.is_language = None
@@ -68,6 +69,7 @@ class SearchResult():
         self.date_indexed = None
         if self.language_code == 'en-us':
             self.language_code = 'en'
+
 
 # Takes a search result class, which may or may not be empty, and merges it with an
 # index term's search data.
@@ -87,7 +89,7 @@ def MergeSearchResult(search_result, index_term, bonus_existing=False):
     try:
         if index_term.show_sd_ad:
             search_result.show_sd_ad = True
-    except:
+    except Exception:
         pass
 
     # Set the index date. Add dates to string for multiple terms.
@@ -103,12 +105,12 @@ def MergeSearchResult(search_result, index_term, bonus_existing=False):
         found = False
         for result in tmp_result:
             if result[0] == search_result.allfromdomain:
-                tmp_result = [result,]
+                tmp_result = [result, ]
                 found = True
                 break
             alternateurl = result[1].get('alternateurl', None)
             if alternateurl and alternateurl == search_result.allfromdomain:
-                tmp_result = [result,]
+                tmp_result = [result, ]
                 found = True
                 break
         if not found:
@@ -141,10 +143,11 @@ def MergeSearchResult(search_result, index_term, bonus_existing=False):
                     new_result[iteridx][1]['urls'].append(item[1]['urls'])
                     # TODO: Sort the appended urls for that domain.
                     # This line complains about list indexes needing to be integers, not strings.
-                    #new_result[iteridx][1]['urls'].sort(key=itemgetter('score'), reverse=True)
+                    # new_result[iteridx][1]['urls'].sort(key=itemgetter('score'), reverse=True)
     new_result.sort(key=lambda item: item[1]['score'], reverse=True)
     search_result.search_results = new_result
     return search_result
+
 
 def RemoveWordFromSearchResults(search_result, word):
     """
@@ -162,7 +165,7 @@ def RemoveWordFromSearchResults(search_result, word):
             titleitems = page['title'].lower().split(' ')
             # TODO: Remove page-by-page instead of skipping entire result if one page matches.
             if word in resultitems or word in titleitems:
-                print 'Word {0} found in page {1}, removing.'.format(word, page['url'])
+                print('Word {0} found in page {1}, removing.'.format(word, page['url']))
             else:
                 tmp_urls.append(page)
         if len(tmp_urls) > 0:
@@ -172,6 +175,7 @@ def RemoveWordFromSearchResults(search_result, word):
     search_result.search_results = tmp_results
     search_result.result_count = len(search_result.search_results)
     return search_result
+
 
 def index(request):
     language_code = request.LANGUAGE_CODE
@@ -193,34 +197,44 @@ def index(request):
     else:
         cached = True
 
-    return render_to_response('index.htm', {'language_code': language_code, 'recent_terms': recent_terms, 'superuser': superuser, 'cached': cached }, context_instance=RequestContext(request))
+    return render(request, 'index.htm', {'language_code': language_code, 'recent_terms': recent_terms, 'superuser': superuser, 'cached': cached})
+
 
 def ads(request):
     return HttpResponsePermanentRedirect('https://ads.wbsrch.com')
 
+
 def analytics(request):
     return HttpResponsePermanentRedirect('https://analytics.wbsrch.com')
+
 
 def apps(request):
     return HttpResponsePermanentRedirect('https://apps.wbsrch.com')
 
+
 def browser(request):
     return HttpResponsePermanentRedirect('https://browser.wbsrch.com')
+
 
 def images(request):
     return HttpResponsePermanentRedirect('https://images.wbsrch.com')
 
+
 def maps(request):
     return HttpResponsePermanentRedirect('https://maps.wbsrch.com')
+
 
 def news(request):
     return HttpResponsePermanentRedirect('https://news.wbsrch.com')
 
+
 def stats(request):
     return HttpResponsePermanentRedirect('https://stats.wbsrch.com')
 
+
 def video(request):
     return HttpResponsePermanentRedirect('https://video.wbsrch.com')
+
 
 def policy(request):
     language_code = request.LANGUAGE_CODE
@@ -228,11 +242,13 @@ def policy(request):
         language_code = 'en'
     return render_to_response('policy.htm', {'language_code': language_code})
 
+
 def philosophy(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
     return render_to_response('philosophy.htm', {'language_code': language_code})
+
 
 def faq(request):
     language_code = request.LANGUAGE_CODE
@@ -240,11 +256,13 @@ def faq(request):
         language_code = 'en'
     return render_to_response('faq.htm', {'language_code': language_code})
 
+
 def dmca(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
     return render_to_response('dmca.htm', {'language_code': language_code})
+
 
 def dmca_notices(request):
     language_code = request.LANGUAGE_CODE
@@ -253,11 +271,13 @@ def dmca_notices(request):
     notices = DMCANotice.objects.all()
     return render_to_response('dmcanotices.htm', {'language_code': language_code, 'notices': notices})
 
+
 def howto(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
     return render_to_response('howto.htm', {'language_code': language_code})
+
 
 def privacy(request):
     language_code = request.LANGUAGE_CODE
@@ -265,17 +285,20 @@ def privacy(request):
         language_code = 'en'
     return render_to_response('privacy.htm', {'language_code': language_code})
 
+
 def criteria(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
     return render_to_response('criteria.htm', {'language_code': language_code})
 
+
 def wbrank(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
     return render_to_response('wbrank.htm', {'language_code': language_code})
+
 
 def changelog(request):
     language_code = request.LANGUAGE_CODE
@@ -291,11 +314,13 @@ def changelog(request):
         cached = True
     return render_to_response('changelog.htm', {'changelog': changelog, 'language_code': language_code, 'cached': cached})
 
+
 def terms(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
     return render_to_response('terms.htm', {'language_code': language_code})
+
 
 def contact(request):
     language_code = request.LANGUAGE_CODE
@@ -303,11 +328,13 @@ def contact(request):
         language_code = 'en'
     return render_to_response('contact.htm', {'language_code': language_code})
 
+
 def hardware(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
     return render_to_response('hardware.htm', {'language_code': language_code})
+
 
 def index_stats(request, realtime=False):
     language_code = request.LANGUAGE_CODE
@@ -319,7 +346,7 @@ def index_stats(request, realtime=False):
     else:
         try:
             stats = IndexStats.objects.all()[0]
-        except:
+        except Exception:
             # Will only happen with an empty database.
             stats = GenerateIndexStats(True)
         stats.langs = ujson.loads(stats.langs)
@@ -355,14 +382,14 @@ def domain(request):
         site_model = GetSiteInfoModelFromLanguage(language_code)
         ranking_model = GetKeywordRankingModelFromLanguage(language_code)
         # Normalize URL
-        if domain.startswith(u'http:') or domain.startswith(u'https:'):
+        if domain.startswith('http:') or domain.startswith('https:'):
             parsedurl = urlparse(domain)
             domain = parsedurl.geturl()
             rawdomain = parsedurl.netloc
-        if u'/' in rawdomain:
+        if '/' in rawdomain:
             pieces = rawdomain.split('/')
             rawdomain = pieces[0]
-        if not u'.' in domain or u' ' in domain:
+        if '.' not in domain or ' ' in domain:
             notdomain = True
         # Prevent crawling excluded sites.
         domains = DomainInfo.objects.filter(url=rawdomain)
@@ -373,7 +400,7 @@ def domain(request):
         extra = None
         parent = None
         pieces = rawdomain.split('.')
-        if not rawdomain.startswith(u'www.'):
+        if not rawdomain.startswith('www.'):
             if len(pieces) > 2:
                 parentdomain = '.'.join(pieces[1:])
                 try:
@@ -381,7 +408,7 @@ def domain(request):
                 except ObjectDoesNotExist:
                     pass
             try:
-                extra = DomainInfo.objects.get(url=(u'www.' + rawdomain))
+                extra = DomainInfo.objects.get(url=('www.' + rawdomain))
             except ObjectDoesNotExist:
                 pass
         else:
@@ -427,7 +454,7 @@ def domain(request):
             dominfo.url = rawdomain
             try:
                 dominfo.save()
-                domains = [dominfo,]
+                domains = [dominfo, ]
             except IntegrityError:
                 # The only reason we would get an integrity error is if we
                 # violate the unique key constraint of the database. If we
@@ -438,17 +465,17 @@ def domain(request):
                 connection._rollback()
                 try:
                     dominfo = DomainInfo.objects.get(url=rawdomain)
-                    domains = [dominfo,]
+                    domains = [dominfo, ]
                 except ObjectDoesNotExist:
                     domains = []
         searchlog.indexed = False
-        if request.META.has_key('HTTP_REFERER'):
+        if 'HTTP_REFERER' in request.META:
             searchlog.referer = request.META['HTTP_REFERER']
             if len(searchlog.referer) > 255:
                 searchlog.referer = searchlog.referer[0:252] + '...'
-        if request.META.has_key('REMOTE_ADDR'):
+        if 'REMOTE_ADDR' in request.META:
             searchlog.ip = request.META['REMOTE_ADDR']
-        if request.META.has_key('HTTP_USER_AGENT'):
+        if 'HTTP_USER_AGENT' in request.META:
             searchlog.browserstring = request.META['HTTP_USER_AGENT']
             if len(searchlog.browserstring) > 255:
                 searchlog.browserstring = searchlog.browserstring[0:252] + '...'
@@ -463,15 +490,16 @@ def domain(request):
             if country:
                 searchlog.ip_country = country
         try:
-            async(SaveLogEntry, searchlog)
-        except:
+            async_task(SaveLogEntry, searchlog)
+        except Exception:
             print('Cannot save log entry. Redis server may not be running.')
 
-        return render_to_response('domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
+        return render(request, 'domain.htm', {'domains': domains, 'excluded': excluded, 'siteinfos': siteinfos, 'domain': domain,
             'num_records': num_records, 'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
-            'excluded': excluded, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain, 'notdomain': notdomain },
-            context_instance=RequestContext(request))
-    return render_to_response('domain.htm', {'language_code': language_code }, context_instance=RequestContext(request))
+            'excluded': excluded, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain, 'notdomain': notdomain}
+            )
+    return render(request, 'domain.htm', {'language_code': language_code})
+
 
 def ipaddry(request):
     start = timezone.now()
@@ -482,11 +510,11 @@ def ipaddry(request):
     superuser = False
     if request.user and request.user.is_superuser:
         superuser = True
-    #try:
+    # try:
     if True:
         ip = request.GET.get('q', None)
         if not ip:
-            return render_to_response('ip.htm', {'language_code': language_code, 'superuser': superuser }, context_instance=RequestContext(request))
+            return render(request, 'ip.htm', {'language_code': language_code, 'superuser': superuser})
         pieces = ip.split('.')
         if len(pieces) != 4:
             raise Http404
@@ -515,13 +543,13 @@ def ipaddry(request):
         searchlog.keywords = ip
         searchlog.result_count = len(domains)
         searchlog.indexed = False
-        if request.META.has_key('HTTP_REFERER'):
+        if 'HTTP_REFERER' in request.META:
             searchlog.referer = request.META['HTTP_REFERER']
             if len(searchlog.referer) > 255:
                 searchlog.referer = searchlog.referer[0:252] + '...'
-        if request.META.has_key('REMOTE_ADDR'):
+        if 'REMOTE_ADDR' in request.META:
             searchlog.ip = request.META['REMOTE_ADDR']
-        if request.META.has_key('HTTP_USER_AGENT'):
+        if 'HTTP_USER_AGENT' in request.META:
             searchlog.browserstring = request.META['HTTP_USER_AGENT']
             if len(searchlog.browserstring) > 255:
                 searchlog.browserstring = searchlog.browserstring[0:252] + '...'
@@ -536,16 +564,16 @@ def ipaddry(request):
             if country:
                 searchlog.ip_country = country
         try:
-            async(SaveLogEntry, searchlog)
-        except:
+            async_task(SaveLogEntry, searchlog)
+        except Exception:
             print('Cannot save log entry. Redis server may not be running.')
 
-        return render_to_response('ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
-                'num_siteinfos': num_siteinfos, 'cached': cached },
-            context_instance=RequestContext(request))
-    #except:
+        return render(request, 'ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
+                'num_siteinfos': num_siteinfos, 'cached': cached})
+    # except:
     #    pass
-    return render_to_response('ip.htm', {'language_code': language_code, 'cached': cached }, context_instance=RequestContext(request))
+    return render(request, 'ip.htm', {'language_code': language_code, 'cached': cached})
+
 
 def CleanSearchTerm(searchterm):
     if len(searchterm) > 240:
@@ -574,6 +602,7 @@ def CleanSearchTerm(searchterm):
         searchterm = searchterm.replace("'[0]", "")
     return searchterm
 
+
 def search(request):
     log = None
     exclude = []
@@ -588,12 +617,12 @@ def search(request):
         result.searchterm = request.POST.get('q', None)
         result.allfromdomain = request.POST.get('domain', False)
         if request.POST.get('s') == 'fp':
-            return HttpResponsePermanentRedirect(u'/search/?q={0}'.format(result.searchterm))
+            return HttpResponsePermanentRedirect('/search/?q={0}'.format(result.searchterm))
     elif request.method == 'GET':
         result.searchterm = request.GET.get('q', None)
         result.allfromdomain = request.GET.get('domain', False)
         if request.GET.get('s') == 'fp':
-            return HttpResponsePermanentRedirect(u'/search/?q={0}'.format(result.searchterm))
+            return HttpResponsePermanentRedirect('/search/?q={0}'.format(result.searchterm))
     # Search
     if result.searchterm:
         result.searchterm = CleanSearchTerm(result.searchterm)
@@ -616,18 +645,18 @@ def search(request):
                     result.searchterm = result.searchterm.replace('  ', ' ')
                     if result.searchterm.endswith(' '):
                         result.searchterm = result.searchterm[0:-1]
-            if language_name_reverse.has_key(piece) and (language_name_reverse[piece] != request.LANGUAGE_CODE):
+            if piece in language_name_reverse and (language_name_reverse[piece] != request.LANGUAGE_CODE):
                 result.names_language = language_name_reverse[piece]
                 result.names_language_search = result.searchterm.replace(piece, '')
                 # Collapse extra spaces if necessary.
                 result.names_language_search = result.names_language_search.replace('  ', ' ')
                 result.names_language_search = result.names_language_search.strip()
                 break
-        if u'site:' in result.searchterm:
+        if 'site:' in result.searchterm:
             dom = None
             queries = []
             for piece in pieces:
-                if piece.startswith(u'site:'):
+                if piece.startswith('site:'):
                     dom = piece[5:]
                 else:
                     queries.append(piece)
@@ -636,9 +665,9 @@ def search(request):
             elif dom and len(queries) == 0:
                 return HttpResponseRedirect('/domain/?q={0}'.format(dom))
         # Check whether it's a domain search.
-        if u'.' in result.searchterm:
+        if '.' in result.searchterm:
             for piece in pieces:
-                if u'.' in piece:
+                if '.' in piece:
                     domain_url = GetRootUrl(piece)
                     if IsIPAddress(piece):
                         result.is_ip = piece
@@ -656,56 +685,56 @@ def search(request):
         # We should probably track both "actual search" and "result query".
         #
         # We should also allow exact matches because "Why Is The Sky Blue?" or "Why Is There Air?" could be an exact movie/album title.
-        #question = False
-        #if result.searchterm.startswith('what is a '):
+        # question = False
+        # if result.searchterm.startswith('what is a '):
         #    result.searchterm = result.searchterm[10:]
         #    question = True
-        #elif result.searchterm.startswith('what is the '):
+        # elif result.searchterm.startswith('what is the '):
         #    result.searchterm = result.searchterm[12:]
         #    question = True
-        #elif result.searchterm.startswith('what is '):
+        # elif result.searchterm.startswith('what is '):
         #    result.searchterm = result.searchterm[8:]
         #    question = True
-        #elif result.searchterm.startswith('what are '):
+        # elif result.searchterm.startswith('what are '):
         #    result.searchterm = result.searchterm[9:]
         #    question = True
-        #elif result.searchterm.startswith('who is '):
+        # elif result.searchterm.startswith('who is '):
         #    result.searchterm = result.searchterm[8:]
         #    question = True
-        #elif result.searchterm.startswith('who is the '):
+        # elif result.searchterm.startswith('who is the '):
         #    result.searchterm = result.searchterm[12:]
         #    question = True
-        #elif result.searchterm.startswith('where is the '):
+        # elif result.searchterm.startswith('where is the '):
         #    result.searchterm = result.searchterm[13:]
         #    question = True
-        #elif result.searchterm.startswith('where is '):
+        # elif result.searchterm.startswith('where is '):
         #    result.searchterm = result.searchterm[9:]
         #    question = True
-        #elif result.searchterm.startswith('when is '):
+        # elif result.searchterm.startswith('when is '):
         #    result.searchterm = result.searchterm[8:]
         #    question = True
-        #elif result.searchterm.startswith('why is the '):
+        # elif result.searchterm.startswith('why is the '):
         #    result.searchterm = result.searchterm[11:]
         #    question = True
-        #elif result.searchterm.startswith('why is '):
+        # elif result.searchterm.startswith('why is '):
         #    result.searchterm = result.searchterm[7:]
         #    question = True
-        #elif result.searchterm.startswith('how is the '):
+        # elif result.searchterm.startswith('how is the '):
         #    result.searchterm = result.searchterm[11:]
         #    question = True
-        #elif result.searchterm.startswith('how is a '):
+        # elif result.searchterm.startswith('how is a '):
         #    result.searchterm = result.searchterm[9:]
         #    question = True
-        #elif result.searchterm.startswith('how is '):
+        # elif result.searchterm.startswith('how is '):
         #    result.searchterm = result.searchterm[7:]
         #    question = True
-        #if question and result.searchterm.endswith('?'):
+        # if question and result.searchterm.endswith('?'):
         #    result.searchterm = result.searchterm[:-1]
         # Retrieve the data.
         term = TrySearchTerm(result.searchterm, result.language_code)
         if term:
             if term.date_indexed < (timezone.now() - timedelta(days=INDEX_TERM_STALE_DAYS)) and not term.actively_blocked and not term.refused and (len(term.keywords) > 2):
-                AddPendingTerm(term.keywords, result.language_code, u'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
+                AddPendingTerm(term.keywords, result.language_code, 'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
             result = MergeSearchResult(result, term)
         else:
             create_placeholders = True
@@ -713,7 +742,7 @@ def search(request):
                 setting = Setting.objects.get(key='create_placeholders')
                 if setting.value == 'False' or setting.value == '0' or setting.value == 'F':
                     create_placeholders = False
-            except:
+            except Exception:
                 print('Not creating placeholder index term -- create_placeholders setting is false')
             result.indexed = False
             searchterms = GetTerms(result.searchterm)
@@ -721,7 +750,7 @@ def search(request):
                 try:
                     term = term_model.objects.get(keywords=item)
                     if term.date_indexed < (timezone.now() - timedelta(days=INDEX_TERM_STALE_DAYS)) and not term.actively_blocked and not term.refused and (len(term.keywords) > 2):
-                        AddPendingTerm(term.keywords, result.language_code, u'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
+                        AddPendingTerm(term.keywords, result.language_code, 'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
                     result = MergeSearchResult(result, term, bonus_existing=True)
                 except ObjectDoesNotExist:
                     if create_placeholders:
@@ -749,26 +778,26 @@ def search(request):
             log.result_count = result.result_count
             log.indexed = result.indexed
             log.search_time = end_delta.total_seconds()
-            if request.META.has_key('HTTP_REFERER'):
+            if 'HTTP_REFERER' in request.META:
                 log.referer = request.META['HTTP_REFERER']
                 if len(log.referer) > 255:
                     log.referer = log.referer[0:252] + '...'
-            if request.META.has_key('REMOTE_ADDR'):
+            if 'REMOTE_ADDR' in request.META:
                 log.ip = request.META['REMOTE_ADDR']
             if log.ip:
                 gi = GeoIP()
                 country = gi.country_code(log.ip)
                 if country:
                     log.ip_country = country
-            if request.META.has_key('HTTP_USER_AGENT'):
+            if 'HTTP_USER_AGENT' in request.META:
                 log.browserstring = request.META['HTTP_USER_AGENT']
                 if len(log.browserstring) > 255:
                     log.browserstring = log.browserstring[0:252] + '...'
                 if IsBotAgent(log.browserstring):
                     log.is_bot = True
             try:
-                async(SaveLogEntry, log)
-            except:
+                async_task(SaveLogEntry, log)
+            except Exception:
                 print('Cannot save log entry. Redis server may not be running.')
     is_language_name = None
     if result.is_language:
@@ -797,26 +826,24 @@ def search(request):
     # correct multiple typos in a phrase.
     if result.typo_for:
         result.typo_for = result.searchterm.replace(result.typo, result.typo_for)
-    return render_to_response('search.htm',
-        { 'search_results': result.search_results, 'searchterm': result.searchterm,
+    return render(request, 'search.htm',
+        {'search_results': result.search_results, 'searchterm': result.searchterm,
           'result_count': result.result_count, 'language_code': result.language_code, 'indexed': result.indexed,
           'allfromdomain': result.allfromdomain, 'actively_blocked': result.actively_blocked, 'show_sd_ad': result.show_sd_ad,
           'show_network_ad': result.show_network_ad, 'typo_for': result.typo_for, 'is_language': result.is_language,
           'is_language_name': is_language_name, 'superuser': superuser, 'refused': result.refused, 'is_domain': result.is_domain,
           'is_ip': result.is_ip, 'names_language': result.names_language, 'names_language_search': result.names_language_search,
-          'names_language_name': names_language_name, 'log': log, 'exclude': exclude, 'date_indexed': result.date_indexed },
-        context_instance=RequestContext(request))
+          'names_language_name': names_language_name, 'log': log, 'exclude': exclude, 'date_indexed': result.date_indexed})
+
 
 @permission_required('is_superuser')
 def adminpanel(request):
-    counts = []
     result = None
-    cursor = connection.cursor()
     host = request.META.get('HTTP_HOST', None)
     query_string = request.META.get('QUERY_STRING', None)
     language = LanguageFromDomain(request)
     message = 'You are on host: {0}, language: {1}, request language: {2},  query_string: {3}'.format(host, language, request.LANGUAGE_CODE, query_string)
-    if request.GET.has_key('crawlurl'):
+    if 'crawlurl' in request.GET:
         randomfromdomain = request.GET.get('randomfromdomain', None)
         if not randomfromdomain:
             result = CrawlSingleUrl(request.GET['crawlurl'])
@@ -838,7 +865,8 @@ def adminpanel(request):
             options['noop'] = False
             options['seconds'] = 0
             result = Crawler(options)
-    return render_to_response('adminpanel.htm', { 'result': result, 'message': message })
+    return render_to_response('adminpanel.htm', {'result': result, 'message': message})
+
 
 @permission_required('is_superuser')
 def adminpanel_movesite(request):
@@ -852,17 +880,13 @@ def adminpanel_movesite(request):
         MoveSiteTo(item, lang)
         numpages = numpages + 1
     message = 'Moved {0} pages to {1} for domain {2}'.format(numpages, lang, domain)
-    return render_to_response('adminpanel.htm', { 'message': message }, context_instance=RequestContext(request))
+    return render(request, 'adminpanel.htm', {'message': message})
+
 
 @permission_required('is_superuser')
 def adminpanel_blocksite(request):
     domain = None
-    counts = []
     result = None
-    cursor = connection.cursor()
-    host = request.META.get('HTTP_HOST', None)
-    query_string = request.META.get('QUERY_STRING', None)
-    language = LanguageFromDomain(request)
     sitename = None
     reason = None
     message = None
@@ -872,18 +896,18 @@ def adminpanel_blocksite(request):
         reason = request.POST.get('reason', None)
         if reason:
             reason = int(reason)
-        message = u'Site block requested for {0} for reason {1}. '.format(sitename, reason)
+        message = 'Site block requested for {0} for reason {1}. '.format(sitename, reason)
         try:
             domain = DomainInfo.objects.get(url=sitename)
             if domain.is_unblockable:
-                message += u'Domain is set as unblockable.'
+                message += 'Domain is set as unblockable.'
         except ObjectDoesNotExist:
             # Always create domain info if the domain doesn't exist yet.
             domain = DomainInfo()
             domain.url = sitename
             domain.save()
         try:
-            existing = BlockedSite.objects.get(url=sitename)
+            BlockedSite.objects.get(url=sitename)
             # If the domain is already blocked, the URL must have been added erroneously.
             # in that case, just delete it.
             num_before_urls = SiteInfo.objects.filter(rooturl=sitename).count()
@@ -896,7 +920,7 @@ def adminpanel_blocksite(request):
                 num_after_urls += site_model.objects.filter(rooturl=sitename).count()
             RequeueRankedKeywordsForDomain(sitename)
             DeleteDomainLinks(sitename)
-            message += u'Domain was already blocked. {0} urls were in the database and now there are {1}.'.format(
+            message += 'Domain was already blocked. {0} urls were in the database and now there are {1}.'.format(
                 num_before_urls, num_after_urls)
         except ObjectDoesNotExist:
             num_before_urls = SiteInfo.objects.filter(rooturl=sitename).count()
@@ -912,22 +936,23 @@ def adminpanel_blocksite(request):
                 num_after_urls += site_model.objects.filter(rooturl=sitename).count()
             RequeueRankedKeywordsForDomain(sitename)
             DeleteDomainLinks(sitename)
-            message += u'Domain blocked. {0} urls were in the database and now there are {1}.'.format(
+            message += 'Domain blocked. {0} urls were in the database and now there are {1}.'.format(
                 num_before_urls, num_after_urls)
-    elif request.method == 'GET' and request.GET.has_key('site'):
+    elif request.method == 'GET' and 'site' in request.GET:
         sitename = request.GET['site']
         sitename = GetRootUrl(sitename)
         reason = request.GET.get('reason', None)
         message = 'Preparing to block {0}'.format(sitename)
-    return render_to_response('adminpanel.htm', { 'result': result, 'message': message, 'blocksite': True, 'sitename': sitename,
-        'reason': reason, 'choices': EXCLUDED_SITE_REASONS }, context_instance=RequestContext(request))
+    return render(request, 'adminpanel.htm', {'result': result, 'message': message, 'blocksite': True, 'sitename': sitename,
+        'reason': reason, 'choices': EXCLUDED_SITE_REASONS})
+
 
 @permission_required('is_superuser')
 def adminpanel_topsites(request):
     counts = []
     result = None
     cursor = connection.cursor()
-    if request.GET.has_key('crawlurl'):
+    if 'crawlurl' in request.GET:
         result = CrawlSingleUrl(request.GET['crawlurl'])
     for language in language_list:
         if language == 'en':
@@ -935,18 +960,17 @@ def adminpanel_topsites(request):
         else:
             limit = 100
         model = GetSiteInfoModelFromLanguage(language)
-        cursor.execute('SELECT count(*), rooturl FROM ' + model._meta.db_table + ' GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(limit));
+        cursor.execute('SELECT count(*), rooturl FROM ' + model._meta.db_table + ' GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(limit))
         domain_counts = cursor.fetchall()
         counts.append((language, domain_counts))
-    return render_to_response('adminpanel.htm', { 'domain_counts': counts, 'result': result })
+    return render_to_response('adminpanel.htm', {'domain_counts': counts, 'result': result})
+
 
 @permission_required('is_superuser')
 def adminpanel_pagescore(request):
     url = request.GET.get('url', None)
     keyword = request.GET.get('keyword', None)
-    language_code = request.GET.get('language', u'en')
-    pagescore = None
-    calctime = None
+    language_code = request.GET.get('language', 'en')
     reasons = None
     elapsed = None
     message = 'Enter a URL and keywords to check {0} {1}.'.format(url, keyword)
@@ -959,9 +983,9 @@ def adminpanel_pagescore(request):
         reasons = CalculateTermValue(page, keyword, lang=language_code, verbose=True)
         elapsed = (start - timezone.now()).total_seconds()
 
-    return render_to_response('adminpanel.htm',
-        { 'reasons': reasons, 'keyword': keyword, 'myurl': url, 'pagescore': True, 'calctime': elapsed, 'message': message },
-        context_instance=RequestContext(request))
+    return render(request, 'adminpanel.htm',
+        {'reasons': reasons, 'keyword': keyword, 'myurl': url, 'pagescore': True, 'calctime': elapsed, 'message': message})
+
 
 @permission_required('is_superuser')
 def adminpanel_searchlogs(request):
@@ -994,9 +1018,9 @@ def adminpanel_searchlogs(request):
         for log in logs:
             if not log.referer:
                 continue
-            if bingsearches and u'bing.com' in log.referer:
+            if bingsearches and 'bing.com' in log.referer:
                 tmplogs.append(log)
-            if googlesearches and u'google.com' in log.referer:
+            if googlesearches and 'google.com' in log.referer:
                 tmplogs.append(log)
             if len(tmplogs) > maxresults:
                 logs = tmplogs
@@ -1013,11 +1037,11 @@ def adminpanel_searchlogs(request):
     else:
         logs = logs[0:maxresults]
 
-    return render_to_response('adminpanel.htm',
-        { 'message': 'Showing recent non-bot {0} logs'.format(lang), 'logs': logs, 'lang': lang, 'twoormore': twoormore, 'zeroresults': zeroresults,
+    return render(request, 'adminpanel.htm',
+        {'message': 'Showing recent non-bot {0} logs'.format(lang), 'logs': logs, 'lang': lang, 'twoormore': twoormore, 'zeroresults': zeroresults,
           'threeormore': threeormore, 'bingsearches': bingsearches, 'googlesearches': googlesearches, 'maxresults': maxresults,
-          'unindexed': unindexed, 'nodomains': nodomains },
-        context_instance=RequestContext(request))
+          'unindexed': unindexed, 'nodomains': nodomains})
+
 
 @permission_required('is_superuser')
 def adminpanel_sitelimits(request):
@@ -1026,13 +1050,14 @@ def adminpanel_sitelimits(request):
     cursor = connection.cursor()
     sites = DomainInfo.objects.filter(max_urls__isnull=False).order_by('-alexa_rank')
     for site in sites:
-        table = u'site_info'
-        if site.language_association and site.language_association != u'en':
+        table = 'site_info'
+        if site.language_association and site.language_association != 'en':
             table = 'dir_siteinfo_' + site.language_association
-        cursor.execute("SELECT count(*) FROM " + table + " WHERE rooturl = '" + site.url + "'");
+        cursor.execute("SELECT count(*) FROM " + table + " WHERE rooturl = '" + site.url + "'")
         domain_counts = cursor.fetchall()
         counts.append((site, domain_counts))
-    return render_to_response('adminpanel.htm', { 'limit_counts': counts, 'result': result })
+    return render_to_response('adminpanel.htm', {'limit_counts': counts, 'result': result})
+
 
 # Gets a list of the domains with the most URLs that lack a language tag of any kind.
 @permission_required('is_superuser')
@@ -1048,11 +1073,12 @@ def adminpanel_unclassified(request):
             domaininfo = DomainInfo.objects.get(url=domain[1])
             if domaininfo.language_association or domaininfo.uses_language_subdirs or domain.uses_langid:
                 continue
-        except:
+        except Exception:
             pass
         uncategorized_domains.append(domain)
     counts.append(('en', uncategorized_domains))
-    return render_to_response('adminpanel.htm', { 'domain_counts': counts })
+    return render_to_response('adminpanel.htm', {'domain_counts': counts})
+
 
 @permission_required('is_superuser')
 def adminpanel_doctype(request):
@@ -1064,13 +1090,12 @@ def adminpanel_doctype(request):
         model_name = 'site_info'
     else:
         model_name = 'dir_siteinfo_' + lang
-    counts = []
-    uncategorized_domains = []
     cursor = connection.cursor()
     limit = 200
     cursor.execute("SELECT id, lastcrawled, url FROM {0} WHERE pagetext ILIKE 'html public%' LIMIT {1}".format(model_name, limit))
     urls = cursor.fetchall()
-    return render_to_response('adminpanel.htm', { 'urls': urls, 'lang': lang })
+    return render_to_response('adminpanel.htm', {'urls': urls, 'lang': lang})
+
 
 @permission_required('is_superuser')
 def adminpanel_oldestcrawls(request):
@@ -1082,13 +1107,12 @@ def adminpanel_oldestcrawls(request):
         model_name = 'site_info'
     else:
         model_name = 'dir_siteinfo_' + lang
-    counts = []
-    uncategorized_domains = []
     cursor = connection.cursor()
     limit = 1000
     cursor.execute("SELECT id, lastcrawled, url FROM {0} ORDER BY lastcrawled ASC LIMIT {1}".format(model_name, limit))
     urls = cursor.fetchall()
-    return render_to_response('adminpanel.htm', { 'urls': urls, 'lang': lang })
+    return render_to_response('adminpanel.htm', {'urls': urls, 'lang': lang})
+
 
 def most_linked_domains(request):
     language_code = request.LANGUAGE_CODE
@@ -1098,7 +1122,7 @@ def most_linked_domains(request):
 
     try:
         stats = IndexStats.objects.all()[0]
-    except:
+    except Exception:
         # Will only happen with an empty database.
         stats = GenerateIndexStats(True)
     try:
@@ -1107,6 +1131,7 @@ def most_linked_domains(request):
         domains = []
 
     return render_to_response('mostlinked.htm', {'domains': domains, 'cached': cached, 'language_code': language_code})
+
 
 def popular_searches(request, year=None, month=None):
     language_code = request.LANGUAGE_CODE
@@ -1121,7 +1146,7 @@ def popular_searches(request, year=None, month=None):
         current = True
     try:
         report = MonthlySearchReport.objects.get(month=month, year=year, language=language_code)
-    except:
+    except Exception:
         # Only auto-generate the report for the current month.
         if not current:
             raise Http404
@@ -1133,13 +1158,15 @@ def popular_searches(request, year=None, month=None):
             cache.set('popular_searches_' + language_code, report, 172800)
         else:
             cached = True
-    month_name = month_names[report.month-1]
+    month_name = month_names[report.month - 1]
     report.top_searches = ujson.loads(report.top_searches)
     others = MonthlySearchReport.objects.filter(language=language_code).exclude(month=month, year=year)
     return render_to_response('popular.htm', {'report': report, 'language_code': language_code, 'others': others, 'month_name': month_name, 'cached': cached})
 
+
 def encode_autocomplete(obj):
     return obj.keywords
+
 
 @csrf_exempt
 def autocomplete(request):
@@ -1153,11 +1180,12 @@ def autocomplete(request):
         autocomplete_model = GetAutoCompleteModelFromLanguage(language_code)
         results = autocomplete_model.objects.filter(keywords__startswith=text).order_by('-score')[0:8]
         if results.count() > 0:
-            return HttpResponse( (json.dumps(list(results), default=encode_autocomplete)), content_type='application/json', status=200)
+            return HttpResponse((json.dumps(list(results), default=encode_autocomplete)), content_type='application/json', status=200)
         else:
             return HttpResponse(status=404)
     else:
         return HttpResponse(status=404)
+
 
 def go(request):
     lang = request.GET.get('lang', None)
@@ -1167,15 +1195,17 @@ def go(request):
     click.search_id = request.GET.get('id', None)
     click.url = request.GET.get('url', None)
     click.position = request.GET.get('pos', None)
-    if request.META.has_key('REMOTE_ADDR'):
+    if 'REMOTE_ADDR' in request.META:
         click.ip = request.META['REMOTE_ADDR']
     click.xpos = 0
     click.ypos = 0
     click.save()
     return HttpResponse(status=200)
 
+
 def error(request):
     raise ValueError('ERROR')
+
 
 def email(request):
     send_mail('Test Email', 'This is a test message.', 'jchampion@wbsrch.com',

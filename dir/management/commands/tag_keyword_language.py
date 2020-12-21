@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from optparse import make_option
-from dir.models import IndexTerm, language_list
+from dir.models import language_list
 from dir.utils import GetIndexModelFromLanguage
 import sys
-import operator
 import codecs
 
 UTF8Writer = codecs.getwriter('utf8')
 sys.stdout = UTF8Writer(sys.stdout)
+
 
 class Command(BaseCommand):
     help = """
@@ -19,12 +18,11 @@ class Command(BaseCommand):
     language. Works based on the idea that if a word shows up a lot in a known-other-language, that word might
     be in that language.
     """
-    option_list = BaseCommand.option_list + (
-        make_option('-s', '--startafter', default=None, action='store', type='string', dest='startafter', help='Start after <string>. Only useful for resuming an afterz or beforezero categorize.'),
-        make_option('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for index keywords (default=en).'),
-        make_option('-w', '--wordlength', default=3, action='store', type='int', dest='wordlength', help='Min word length to check. (default=3)'),
-        make_option('-t', '--threshold', default=100, action='store', type='int', dest='threshold', help='Min number of results to suggest tag. (default=100)'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('-s', '--startafter', default=None, action='store', dest='startafter', help='Start after <string>. Only useful for resuming an afterz or beforezero categorize.')
+        parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Language to use for index keywords (default=en).')
+        parser.add_argument('-w', '--wordlength', default=3, action='store', type=int, dest='wordlength', help='Min word length to check. (default=3)')
+        parser.add_argument('-t', '--threshold', default=100, action='store', type=int, dest='threshold', help='Min number of results to suggest tag. (default=100)')
 
     def handle(self, *args, **options):
         startafter = options.get('startafter', None)
@@ -57,23 +55,23 @@ class Command(BaseCommand):
             scores = sorted(langcounts.iteritems(), key=lambda item: item[1], reverse=True)
             if len(scores) < 1:
                 continue
-            print u'Scores for "{0}": {1}'.format(keyword, scores)
+            print('Scores for "{0}": {1}'.format(keyword, scores))
             if scores[0][0] == 'en':
                 notprompted = notprompted + 1
                 continue
             if threshold and (scores[0][1] < threshold):
                 toofew = toofew + 1
                 continue
-            input = raw_input(u'Tag {0} as: [q]uit/[s]kip/[xx] tag as lang]? '.format(keyword))
-            input = input.lower()
-            if input == 'q':
+            rinput = input('Tag {0} as: [q]uit/[s]kip/[xx] tag as lang]? '.format(keyword))
+            rinput = rinput.lower()
+            if rinput == 'q':
                 exit()
-            elif input == 's':
+            elif rinput == 's':
                 continue
             else:
-                if input in language_list:
+                if rinput in language_list:
                     kw = language_checked.objects.get(keywords=keyword)
-                    kw.is_language = input
+                    kw.is_language = rinput
                     kw.save()
-                    print('Setting keyword "{0}" as language {1}'.format(keyword, input))
+                    print('Setting keyword "{0}" as language {1}'.format(keyword, rinput))
         print('Done. {0} too-short and {1} below-threshold words were skipped, and {2} had more English results.'.format(tooshort, toofew, notprompted))

