@@ -45,6 +45,8 @@ int main(int argc, char* argv[]) {
 
       /* Print all records */
       int count = 0;
+      int processed = 0;
+      cout << "Pages retrieved. Checking for DomainInfo entries." << endl;
       for (result::const_iterator c = R.begin(); c != R.end(); ++c)
       {
          int id = c[0].as<int>();
@@ -75,6 +77,11 @@ int main(int argc, char* argv[]) {
                  nontransaction P(C);
                  result T( P.exec( sqlthree.c_str() ));
                  P.commit();
+             }
+             processed += 1;
+             if( processed % 10000 == 0)
+             {
+                 cout << processed << " domains processed." << endl;
              }
          }
       }
