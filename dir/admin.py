@@ -717,7 +717,7 @@ class IndexTermAdmin(admin.ModelAdmin):
             ranking_model = KeywordRanking
             if item.is_language:
                 ranking_model = GetKeywordRankingModelFromLanguage(item.is_language)
-            existing = ranking_model.objects.filter(keywords=item.keywords).delete()
+            ranking_model.objects.filter(keywords=item.keywords).delete()
             item.delete()
 
     delete_these_index_terms.short_description = "Delete these index terms and their keyword ranks."

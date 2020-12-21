@@ -7,17 +7,9 @@
 #
 # To index a single term, call BuildIndexForTerm.
 
-from bs4 import BeautifulSoup
-#Python 3: import urllib.request, urllib.error, urllib.parse
-import urllib.request, urllib.error, urllib.parse
 import time
-import optparse
-from urllib.parse import urlparse
 from django.db import connection
 from django.utils import timezone
-from django.utils.timezone import utc
-from django.db.utils import DatabaseError
-from django.db import transaction
 from dir.models import *
 from dir.utils import *
 import datetime
@@ -49,7 +41,7 @@ def RemoveFromPending(keywords, language=None):
         existing = index_model.objects.get(keywords=keywords)
         existing.delete()
         return True
-    except:
+    except Exception:
         return False
 
 
@@ -79,7 +71,7 @@ def Index(pendingindexes, max, sleep=2, language=None, verbose=False, abbreviate
 def LoadKeywordsFromFile(filename):
     pendingindexes = []
     numloaded = 0
-    print('Loading pending indexes from file: '.format(filename))
+    print('Loading pending indexes from file: {0}'.format(filename))
     f = open(filename, 'rb')
     reader = codecs.getreader('utf8')(f)
     for line in reader.readlines():
@@ -93,9 +85,9 @@ def GetPendingIndexes(max, offset=0, language='en', verbose=False, random=False)
     pendingindexes = []
     index_model = GetPendingIndexModelFromLanguage(language)
     if random:
-        pending = index_model.objects.all().order_by('?')[offset:max+offset]
+        pending = index_model.objects.all().order_by('?')[offset:max + offset]
     else:
-        pending = index_model.objects.all().order_by('date_added')[offset:max+offset]
+        pending = index_model.objects.all().order_by('date_added')[offset:max + offset]
     print('Loading pending indexes from {0} database: '.format(language))
     for item in pending:
         pendingindexes.append(item.keywords)
@@ -112,11 +104,11 @@ def GetReindexes(max, offset=0, language='en', verbose=False, random=False, quic
         newest = (timezone.now() - datetime.timedelta(days=days))
         if verbose:
             print('Getting indexes before {0}, which is {1} days before now.'.format(newest, days))
-        pending = index_model.objects.filter(date_indexed__lte=newest).order_by('date_indexed')[offset:max+offset]
+        pending = index_model.objects.filter(date_indexed__lte=newest).order_by('date_indexed')[offset:max + offset]
     elif random:
-        pending = index_model.objects.all().order_by('?')[offset:max+offset]
+        pending = index_model.objects.all().order_by('?')[offset:max + offset]
     else:
-        pending = index_model.objects.all().order_by('date_indexed')[offset:max+offset]
+        pending = index_model.objects.all().order_by('date_indexed')[offset:max + offset]
     print('Loading stale indexes from {0} database: '.format(language))
     for item in pending:
         if quickness and quickness > 0:
@@ -171,8 +163,8 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
             # if there are any results for them.
             try:
                 print('Index term {0} not found, cannot use for calculations.'.format(singleword))
-            except:
-                print('Index term (unprintable) not found, cannot use for calculations.'.format(singleword))
+            except Exception:
+                print('Index term (unprintable) not found, cannot use for calculations.')
             continue
         # No point in adding up a word with no results, and this way we don't have to worry about divide by zero.
         if word.num_results == 0:
@@ -194,23 +186,23 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
             factor = 1 / math.pow(2, (math.log(word.num_results, 10)))
         elif type == 'cuberoot':
             # =100 - POWER(B2, 1/3)
-            factor = 100.0 - math.pow(word.num_results, (1.0/3.0)) / 100.0
+            factor = 100.0 - math.pow(word.num_results, (1.0 / 3.0)) / 100.0
         elif type == 'cuberootb':
             # =101 - POWER(B2, 1/3)
-            factor = 101.0 - math.pow(word.num_results, (1.0/3.0)) / 100.0
+            factor = 101.0 - math.pow(word.num_results, (1.0 / 3.0)) / 100.0
         elif type == 'fourthroot':
             # =(33.333 - POWER(B2, 1/4)) * 3
-            factor = ((33.33 - math.pow(word.num_results, (1.0/4.0))) * 3) / 100.0
+            factor = ((33.33 - math.pow(word.num_results, (1.0 / 4.0))) * 3) / 100.0
         elif type == 'fourthrootb':
             # =(32.0 - POWER(B2, 1/4)) * 3
-            factor = ((32.0 - math.pow(word.num_results, (1.0/4.0))) * 3) / 100.0
+            factor = ((32.0 - math.pow(word.num_results, (1.0 / 4.0))) * 3) / 100.0
         elif type == 'logdivide':
             # =1 / (LOG(B2, 10)+1)
             factor = 1.0 / (math.log(word.num_results, 10) + 1.0)
         elif type == 'fourthrootandlog':
             # Takes the average of the fourthrootb and the logdivide calculations, but with slightly different
             # max/scaling factors.
-            factora = ((29 - math.pow(word.num_results, (1.0/4.0))) * 3) / 100.0
+            factora = ((29 - math.pow(word.num_results, (1.0 / 4.0))) * 3) / 100.0
             factorb = 0.80 / (math.log(word.num_results, 10) + 1.0)
             factor = (factora + factorb) / 2.0
         elif type == 'squareroot1200':
@@ -233,8 +225,8 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
             return ratings
         try:
             print('Merge factor for term {0} is {1} with {2} results'.format(singleword, factor, word.num_results))
-        except:
-            print('Merge factor for term (unprintable) is {1} with {2} results'.format(singleword, factor, word.num_results))
+        except Exception:
+            print('Merge factor for term (unprintable) is {0} with {1} results'.format(factor, word.num_results))
         page_rankings = ujson.loads(word.page_rankings)
         for item in page_rankings:
             #print 'Checking {0} in page_rankings.'.format(item)
@@ -281,7 +273,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     site_model = GetSiteInfoModelFromLanguage(lang)
     try:
         term = term_model.objects.get(keywords=keywords)
-    except:
+    except Exception:
         term = term_model()
         term.keywords = keywords
         term.num_results = 0
@@ -298,7 +290,6 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     asciikeywords = unidecode(spacelesskeywords)
     if spacelesskeywords != asciikeywords:
         print('Checking URL as {0}'.format(asciikeywords))
-    skp = '%' + spacelesskeywords + '%'
     akp = '%' + asciikeywords + '%'
     # Don't even bother selecting on page text, keywords, or description ILIKE for massive queries.
     # Since title, first head tag, and URL are most important. About 1.2% of queries fit this and
@@ -308,19 +299,19 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     # and a popularity contest anyway, at least that gives us a chance of succeeding in our indexing.
     querystart = timezone.now()
     if term.num_pages > 100000:
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
                      site_model._meta.db_table +
                      " WHERE (pagetitle ILIKE %s OR url ILIKE " +
                      "%s OR pagefirstheadtag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, akp, kp])
     elif term.num_pages > 40000:
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
                      site_model._meta.db_table +
                      " WHERE (pagetitle ILIKE %s OR url ILIKE " +
                      "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s) LIMIT 1000000")
         index_items = site_model.objects.raw(sql_query, [kp, akp, kp, kp])
     elif term.num_pages > 10000:
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
                      site_model._meta.db_table +
                      " WHERE (pagetitle ILIKE %s OR url ILIKE " +
                      "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
@@ -328,7 +319,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     # If we have more than 3000 results, ignore the specific page text because we can get what we
     # need from the head tag, url, keywords, description, and title (mostly).
     elif abbreviated or term.num_pages > 3000:
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " + 
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
                      site_model._meta.db_table +
                      " WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR url ILIKE " +
                      "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
@@ -346,14 +337,13 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         querydelta = timezone.now() - querystart
         print('Query took: {0} seconds'.format(querydelta.total_seconds()))
         print('{0} Calculating values.'.format(timezone.now().isoformat()))
-    counter = 0
     # Calculate the score for each page we've found.
     termcalcstart = timezone.now()
     for item in index_items:
         try:
             weight = CalculateTermValue(item, keywords, abbreviated, lang)
         # Any problem calculating the term's value and it gets a zero.
-        except:
+        except Exception:
             weight = 0
         ratings.append([item.id, weight])
     term.num_pages = len(ratings)
@@ -395,11 +385,11 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         saved = False
     jsonify_delta = timezone.now() - jsonify_start
     if verbose:
-        print('{0} Done indexing: {0}, {1} results from {2} pages.'.format(timezone.now().isoformat(), keywords, term.num_results, term.num_pages))
-        querytime = LogQueries(connection.queries[prevqueries:])
+        print('{0} Done indexing: {1}, {2} results from {3} pages.'.format(timezone.now().isoformat(), keywords, term.num_results, term.num_pages))
+        LogQueries(connection.queries[prevqueries:])
     try:
         print("Index Time for '{0}': {1} seconds, Jsonify Time: {2} seconds (includes ranking update), {3} pages, {4} results.".format(
             term.keywords, term.index_time, jsonify_delta.total_seconds(), term.num_pages, term.num_results))
-    except:
+    except Exception:
         pass
     return saved

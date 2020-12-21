@@ -1,9 +1,8 @@
-from bs4 import BeautifulSoup, Comment, Doctype, Declaration, Tag, NavigableString
+from bs4 import BeautifulSoup, Comment, Doctype
 from bs4.element import ProcessingInstruction
 import urllib.request, urllib.error, urllib.parse
 import http.client
 import time
-import optparse
 from dir.models import *
 from dir.utils import *
 from dir.robots import GetRobotsFile, AllowedByRobots
@@ -11,14 +10,9 @@ from dir.language import *
 from django.db.utils import DatabaseError, DataError
 from django.db import connection
 from django.utils import timezone
-from django.utils.timezone import utc
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import transaction
-import html.parser
-import datetime
 import socket
 import codecs
-import random
 import re
 
 
@@ -120,32 +114,32 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
             siteinfo.pagetitle = html_decode(soup.title.string).strip()[0:255]
             if descriptive:
                 print('Title: {0}'.format(siteinfo.pagetitle))
-        except:
+        except Exception:
             pass
     if descriptive:
         print('Root URL: {0}'.format(siteinfo.rooturl))
-    description = soup.findAll(attrs = {'name': 'description'})
+    description = soup.findAll(attrs={'name': 'description'})
     if len(description) > 0:
         try:
             siteinfo.pagedescription = html_decode(description[0]['content'].strip())[0:319]
             if descriptive:
                 print('Description: {0}'.format(siteinfo.pagedescription))
-        except:
+        except Exception:
             pass
-    keywords = soup.findAll(attrs = {'name': 'keywords'})
+    keywords = soup.findAll(attrs={'name': 'keywords'})
     if len(keywords) > 0:
         try:
             siteinfo.pagekeywords = keywords[0]['content'].strip()[0:255].lower()
             if descriptive:
                 print('Keywords: {0}'.format(siteinfo.pagekeywords))
-        except:
+        except Exception:
             pass
     try:
         # We don't actually store the canonical link anywhere, but we could if we wanted to.
         canonicallinks = soup.findAll('link', rel='canonical')
         for canonical in canonicallinks:
             print('Canonical link found: {0}'.format(canonical['href']))
-    except:
+    except Exception:
         pass
     headtags = soup.findAll('h1')
     if len(headtags) > 0:
@@ -210,7 +204,6 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     if descriptive:
         print('Num Images: {0}'.format(siteinfo.num_images))
     # Get image titles, URLs, and filenames.
-    missingalt = ''
     image_alt_tags = []
     image_title_tags = []
     image_filenames = []
@@ -233,8 +226,6 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     canonical = False
     for link in links:
         rel = link.attrs.get('rel', None)
-        type = link.attrs.get('type', None)
-        href = link.attrs.get('href', None)
         if rel and rel[0].lower() == 'stylesheet':
             num_stylesheets += 1
         elif rel and rel[0].lower() == 'canonical':
@@ -245,7 +236,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     scripts = soup.findAll('script')
     num_external_scripts = 0
     for script in scripts:
-        type = script.attrs.get('type', None)
+        script.attrs.get('type', None)
         src = script.attrs.get('src', None)
         if src:
             num_external_scripts += 1
@@ -298,7 +289,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     [item.extract() for item in soup.contents if isinstance(item, Doctype)]
     [s.extract() for s in soup(['script', 'style', 'head'])]
     # Remove comment tags for cleaner text.
-    comments = soup.findAll(text=lambda text:isinstance(text, Comment))
+    comments = soup.findAll(text=lambda text: isinstance(text, Comment))
     [comment.extract() for comment in comments]
     for item in soup:
         if isinstance(item, ProcessingInstruction):
@@ -329,14 +320,14 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
     if normaled != realurl:
         try:
             print('URL Normalized to {0}'.format(normaled))
-        except:
+        except Exception:
             pass
         realurl = normaled
     try:
         ipaddr = socket.gethostbyname(urlparse.urlparse(realurl).hostname)
         if descriptive:
             print('IP Address is: {0}'.format(ipaddr))
-    except:
+    except Exception:
         pass
     if (not recrawl and not CanCrawlUrl(realurl)) or (recrawl and not CanReCrawlUrl(realurl, descriptive)):
         if descriptive:
@@ -392,7 +383,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
             print('Content-Length: {0}'.format(length))
         if length > 0:
             info.pagesize = length
-    except:
+    except Exception:
         pass
     server_header = response.headers.get('server', None)
     content_type_header = response.headers.get('content-type', None)
@@ -421,17 +412,17 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
     # churn every time we recrawl a URL, but the alternative is having old links and
     # iframes build up as the page changes when they aren't on the current
     # version of the page..
-    elinks = PageIFrame.objects.filter(url_source = info.url)
+    elinks = PageIFrame.objects.filter(url_source=info.url)
     if descriptive:
         print('Deleting {0} existing IFrames.'.format(elinks.count()))
     for elink in elinks:
         elink.delete()
-    elinks = PageJavaScript.objects.filter(url_source = info.url)
+    elinks = PageJavaScript.objects.filter(url_source=info.url)
     if descriptive:
         print('Deleting {0} existing JavaScripts.'.format(elinks.count()))
     for elink in elinks:
         elink.delete()
-    elinks = PageLink.objects.filter(url_source = info.url)
+    elinks = PageLink.objects.filter(url_source=info.url)
     if descriptive:
         print('Deleting {0} existing links.'.format(elinks.count()))
     for elink in elinks:
@@ -492,7 +483,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
                     oldsite.delete()
                 except ObjectDoesNotExist:
                     pass
-    except:
+    except Exception:
         try:
             if not info.firstcrawled:
                 info.firstcrawled = info.lastcrawled
@@ -521,7 +512,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
                 destroot = GetRootUrl(hr)
                 if destroot and destroot != rooturl and '.' in destroot and destroot != '.' and not IsHtmlExtension(destroot):
                     try:
-                        existing = PageLink.objects.get(url_source=info.url, url_destination=hr)
+                        PageLink.objects.get(url_source=info.url, url_destination=hr)
                     except ObjectDoesNotExist:
                         ulink = PageLink()
                         ulink.rooturl_source = rooturl
@@ -568,7 +559,7 @@ def AddPendingLink(pendinglinks, url, root=None, descriptive=False, recrawl=Fals
             remove_model = GetSiteInfoModelFromURL(url, descriptive)
             print('Removing invalid URL from the {0} database.'.format(remove_model))
             count = RemoveFromDatabase(url, descriptive, all_languages=True, model=remove_model)
-            print('Removed {0} instances of the url from the database.'.format(count, origurl))
+            print('Removed {0} instances of the url {1} from the database.'.format(count, origurl))
         return
     if origurl != url:
         if descriptive:
@@ -581,8 +572,8 @@ def AddPendingLink(pendinglinks, url, root=None, descriptive=False, recrawl=Fals
             count = RemoveFromDatabase(origurl, descriptive, all_languages=True, model=remove_model)
             try:
                 print('Removed {0} instances of {1} from the database.'.format(count, origurl))
-            except:
-                print('Removed {0} instances of the url from the database.'.format(count, origurl))
+            except Exception:
+                print('Removed {0} instances of the url {1} from the database.'.format(count, origurl))
     # Prevent crawling excluded sites, non-HTML, and at-url-limit sites.
     if not recrawl and not CanCrawlUrl(url):
         if descriptive:
@@ -599,27 +590,27 @@ def AddPendingLink(pendinglinks, url, root=None, descriptive=False, recrawl=Fals
             count = RemoveFromDatabase(url, descriptive, all_languages=True, model=remove_model)
             try:
                 print('Removed {0} instances of {1} from the database.'.format(count, url))
-            except:
-                print('Removed {0} instances of the url from the database.'.format(count, url))
+            except Exception:
+                print('Removed {0} instances of the url {1} from the database.'.format(count, url))
         except ObjectDoesNotExist:
             pass
         return
     if not recrawl:
         try:
             site_model = GetSiteInfoModelFromURL(url, descriptive)
-            previous = site_model.objects.get(url=url)
+            site_model.objects.get(url=url)
             if descriptive:
                 print('URL in DB, non recrawl mode, skip add to pending: {0}'.format(url))
             RemoveFromPending(pendinglinks, url)
             return
-        except:
+        except Exception:
             pass
     if url in pendinglinks:
         return
     if descriptive:
         try:
             print('Add Pending Link: {0}'.format(url))
-        except:
+        except Exception:
             pass
     pendinglinks.append(url)
 
@@ -633,19 +624,19 @@ def SavePendingUrls(pendinglinks, descriptive=False):
             domain = DomainInfo.objects.get(url=rooturl)
             if domain.language_association:
                 lang = domain.language_association
-        except:
+        except Exception:
             pass
         # Never save links where we have existing site info.
         #
         # TODO: Check other languages.
         site_model = GetSiteInfoModelFromLanguage(lang)
         try:
-            existingpage = site_model.objects.get(url=url)
+            site_model.objects.get(url=url)
             continue
         except ObjectDoesNotExist:
             pass
         try:
-            existing = CrawlableUrl.objects.get(url=url)
+            CrawlableUrl.objects.get(url=url)
         except ObjectDoesNotExist:
             pending = CrawlableUrl()
             pending.url = url
@@ -655,7 +646,7 @@ def SavePendingUrls(pendinglinks, descriptive=False):
                 if descriptive:
                     try:
                         print('Added pending URL to database: {0}'.format(url))
-                    except:
+                    except Exception:
                         print('Added a pending URL to the database.')
             except DatabaseError:
                 connection._rollback()
@@ -670,7 +661,7 @@ def RemoveFromPending(pendinglinks, url):
         existing = CrawlableUrl.objects.get(url=url)
         existing.delete()
         return True
-    except:
+    except Exception:
         return False
 
 
@@ -690,7 +681,7 @@ def RemoveFromDatabase(url, descriptive=False, all_languages=True, model=None):
         rooturl = GetRootUrl(url)
         domain = DomainInfo.objects.get(url=rooturl)
         language = domain.language_association
-    except:
+    except Exception:
         language = 'en'
     try:
         site_model = GetSiteInfoModelFromLanguage(language)
@@ -699,7 +690,7 @@ def RemoveFromDatabase(url, descriptive=False, all_languages=True, model=None):
         removed = removed + 1
         if descriptive:
             print('URL deleted from {0} database: {1}'.format(language, url))
-    except:
+    except Exception:
         site_model = None
         pass
     # For now, all languages just means delete if from english *and* tagged language.
@@ -711,7 +702,7 @@ def RemoveFromDatabase(url, descriptive=False, all_languages=True, model=None):
                 existing.delete()
                 removed = removed + 1
                 print('URL deleted from en database: {0}'.format(url))
-            except:
+            except Exception:
                 pass
 
     # Remove all links from all link tables (JavaScript, Iframe, PageLink).
@@ -744,9 +735,9 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
             domain.url = root
             try:
                 print('Created new DomainInfo entry for {0}.'.format(root))
-            except:
+            except Exception:
                 print('Created new DomainInfo entry.')
-        if domain.robots_last_updated == None:
+        if domain.robots_last_updated is None:
             print('Robots file never checked for database {0}, retrieving now.'.format(root))
             try:
                 GetRobotsFile(domain)
@@ -762,7 +753,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                 return False
         try:
             print('Retrieving {0}'.format(url))
-        except:
+        except Exception:
             print('Retrieving URL')
         req = urllib.request.Request(url)
         req.add_header('User-agent', 'Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)')
@@ -778,7 +769,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
             # 4XX errors are immediately fatal and we remove the URL.
             if e.code == 404 or e.code == 403 or e.code == 401 or e.code == 400 or e.code == 410 or e.code == 406:
                 if descriptive:
-                    print('HTTP Error: '.format(e.code))
+                    print('HTTP Error: {0}'.format(e.code))
                 RemoveFromPending(pendinglinks, url)
                 if recrawl:
                     remove_model = GetSiteInfoModelFromURL(url, descriptive)
@@ -788,7 +779,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
             elif e.code == 302:
                 try:
                     print('HTTP Error: {0} - {1}'.format(e.code, e.reason))
-                except:
+                except Exception:
                     print('302 Redirect.')
                 if recrawl:
                     try:
@@ -798,7 +789,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                         site_model = GetSiteInfoModelFromURL(url)
                         info = site_model.objects.get(url=url)
                         AddError(info, str(e.code), 'HTTP Error {0} - {1}'.format(e.code, e.reason))
-                    except:
+                    except Exception:
                         pass
                     # May want to return False in all cases, not just recrawl.
                     return False
@@ -806,13 +797,13 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
             elif e.code == 503 or e.code == 502 or e.code == 500 or e.code == 504 or e.code == 501:
                 try:
                     print('HTTP Error: {0} - {1}'.format(e.code, e.reason))
-                except:
+                except Exception:
                     print('HTTP Error (unprintable)')
                 try:
                     site_model = GetSiteInfoModelFromURL(url)
                     info = site_model.objects.get(url=url)
                     AddError(info, str(e.code), 'HTTP Error {0}'.format(e.code))
-                except:
+                except Exception:
                     pass
             else:
                 print('HTTP Error: {0} - {1}'.format(e.code, e.reason))
@@ -821,7 +812,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                         site_model = GetSiteInfoModelFromURL(url)
                         info = site_model.objects.get(url=url)
                         AddError(info, str(e.code), 'HTTP Error {0}'.format(e.code))
-                    except:
+                    except Exception:
                         pass
         except urllib.error.URLError as e:
             print('Unable to crawl URL {0}: urllib2.URLError is {1}'.format(url, e.args))
@@ -857,14 +848,14 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                     pass
             return False
         except socket.timeout as e:
-            print('Timed out retrieving URL: {0} - {1}'.format(url,e))
+            print('Timed out retrieving URL: {0} - {1}'.format(url, e))
             RemoveFromPending(pendinglinks, url)
             if recrawl:
                 try:
                     site_model = GetSiteInfoModelFromURL(url)
                     info = site_model.objects.get(url=url)
                     AddError(info, "socket.timeout", 'Timed out Retrieving URL')
-                except:
+                except Exception:
                     pass
             return False
         except socket.error as e:
@@ -875,42 +866,42 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
                     site_model = GetSiteInfoModelFromURL(url)
                     info = site_model.objects.get(url=url)
                     AddError(info, "socket.error", str(e))
-                except:
+                except Exception:
                     pass
             return False
         except ValueError as e:
             try:
-                print('Value error, cannot crawl URL: {0} - {1}'.format(url,e))
-            except:
+                print('Value error, cannot crawl URL: {0} - {1}'.format(url, e))
+            except Exception:
                 print('Value error, cannot crawl URL: {0}'.format(e))
             RemoveFromPending(pendinglinks, url)
             try:
                 site_model = GetSiteInfoModelFromURL(url)
                 info = site_model.objects.get(url=url)
                 AddError(info, 'ValueError', str(e))
-            except:
+            except Exception:
                 pass
             return False
         except http.client.HTTPException as e:
-            print('httplib.HTTPException retrieving URL: {0} - {1}'.format(url,e))
+            print('httplib.HTTPException retrieving URL: {0} - {1}'.format(url, e))
             RemoveFromPending(pendinglinks, url)
             try:
                 site_model = GetSiteInfoModelFromURL(url)
                 info = site_model.objects.get(url=url)
                 AddError(info, 'HttpError', str(e))
-            except:
+            except Exception:
                 pass
             return False
         except http.client.BadStatusLine as e:
-            print('httplib.BadStatusLine retrieving URL: {0} - {1}'.format(url,e))
+            print('httplib.BadStatusLine retrieving URL: {0} - {1}'.format(url, e))
             RemoveFromPending(pendinglinks, url)
             return False
         except http.client.IncompleteRead as e:
-            print('httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url,e))
+            print('httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url, e))
             RemoveFromPending(pendinglinks, url)
             return False
         except http.client.InvalidURL as e:
-            print('Invalid URL: {0} - {1}'.format(url,e))
+            print('Invalid URL: {0} - {1}'.format(url, e))
             RemoveFromPending(pendinglinks, url)
             return False
 
@@ -955,12 +946,11 @@ def CrawlSingleUrl(url):
     except Exception as e:
         try:
             print('Failure in CrawlSingleUrl for {0}: {1}'.format(url, e))
-        except:
+        except Exception:
             print('Failure in CrawlSingleUrl. Error or URL is unprintable')
 
 
 def LoadUrlsFromFile(pendinglinks, filename, descriptive=False, seconds=1):
-    numloaded = 0
     f = open(filename, 'rb')
     reader = codecs.getreader('utf8')(f)
     for line in reader.readlines():
@@ -975,13 +965,13 @@ def QueryPendingUrls(pendinglinks, max, offset=0, language=None, descriptive=Fal
     numloaded = 0
     if random:
         randomval = RandomValue()
-        existing = CrawlableUrl.objects.filter(randval__gte=randomval).order_by('randval')[offset:(offset+max)]
+        existing = CrawlableUrl.objects.filter(randval__gte=randomval).order_by('randval')[offset:(offset + max)]
     else:
         if entiredomain:
             print('Getting Pending URLs for {0}'.format(entiredomain))
-            existing = CrawlableUrl.objects.filter(rooturl=entiredomain)[offset:(offset+max)]
+            existing = CrawlableUrl.objects.filter(rooturl=entiredomain)[offset:(offset + max)]
         else:
-            existing = CrawlableUrl.objects.all()[offset:(offset+max)]
+            existing = CrawlableUrl.objects.all()[offset:(offset + max)]
     for url in existing:
         AddPendingLink(pendinglinks, url.url, descriptive=descriptive, recrawl=False)
         numloaded = numloaded + 1
@@ -991,7 +981,6 @@ def QueryPendingUrls(pendinglinks, max, offset=0, language=None, descriptive=Fal
 
 
 def RecrawlOldUrls(pendinglinks, max, offset=0, language=None, descriptive=False, seconds=5, entiredomain=None):
-    numloaded = 0
     site_model = GetSiteInfoModelFromLanguage(language)
     if entiredomain:
         print('Getting Existing URLs for {0}'.format(entiredomain))
@@ -1004,7 +993,6 @@ def RecrawlOldUrls(pendinglinks, max, offset=0, language=None, descriptive=False
 
 
 def RecrawlDoctypeUrls(pendinglinks, max, offset=0, language=None, descriptive=False):
-    numloaded = 0
     site_model = GetSiteInfoModelFromLanguage(language)
     existing = site_model.objects.filter(pagetext__istartswith='html public')[offset:(max + offset)]
     for url in existing:
@@ -1013,7 +1001,6 @@ def RecrawlDoctypeUrls(pendinglinks, max, offset=0, language=None, descriptive=F
 
 
 def RecrawlXmlUrls(pendinglinks, max, offset=0, language=None, descriptive=False, seconds=1):
-    numloaded = 0
     site_model = GetSiteInfoModelFromLanguage(language)
     existing = site_model.objects.filter(pagetext__istartswith='xml version')[offset:(max + offset)]
     for url in existing:

@@ -451,7 +451,6 @@ def MakeRealUrl(url, domain=None, secure=False):
         scheme = 'https:'
     else:
         scheme = 'http:'
-    oldurl = url
     if not IsHtmlUrl(url):
         return url
     if url.startswith('//') or url.startswith('://'):
@@ -477,7 +476,7 @@ def MakeRealUrl(url, domain=None, secure=False):
 def IsIPAddress(url):
     # Try as an IP address first.
     try:
-        ip = ipaddr.IPAddress(url)
+        ipaddr.IPAddress(url)
         return True
     except ValueError:
         pass
@@ -1582,7 +1581,7 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
             if verbose:
                 try:
                     print("MoveSiteTo: Keywords '{0}' added to {1} pending index.".format(keyword.keywords, existlang))
-                except:
+                except Exception:
                     print("MoveSiteTo: Keywords added to {0} pending index.".format(existlang))
             AddPendingTerm(keyword.keywords, existlang, 'Site {0} moved to {1} and it ranks {2} for {3}'.format(site, language, keyword.rank, keyword.keywords))
         # Set the domain's language. If we're moving a URL parameter or langid page, this is a noop.
@@ -1847,7 +1846,7 @@ def CanReCrawlUrl(url, verbose=False):
     if verbose:
         try:
             print('Testing CanReCrawlURL for: ' + url)
-        except:
+        except Exception:
             print('URL is unprintable. Weird.')
     if not IsHtmlUrl(url):
         if verbose:
@@ -1868,7 +1867,7 @@ def CanReCrawlUrl(url, verbose=False):
                 if verbose:
                     print('Cannot crawl url because this domain has only crawl root url set and this is not the root url.')
                 return False
-    except:
+    except Exception:
         pass
     return True
 
@@ -2371,7 +2370,7 @@ def AddPendingTerm(item, language_code='en', reason=None):
         # This can happen if two searches happen at once and there's a race condition.
         try:
             new_index.save()
-        except:
+        except Exception:
             pass
 
 # Try to search for a specific search term or phrase. If found, return
@@ -2613,7 +2612,6 @@ def LogQueries(queries):
     other = 0.0
     othertotal = 0.0
     for query in queries:
-        sql = query['sql']
         totaltime += float(query['time'])
         if query['sql'].startswith('SELECT "dir_domaininfo"'):
             domaininfo += float(query['time'])
@@ -2823,7 +2821,7 @@ def PornBlock(item=None, url=None):
     print('Blocking URLs for domain {0}'.format(parsedurl))
     RemoveURLsForDomain(parsedurl)
     try:
-        existing = BlockedSite.objects.get(url=parsedurl)
+        BlockedSite.objects.get(url=parsedurl)
         print('Domain {0} was already blocked. That is odd.'.format(parsedurl))
     except ObjectDoesNotExist:
         print('Adding BlockedSite for domain {0}.'.format(parsedurl))
@@ -2851,7 +2849,7 @@ def BannedSearchString(text):
       '2121121121212.1' in text or "and 'x'='" in text or 'and "x"="' in text):
         return True
     try:
-        bad = BadQuery.objects.get(keywords=text)
+        BadQuery.objects.get(keywords=text)
         return True
     except ObjectDoesNotExist:
         pass
@@ -3403,7 +3401,7 @@ def SplitTitleAndGetPageRanks(siteinfo, minlength=3):
             notfound.append(term)
             try:
                 print(e)
-            except:
+            except Exception:
                 print('ValueError - one of the words in the title was not found, but it is unprintable.')
     for result in results:
         print(result)
@@ -3421,7 +3419,7 @@ def TakeScreenshot(url):
     driver.set_window_size(WIDTH, HEIGHT) # optional
     try:
         driver.get('https://{0}'.format(url))
-    except:
+    except Exception:
         driver.service.process.send_signal(signal.SIGTERM)
         try:
             driver.quit()
@@ -3441,7 +3439,7 @@ def TakeScreenshot(url):
         return False
     try:
         screen = driver.get_screenshot_as_png()
-    except:
+    except Exception:
         driver.service.process.send_signal(signal.SIGTERM)
         try:
             driver.quit()
@@ -3452,7 +3450,7 @@ def TakeScreenshot(url):
     box = (0, 0, WIDTH, HEIGHT)
     try:
         im = Image.open(io.StringIO(screen))
-    except:
+    except Exception:
         driver.service.process.send_signal(signal.SIGTERM)
         try:
             driver.quit()
@@ -3481,7 +3479,7 @@ def GetFavicons(domain):
     url = 'https://{0}'.format(domain)
     try:
         icons = favicon.get(url)
-    except:
+    except Exception:
         print('Failed to get icons for {0}. Probably a connection problem.'.format(domain))
         return False
     try:
@@ -3495,7 +3493,7 @@ def GetFavicons(domain):
         fav.domain = domaininfo
         try:
             response = requests.get(icon.url, stream=True)
-        except:
+        except Exception:
             print('Could not retrieve icon {0}'.format(icon.url))
             continue
         filename = 'favicons/{0}{1}x{2}.{3}'.format(domain, icon.width, icon.height, icon.format)
@@ -3643,17 +3641,13 @@ def GetPagesAverageAge(language):
         return timedelta(days=0)
 
 def GetOldestIndexAge(language):
-    total_items = 0
     imodel = GetIndexModelFromLanguage(language)
-    now = timezone.now()
     for item in imodel.objects.order_by('date_indexed').values_list('date_indexed', flat=True):
         return item
     return None
 
 def GetOldestPageAge(language):
-    total_items = 0
     imodel = GetSiteInfoModelFromLanguage(language)
-    now = timezone.now()
     for item in imodel.objects.order_by('lastcrawled').values_list('lastcrawled', flat=True):
         return item
     return None
