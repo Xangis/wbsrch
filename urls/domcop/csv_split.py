@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 # Script to split Domcop CSV file into URL list.
-
-import os
-import sys
 import csv
+
 
 def ProcessCSVFile(filename):
     num_domains = 0
@@ -21,6 +19,7 @@ def ProcessCSVFile(filename):
             outfile.write('{0}\n'.format(item))
         outfile.close()
     print('Processed {0} domains in {1}.'.format(num_domains, filename))
+
 
 for file in ('top10milliondomains.csv',):
     ProcessCSVFile(file)

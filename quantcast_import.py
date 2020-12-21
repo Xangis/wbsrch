@@ -24,10 +24,6 @@ from django.db import connection
 import csv
 
 def LoadQuantcastFile(filename):
-    added_to_pending = 0
-    added_domains = 0
-    blocked_domains = 0
-    updated_domains = 0
     crawl_needed = []
     crawl_blocked = []
     skipped = []
@@ -69,6 +65,7 @@ def LoadQuantcastFile(filename):
             outfile.write('%s\n' % item)
         outfile.close()
     print('Updated ' + str(len(processed)) + ' domains. ' + str(len(crawl_needed)) + ' need to be crawled.')
+
 
 # /usr/bin/wget -O $MYFILENAME https://ak.quantcast.com/quantcast-top-sites.zip
 if not os.path.isfile('Quantcast-Top-Million.txt'):

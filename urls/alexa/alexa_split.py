@@ -13,7 +13,6 @@
 # wc domains_unique.txt will tell you the total number of different domains.
 
 import os
-import sys
 import csv
 import zipfile
 
@@ -39,10 +38,12 @@ def ProcessCSVFile(filename):
         outfile.close()
     print('Processed {0} more domains in {1}, {2} were new.'.format(num_domains, filename, len(domains)))
 
+
 def UnzipFile(file):
     zip_ref = zipfile.ZipFile(file, 'r')
     zip_ref.extractall('.')
     zip_ref.close()
+
 
 for file in os.listdir('.'):
     if file.endswith('.zip'):

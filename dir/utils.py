@@ -2270,7 +2270,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
         term.save()
     # Now we need to update the term rankings.
     ranking_model = GetKeywordRankingModelFromLanguage(language)
-    existing = ranking_model.objects.filter(keywords=term).delete()
+    ranking_model.objects.filter(keywords=term).delete()
     rank = 1
     show = True
     if term.refused:
@@ -2921,7 +2921,7 @@ def RequeueRankedKeywordsForDomain(domain):
             # This should actually never happen.
             pass
         try:
-            existing = pending_model.objects.get(keywords=rank.keywords)
+            pending_model.objects.get(keywords=rank.keywords)
         except ObjectDoesNotExist:
             pending = pending_model()
             pending.keywords = rank.keywords

@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup, Comment, Doctype
 from bs4.element import ProcessingInstruction
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 import http.client
 import time
 from dir.models import *

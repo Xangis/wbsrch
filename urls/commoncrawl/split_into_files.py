@@ -18,10 +18,7 @@
 #
 # Tested with Python 2.7. See the .py3 version for a Python3 variant.
 
-import os
-import sys
 import codecs
-from urlparse import urlparse
 
 def SplitDomains(filename):
     processed = 0
@@ -41,6 +38,7 @@ def SplitDomains(filename):
     for item in domain_files.keys():
         domain_files[item].close()
     print('Processed {0} domains.'.format(processed))
+
 
 SplitDomains('commoncrawl_domainnames_ycombinator10367342_new')
 #SplitDomains('_all.txt')

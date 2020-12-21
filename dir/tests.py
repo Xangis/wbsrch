@@ -829,7 +829,6 @@ class InfixLanguageTestCase(TestCase):
 
     def test_ru_infix(self):
         url = u'http://www.example.com/ru/index/page.htm'
-        language = None
         try:
             GetInfixLanguage(url)
         except InvalidLanguageException as e:
@@ -837,7 +836,6 @@ class InfixLanguageTestCase(TestCase):
 
     def test_zh_cn_infix(self):
         url = u'http://www.example.com/zh-cn/index/page.htm'
-        language = None
         try:
             GetInfixLanguage(url)
         except InvalidLanguageException as e:
@@ -845,7 +843,6 @@ class InfixLanguageTestCase(TestCase):
 
     def test_uk_uk_infix(self):
         url = u'http://www.example.com/uk-UA/index/page.htm'
-        language = None
         try:
             GetInfixLanguage(url)
         except InvalidLanguageException as e:
@@ -1298,7 +1295,7 @@ class MarkURLAsSpamTestCase(TestCase):
     def test_spam_comment_ip(self):
         spamhtml = '<html><head><title>Spam</title></head><body>Spam!</body></html>'
         ip = '192.168.1.255'
-        MarkURLContentsAsSpam(spamhtml,ip)
+        MarkURLContentsAsSpam(spamhtml, ip)
         address = IPAddress.objects.get(ip=ip)
         self.assertEqual(address.spam_commenter, True)
 
@@ -1351,7 +1348,7 @@ class CrawlerTestCase(TestCase):
               <html xmlns="http://www.w3.org/1999/xhtml">
               <head>
               <style type="text/css">
-              @import url(/css/powells_main_20120416104528.min.css); 
+              @import url(/css/powells_main_20120416104528.min.css);
               </style>
               <!-- This is a comment. -->
               <meta name="description" content="This is the content description." />
@@ -1508,7 +1505,7 @@ class IndexerTestCase(TestCase):
         term = None
         try:
             term = IndexTerm.objects.get(keywords='aardvarkpants')
-        except:
+        except ObjectDoesNotExist:
             pass
         self.assertEqual(term, None)
 
@@ -1548,7 +1545,7 @@ class IndexerTestCase(TestCase):
         term = None
         try:
             term = IndexTerm_pt.objects.get(keywords='wbsrch')
-        except:
+        except ObjectDoesNotExist:
             pass
         self.assertEqual(term, None)
 
@@ -1668,7 +1665,7 @@ class SearchTestCase(TestCase):
 
     # If neither word is indexed, the phrase and both individual words should
     # be queued for indexing.
-    # 
+    #
     # Since there is a URL that has "horse monkey" all throughout the title and
     # text, there should be placeholder indexes for all three terms that have a
     # single result.
@@ -2058,11 +2055,11 @@ class BlockedSiteTestCase(TestCase):
         info = SiteInfo_cs()
         info.rooturl = u'spamsite.cz'
         info.url = u'http://spamsite.cz/1/'
-        info.save()       
+        info.save()
         info = SiteInfo_cs()
         info.rooturl = u'spamsite.cz'
         info.url = u'http://spamsite.cz/2/'
-        info.save()       
+        info.save()
         info = SiteInfo_cs()
         info.rooturl = u'notaspamsite.cz'
         info.url = u'http://notaspamsite.cz/1/'
@@ -2238,7 +2235,7 @@ class MoveSiteTestCase(TestCase):
         info.rooturl = u'example.cz'
         info.url = u'http://example.cz/1/'
         info.lastcrawled = timezone.now()
-        info.save()       
+        info.save()
         domain = DomainInfo()
         domain.url = u'example.com'
         domain.language_association = 'en'
@@ -2428,7 +2425,7 @@ class PornBlockTestCase(TestCase):
             PornBlock(site)
             pornurls = SiteInfo.objects.filter(rooturl=u'pornsite3.com').count()
             pornexclusion = BlockedSite.objects.filter(url=u'pornsite3.com')
-            domain = DomainInfo.objects.get(url=u'pornsite3.com')
+            DomainInfo.objects.get(url=u'pornsite3.com')
             self.assertEqual(pornurls, 0)
             self.assertEqual(pornexclusion.count(), 1)
             self.assertEqual(pornexclusion[0].exclude_subdomains, True)

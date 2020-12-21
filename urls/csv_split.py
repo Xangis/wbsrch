@@ -23,6 +23,7 @@ def ProcessCSVFile(filename):
         outfile.close()
     print('Processed {0} domains in {1}.'.format(num_domains, filename))
 
+
 for file in ('aero.csv', 'biz.csv', 'com.csv', 'edu.csv', 'info.csv', 'jobs.csv', 'mil.csv', 'name.csv', 'org.csv', 'tel.csv', 'xxx.csv',
              'asia.csv', 'cat.csv', 'coop.csv', 'gov.csv', 'int.csv', 'mobi.csv', 'net.csv', 'pro.csv', 'travel.csv'):
     ProcessCSVFile(file)

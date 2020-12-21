@@ -58,6 +58,7 @@ def SplitDomains(filename):
         domain_files[item].close()
     print('Processed ' + str(processed) + ' domains.')
 
+
 SplitDomains('domains.txt')
 #SplitDomains('top-1m.csv')
 #SplitDomains('top500.domains.03.16.csv')

@@ -4,8 +4,6 @@
 #
 # This should be run after split.sh if processing DMOZ urls.
 
-import os
-import sys
 import csv
 
 def ProcessCSVFile(filename):
@@ -26,6 +24,7 @@ def ProcessCSVFile(filename):
             outfile.write('{0}\n'.format(item))
         outfile.close()
     print('Processed {0} lines and found {1} domains in {2}.'.format(lines, num_domains, filename))
+
 
 for file in ('Quantcast-Top-Million.txt',):
     ProcessCSVFile(file)
