@@ -29,7 +29,9 @@
 
 {% if domains %}
 {% for domain in domains %}
-{% if superuser %}<p><a href="/adm/dir/domaininfo/{{ domain.id }}/">View this domain in the admin.</a><br/>
+{% if superuser %}<p>
+<a href="/adm/dir/domaininfo/{{ domain.id }}/">View this domain in the admin.</a><br/>
+<a href="/adm/dir/domaininfo/?q={{ domain.url }}">View this domain in the admin search view.</a><br/>
 <p><form method="post" action="/adminpanel/movesite/">Move this domain to language</a> 
 <input type="hidden" name="domain" value="{{ domain.url }}">
 <input id="langbox" class="shortbox" type="text" name="lang" maxlength="3" />
