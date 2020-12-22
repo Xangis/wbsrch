@@ -1600,6 +1600,7 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
         connection._rollback()
     site.delete(keep_links=True)
 
+
 # Removes all URLs for that domain. Nukes them from the main site info table,
 # and if the domain is tagged with a language, nukes them from that language
 # table too.
