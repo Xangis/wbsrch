@@ -273,7 +273,9 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
     site_model = GetSiteInfoModelFromLanguage(lang)
     try:
         term = term_model.objects.get(keywords=keywords)
-    except Exception:
+        if term.num_pages is None:
+            term.num_pages = 0
+    except ObjectDoesNotExist:
         term = term_model()
         term.keywords = keywords
         term.num_results = 0
