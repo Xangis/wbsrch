@@ -189,15 +189,16 @@ def index(request):
         superuser = True
 
     cached = False
-    recent_terms = cache.get('recent_terms_' + language_code)
-    if not recent_terms:
-        recent_terms = list(index_model.objects.filter(num_results__gt=9, actively_blocked=False, typo_for__isnull=True, is_language__isnull=True).order_by('-date_indexed')[:10])
-        # Cache for up to 180 seconds.
-        cache.set('recent_terms_' + language_code, recent_terms, 180)
-    else:
-        cached = True
+    #recent_terms = cache.get('recent_terms_' + language_code)
+    #if not recent_terms:
+    #    recent_terms = list(index_model.objects.filter(num_results__gt=9, actively_blocked=False, typo_for__isnull=True, is_language__isnull=True).order_by('-date_indexed')[:10])
+    #    # Cache for up to 180 seconds.
+    #    cache.set('recent_terms_' + language_code, recent_terms, 180)
+    #else:
+    #    cached = True
 
-    return render(request, 'index.htm', {'language_code': language_code, 'recent_terms': recent_terms, 'superuser': superuser, 'cached': cached})
+    #return render(request, 'index.htm', {'language_code': language_code, 'recent_terms': recent_terms, 'superuser': superuser, 'cached': cached})
+    return render(request, 'index.htm', {'language_code': language_code, 'superuser': superuser, 'cached': cached})
 
 
 def ads(request):
