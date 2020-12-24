@@ -74,9 +74,9 @@ urlpatterns = [
     url(r'^api/get_robots_info/$', api.get_robots_info, name='api_get_robots_info'),
     # End API methods
     # url(r'^admin-preview/$', views.admin_preview, name='admin_preview'),
-    url(r'^adm/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^adm/', include(admin.site.urls)),
 ]
 
 if settings.DEBUG:
     urlpatterns.append(url(r'^(?P<path>.*)$', django.views.static.serve, {'document_root': settings.MEDIA_ROOT, }))
+    urlpatterns.append(url(r'^adm/doc/', include('django.contrib.admindocs.urls')))
+    urlpatterns.append(url(r'^adm/', include(admin.site.urls)))
