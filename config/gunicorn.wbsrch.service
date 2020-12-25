@@ -1,0 +1,12 @@
+[Unit]
+Description=Gunicorn daemon for wbsrch.com.
+After=network.target
+
+[Service]
+User=xangis
+Group=xangis
+WorkingDirectory=/home/xangis/wbsrch
+ExecStart=/home/xangis/wbsrch/env/bin/gunicorn --access-logfile /home/xangis/wbsrch/log/gunicorn.log --timeout 300 --workers 3 --bind unix:/home/xangis/wbsrch/wbsrch.sock zetaweb.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

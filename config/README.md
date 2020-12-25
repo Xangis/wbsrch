@@ -16,6 +16,9 @@ django-wbsrch
 fastcgi.conf
   NGINX FastCGI config file, goes in /etc/nginx/
 
+gunicorn.wbsrch.com
+  Gunicorn config file. Goes in /etc/systemd/system/.
+
 nginx.conf
   NGINX config file, goes in /etc/nginx/
 
@@ -29,7 +32,7 @@ pg_hba.conf
 postgresql.conf.*
   These configs are various versions for different servers. Postgresql doesn't allow remote connections
   by default and it doesn't take advantage of high amounts of RAM or fast disks. These configs address
-  those.
+  those. postgresql.conf.4GB2CoreSystem is a Postgres 12 setup for a 4GB 2-core Smarthost box.
 
 uwsgi.wbsrch.conf
   uWSGI configuration file, goes in init.d. Used to start and stop the WbSrch service on an
@@ -37,11 +40,14 @@ uwsgi.wbsrch.conf
 
 uwsgi.wbsrch.service
   uWSGI configuration file for running on a systemd-based system. Goes in the
-  /etc/systemd/system/ folder.
+  /etc/systemd/system/ folder. Gunicorn works better, try that instead.
 
 wbsrch.com
   Web config file for nginx. Goes in /etc/init.d/sites-available with a symbolic link in
-  ../sites-enabled.
+  ../sites-enabled. For use with uWSGI.
+
+wbsrch.com.gunicorn
+  Nginx config file for Gunicorn setup. Use with gincorn.django.service.
 
 wbsrch_cron
   Cron job file, goes in /etc/cron.d/, runs daiy tasks like the index stats generation
