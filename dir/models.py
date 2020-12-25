@@ -500,7 +500,7 @@ class DomainSuffix(models.Model):
         return self.extension
 
     class Meta:
-        in_db = 'urls'
+        in_db = 'indexes'
         ordering = ['extension', ]
 
 
