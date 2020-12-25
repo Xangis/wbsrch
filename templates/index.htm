@@ -23,14 +23,6 @@
 <script src="/wbsrch.js" type="text/javascript"></script>
 </head>
 <body>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=649581031815449";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 <div class="clear head">
 <h1><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" />&nbsp;WbSrch Web {% trans "Search" %}</h1>
 <h2>{% trans "The Independent Search Engine" %}</h2>
@@ -45,7 +37,7 @@
 </form>
 <p>&nbsp;</p>
 <br/>
-<p><strong>{% trans "Most Recently Indexed Search Terms" %}:</strong></p>
+{% if recent_terms %}<p><strong>{% trans "Most Recently Indexed Search Terms" %}:</strong></p>{% endif %}
 <p>
 {% for term in recent_terms %}<a href="/search/?q={{ term.keywords|urlencode }}">{{ term.keywords }}</a>&nbsp;{% if forloop.counter == 5 %}<br class="visible-small"/>{% endif %}{% endfor %}
 </p>
@@ -63,13 +55,6 @@
 <br/>
 {% include 'footerwithoutcopyright.inc' %}
 {% if language_code == 'en' %}
-<div class="floatright">
-<div class="fb-like" data-width="220px" data-href="https://www.facebook.com/WbSrch" data-layout="standard" data-action="like" data-show-faces="false" data-share="true" data-colorscheme="dark"></div>
-</div>
-<div class="centered">
-<a href="https://twitter.com/WbSrchDotCom" class="twitter-follow-button" data-show-count="false">Follow @WbSrchDotCom</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-</div>
 <br class="clear"/>
 {% endif %}
 {% include 'copyright.inc' %}
