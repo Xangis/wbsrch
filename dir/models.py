@@ -209,7 +209,7 @@ class BlockedSite(models.Model):
     date_added = models.DateField(auto_now_add=True, db_index=True)
 
     class Meta:
-        in_db = 'urls'
+        in_db = 'indexes'
 
     def __str__(self):
         return self.url
