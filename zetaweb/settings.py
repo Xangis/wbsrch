@@ -2,9 +2,12 @@
 # Django settings for zetaweb project.
 from django.utils.translation import gettext_noop
 from socket import gethostname, gethostbyname
+from pathlib import Path
 import os
 
 DEBUG = os.getenv('DEBUG', False)
+
+PWD = Path(__file__).parent.parent
 
 ADMINS = (
     ('Jason Champion', 'jchampion@sigmacentauri.com'),
@@ -28,14 +31,14 @@ EMAIL_PORT = 25
 
 ZETAWEB_PASSWORD = os.getenv('ZETAWEB_PASSWORD', 'password')
 URLS_PASSWORD = os.getenv('URLS_PASSWORD', 'password')
-INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'password')
+INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'jf89mvk9.3r9jn.8fjf')
 NEWS_PASSWORD = os.getenv('NEWS_PASSWORD', 'password')
 ZETAWEB_HOST = os.getenv('ZETAWEB_HOST', '127.0.0.1')
 URLS_HOST = os.getenv('URLS_HOST', '127.0.0.1')
 INDEXES_HOST = os.getenv('INDEXES_HOST', '127.0.0.1')
 NEWS_HOST = os.getenv('NEWS_HOST', '127.0.0.1')
 
-if True:
+if False:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -70,6 +73,26 @@ if True:
             'PORT': '',
         }
     }
+else:
+    # ONLY the indexes database is allowed for prouduction.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'indexes',
+            'USER': 'indexes',
+            'PASSWORD': INDEXES_PASSWORD,
+            'HOST': INDEXES_HOST,
+            'PORT': '',
+        },
+        'indexes': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'indexes',
+            'USER': 'indexes',
+            'PASSWORD': INDEXES_PASSWORD,
+            'HOST': INDEXES_HOST,
+            'PORT': '',
+        },
+    }
 
 DATABASE_ROUTERS = ['zetaweb.dbrouter.ModelDatabaseRouter', ]
 
@@ -84,7 +107,7 @@ TIME_ZONE = 'America/Los_Angeles'
 LANGUAGE_CODE = 'en-us'
 
 LOCALE_PATHS = (
-    "/var/django/wbsrch/locale",
+    os.path.join(PWD, 'locale'),
 )
 
 SITE_ID = 1
@@ -102,8 +125,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-#MEDIA_ROOT = '/var/django/wbsrch/templates/'
-MEDIA_ROOT = '/home/xangis/Desktop/wbsrch/templates/'
+MEDIA_ROOT = os.path.join(PWD, 'templates/')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -141,7 +163,7 @@ SECRET_KEY = 'dv9z&amp;gl$+u5*kxrfgn2ajse24off-z0xge&amp;wcz75rf+8@kf^hw'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/var/django/wbsrch/templates/', '/home/xangis/Desktop/wbsrch/templates/'],
+        'DIRS': [os.path.join(PWD, 'templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -201,9 +223,17 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
         }
     },
     'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -220,6 +250,10 @@ LOGGING = {
         },
     },
     'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
@@ -454,10 +488,7 @@ LANG_INFO = django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-if not DEBUG:
-    GEOIP_PATH = '/var/django/wbsrch/geoip/'
-else:
-    GEOIP_PATH = '/home/xangis/Desktop/wbsrch/geoip/'
+GEOIP_PATH = os.path.join(PWD, 'geoip/')
 
 Q_CLUSTER = {
     'name': 'wbsrch',
