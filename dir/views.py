@@ -743,11 +743,11 @@ def search(request):
                 AddPendingTerm(term.keywords, result.language_code, 'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
             result = MergeSearchResult(result, term)
         else:
-            create_placeholders = True
+            create_placeholders = False
             try:
                 setting = Setting.objects.get(key='create_placeholders')
-                if setting.value == 'False' or setting.value == '0' or setting.value == 'F':
-                    create_placeholders = False
+                if setting.value == 'True' or setting.value == '1' or setting.value == 'T' or setting.value == 'Y' or setting.value == 'yes' or setting.value == 'true':
+                    create_placeholders = True
             except Exception:
                 print('Not creating placeholder index term -- create_placeholders setting is false')
             result.indexed = False
