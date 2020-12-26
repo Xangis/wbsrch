@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML_DIZ_INFO>
+  <MASTER_PAD_VERSION_INFO>
+    <MASTER_PAD_VERSION>4.0</MASTER_PAD_VERSION>
+    <MASTER_PAD_EDITOR>RoboSoft 4.0.789</MASTER_PAD_EDITOR>
+    <MASTER_PAD_EDITOR_URL>http://robosoft.rudenko.com</MASTER_PAD_EDITOR_URL>
+    <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://www.asp-shareware.org/pad</MASTER_PAD_INFO>
+  </MASTER_PAD_VERSION_INFO>
+  <RoboSoft>
+    <Company_UIN>CMP-010119BADC3</Company_UIN>
+    <Company_Description></Company_Description>
+    <Product_UIN>APP-0101192CB47</Product_UIN>
+    <Search_String>WbBrowse</Search_String>
+    <Publish_on_CD>FALSE</Publish_on_CD>
+    <RSProductType></RSProductType>
+    <Press_Release_Search_String></Press_Release_Search_String>
+    <NewsFeed_Search_String></NewsFeed_Search_String>
+    <Search_Engine_Search_String></Search_Engine_Search_String>
+    <Web_Directories_Search_String></Web_Directories_Search_String>
+    <Search_String_Unique></Search_String_Unique>
+    <Comments_For_Reviewer></Comments_For_Reviewer>
+    <Backlink></Backlink>
+  </RoboSoft>
+  <Company_Info>
+    <Company_Name>WbSrch</Company_Name>
+    <Address_1>3127 SE 21st Ave.</Address_1>
+    <Address_2></Address_2>
+    <City_Town>Portland</City_Town>
+    <State_Province>OR</State_Province>
+    <Zip_Postal_Code>97202</Zip_Postal_Code>
+    <Country>United States of America</Country>
+    <Company_WebSite_URL>https://wbsrch.com</Company_WebSite_URL>
+    <Contact_Info>
+      <Contact_First_Name>Jason</Contact_First_Name>
+      <Contact_Last_Name>Champion</Contact_Last_Name>
+      <Contact_Email>jchampion@zetacentauri.com</Contact_Email>
+      <Author_First_Name>Jason</Author_First_Name>
+      <Author_Last_Name>Champion</Author_Last_Name>
+      <Author_Email>jchampion@zetacentauri.com</Author_Email>
+    </Contact_Info>
+    <Support_Info>
+      <Sales_Email>jchampion@zetacentauri.com</Sales_Email>
+      <Support_Email>jchampion@zetacentauri.com</Support_Email>
+      <General_Email>jchampion@zetacentauri.com</General_Email>
+      <Sales_Phone></Sales_Phone>
+      <Support_Phone></Support_Phone>
+      <General_Phone></General_Phone>
+      <Fax_Phone></Fax_Phone>
+    </Support_Info>
+    <GooglePlusPage></GooglePlusPage>
+    <LinkedinPage></LinkedinPage>
+    <TwitterCompanyPage></TwitterCompanyPage>
+    <FacebookCompanyPage></FacebookCompanyPage>
+    <CompanyStorePage></CompanyStorePage>
+  </Company_Info>
+  <NewsFeed>
+    <NewsFeed_FORM>Y</NewsFeed_FORM>
+    <NewsFeed_VERSION>1.0</NewsFeed_VERSION>
+    <NewsFeed_URL>http://Submit-Everywhere.com/extensions/NewsFeed.htm</NewsFeed_URL>
+    <NewsFeed_DESCRIPTION>This PAD extension allows you to add your RSS and Atom news feeds info into your PAD file. This info can be used by RSS feed submission software or by feed directories themselves.</NewsFeed_DESCRIPTION>
+    <NewsFeed_Type>RSS 0.90</NewsFeed_Type>
+    <NewsFeed_Language>English</NewsFeed_Language>
+    <NewsFeed_Purpose>News</NewsFeed_Purpose>
+    <NewsFeed_Author_Email>jchampion@zetacentauri.com</NewsFeed_Author_Email>
+    <NewsFeed_Author_First_Name>Jason</NewsFeed_Author_First_Name>
+    <NewsFeed_Author_Last_Name>Champion</NewsFeed_Author_Last_Name>
+    <NewsFeed_Feed_URL></NewsFeed_Feed_URL>
+    <NewsFeed_Site_Name></NewsFeed_Site_Name>
+    <NewsFeed_Site_URL></NewsFeed_Site_URL>
+    <NewsFeed_Title></NewsFeed_Title>
+    <NewsFeed_Description_70></NewsFeed_Description_70>
+    <NewsFeed_Description_250></NewsFeed_Description_250>
+  </NewsFeed>
+  <Site>
+    <Site_FORM>Y</Site_FORM>
+    <Site_VERSION>1.0</Site_VERSION>
+    <Site_URL>http://Submit-Everywhere.com/extensions/Site.htm</Site_URL>
+    <Site_DESCRIPTION>This PAD extension allows you to add your site info into your PAD file. This info can be used by site submission software or by web directories themselves.</Site_DESCRIPTION>
+    <Site_Contact_Email>jchampion@zetacentauri.com</Site_Contact_Email>
+    <Site_Contact_First_Name>Jason</Site_Contact_First_Name>
+    <Site_Contact_Last_Name>Champion</Site_Contact_Last_Name>
+    <Site_Site_Title>The WbBrowse Web Browser</Site_Site_Title>
+    <Site_Site_URL>http://wbbrowse.com</Site_Site_URL>
+    <Site_Description_100>A multi-platform tabbed web browser.</Site_Description_100>
+    <Site_Description_250>A multiplatform tabbed web browser based on Qt and WebKit.</Site_Description_250>
+    <Site_Description_450>A tabbed web browser for Windows, Linux, and OSX based on Qt and WebKit.</Site_Description_450>
+    <Site_Keywords>browser, web browser, web, internet, internet browser, desktop browser, desktop web browser</Site_Keywords>
+  </Site>
+  <PAD_Certification_Promotion>
+    <Apply_For_Certification>N</Apply_For_Certification>
+  </PAD_Certification_Promotion>
+  <Dynamic_PAD>
+    <Dynamic_Distributive>N</Dynamic_Distributive>
+  </Dynamic_PAD>
+  <Program_Info>
+    <Program_Name>WbBrowse</Program_Name>
+    <Program_Version>2.0</Program_Version>
+    <Program_Release_Month>12</Program_Release_Month>
+    <Program_Release_Day>25</Program_Release_Day>
+    <Program_Release_Year>2020</Program_Release_Year>
+    <Program_Cost_Dollars>0</Program_Cost_Dollars>
+    <Program_Type>Freeware</Program_Type>
+    <Program_Release_Status>Major Update</Program_Release_Status>
+    <Program_Install_Support>Install and Uninstall</Program_Install_Support>
+    <Program_OS_Support>Win7 x32,Win7 x64,Windows 8</Program_OS_Support>
+    <Program_Language>English</Program_Language>
+    <Program_Change_Info>Updated web engine.</Program_Change_Info>
+    <Program_System_Requirements>No special requirements.</Program_System_Requirements>
+    <Program_Category_Class>Network &amp; Internet::Browsers</Program_Category_Class>
+    <File_Info>
+      <File_Size_Bytes>40917812</File_Size_Bytes>
+      <File_Size_K>39960</File_Size_K>
+      <File_Size_MB>39</File_Size_MB>
+      <Filename_Versioned></Filename_Versioned>
+      <Filename_Previous></Filename_Previous>
+      <Filename_Generic></Filename_Generic>
+      <Filename_Long></Filename_Long>
+    </File_Info>
+    <Expire_Info>
+      <Has_Expire_Info>N</Has_Expire_Info>
+      <Expire_Based_On>Days</Expire_Based_On>
+      <Expire_Count></Expire_Count>
+      <Expire_Other_Info></Expire_Other_Info>
+      <Expire_Month></Expire_Month>
+      <Expire_Day></Expire_Day>
+      <Expire_Year></Expire_Year>
+    </Expire_Info>
+    <Program_Categories>Internet Browsers,Internet Browser,Web Browsers,Web Browser,Browsers,Internet,Network</Program_Categories>
+    <Limitations>No limitations.</Limitations>
+    <Program_Cost_Other_Code></Program_Cost_Other_Code>
+    <Program_Cost_Other></Program_Cost_Other>
+    <Awards></Awards>
+    <Program_Specific_Category></Program_Specific_Category>
+    <Includes_JAVA_VM></Includes_JAVA_VM>
+    <Includes_VB_Runtime></Includes_VB_Runtime>
+    <Includes_DirectX></Includes_DirectX>
+    <FacebookProductPage></FacebookProductPage>
+    <GooglePlusProductPage></GooglePlusProductPage>
+  </Program_Info>
+  <Web_Info>
+    <Application_URLs>
+      <Application_Info_URL>https://wbsrch.com/browser/</Application_Info_URL>
+      <Application_Screenshot_URL>https://wbsrch.com/images/Wikipedia_on_WbBrowse.png</Application_Screenshot_URL>
+      <Application_Icon_URL>https://wbsrch.com/favicon.png</Application_Icon_URL>
+      <Application_XML_File_URL>https://wbsrch.com/wbbrowse_pad_file.xml</Application_XML_File_URL>
+      <Application_Order_URL></Application_Order_URL>
+    </Application_URLs>
+    <Download_URLs>
+      <Primary_Download_URL>http://wbbrowse.com/WbBrowse1.0Setup.exe</Primary_Download_URL>
+      <Secondary_Download_URL></Secondary_Download_URL>
+      <Additional_Download_URL_1></Additional_Download_URL_1>
+      <Additional_Download_URL_2></Additional_Download_URL_2>
+    </Download_URLs>
+  </Web_Info>
+  <Permissions>
+    <Distribution_Permissions>This program is freeware and may be distributed freely.</Distribution_Permissions>
+    <EULA>WbBrowse is copyright (c) 2014-2020 Jason Champion
+
+
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+
+of this software and associated documentation files (the "Software"), to use it
+
+in any way they see fit, and to publish and redistribute copies of the software
+
+without any other restrictions, provided that this notice is included.
+
+
+
+The software is provided "as is", without warranty of any kind, express or
+
+implied, including but not limited to the warranties of merchantability,
+
+fitness for a particular purpose and noninfringement. In no event shall the
+
+authors or copyright holders be liable for any claim, damages or other liability,
+
+real or imagined, whether in an action of contract, tort or otherwise, arising from,
+
+out of or in connection with the software or the use or other dealings in the
+
+software.
+
+
+
+WbBrowse uses the Qt libraries, whcih can be obtained at www.qt.io.</EULA>
+  </Permissions>
+  <ASBMPlannerID1stRound>5</ASBMPlannerID1stRound>
+  <Issues>11</Issues>
+  <ASBMPlannerID2ndRound>6</ASBMPlannerID2ndRound>
+  <AppStore>
+    <AppStore_AppID></AppStore_AppID>
+    <AppStore_Category></AppStore_Category>
+    <AppStore_Info_URL></AppStore_Info_URL>
+    <AppStore_Download_URL></AppStore_Download_URL>
+    <AppStore_Promo_Code_1></AppStore_Promo_Code_1>
+    <AppStore_Promo_Code_2></AppStore_Promo_Code_2>
+    <AppStore_Promo_Code_3></AppStore_Promo_Code_3>
+    <AppStore_Supported_Devices></AppStore_Supported_Devices>
+    <AppStore_Other_Applications></AppStore_Other_Applications>
+    <AppStore_Advantages_And_Unique_Features></AppStore_Advantages_And_Unique_Features>
+    <AppStore_Awards_And_Ratings></AppStore_Awards_And_Ratings>
+  </AppStore>
+  <Program_Descriptions>
+    <English>
+      <Keywords>browser, web browser, tabbed browser</Keywords>
+      <Char_Desc_45>A tabbed web browser.</Char_Desc_45>
+      <Char_Desc_80>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX.</Char_Desc_80>
+      <Char_Desc_250>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX. It is based on WebKit and was built using the Qt framework. It uses the same rendering engine as Safari and pages will render similarly.</Char_Desc_250>
+      <Char_Desc_450>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX. It is based on WebKit and was built using the Qt framework. It uses the same rendering engine as Safari and web pages will render in a similar fashion. WbBrowse was built by the WbSrch search engine development team.</Char_Desc_450>
+      <Char_Desc_2000>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX. It is based on WebKit and was built using the Qt framework. It uses the same rendering engine as Safari and web pages will render in a similar fashion.
+
+Wbbrowse supports private browsing, bookmarking, page inspection, and modern HTML5 site elements such video and audio. It has both install and uninstall support and ha no spyware, adware, or "add-on spam" in its installer.
+
+WbBrowse was built by the WbSrch search engine development team. WbSrch is a search engine that was created in 2013 and launched in 2014.</Char_Desc_2000>
+    </English>
+  </Program_Descriptions>
+</XML_DIZ_INFO>

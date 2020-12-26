@@ -33,6 +33,11 @@ server {
             return 301 https:$host$request_uri;
         }
 
+        location ~ ^/files/ {
+                internal; # only the nginx instance can access this url directly
+                root   /home/xangis/wbsrch/files/;
+        }
+
         location ~ ^/admin/static/ {
             root /home/xangis/.virtualenvs/wbsrch/lib/python2.7/site-packages/django/contrib/;     
         }

@@ -1217,3 +1217,20 @@ def email(request):
     send_mail('Test Email', 'This is a test message.', 'jchampion@wbsrch.com',
         ['jchampion@sigmacentauri.com'], fail_silently=False)
     return HttpResponse(status=200)
+
+
+def browser(request):
+    return render_to_response('browser.htm')
+
+
+def getfile(request, filename):
+    try:
+        record = FileDownload.objects.get(filename=filename, enabled=True)
+        record.count = record.count + 1
+        record.save()
+    except:
+        return render_to_response('browser.htm')
+    response = HttpResponse()
+    response['X-Accel-Redirect'] = '/files/' + filename
+    response['Content-Type'] = ""
+    return response

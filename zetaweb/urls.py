@@ -51,6 +51,7 @@ urlpatterns = [
     url(r'^stats/$', views.stats),
     url(r'^error/$', views.error),
     url(r'^email/$', views.email),
+    url(r'^browser/$', views.browser),
     # Admin panel views.
     url(r'^adminpanel/oldestcrawls/$', views.adminpanel_oldestcrawls, name='adminpanel-oldestcrawls'),
     url(r'^adminpanel/unclassified/$', views.adminpanel_unclassified, name='adminpanel-unclassified'),
