@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="footer"><p class="centered hidden-small"><a href="http://mycroftproject.com/search-engines.html?name={% if language_code and language_code != 'en' %}{{ language_code }}.{% endif %}wbsrch.com">Get the WbSrch search plugin</a> for <a href="http://firefox.com">Firefox</a>, Internet Explorer, and other modern browsers, or download the <a href="https://browser.wbsrch.com">WbBrowse Browser</a>.</p>
+<div class="footer"><p class="centered hidden-small"><a href="http://mycroftproject.com/search-engines.html?name={% if language_code and language_code != 'en' %}{{ language_code }}.{% endif %}wbsrch.com">Get the WbSrch search plugin</a> for <a href="http://firefox.com">Firefox</a>, Internet Explorer, and other modern browsers, or download the <a href="/browser/">WbBrowse Browser</a>.</p>
 <p class="centered">
 <a href="/ip/">{% trans 'IP Address Info' %}</a> | 
 <a href="/changelog/">{% trans "Changelog" %}</a> | 

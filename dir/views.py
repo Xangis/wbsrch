@@ -457,12 +457,12 @@ def domain(request):
         #        dominfo.save()
         #        domains = [dominfo, ]
         #    except IntegrityError:
-                # The only reason we would get an integrity error is if we
-                # violate the unique key constraint of the database. If we
-                # did that, it means that the term is already in there and we
-                # should be able to query it. This can happen when someone
-                # searches an unindexed term and re-searches it before the
-                # placeholder term finishes creating (which could take a while).
+        # The only reason we would get an integrity error is if we
+        # violate the unique key constraint of the database. If we
+        # did that, it means that the term is already in there and we
+        # should be able to query it. This can happen when someone
+        # searches an unindexed term and re-searches it before the
+        # placeholder term finishes creating (which could take a while).
         #        connection._rollback()
         #        try:
         #            dominfo = DomainInfo.objects.get(url=rawdomain)
@@ -1225,12 +1225,16 @@ def browser(request):
 
 def getfile(request, filename):
     try:
+        print('Looking for file: {0}'.format(filename))
         record = FileDownload.objects.get(filename=filename, enabled=True)
+        print('File {0} found'.format(filename))
         record.count = record.count + 1
         record.save()
     except:
+        print('File not found.')
         return render_to_response('browser.htm')
     response = HttpResponse()
     response['X-Accel-Redirect'] = '/files/' + filename
     response['Content-Type'] = ""
+    print('Redirecting to {0}'.format(response['X-Accel-Redirect']))
     return response

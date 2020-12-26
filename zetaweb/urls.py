@@ -37,6 +37,8 @@ urlpatterns = [
     url(r'^terms/$', views.terms, name='terms'),
     url(r'^contact/$', views.contact, name='contact'),
     url(r'^articles/$', articles),
+    url(r'^browser/$', views.browser),
+    url(r'^software/(?P<filename>[-_.a-zA-Z0-9]+.(exe|zip|gz|msi|tar|tgz|deb|pkg|mpkg|xz))$', views.getfile),
     url(r'^article/(?P<post_url>[a-zA-Z0-9_-]+)/$', post_url),
     url(r'^article-category/(?P<category>[a-zA-Z0-9_-]+)/$', article_category),
     # Redirects to other sites.
@@ -51,7 +53,6 @@ urlpatterns = [
     url(r'^stats/$', views.stats),
     url(r'^error/$', views.error),
     url(r'^email/$', views.email),
-    url(r'^browser/$', views.browser),
     # Admin panel views.
     url(r'^adminpanel/oldestcrawls/$', views.adminpanel_oldestcrawls, name='adminpanel-oldestcrawls'),
     url(r'^adminpanel/unclassified/$', views.adminpanel_unclassified, name='adminpanel-unclassified'),

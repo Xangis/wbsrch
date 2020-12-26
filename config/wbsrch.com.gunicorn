@@ -35,7 +35,7 @@ server {
 
         location ~ ^/files/ {
                 internal; # only the nginx instance can access this url directly
-                root   /home/xangis/wbsrch/files/;
+                root /home/xangis/wbsrch/;
         }
 
         location ~ ^/admin/static/ {
@@ -60,7 +60,7 @@ server {
 	    return 444;
 	}
 
-        location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|pdf|zip|exe|wav|gz|bmp|tgz|gz|rar|txt|tar|rtf|otf|ttf|html|xml)$ {
+        location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|pdf|wav|bmp|txt|rtf|otf|ttf|html|xml)$ {
             root /home/xangis/wbsrch/templates/;
             access_log off;
             expires 14d;
