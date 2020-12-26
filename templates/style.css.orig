@@ -36,6 +36,7 @@ border: 0;
 vertical-align: middle;
 margin-left: 3px;
 margin-right: 3px;
+max-width: 96%;
 }
 
 td > img {
