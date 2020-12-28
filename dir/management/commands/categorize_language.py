@@ -147,7 +147,7 @@ class Command(BaseCommand):
                 autotag = language_list
                 autoblock = blocked_language_list
             if justdomain:
-                query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl = '{0}' GROUP BY rooturl;".format(justdomain)
+                uncategorized_domains.append(justdomain)
             elif onlysuffix:
                 query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '%{0}' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlysuffix, maxurls, maxitems)
             elif onlyprefix:
@@ -159,9 +159,12 @@ class Command(BaseCommand):
             else:
                 query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) <= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(maxurls, maxitems)
             #cursor.execute('SELECT count(*), rooturl FROM site_info GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(maxitems))
-            print('Running query: {0}'.format(query))
-            cursor.execute(query)
-            domain_counts = cursor.fetchall()
+            if justdomain:
+                domain_counts = []
+            else:
+                print('Running query: {0}'.format(query))
+                cursor.execute(query)
+                domain_counts = cursor.fetchall()
             for domain in domain_counts:
                 processed += 1
                 # Bail if we hit our page minimum -- we're done.
