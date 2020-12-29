@@ -179,6 +179,7 @@ int main(int argc, char* argv[]) {
       }
       cout << "Operation done successfully. " << count << " domains updated." << endl;
       C.disconnect ();
+      D.disconnect();
    } catch (const std::exception &e) {
       cerr << e.what() << std::endl;
       return 1;

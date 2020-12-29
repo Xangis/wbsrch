@@ -14,18 +14,30 @@ using namespace pqxx;
 
 int main(int argc, char* argv[]) {
    if( argc < 3 ) {
-     cout << "This program requires 2 arguments: number of items to process and offset. Try 10000 and 0." << endl;
+     cout << "This program requires 2 arguments: number of items to process and offset. Try 10000 and 0. If any third argument is supplied it will log results." << endl;
      exit(1);
    }
    stringstream sql;
    int numitems = atoi(argv[1]);
    int offset = atoi(argv[2]);
+   bool log = false;
+   if( argc > 3 ) {
+       log = true;
+   }
 
    try {
       connection C("dbname = zetaweb user = zetaweb password = password \
       hostaddr = 127.0.0.1 port = 5432");
       if (C.is_open()) {
-         cout << "Opened database successfully: " << C.dbname() << endl;
+         cout << "Opened database zetaweb successfully: " << C.dbname() << endl;
+      } else {
+         cout << "Can't open database" << endl;
+         return 1;
+      }
+      connection D("dbname = indexes user = indexes password = password \
+      hostaddr = 127.0.0.1 port = 5432");
+      if (D.is_open()) {
+         cout << "Opened database indexes successfully: " << D.dbname() << endl;
       } else {
          cout << "Can't open database" << endl;
          return 1;
@@ -58,7 +70,7 @@ int main(int argc, char* argv[]) {
 
          // cout << "Executing: " << sqltwo << endl;
 
-         nontransaction O(C);
+         nontransaction O(D);
          result S( O.exec( sqltwo.c_str() ));
          O.commit();
          for (result::const_iterator d = S.begin(); d != S.end(); ++d) {
@@ -74,7 +86,10 @@ int main(int argc, char* argv[]) {
                  sqlthree = sqlthree + url + "', 0, true, false, false, false, false, false, false, false, false, false)";
                  count += 1;
                  // cout << "Executing: " << sqlthree << endl;
-                 nontransaction P(C);
+                 if( log ) {
+                     cout << "Added domain " << url << endl;
+                 }
+                 nontransaction P(D);
                  result T( P.exec( sqlthree.c_str() ));
                  P.commit();
              }
@@ -87,6 +102,7 @@ int main(int argc, char* argv[]) {
       }
       cout << "Operation done successfully. " << count << " domains added." << endl;
       C.disconnect ();
+      D.disconnect ();
    } catch (const std::exception &e) {
       cerr << e.what() << std::endl;
       return 1;
