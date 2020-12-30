@@ -27,7 +27,6 @@ def punycode(value):
     """
     if not value:
         return ''
-    print(value)
     if value.startswith('.'):
         value = value[1:]
     if not value or not value.startswith('xn--'):
