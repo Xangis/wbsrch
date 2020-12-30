@@ -1,5 +1,6 @@
 from django import template
 from django.utils import translation
+import idna
 
 register = template.Library()
 
@@ -16,3 +17,19 @@ def language_name_safe(value):
         return val
     except KeyError:
         return value
+
+
+@register.filter()
+def punycode(value):
+    """
+    Converts the value into a parenthetical expression if it's valid
+    punycode, otherwise returns an empty string.
+    """
+    if not value:
+        return ''
+    print(value)
+    if value.startswith('.'):
+        value = value[1:]
+    if not value or not value.startswith('xn--'):
+        return ''
+    return ' ({0})'.format(idna.decode(value))

@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n %}{% load extratags %}
 <!DOCTYPE html>
 <html lang="{{ language_code }}"><head>
 <meta name="keywords" content="wbsrch, web, cctld, stats, {% trans "tld" %}, top-level domain, {% trans "statistics" %}, urls, counts, top level domain, {% trans "search engine" %}">
@@ -17,7 +17,7 @@
 <tr><td colspan="5">We know about {{ count }} top-level domains.<br/></td></tr>
 <tr><th>{% trans "Extension" %}</th><th>{% trans "Known Domains" %}</th><th>{% trans "Crawled Domains" %}</th><th>{% trans "Excluded Domains" %}</th><th>{% trans "Exclude/Crawl Ratio (%)" %}</tr>
 {% for stat in stats %}
-<tr><td>{{ stat.extension }}</td><td>{{ stat.num_known }}</td><td>{{ stat.num_crawled }}</td><td>{{ stat.num_blocked }}</td><td>{{ stat.blocked_to_crawled_ratio }}</td></tr>
+<tr><td>{{ stat.extension }}{{ stat.extension|punycode }}</td><td>{{ stat.num_known }}</td><td>{{ stat.num_crawled }}</td><td>{{ stat.num_blocked }}</td><td>{{ stat.blocked_to_crawled_ratio }}</td></tr>
 {% endfor %}
 <tr><td colspan="5"><br/>The number of known domains includes domains that may have expired since discovery.</td></tr>
 <tr><td colspan="5" class="centered"><br/>For index stats, please see the <a href="/index-stats/">index stats page</a></td><tr>
