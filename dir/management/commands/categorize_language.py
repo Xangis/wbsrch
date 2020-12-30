@@ -8,6 +8,19 @@ from dir.language import IdentifyLanguage
 import codecs
 
 
+def TrimDomain(domain):
+    """
+    Rough and dirty method to clean leading HTTP and trailing slash from a domain name.
+    """
+    domain = domain.strip()
+    if domain.endswith('/'):
+        domain = domain[0:-1]
+    if domain.startswith('http://'):
+        domain = domain[7:]
+    if domain.startswith('https://'):
+        domain = domain[8:]
+    return domain
+
 class Command(BaseCommand):
     help = """Performs semi-manual or automatic language categorization for domains.
 
@@ -95,7 +108,7 @@ class Command(BaseCommand):
             f = open(filename, 'rb')
             reader = codecs.getreader('utf8')(f)
             for line in reader.readlines():
-                line = line.strip()
+                line = TrimDomain(line)
                 uncategorized_domains.append(line)
             print('{0} domains loaded from file {1}.'.format(numloaded, filename))
         # We start with the domains having the most pages and descend.
@@ -147,7 +160,7 @@ class Command(BaseCommand):
                 autotag = language_list
                 autoblock = blocked_language_list
             if justdomain:
-                uncategorized_domains.append(justdomain)
+                uncategorized_domains.append(TrimDomain(justdomain))
             elif onlysuffix:
                 query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '%{0}' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlysuffix, maxurls, maxitems)
             elif onlyprefix:
@@ -232,7 +245,7 @@ class Command(BaseCommand):
                 continue
             if autotagenglish and englishratio > 95:
                 print('Site {0} is mostly English - ratio {1} from {2} of {3}, auto-tagging as English'.format(domain, englishratio, english, total))
-                input = 'en'
+                kinput = 'en'
                 tagged_count = tagged_count + 1
             elif autotagenglish and onlyautotag:
                 print('Not English. Skipping.')
@@ -249,28 +262,28 @@ class Command(BaseCommand):
                 # Prompt for what to do. If c
                 if confident and autotag and (scores[0][0] in autotag):
                     print('Auto-Tagging {0} as language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1]))
-                    input = scores[0][0]
+                    kinput = scores[0][0]
                     tagged_count += 1
                 elif confident and autoblock and (scores[0][0] in autoblock):
                     print('Auto-Blocking {0} as unindexed language {1} ({3}/{2} {1})]? '.format(domain, scores[0][0], total, scores[0][1]))
-                    input = 'del'
+                    kinput = 'del'
                     tagged_count += 1
                 elif autotag and onlyautotag:
                     if not quiet:
                         print('Skipping {0} because we are in only-auto-tag mode and it could not be automatically tagged.'.format(domain))
-                    input = 's'
+                    kinput = 's'
                 elif autoblock:
                     if not quiet:
                         print('Skipping {0} because we are in auto-block mode and it could not be automatically blocked.'.format(domain))
-                    input = 's'
+                    kinput = 's'
                 else:
-                    input = input('Tag {0} as: [q]uit/[s]kip/[i]nfix-tag/[u]rlparam-tag/[del]ete/[xx] lang ({1}/{2} En, {3}/{2} {4})]? '.format(total, english, total, scores[0][1], scores[0][0]))
-                input = input.lower()
-            if input == 'q':
+                    kinput = input('Tag {0} as: [q]uit/[s]kip/[i]nfix-tag/[u]rlparam-tag/[del]ete/[xx] lang ({1}/{2} En, {3}/{2} {4})]? '.format(total, english, total, scores[0][1], scores[0][0]))
+                kinput = kinput.lower()
+            if kinput == 'q':
                 exit()
-            elif input == 's':
+            elif kinput == 's':
                 continue
-            elif input == 'i':
+            elif kinput == 'i':
                 try:
                     dom = DomainInfo.objects.get(url=domain)
                 except ObjectDoesNotExist:
@@ -279,7 +292,7 @@ class Command(BaseCommand):
                 dom.uses_language_subdirs = True
                 dom.save()
                 continue
-            elif input == 'u':
+            elif kinput == 'u':
                 try:
                     dom = DomainInfo.objects.get(url=domain)
                 except ObjectDoesNotExist:
@@ -288,13 +301,13 @@ class Command(BaseCommand):
                 dom.uses_language_query_parameter = True
                 dom.save()
                 continue
-            elif input == 'del':
+            elif kinput == 'del':
                 try:
                     BlockedSite.objects.get(url=domain)
                     # If the domain is already blocked, the URL must have been added erroneously.
                     # in that case, just delete it.
-                    RemoveURLsForDomain(item.rooturl)
-                    DeleteDomainLinks(item.rooturl)
+                    RemoveURLsForDomain(domain)
+                    DeleteDomainLinks(domain)
                 except ObjectDoesNotExist:
                     langtoblock = scores[0][0]
                     site = BlockedSite()
@@ -451,23 +464,23 @@ class Command(BaseCommand):
                 DeleteDomainLinks(domain)
                 print('Site {0} language blocked and all URLs deleted.'.format(domain))
             else:
-                if input in language_list or input in ['fo', 'fy', 'oc', 'om', 'nap', 'eo']:
-                    model = GetSiteInfoModelFromLanguage(input)
+                if kinput in language_list or kinput in ['fo', 'fy', 'oc', 'om', 'nap', 'eo']:
+                    model = GetSiteInfoModelFromLanguage(kinput)
                     if model:
                         try:
                             dom = DomainInfo.objects.get(url=domain)
                         except ObjectDoesNotExist:
                             dom = DomainInfo()
                             dom.url = domain
-                        dom.language_association = input
+                        dom.language_association = kinput
                         dom.save()
-                        if input != 'en':
+                        if kinput != 'en':
                             urls = SiteInfo.objects.filter(rooturl=domain)
                             for url in urls:
-                                print('Moving ' + str(url) + ' to ' + input)
-                                MoveSiteTo(url, input)
+                                print('Moving ' + str(url) + ' to ' + kinput)
+                                MoveSiteTo(url, kinput)
                 else:
-                    print('{0} is not a valid language. Skipping'.format(input))
+                    print('{0} is not a valid language. Skipping'.format(kinput))
                     continue
         print('Finished. Processed {0} domains and {1} were not tagged. Number of auto-tagged items: {2}'.format(
           processed, len(uncategorized_domains), tagged_count))
