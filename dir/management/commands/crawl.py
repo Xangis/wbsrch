@@ -6,7 +6,7 @@ from django.conf import settings
 class Command(BaseCommand):
     help = "This is the main command for crawling pages on the web."
 
-    def add_arguents(self, parser):
+    def add_arguments(self, parser):
         # parser.add_argument('-v', '--verbose', default=False, action='store_true', dest='verbose', help='Run in verbose mode.')
         parser.add_argument('-d', '--descriptive', default=False, action='store_true', dest='descriptive', help='Run in descriptive [verbose] mode. (default=False)')
         parser.add_argument('-p', '--pending', default=False, action='store_true', dest='pending', help='Get pending URL list from database.')
