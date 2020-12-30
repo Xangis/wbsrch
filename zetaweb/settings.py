@@ -88,7 +88,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'indexes',
             'USER': 'indexes',
-            'PASSWORD': INDEXES_PASSWORD,
+            'PASSWORD': 'jf89mvk9.3r9jn.8fjf',
             'HOST': INDEXES_HOST,
             'PORT': '',
         },
