@@ -5,6 +5,20 @@ from dir.models import DomainInfo, SiteInfoAfterZ, BlockedSite
 from dir.utils import MoveSiteTo, GetSiteInfoModelFromLanguage, RemoveURLsForDomain
 
 
+def TrimDomain(domain):
+    """
+    Rough and dirty method to clean leading HTTP and trailing slash from a domain name.
+    """
+    domain = domain.strip()
+    if domain.endswith('/'):
+        domain = domain[0:-1]
+    if domain.startswith('http://'):
+        domain = domain[7:]
+    if domain.startswith('https://'):
+        domain = domain[8:]
+    return domain
+
+
 class Command(BaseCommand):
     help = """
     Checks all of the sites with the specified extension to see whether they should be moved to the target language.
@@ -18,6 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         site = options.get('site')
+        site = TrimDomain(site)
         reason = int(options.get('reason'))
         print('Blocking {0} for reason {1}'.format(site, reason))
         try:
