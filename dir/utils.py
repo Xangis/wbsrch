@@ -1442,13 +1442,18 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
         if (item.pagetext.startswith('Buy this domain.') or ('This website is for sale' in item.pagetitle) or ('This website is for sale' in item.pagetext) or
-          ('The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or (' is for sale' in item.pagetext)):
+          ('The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or (' is for sale' in item.pagetext) or
+          ('This domain name is parked' in item.pagetitle) or ('Registered at Namecheap.com' in item.pagetitle) or (item.pagetitle == 'Suspended Domain')):
             if verbose:
                 rulematches.append('Lose half of points for parked domain.')
             value /= 2
         # These phrases mean that a site is possibly parked, but almost definitely garbage.
         if ('Resources and Information.' in item.pagetitle) or ('For search results please CLICK HERE' in item.pagetext):
             value -= 8
+    if item.pagetitle == 'Index of /':
+        value *= 0.75
+        if verbose:
+            rulematches.append('Lose 25% for being a directory listing page.')
     # Empty pages without much real content, are penalized severely.
     if not item.pagetext or (len(item.pagetext) < 3):
         value -= 20
