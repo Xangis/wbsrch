@@ -1443,7 +1443,8 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
         if (item.pagetext.startswith('Buy this domain.') or ('This website is for sale' in item.pagetitle) or ('This website is for sale' in item.pagetext) or
           ('The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or (' is for sale' in item.pagetext) or
-          ('This domain name is parked' in item.pagetitle) or ('Registered at Namecheap.com' in item.pagetitle) or (item.pagetitle == 'Suspended Domain')):
+          ('This domain name is parked' in item.pagetitle) or ('Registered at Namecheap.com' in item.pagetitle) or (item.pagetitle == 'Suspended Domain') or
+          ('is registered by NetNames' in item.pagetitle) or (item.pagetitle == 'Domain Registered at Safenames')):
             if verbose:
                 rulematches.append('Lose half of points for parked domain.')
             value /= 2
