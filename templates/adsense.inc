@@ -1,4 +1,4 @@
-{% with '3' as numbers %}
+{% with '3 5' as numbers %}
 {% with numbers.split|random as section %}
 {% if section == '1' %}
 <!-- Adcash -->
@@ -19,13 +19,13 @@
 <!-- Adsterra -->
 <script type="text/javascript">
 	atOptions = {
-		'key' : '7cb8fde86d9eb121ba106553cdc48d1a',
+		'key' : '3763623866646538366439656231323162613130363535336364633438643161',
 		'format' : 'iframe',
 		'height' : 90,
 		'width' : 728,
 		'params' : {}
 	};
-	document.write('<scr' + 'ipt type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.bcloudhost.com/7cb8fde86d9eb121ba106553cdc48d1a/invoke.js"></scr' + 'ipt>');
+	document.write('<scr' + 'ipt type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.gatetodisplaycontent.com/3763623866646538366439656231323162613130363535336364633438643161/invoke.js"></scr' + 'ipt>');
 </script>
 {% else %}
 <!-- Chitika -->
