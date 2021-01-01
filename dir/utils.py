@@ -1441,13 +1441,43 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             if verbose:
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
-        if (item.pagetext.startswith('Buy this domain.') or ('This website is for sale' in item.pagetitle) or ('This website is for sale' in item.pagetext) or
-          ('The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or (' is for sale' in item.pagetext) or
-          ('This domain name is parked' in item.pagetitle) or ('Registered at Namecheap.com' in item.pagetitle) or (item.pagetitle == 'Suspended Domain') or
-          ('is registered by NetNames' in item.pagetitle) or (item.pagetitle == 'Domain Registered at Safenames')):
+        if (item.pagetext.startswith('Buy this domain.') or
+            ('This website is for sale' in item.pagetitle) or
+            ('This website is for sale' in item.pagetext) or
+            ('The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or
+            (' is for sale' in item.pagetext) or
+            ('This domain name is parked' in item.pagetitle) or
+            ('Registered at Namecheap.com' in item.pagetitle) or
+            (item.pagetitle == 'Suspended Domain') or
+            ('is registered by NetNames' in item.pagetitle) or
+            (item.pagetitle == 'Domain Registered at Safenames') or
+            (item.pagetitle == 'STRATO - Domain reserved') or
+            (item.pagetitle == 'WEBSITE.WS - Your Internet Address For Life™') or
+            (item.pagetitle == 'Want your own website? | 123 Reg') or
+            (item.pagetitle == 'HugeDomains.com - Shop for over 300,000 Premium Domains') or
+            (item.pagetitle == 'Hosted By One.com | Webhosting made simple') or
+            (item.pagetitle == 'Domain hosted by DanDomain - Domæner, hjemmeside, email, it-hosting, webshop') or
+            (item.pagetitle == 'Expired - domain expired') or
+            (item.pagetitle == 'Domain parked by Instra') or
+            (item.pagetitle == 'RealNames | A more meaningful email address') or
+            (item.pagetitle == 'Domain Registered at Safenames') or
+            (item.pagetitle == 'Domein Gereserveerd - Mijndomein.nl') or
+            (item.pagetitle == 'Hostnet: De grootste domeinnaam- en hostingprovider van Nederland.') or
+            (item.pagetitle == 'Domain Profile - Afternic') or
+            (item.pagetitle == 'TransIP - Reserved domain') or
+            (item.pagetitle == 'Deze domeinnaam is geregistreerd door een klant van Yourhosting.nl') or
+            (item.pagetitle == 'Hello, this domain has been purchased at Hostpoint') or
+            (item.pagetitle == 'The domain name is registered') or
+            (item.pagetitle == 'Web Hosting, Reseller Hosting & Domain Names from Heart Internet') or
+            (item.pagetitle == 'New Web Hosting Account!') or
+            (item.pagetitle == 'Web hosting, domain name registration and web services by 1&1 Internet') or
+            (item.pagetitle == 'This domain was registered by Youdot.io') or
+            (item.pagetitle == 'GoDaddy Domain Name Search') or
+            (item.pagetitle == 'Domain is Parked')
+        ):
             if verbose:
-                rulematches.append('Lose half of points for parked domain.')
-            value /= 2
+                rulematches.append('Lose two thirds of points for parked domain.')
+            value /= 3
         # These phrases mean that a site is possibly parked, but almost definitely garbage.
         if ('Resources and Information.' in item.pagetitle) or ('For search results please CLICK HERE' in item.pagetext):
             value -= 8
@@ -1455,7 +1485,32 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         value *= 0.75
         if verbose:
             rulematches.append('Lose 25% for being a directory listing page.')
-    # Empty pages without much real content, are penalized severely.
+    # Empty pages without any content, are penalized severely. Sites only lose 60%, rather
+    # than the 2/3 lost by a parked page (6.66% better), so they will tend to rank slightly
+    # above parked pages, but barely.
+    # We may in the future want to treat suspended accounts differently from accounts that
+    # never had any content.
+    if ((item.pagetitle == 'Account Suspended') or
+        (item.pagetitle == 'Domain Default page') or
+        (item.pagetitle == "Web Server's Default Page") or
+        (item.pagetitle == 'IIS7') or
+        (item.pagetitle == 'IIS Windows Server') or
+        (item.pagetitle == 'Coming Soon') or
+        (item.pagetitle == 'Welcome to nginx!') or
+        (item.pagetitle == '502 Bad Gateway') or
+        (item.pagetitle == 'Default Parallels Plesk Panel Page') or
+        (item.pagetitle == 'Default Parallels Plesk Page') or
+        (item.pagetitle == 'Apache2 Ubuntu Default Page: It works') or
+        (item.pagetitle == 'Apache2 Debian Default Page: It works') or
+        (item.pagetitle == 'Welcome to your new website') or
+        (item.pagetitle == 'Registered & Protected by MarkMonitor') or
+        (item.pagetitle == 'Coming Soon - Future home of something quite cool') or
+        (item.pagetitle == 'Coming Soon...') or
+        (item.pagetitle == 'Coming Soon page') or
+        (item.pagetitle == 'Parallels Operations Automation Default Page')
+    ):
+        value *= 0.4
+    # If there is no page text, the page is worthless.
     if not item.pagetext or (len(item.pagetext) < 3):
         value -= 20
         if verbose:
