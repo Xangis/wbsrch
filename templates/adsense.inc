@@ -1,4 +1,4 @@
-{% with '2 3 5' as numbers %}
+{% with '2 3 5 6' as numbers %}
 {% with numbers.split|random as section %}
 {% if section == '1' %}
 <!-- Adcash -->
@@ -27,6 +27,18 @@
 	};
 	document.write('<scr' + 'ipt type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.gatetodisplaycontent.com/3763623866646538366439656231323162613130363535336364633438643161/invoke.js"></scr' + 'ipt>');
 </script>
+{% elif section == '6' %}
+<!-- Media.net -->
+<div id="471798331">
+    <script type="text/javascript">
+        try {
+            window._mNHandle.queue.push(function (){
+                window._mNDetails.loadTag("471798331", "728x90", "471798331");
+            });
+        }
+        catch (error) {}
+    </script>
+</div>
 {% else %}
 <!-- Chitika -->
 <script type="text/javascript">
