@@ -4,11 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from dir.models import DomainInfo, PageLink, BlockedSite, SiteInfo
 from dir.utils import PornBlock
-import codecs
 import sys
-
-UTF8Writer = codecs.getwriter('utf8')
-sys.stdout = UTF8Writer(sys.stdout)
 
 
 class Command(BaseCommand):

@@ -5,10 +5,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from dir.models import language_list
 from dir.utils import GetIndexModelFromLanguage
 import sys
-import codecs
-
-UTF8Writer = codecs.getwriter('utf8')
-sys.stdout = UTF8Writer(sys.stdout)
 
 
 class Command(BaseCommand):
