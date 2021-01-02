@@ -35,6 +35,16 @@ def html_decode(s):
     return s
 
 
+def RemoveExtraSpaces(text):
+    if not text:
+        return text
+    text = text.replace('\n', '')
+    text = text.replace('\r', '')
+    text = text.replace('\t', '')
+    text = re.sub(' +', ' ', text)
+    return text
+
+
 def Crawler(options):
     pendinglinks = []
     if options['justthisurl']:
@@ -113,7 +123,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     soup = BeautifulSoup(html)
     if soup.title:
         try:
-            siteinfo.pagetitle = html_decode(soup.title.string).strip()[0:255]
+            siteinfo.pagetitle = RemoveExtraSpaces(html_decode(soup.title.string).strip()[0:255])
             if descriptive:
                 print('Title: {0}'.format(siteinfo.pagetitle))
         except Exception:
