@@ -74,7 +74,7 @@ class Command(BaseCommand):
                 numfound = numfound + 1
                 prompt = u'[{5}] Tag {0} as {1} ({2} results in english, {3} in {1}) updated {4}: [y]es/[n]o/[e]nglishword/[q]uit? '.format(
                     term.keywords, language, term.num_results, item.num_results, term.date_indexed, numdone + offset)
-                rinput = input(prompt.encode(sys.stdout.encoding)).lower()
+                rinput = input(prompt).lower()
                 if rinput == 'y':
                     term.is_language = language
                     term.save(keep_date=True)
@@ -107,7 +107,7 @@ class Command(BaseCommand):
                     resultstr += '{0} = {1:.2f}%, '.format(rval[0], rval[1])
                 print(resultstr)
                 prompt = u'Enter the two-letter language to tag as, or e for english, q to quit, anything else to skip: '
-                rinput = input(prompt.encode(sys.stdout.encoding)).lower()
+                rinput = input(prompt).lower()
                 if rinput == 'e' or rinput == 'en':
                     print('{0} tagged as English.'.format(item.keywords))
                     item.verified_english = True
