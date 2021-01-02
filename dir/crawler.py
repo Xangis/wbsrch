@@ -35,6 +35,16 @@ def html_decode(s):
     return s
 
 
+def RemoveExtraSpaces(text):
+    if not text:
+        return text
+    text = text.replace('\n', '')
+    text = text.replace('\r', '')
+    text = text.replace('\t', '')
+    text = re.sub(' +', ' ', text)
+    return text
+
+
 def Crawler(options):
     pendinglinks = []
     if options['justthisurl']:
@@ -113,7 +123,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     soup = BeautifulSoup(html)
     if soup.title:
         try:
-            siteinfo.pagetitle = html_decode(soup.title.string).strip()[0:255]
+            siteinfo.pagetitle = RemoveExtraSpaces(html_decode(soup.title.string).strip()[0:255])
             if descriptive:
                 print('Title: {0}'.format(siteinfo.pagetitle))
         except Exception:
@@ -123,7 +133,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     description = soup.findAll(attrs={'name': 'description'})
     if len(description) > 0:
         try:
-            siteinfo.pagedescription = html_decode(description[0]['content'].strip())[0:319]
+            siteinfo.pagedescription = RemoveExtraSpaces(html_decode(description[0]['content'].strip())[0:319])
             if descriptive:
                 print('Description: {0}'.format(siteinfo.pagedescription))
         except Exception:
@@ -131,7 +141,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     keywords = soup.findAll(attrs={'name': 'keywords'})
     if len(keywords) > 0:
         try:
-            siteinfo.pagekeywords = keywords[0]['content'].strip()[0:255].lower()
+            siteinfo.pagekeywords = RemoveExtraSpaces(keywords[0]['content'].strip()[0:255].lower())
             if descriptive:
                 print('Keywords: {0}'.format(siteinfo.pagekeywords))
         except Exception:
@@ -145,13 +155,13 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
         pass
     headtags = soup.findAll('h1')
     if len(headtags) > 0:
-        siteinfo.pagefirstheadtag = headtags[0].text.strip()[0:255]
+        siteinfo.pagefirstheadtag = RemoveExtraSpaces(headtags[0].text.strip()[0:255])
     secondaryheadtags = soup.findAll('h2')
     if len(secondaryheadtags) > 0:
-        siteinfo.pagefirsth2tag = secondaryheadtags[0].text.strip()[0:255]
+        siteinfo.pagefirsth2tag = RemoveExtraSpaces(secondaryheadtags[0].text.strip()[0:255])
     tertiaryheadtags = soup.findAll('h3')
     if len(tertiaryheadtags) > 0:
-        siteinfo.pagefirsth3tag = tertiaryheadtags[0].text.strip()[0:255]
+        siteinfo.pagefirsth3tag = RemoveExtraSpaces(tertiaryheadtags[0].text.strip()[0:255])
     iframes = soup.findAll('iframe')
     siteinfo.num_iframes = len(iframes)
     if descriptive:
