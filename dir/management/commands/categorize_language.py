@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
     To perform automatic categorization, which kind of works but is very experimental, you should use a command something like this:
 
-        time python manage.py categorize_language -c -t -a an,ca,cs,cy,da,de,el,es,et,eu,fi,fr,gl,hr,hu,is,it,lt,lv,nl,no,pl,pt,ro,sl,sv,sw,tr,rw,xh,zu -q -o -j -i 12000000 -m 200000
+        time python manage.py categorize_language -c -t -a an,ca,cs,cy,da,de,el,es,et,eu,fi,fr,gl,hr,hu,is,it,lt,lv,nl,no,pl,pt,ro,rw,sl,sv,sw,tr,rw,xh,zu -q -o -j -i 12000000 -m 200000
 
     To perform automatic language blocking, which kind of works but is very experimental, you should use a command something like this:
 
@@ -34,7 +34,7 @@ class Command(BaseCommand):
 
     To perform automatic language blocking for only domains ending in .ua:
 
-        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mr,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000 -u .ua
+        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000 -u .ua
 
     To automatically tag sites as english, which kind of works but is very experimental, you should use a command something like this (note the use of -n so we only tag with higher-confidence data):
 
