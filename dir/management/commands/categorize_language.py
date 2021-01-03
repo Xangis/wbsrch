@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
     To perform automatic categorization, which kind of works but is very experimental, you should use a command something like this:
 
-        time python manage.py categorize_language -c -t -a an,ca,cs,cy,de,el,es,et,eu,fi,fr,gl,hr,hu,it,lt,lv,nl,pl,pt,ro,sl,sv,sw,tr,rw,xh,zu -q -o -j -i 12000000 -m 200000
+        time python manage.py categorize_language -c -t -a an,ca,cs,cy,da,de,el,es,et,eu,fi,fr,gl,hr,hu,is,it,lt,lv,nl,no,pl,pt,ro,sl,sv,sw,tr,rw,xh,zu -q -o -j -i 12000000 -m 200000
 
     To perform automatic language blocking, which kind of works but is very experimental, you should use a command something like this:
 
