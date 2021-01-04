@@ -1,13 +1,7 @@
 from subprocess import call
 import time
 
-import os
-import sys
-sys.path.append('/var/django/wbsrch/')
-os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
-
-# Uses the language list to get active languages.
-from dir.views import language_list
+language_list = ['en', 'an', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
 
 # Index ratio controls how quickly we cycle through terms for a language.
 # Counts for languages not in the index are ignored.

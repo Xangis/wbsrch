@@ -2,8 +2,8 @@
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError, connection
-from dir.models import *
-from dir.utils import *
+from dir.models import DomainInfo, BlockedSite, language_list, blocked_language_list
+from dir.utils import GetSiteInfoModelFromLanguage, MoveSiteTo, DeleteDomainLinks, RequeueRankedKeywordsForDomain, RemoveURLsForDomain
 from dir.language import IdentifyLanguage
 import codecs
 
@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
     To perform automatic categorization, which kind of works but is very experimental, you should use a command something like this:
 
-        time python manage.py categorize_language -c -t -a an,ca,cs,cy,de,el,es,et,eu,fi,fr,gl,hr,hu,it,lt,lv,nl,pl,pt,ro,sl,sv,sw,tr,rw,xh,zu -q -o -j -i 12000000 -m 200000
+        time python manage.py categorize_language -c -t -a an,ca,cs,cy,da,de,el,es,et,eu,fi,fr,gl,hr,hu,is,it,lt,lv,nl,no,pl,pt,ro,rw,sl,sv,sw,tr,rw,xh,zu -q -o -j -i 12000000 -m 200000
 
     To perform automatic language blocking, which kind of works but is very experimental, you should use a command something like this:
 
@@ -34,7 +34,7 @@ class Command(BaseCommand):
 
     To perform automatic language blocking for only domains ending in .ua:
 
-        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mr,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000 -u .ua
+        python manage.py categorize_language -c -t -b am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh -q -i 10000000 -u .ua
 
     To automatically tag sites as english, which kind of works but is very experimental, you should use a command something like this (note the use of -n so we only tag with higher-confidence data):
 
@@ -45,26 +45,28 @@ class Command(BaseCommand):
         python manage.py categorize_language -g -t -i 99999999 -u .fi
 """
     def add_arguments(self, parser):
-        parser.add_argument('-m', '--maxurls', default=100000, action='store', type=int, dest='maxurls', help='Max number of URLs in domain to start with, in descending order. (default=100000)')
-        parser.add_argument('-i', '--items', default=100, action='store', type=int, dest='items', help='Number of items to process (default=100)')
-        parser.add_argument('-n', '--numpageminimum', default=1, action='store', type=int, dest='numpageminimum', help='Minimum number of pages required to process a domain (default=1).')
-        parser.add_argument('-o', '--onlyautotag', default=False, action='store_true', dest='onlyautotag', help='Only auto-tag, nothing else. Requires -e or -a switch.')
-        parser.add_argument('-j', '--justnotenglish', default=False, action='store_true', dest='justnotenglish', help='Only prompt for items that detect as mostly (<10%%) non-English (default=False)')
-        parser.add_argument('-e', '--autotagenglish', default=False, action='store_true', dest='autotagenglish', help='Auto-tag sites that detect as english (>95%%). Supersedes skipping english in -j. (default=False)')
-        parser.add_argument('-c', '--confidentprompt', default=False, action='store_true', dest='confident', help='Only prompt for sites where confidence level in one language is over 90%%. Works with -j (default=False)')
         parser.add_argument('-a', '--autotag', default=None, action='store', dest='autotag', help='Automatically tag this comma-seperated list of language codes, only works with -c.')
         parser.add_argument('-b', '--autoblock', default=None, action='store', dest='autoblock', help='Automatically block this comma-seperated list of language codes, only works with -c.')
+        parser.add_argument('-c', '--confidentprompt', default=False, action='store_true', dest='confident', help='Only prompt for sites where confidence level in one language is over 90%%. Works with -j (default=False)')
+        parser.add_argument('-d', '--domain', default=None, action='store', dest='domain', help='Only check this domain.')
+        parser.add_argument('-e', '--autotagenglish', default=False, action='store_true', dest='autotagenglish', help='Auto-tag sites that detect as english (>95%%). Supersedes skipping english in -j. (default=False)')
+        parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load domain list from specified file. Ignores all options and categorizes/blocks everything.')
+        parser.add_argument('-g', '--goahead', default=False, action='store_true', dest='goahead', help='Go ahead and block and tag ALL languages, and do it automatically. Same options as -f, -0, or -z. Combines -e,-a,-b,-c. Overrides everything but -f, -0, and -z. Works with -u,-j,-p,-n,-r,-t. (default=False)')
+        parser.add_argument('-i', '--items', default=100, action='store', type=int, dest='items', help='Number of items to process (default=100)')
+        parser.add_argument('-j', '--justnotenglish', default=False, action='store_true', dest='justnotenglish', help='Only prompt for items that detect as mostly (<10%%) non-English (default=False)')
+        parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Site info language table to use (default=en).')
+        parser.add_argument('-m', '--maxurls', default=100000, action='store', type=int, dest='maxurls', help='Max number of URLs in domain to start with, in descending order. (default=100000)')
+        parser.add_argument('-n', '--numpageminimum', default=1, action='store', type=int, dest='numpageminimum', help='Minimum number of pages required to process a domain (default=1).')
+        parser.add_argument('-o', '--onlyautotag', default=False, action='store_true', dest='onlyautotag', help='Only auto-tag, nothing else. Requires -e or -a switch.')
+        parser.add_argument('-p', '--urlprefix', default=None, action='store', dest='urlprefix', help='Only check URLs with this prefix.')
+        parser.add_argument('-q', '--quiet', default=False, action='store_true', dest='quiet', help='Quiet mode - do not log individual pages and titles to the console.')
+        parser.add_argument('-r', '--rank', default=False, action='store_true', dest='rank', help='Check untagged domains in order of popularity rank.')
+        parser.add_argument('-s', '--startafter', default=None, action='store', dest='startafter', help='Start after <string>. Only useful for resuming an afterz or beforezero categorize.')
+        parser.add_argument('-t', '--textminimum', default=False, action='store_true', dest='textminimum', help='Require at least 100 characters of text to count page for categorization.')
         parser.add_argument('-u', '--urlsuffix', default=None, action='store', dest='urlsuffix', help='Only check URLs with this suffix.')
+        parser.add_argument('-x', '--examine', default=False, action='store_true', dest='examine', help='Re-examine pages with existing tags and recategorize if necessary.')
         parser.add_argument('-z', '--afterz', default=False, action='store_true', dest='afterz', help='Only check URLs with pages having a title after z. Can be combined with -0.')
         parser.add_argument('-0', '--beforezero', default=False, action='store_true', dest='beforezero', help='Only check URLs with pages having a title before zero. Can be combined with -z.')
-        parser.add_argument('-s', '--startafter', default=None, action='store', dest='startafter', help='Start after <string>. Only useful for resuming an afterz or beforezero categorize.')
-        parser.add_argument('-p', '--urlprefix', default=None, action='store', dest='urlprefix', help='Only check URLs with this prefix.')
-        parser.add_argument('-r', '--rank', default=False, action='store_true', dest='rank', help='Check untagged domains in order of popularity rank.')
-        parser.add_argument('-q', '--quiet', default=False, action='store_true', dest='quiet', help='Quiet mode - do not log individual pages and titles to the console.')
-        parser.add_argument('-t', '--textminimum', default=False, action='store_true', dest='textminimum', help='Require at least 100 characters of text to count page for categorization.')
-        parser.add_argument('-d', '--domain', default=None, action='store', dest='domain', help='Only check this domain.')
-        parser.add_argument('-g', '--goahead', default=False, action='store_true', dest='goahead', help='Go ahead and block and tag ALL languages, and do it automatically. Same options as -f, -0, or -z. Combines -e,-a,-b,-c. Overrides everything but -f, -0, and -z. Works with -u,-j,-p,-n,-r,-t. (default=False)')
-        parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load domain list from specified file. Ignores all options and categorizes/blocks everything.')
 
     def handle(self, *args, **options):
         maxurls = options.get('maxurls', 100000)
@@ -83,6 +85,8 @@ class Command(BaseCommand):
         startafter = options.get('startafter', None)
         verbosity = int(options['verbosity'])
         numpageminimum = int(options['numpageminimum'])
+        language = options.get('language', 'en')
+        examine = options.get('examine', False)
         tagged_count = 0
         processed = 0
         if autotag:
@@ -96,6 +100,7 @@ class Command(BaseCommand):
         print('Max Items to Process: {0}, Max Num URLs Starting Point: {1}, Min starting point: {2}'.format(maxitems, maxurls, numpageminimum))
         cursor = connection.cursor()
         uncategorized_domains = []
+        site_model = GetSiteInfoModelFromLanguage(language)
         if options['file']:
             autotagenglish = True
             onlyautotag = False
@@ -120,14 +125,14 @@ class Command(BaseCommand):
             autoblock = blocked_language_list
             if afterz:
                 # Should give us SELECT DISTINCT rooturl FROM site_info WHERE pagetitle > 'z'
-                domainpages = SiteInfo.objects.filter(pagetitle__gt='ZZZZZZZZZZ').values_list('rooturl', flat=True).distinct().order_by('rooturl')
+                domainpages = site_model.objects.filter(pagetitle__gt='ZZZZZZZZZZ').values_list('rooturl', flat=True).distinct().order_by('rooturl')
                 print('{0} domains found with title after Z.'.format(len(domainpages)))
                 for domainpage in domainpages:
                     if startafter and domainpage < startafter:
                         continue
                     try:
                         domaininfo = DomainInfo.objects.get(url=domainpage)
-                        if domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid:
+                        if not examine and (domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid):
                             continue
                         else:
                             uncategorized_domains.append(domainpage)
@@ -135,14 +140,14 @@ class Command(BaseCommand):
                         uncategorized_domains.append(domainpage)
             if beforezero:
                 # Should give us SELECT DISTINCT rooturl FROM site_info WHERE pagetitle < '0'
-                domainpages = SiteInfoBeforeZero.objects.filter(pagetitle__lt='0').values_list('rooturl', flat=True).distinct().order_by('rooturl')
+                domainpages = site_model.objects.filter(pagetitle__lt='0').values_list('rooturl', flat=True).distinct().order_by('rooturl')
                 print('{0} domains found with title before zero.'.format(len(domainpages)))
                 for domainpage in domainpages:
                     if startafter and domainpage < startafter:
                         continue
                     try:
                         domaininfo = DomainInfo.objects.get(url=domainpage)
-                        if domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid:
+                        if not examine and (domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid):
                             continue
                         else:
                             uncategorized_domains.append(domainpage)
@@ -159,18 +164,31 @@ class Command(BaseCommand):
                 confident = True
                 autotag = language_list
                 autoblock = blocked_language_list
+            if language == 'en':
+                site_model_name = 'site_info'
+            else:
+                site_model_name = 'dir_siteinfo_{0}'.format(language)
             if justdomain:
                 uncategorized_domains.append(TrimDomain(justdomain))
             elif onlysuffix:
-                query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '%{0}' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlysuffix, maxurls, maxitems)
+                query = "SELECT count(*) AS count_total, rooturl FROM {0} WHERE rooturl ILIKE '%{1}' GROUP BY rooturl HAVING count(*) <= {2} ORDER BY count_total DESC LIMIT {3};".format(
+                    site_model_name, onlysuffix, maxurls, maxitems)
             elif onlyprefix:
-                query = "SELECT count(*) AS count_total, rooturl FROM site_info WHERE rooturl ILIKE '{0}%' GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC LIMIT {2};".format(onlyprefix, maxurls, maxitems)
+                query = "SELECT count(*) AS count_total, rooturl FROM {0} WHERE rooturl ILIKE '{1}%' GROUP BY rooturl HAVING count(*) <= {2} ORDER BY count_total DESC LIMIT {3};".format(
+                    site_model_name, onlyprefix, maxurls, maxitems)
             elif rank:
-                query = 'SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE language_association IS null AND alexa_rank IS NOT null AND uses_language_subdirs = false AND uses_language_query_parameter = false ORDER BY alexa_rank LIMIT {0};'.format(maxurls)
+                if not examine:
+                    query = 'SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE language_association IS null AND alexa_rank IS NOT null AND uses_language_subdirs = false AND uses_language_query_parameter = false ORDER BY alexa_rank LIMIT {0};'.format(
+                        maxurls)
+                else:
+                    query = 'SELECT alexa_rank AS count_total, url AS rooturl FROM dir_domaininfo WHERE alexa_rank IS NOT null ORDER BY alexa_rank LIMIT {0};'.format(
+                        maxurls)
             elif numpageminimum:
-                query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) >= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(numpageminimum, maxitems)
+                query = 'SELECT count(*) AS count_total, rooturl FROM {0} GROUP BY rooturl HAVING count(*) >= {1} ORDER BY count_total DESC,RANDOM() LIMIT {2};'.format(
+                    site_model_name, numpageminimum, maxitems)
             else:
-                query = 'SELECT count(*) AS count_total, rooturl FROM site_info GROUP BY rooturl HAVING count(*) <= {0} ORDER BY count_total DESC,RANDOM() LIMIT {1};'.format(maxurls, maxitems)
+                query = 'SELECT count(*) AS count_total, rooturl FROM {0} GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC,RANDOM() LIMIT {2};'.format(
+                    site_model_name, maxurls, maxitems)
             #cursor.execute('SELECT count(*), rooturl FROM site_info GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(maxitems))
             if justdomain:
                 domain_counts = []
@@ -189,14 +207,14 @@ class Command(BaseCommand):
                     continue
                 try:
                     domaininfo = DomainInfo.objects.get(url=domain[1])
-                    if domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid:
+                    if not examine and (domaininfo.language_association or domaininfo.uses_language_subdirs or domaininfo.uses_langid):
                         continue
                     else:
                         uncategorized_domains.append(domain[1])
                 except Exception:
                     uncategorized_domains.append(domain[1])
         for domain in uncategorized_domains:
-            urls = SiteInfo.objects.filter(rooturl=domain)
+            urls = site_model.objects.filter(rooturl=domain)
             if rank and urls.count() < 1:
                 print('Domain {0} has no crawled pages.'.format(domain))
                 try:
@@ -469,13 +487,18 @@ class Command(BaseCommand):
                     if model:
                         try:
                             dom = DomainInfo.objects.get(url=domain)
+                            if kinput != dom.language_association:
+                                print('Setting {0} language_association to {1}'.format(domain, kinput))
+                                dom.language_association = kinput
+                                dom.save()
                         except ObjectDoesNotExist:
                             dom = DomainInfo()
                             dom.url = domain
-                        dom.language_association = kinput
-                        dom.save()
-                        if kinput != 'en':
-                            urls = SiteInfo.objects.filter(rooturl=domain)
+                            print('Setting {0} language_association to {1}'.format(domain, kinput))
+                            dom.language_association = kinput
+                            dom.save()
+                        if kinput != language:
+                            urls = site_model.objects.filter(rooturl=domain)
                             for url in urls:
                                 print('Moving ' + str(url) + ' to ' + kinput)
                                 MoveSiteTo(url, kinput)

@@ -9,8 +9,8 @@ import uuid
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
 
-language_list = ['en', 'an', 'ca', 'cs', 'cy', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'it', 'lt', 'lv', 'nl', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
-hidden_language_list = ['ha', 'rw', 'sn', 'so', 'wo', 'xh', 'yo', 'zu']
+language_list = ['en', 'an', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
+hidden_language_list = []
 # language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'ro', 'el', 'sv', 'da', 'hu', 'hr', 'sk', 'lt', 'no', 'fi', 'et', 'lv', 'sl', 'is', 'sw', 'yo', 'so', 'wo', 'ha', 'rw', 'sn', 'ca']
 
 # Only including languages that aren't also a valid country. This means that "ar", which could be argentina,
@@ -542,95 +542,96 @@ class SearchLogBase(models.Model):
         in_db = 'indexes'
         abstract = True
 
+
 class SearchLog(SearchLogBase):
 
     def __str__(self):
         return self.keywords
+
 
 class SearchLog_cs(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
-class SearchLog_da(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
 
 class SearchLog_de(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
+
 class SearchLog_el(SearchLogBase):
 
     def __str__(self):
         return self.keywords
+
 
 class SearchLog_es(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
+
 class SearchLog_fi(SearchLogBase):
 
     def __str__(self):
         return self.keywords
+
 
 class SearchLog_fr(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
+
 class SearchLog_hu(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
-class SearchLog_is(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
 
 class SearchLog_it(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
+
 class SearchLog_nl(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
-class SearchLog_no(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
 
 class SearchLog_pl(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
+
 class SearchLog_pt(SearchLogBase):
 
     def __str__(self):
         return self.keywords
+
 
 class SearchLog_sk(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
+
 class SearchLog_sv(SearchLogBase):
 
     def __str__(self):
         return self.keywords
 
+
 class SearchLog_tr(SearchLogBase):
 
     def __str__(self):
         return self.keywords
+
 
 class DomainSearchLog(SearchLogBase):
     # What language site was this domain searched from?
@@ -639,12 +640,14 @@ class DomainSearchLog(SearchLogBase):
     def __str__(self):
         return self.keywords
 
+
 class IPSearchLog(SearchLogBase):
     # What language site was this domain searched from?
     language = models.CharField(max_length=6)
 
     def __str__(self):
         return self.keywords
+
 
 class PendingIndexBase(models.Model):
     keywords = models.CharField(max_length=240, unique=True)
@@ -2711,59 +2714,66 @@ class ResultClickBase(models.Model):
     def __str__(self):
         return '{0} at position {1} in search {2}'.format(self.url, self.position, self.keywords)
 
+
 class ResultClick(ResultClickBase):
     pass
+
 
 class ResultClick_cs(ResultClickBase):
     pass
 
-class ResultClick_da(ResultClickBase):
-    pass
 
 class ResultClick_de(ResultClickBase):
     pass
 
+
 class ResultClick_el(ResultClickBase):
     pass
+
 
 class ResultClick_es(ResultClickBase):
     pass
 
+
 class ResultClick_fi(ResultClickBase):
     pass
+
 
 class ResultClick_fr(ResultClickBase):
     pass
 
+
 class ResultClick_hu(ResultClickBase):
     pass
 
-class ResultClick_is(ResultClickBase):
-    pass
 
 class ResultClick_it(ResultClickBase):
     pass
 
+
 class ResultClick_nl(ResultClickBase):
     pass
 
-class ResultClick_no(ResultClickBase):
-    pass
 
 class ResultClick_pl(ResultClickBase):
     pass
 
+
 class ResultClick_pt(ResultClickBase):
     pass
+
 
 class ResultClick_sk(ResultClickBase):
     pass
 
+
 class ResultClick_sv(ResultClickBase):
     pass
 
+
 class ResultClick_tr(ResultClickBase):
     pass
+
 
 class APIUser(models.Model):
     name = models.CharField(max_length=100)
@@ -2772,12 +2782,14 @@ class APIUser(models.Model):
     class Meta:
         in_db = 'indexes'
 
+
 class APIToken(models.Model):
     user = models.ForeignKey(APIUser)
     key = models.CharField(max_length=64)
 
     class Meta:
         in_db = 'indexes'
+
 
 class APISubscription(models.Model):
     user = models.ForeignKey(APIUser)
@@ -2786,6 +2798,7 @@ class APISubscription(models.Model):
 
     class Meta:
         in_db = 'indexes'
+
 
 class APIUsage(models.Model):
     user = models.ForeignKey(APIUser)
@@ -2894,6 +2907,40 @@ if 'cy' in language_list:
         pass
 
     class AutoComplete_cy(AutoCompleteBase):
+
+        def __str__(self):
+            return self.keywords
+
+
+if 'da' in language_list:
+
+    class SiteInfo_da(URLInfo):
+
+        def __str__(self):
+            return self.url
+
+    class PendingIndex_da(PendingIndexBase):
+
+        def __str__(self):
+            return self.keywords
+
+    class IndexTerm_da(IndexTermBase):
+
+        def __str__(self):
+            return self.keywords
+
+    class KeywordRanking_da(KeywordRank):
+        pass
+
+    class SearchLog_da(SearchLogBase):
+
+        def __str__(self):
+            return self.keywords
+
+    class ResultClick_da(ResultClickBase):
+        pass
+
+    class AutoComplete_da(AutoCompleteBase):
 
         def __str__(self):
             return self.keywords
@@ -3068,6 +3115,41 @@ if 'hr' in language_list:
         def __str__(self):
             return self.keywords
 
+
+if 'is' in language_list:
+
+    class SiteInfo_is(URLInfo):
+
+        def __str__(self):
+            return self.url
+
+    class PendingIndex_is(PendingIndexBase):
+
+        def __str__(self):
+            return self.keywords
+
+    class IndexTerm_is(IndexTermBase):
+
+        def __str__(self):
+            return self.keywords
+
+    class KeywordRanking_is(KeywordRank):
+        pass
+
+    class SearchLog_is(SearchLogBase):
+
+        def __str__(self):
+            return self.keywords
+
+    class ResultClick_is(ResultClickBase):
+        pass
+
+    class AutoComplete_is(AutoCompleteBase):
+
+        def __str__(self):
+            return self.keywords
+
+
 if 'lt' in language_list:
 
     class SiteInfo_lt(URLInfo):
@@ -3133,6 +3215,41 @@ if 'lv' in language_list:
 
         def __str__(self):
             return self.keywords
+
+
+if 'no' in language_list:
+
+    class SiteInfo_no(URLInfo):
+
+        def __str__(self):
+            return self.url
+
+    class PendingIndex_no(PendingIndexBase):
+
+        def __str__(self):
+            return self.keywords
+
+    class IndexTerm_no(IndexTermBase):
+
+        def __str__(self):
+            return self.keywords
+
+    class KeywordRanking_no(KeywordRank):
+        pass
+
+    class SearchLog_no(SearchLogBase):
+
+        def __str__(self):
+            return self.keywords
+
+    class ResultClick_no(ResultClickBase):
+        pass
+
+    class AutoComplete_no(AutoCompleteBase):
+
+        def __str__(self):
+            return self.keywords
+
 
 if 'ro' in language_list:
 

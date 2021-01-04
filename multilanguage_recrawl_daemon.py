@@ -1,11 +1,8 @@
 from subprocess import call
 
-import os
-import sys
-sys.path.append('/var/django/wbsrch/')
-os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
-from dir.views import language_list
+language_list = ['en', 'an', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
+
 
 # Based on a ratio vs French at 100,000 URLs wanting to recrawl 20 per round.
 # Adjust accordingly as indexes evolve.
@@ -17,7 +14,7 @@ lang_crawl_counts = {
 while True:
     for x in range(100, -1, -1):
         for language in language_list:
-            if language is 'en':
+            if language == 'en':
                 continue
             lang_crawl_count = lang_crawl_counts.get(language, 1)
-            call(['python', 'manage.py', 'crawl', '-r', '-m', str(lang_crawl_count), '-s', '1', '-o', str(x * lang_crawl_count), '-l', language])
+            call(['python', 'manage.py', 'crawl', '-r', '-m', str(lang_crawl_count), '-s', '30', '-o', str(x * lang_crawl_count), '-l', language])
