@@ -8,7 +8,7 @@ coverage==4.5.2
 flup==1.0.3
 nltk==3.4
 ipaddr==2.2.0
-python-whois==0.7.1
+python-whois==0.7.3
 # Requires python-dev
 numpy==1.15.4
 csscompressor==0.9.5
