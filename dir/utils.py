@@ -3778,13 +3778,13 @@ def GetNumberOfDomainKeywordsRanked(domain):
         return domain.num_keywords_ranked
     else:
         try:
-            site_model = GetSiteInfoModelFromLanguage(domain.language_association)
+            ranking_model = GetKeywordRankingModelFromLanguage(domain.language_association)
         except InvalidLanguageException:
             # A language that is tagged as another language won't have any pages, but this keeps
             # us from dying on an error.
-            site_model = SiteInfo
-        pages = site_model.objects.filter(rooturl=domain).count()
-        domain.num_keywords_ranked = pages
+            ranking_model = KeywordRanking
+        ranks = ranking_model.objects.filter(rooturl=domain).count()
+        domain.num_keywords_ranked = ranks
         domain.num_keywords_last_updated = timezone.now()
         domain.save()
-        return pages
+        return ranks
