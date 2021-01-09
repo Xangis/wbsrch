@@ -22,7 +22,7 @@ def UpdateDomainWhois(domain, detailed=False):
                     domain.domain_created = info['creation_date']
                 except KeyError:
                     pass
-                if domain.domain_created == 'b' or domain.domain_created == ':':
+                if domain.domain_created == 'b' or domain.domain_created == ':' or domain.domain_created == 'N' or domain.domain_created == 'None':
                     print('Invalid domain_created date "{0}". Resetting to None'.format(domain.domain_created))
                     domain.domain_created = None
                 try:
@@ -31,7 +31,7 @@ def UpdateDomainWhois(domain, detailed=False):
                     domain.domain_expires = info['expiration_date']
                 except KeyError:
                     pass
-                if domain.domain_expires == 'b' or domain.domain_expires == ':':
+                if domain.domain_expires == 'b' or domain.domain_expires == ':' or domain.domain_expires == 'N' or domain.domain_expires == 'None':
                     print('Invalid domain_expires date "{0}". Resetting to None'.format(domain.domain_expires))
                     domain.domain_expires = None
                 try:
@@ -40,6 +40,9 @@ def UpdateDomainWhois(domain, detailed=False):
                     pass
                 except KeyError:
                     pass
+                if domain.domain_updated == 'b' or domain.domain_updated == ':' or domain.domain_updated == 'N' or domain.domain_updated == 'None':
+                    print('Invalid domain_updated date "{0}". Resetting to None'.format(domain.domain_updated))
+                    domain.domain_updated = None
                 try:
                     domain.whois_name = info['name'][0:60]
                 except TypeError:
