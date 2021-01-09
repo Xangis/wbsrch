@@ -12,18 +12,20 @@ class Command(BaseCommand):
         parser.add_argument('-d', '--detailed', default=False, action='store_true', dest='detailed', help='Run in verbose mode.')
         # parser.add_argument('-p', '--pending', default=False, action='store_true', dest='pending', help='Get pending term list from database.')
         # parser.add_argument('-l', '--language', default='en', action='store', type='string', dest='language', help='Language to use for pending indexes (default=en).')
-        # parser.add_argument('-r', '--reindex', default=False, action='store_true', dest='reindex', help='Reindex existing least-recently-indexed terms.')
+        parser.add_argument('-r', '--redo', default=False, action='store_true', dest='redo', help='Update existing least-recently-updated domains.')
         parser.add_argument('-j', '--justthisdomain', default=None, action='store', dest='justthisdomain', help='Gets the data for a specific domain')
         parser.add_argument('-m', '--max', default=5, action='store', type=int, dest='max', help='Max number of domains to update. (default=5)')
         parser.add_argument('-s', '--sleep', default=15, action='store', type=int, dest='sleep', help='Time to sleep between domain queries. (default=15)')
         parser.add_argument('-o', '--offset', default=0, action='store', type=int, dest='offset', help='Domain slice offset - distance from beginning to start. (default=0)')
-        parser.add_argument('-r', '--random', default=False, action='store_true', dest='random', help='Update un-populated domains in random order (default=no)')
+        parser.add_argument('-x', '--random', default=False, action='store_true', dest='random', help='Update un-populated domains in random order (default=no)')
         parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load domain list from specified file.')
         # TODO: Make an option to fill in nulls vs update already-queried domains.
 
     def handle(self, *args, **options):
         if options['random']:
             domains = DomainInfo.objects.filter(whois_last_updated__isnull=True).order_by('?')[options['offset']:options['offset'] + options['max']]
+        elif options['redo']:
+            domains = DomainInfo.objects.filter(whois_last_updated__isnull=False).order_by('whois_last_updated')[options['offset']:options['offset'] + options['max']]
         elif options['justthisdomain']:
             domains = DomainInfo.objects.filter(url=options['justthisdomain'])
         elif options['file']:
