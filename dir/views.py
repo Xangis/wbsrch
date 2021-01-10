@@ -22,7 +22,7 @@ from django.contrib.gis.geoip import GeoIP
 from django.core.mail import send_mail
 
 INDEX_TERM_STALE_DAYS = 1460
-MAX_SEARCH_RESULTS = 200
+MAX_SEARCH_RESULTS = 100
 
 
 def SaveLogEntry(log):
