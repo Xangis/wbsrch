@@ -1,3 +1,4 @@
+CREATE INDEX dir_pendingindex_date_added_idx ON dir_pendingindex (date_added);
 CREATE INDEX dir_pendingindex_an_date_added_idx ON dir_pendingindex_an (date_added);
 CREATE INDEX dir_pendingindex_ca_date_added_idx ON dir_pendingindex_ca (date_added);
 CREATE INDEX dir_pendingindex_cs_date_added_idx ON dir_pendingindex_cs (date_added);
