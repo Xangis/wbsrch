@@ -41,7 +41,7 @@ Jinja2==2.10
 backports.functools-lru-cache==1.5
 favicon==0.5.1
 psycopg2-binary==2.8.6
-Pillow==8.0.1
+Pillow==8.1.0
 selenium==3.141.0
 requests==2.21.0
 zone-file==0.1.5
