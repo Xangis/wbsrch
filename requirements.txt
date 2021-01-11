@@ -43,7 +43,7 @@ favicon==0.5.1
 psycopg2-binary==2.8.6
 Pillow==8.1.0
 selenium==3.141.0
-requests==2.21.0
+requests==2.25.1
 zone-file==0.1.5
 tlds==2019051700
 tox==3.21.0
