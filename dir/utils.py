@@ -1566,6 +1566,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         return rulematches
     return value
 
+
 def CopySiteData(site, newsite):
     newsite.rooturl = site.rooturl
     newsite.url = site.url
@@ -1600,6 +1601,7 @@ def CopySiteData(site, newsite):
     newsite.image_title_tags = site.image_title_tags
     newsite.image_filenames = site.image_filenames
     return newsite
+
 
 # Move a site info to the site info table of another language.
 # If whole_domain is blank or true, we tag the domain as being in that
@@ -1672,6 +1674,7 @@ def RemoveURLsForDomain(rooturl):
     # Now we nuke all crawlable URLs.
     CrawlableUrl.objects.filter(rooturl=rooturl).delete()
 
+
 def IsHtmlUrl(url):
     """
     Returns False if a URL is not HTML - executable files, videos, JavaScript code,
@@ -1706,6 +1709,7 @@ def IsHtmlUrl(url):
         return False
     return True
 
+
 def IsHtmlExtension(url):
     """
     Returns true if the URL extension is an HTML file extension.
@@ -1718,6 +1722,7 @@ def IsHtmlExtension(url):
         if url.endswith(extension):
             return True
     return False
+
 
 def IsDomainBlocked(checkdomain, verbose=False):
     if verbose:
@@ -1745,6 +1750,7 @@ def IsDomainBlocked(checkdomain, verbose=False):
         print('Domain is OK.')
     return False
 
+
 def DomainLimitReached(checkdomain, verbose=False):
     try:
         domain = DomainInfo.objects.get(url=checkdomain)
@@ -1764,6 +1770,7 @@ def DomainLimitReached(checkdomain, verbose=False):
     except ObjectDoesNotExist:
         pass
     return False
+
 
 def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False, secure=False):
     """
