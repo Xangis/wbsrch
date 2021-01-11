@@ -36,7 +36,7 @@ ujson==1.35
 Unidecode==0.04.19
 # Installer does not work with python3
 # django-memcachedkeys==0.1.0
-simhash==1.9.0
+simhash==2.0.0
 Jinja2==2.10
 backports.functools-lru-cache==1.5
 favicon==0.5.1
