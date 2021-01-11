@@ -25,7 +25,7 @@ djangorestframework==3.3.2
 # Requires libgeoip-dev and python-dev.
 GeoIP==1.3.2
 future==0.15.2
-PyYAML==3.13
+PyYAML==5.1
 six==1.15.0
 uwsgitop==0.10
 redis==2.10.5
