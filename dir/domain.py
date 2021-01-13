@@ -9,6 +9,8 @@ import datetime
 import whois
 from socket import gaierror, timeout
 
+BAD_DATE_STRINGS = ('b', ':', 'N', 'None', '0', '2', 'B')
+
 # Accepts a DomainInfo object and updates its whois information.
 def UpdateDomainWhois(domain, detailed=False):
             print('Updating {0}'.format(domain.url))
@@ -22,7 +24,7 @@ def UpdateDomainWhois(domain, detailed=False):
                     domain.domain_created = info['creation_date']
                 except KeyError:
                     pass
-                if domain.domain_created == 'b' or domain.domain_created == ':' or domain.domain_created == 'N' or domain.domain_created == 'None' or domain.domain_created == '0':
+                if domain.domain_created in BAD_DATE_STRINGS:
                     print('Invalid domain_created date "{0}". Resetting to None'.format(domain.domain_created))
                     domain.domain_created = None
                 try:
@@ -31,7 +33,7 @@ def UpdateDomainWhois(domain, detailed=False):
                     domain.domain_expires = info['expiration_date']
                 except KeyError:
                     pass
-                if domain.domain_expires == 'b' or domain.domain_expires == ':' or domain.domain_expires == 'N' or domain.domain_expires == 'None' or domain.domain_created == '0':
+                if domain.domain_expires in BAD_DATE_STRINGS:
                     print('Invalid domain_expires date "{0}". Resetting to None'.format(domain.domain_expires))
                     domain.domain_expires = None
                 try:
@@ -40,7 +42,7 @@ def UpdateDomainWhois(domain, detailed=False):
                     pass
                 except KeyError:
                     pass
-                if domain.domain_updated == 'b' or domain.domain_updated == ':' or domain.domain_updated == 'N' or domain.domain_updated == 'None' or domain.domain_created == '0':
+                if domain.domain_updated in BAD_DATE_STRINGS:
                     print('Invalid domain_updated date "{0}". Resetting to None'.format(domain.domain_updated))
                     domain.domain_updated = None
                 try:
