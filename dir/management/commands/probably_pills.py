@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from dir.models import DomainInfo, PageLink, BlockedSite, SiteInfo
 from dir.utils import RemoveURLsForDomain
-import sys
 
 
 class Command(BaseCommand):

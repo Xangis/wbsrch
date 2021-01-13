@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from django.db import connection
 from dir.models import *
 from dir.utils import *
-import os
-import sys
-import wget
-import zipfile
 import csv
 
 
@@ -35,9 +30,9 @@ def LoadExcludedSiteFile(filename):
                     site.reason = int(row[1])
                     site.detailedreason = row[2]
                     if row[4] == 't':
-                        site.exclude_subdomains = True;
+                        site.exclude_subdomains = True
                     else:
-                        site.exclude_subdomains = False;
+                        site.exclude_subdomains = False
                     site.save()
                     added += 1
     print('Processed {0} blocked sites. {1} were newly removed.'.format(processed, added))

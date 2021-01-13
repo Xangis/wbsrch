@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from dir.models import DomainInfo, SiteInfoAfterZ, BlockedSite
-from dir.utils import MoveSiteTo, GetSiteInfoModelFromLanguage, RemoveURLsForDomain
+from dir.models import BlockedSite
+from dir.utils import RemoveURLsForDomain
 
 
 def TrimDomain(domain):
@@ -28,7 +28,6 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('-s', '--site', action='store', dest='site', help='Site to block.'),
         parser.add_argument('-r', '--reason', default=8, action='store', type=int, dest='reason', help='Reason (4=porn, 8=unindexed language)'),
-
 
     def handle(self, *args, **options):
         site = options.get('site')

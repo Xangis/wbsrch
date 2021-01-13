@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from dir.models import DomainInfo
 from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
 import codecs
-import sys
 
 
 class Command(BaseCommand):

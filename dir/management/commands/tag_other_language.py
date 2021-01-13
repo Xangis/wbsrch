@@ -4,7 +4,6 @@ from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from dir.models import IndexTerm, language_list
 from dir.utils import GetIndexModelFromLanguage, GetSiteInfoModelFromLanguage
-import sys
 
 
 class Command(BaseCommand):
