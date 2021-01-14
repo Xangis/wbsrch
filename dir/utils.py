@@ -260,8 +260,10 @@ def IsValidDomainExtension(text):
             return True
     return False
 
+
 def HasNumber(text):
     return any(char.isdigit() for char in text)
+
 
 def GetPendingIndexModelFromLanguage(language):
     if not language or 'en' in language:
@@ -279,6 +281,7 @@ def GetPendingIndexModelFromLanguage(language):
     else:
         return PendingIndex
 
+
 def GetIndexModelFromLanguage(language):
     if not language or 'en' in language:
         return IndexTerm
@@ -294,6 +297,7 @@ def GetIndexModelFromLanguage(language):
         return model
     else:
         return IndexTerm
+
 
 def GetSiteInfoModelFromLanguage(language):
     if not language or 'en' in language:
@@ -311,6 +315,7 @@ def GetSiteInfoModelFromLanguage(language):
     else:
         return SiteInfo
 
+
 def GetSearchLogModelFromLanguage(language):
     if not language or 'en' in language:
         return SearchLog
@@ -326,6 +331,7 @@ def GetSearchLogModelFromLanguage(language):
         return model
     else:
         return SearchLog
+
 
 def GetKeywordRankingModelFromLanguage(language):
     if not language or 'en' in language:
@@ -343,6 +349,7 @@ def GetKeywordRankingModelFromLanguage(language):
     else:
         return KeywordRanking
 
+
 def GetAutoCompleteModelFromLanguage(language):
     if not language or 'en' in language:
         return AutoComplete
@@ -359,6 +366,7 @@ def GetAutoCompleteModelFromLanguage(language):
     else:
         return AutoComplete
 
+
 def GetResultClickModelFromLanguage(language):
     if not language or 'en' in language:
         return ResultClick
@@ -374,6 +382,7 @@ def GetResultClickModelFromLanguage(language):
         return model
     else:
         return ResultClick
+
 
 def ReverseWWW(domain, rootonly=False):
     """
@@ -407,6 +416,7 @@ def ReverseWWW(domain, rootonly=False):
     else:
         return domain[4:]
 
+
 def GetRootUrl(url, secure=False):
     if not url.startswith('http:') and not url.startswith('https:'):
         if url.startswith('//'):
@@ -423,6 +433,7 @@ def GetRootUrl(url, secure=False):
     if loc.endswith(':80'):
         loc = loc[:-3]
     return loc
+
 
 def MakeRealUrl(url, domain=None, secure=False):
     """
@@ -458,6 +469,7 @@ def MakeRealUrl(url, domain=None, secure=False):
     url = NormalizeUrl(url, pre_crawl_replacement=True, secure=secure)
     return url
 
+
 # Should be called with a RootDomain.
 def IsIPAddress(url):
     # Try as an IP address first.
@@ -466,6 +478,7 @@ def IsIPAddress(url):
         return True
     except ValueError:
         pass
+
 
 # Like GetRootUrl, but also drops subdomains.
 def GetRootDomain(url):
@@ -494,6 +507,7 @@ def GetRootDomain(url):
         loc = '.'.join(parts[-2:])
     return loc
 
+
 # Gets the extension from a domain, i.e. '.com' from 'website.com' and
 # '.de' from 'bild.de'
 def GetDomainExtension(url):
@@ -502,11 +516,13 @@ def GetDomainExtension(url):
         return '.' + extension
     return extension
 
+
 def IsValidToken(word):
     word = word.lower()
     if word == 'the' or word == 'a' or word == 'of' or word == 'is' or word == 'an' or word == 'as' or word == 'i' or word == 'it' or word == 'in' or word == 'to' or word == 'and' or word == '.' or word == ',' or word == ':' or word == ';' or word == '|' or word == 'et' or word == 'on' or word == 'en' or word == 'un' or word == 'e' or word == 'le' or word == 'la' or word == '-' or word == 'è' or word == 'o' or word == '&':
         return False
     return True
+
 
 # Breaks a phrase into individual tokens, removing non-searchable words
 # like 'the'.
@@ -528,6 +544,7 @@ def GetTerms(keywords):
         if IsValidToken(word):
             terms.append(word)
     return terms
+
 
 def GetDomainAgeModifier(domain):
     """
@@ -561,6 +578,7 @@ def GetDomainAgeModifier(domain):
     else:
         return 1.12
 
+
 def GetLinkRank(domains_linking_in):
     """
     Returns a link rank value based on the number of domains linking in.
@@ -587,6 +605,7 @@ def GetLinkRank(domains_linking_in):
     elif domains_linking_in >= 1:
         bonus += 1.0 + (0.25 * (domains_linking_in - 1))
     return bonus
+
 
 def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=False):
     """
@@ -738,6 +757,7 @@ def GetIndexModifiersForDomain(rooturl, lang=None, rulematches=None, verbose=Fal
             rulematches.append('-5 points and multiply by 0.25 for IP address as domain')
     return [value, bonus]
 
+
 def IsBadMimeType(mimetype):
     """
     Is this a MIME type we don't want to save in our index?
@@ -759,6 +779,7 @@ def IsBadMimeType(mimetype):
                     'text/calendar;charset=UTF-8', 'text/calendar; charset=utf-8', 'application/calendar; charset=utf-8']:
         return True
     return False
+
 
 def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
     if not mimetype:
@@ -941,6 +962,7 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
         if verbose:
             print('Unrecognized MIME type: {0}'.format(mimetype))
         return -0.5
+
 
 def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=False):
     """
@@ -1883,6 +1905,7 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
             newurl = 'http://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
     return newurl
 
+
 def CanCrawlUrl(url, verbose=False):
     if not CanReCrawlUrl(url, verbose):
         return False
@@ -1894,6 +1917,7 @@ def CanCrawlUrl(url, verbose=False):
     if DomainLimitReached(rooturl, verbose):
         return False
     return True
+
 
 # Checks whether we can recrawl a URL.
 # This is CanCrawlUrl minus no new domain urls and domain limit checking.
@@ -1925,6 +1949,7 @@ def CanReCrawlUrl(url, verbose=False):
     except Exception:
         pass
     return True
+
 
 def UpdateAlexaRank(domain_name, rank):
     """
@@ -1999,6 +2024,7 @@ def UpdateAlexaRank(domain_name, rank):
             connection._rollback()
     return False
 
+
 def UpdateQuantcastRank(domain_name, rank):
     """
     Updates the Quantcast rank for a site and for its www version (assuming it exists).
@@ -2071,6 +2097,7 @@ def UpdateQuantcastRank(domain_name, rank):
         except DatabaseError:
             connection._rollback()
     return False
+
 
 def UpdateDomcopRank(domain_name, rank, pagerank):
     """
@@ -2151,6 +2178,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
             connection._rollback()
     return False
 
+
 def MarkURLContentsAsSpam(html, ip=None):
     soup = BeautifulSoup(html)
     domains = []
@@ -2190,6 +2218,7 @@ def MarkURLContentsAsSpam(html, ip=None):
         address.spam_commenter = True
         address.save()
 
+
 def SetDomainLanguage(url, language):
     """
     Sets the language on a domain if it's already set. Will not override an existing language tag,
@@ -2210,6 +2239,7 @@ def SetDomainLanguage(url, language):
         domain.url = url
         domain.language_association = language
         domain.save()
+
 
 def SetDomainInfixLanguage(url):
     """
@@ -2235,6 +2265,7 @@ def SetDomainInfixLanguage(url):
         domain.uses_language_query_parameter = False
         domain.save()
 
+
 def BuildJsonIndex(language='en', limit=None, only_empty=True, sleep=0):
     index_model = GetIndexModelFromLanguage(language)
     terms = index_model.objects.all().order_by('date_indexed')
@@ -2255,6 +2286,7 @@ def BuildJsonIndex(language='en', limit=None, only_empty=True, sleep=0):
         if sleep:
             time.sleep(sleep)
         print('Search results size: ' + str(size) + ', Total Size: ' + str(cumulative))
+
 
 # Requires an IndexTerm, will JSONify and save its search rankings.
 def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
@@ -2351,6 +2383,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
         rank = rank + 1
     return term
 
+
 # Gets the bonus for a site based on the number of URLs
 def GetUrlCountScore(num_urls):
     """
@@ -2385,6 +2418,7 @@ def GetUrlCountScore(num_urls):
         return 1
     return 0
 
+
 def AddError(url, short_desc, full_desc):
     url.num_errors = url.num_errors + 1
     if url.num_errors < 5:
@@ -2393,10 +2427,12 @@ def AddError(url, short_desc, full_desc):
     else:
         url.delete()
 
+
 def ClearErrors(url):
     url.num_errors = 0
     url.error_info = ''
     url.save()
+
 
 def AddPendingTerm(item, language_code='en', reason=None):
     if BannedSearchString(item):
@@ -2428,6 +2464,7 @@ def AddPendingTerm(item, language_code='en', reason=None):
         except Exception:
             pass
 
+
 # Try to search for a specific search term or phrase. If found, return
 # it. Otherwise, add it to the pending terms and return None.
 def TrySearchTerm(text, language_code):
@@ -2455,6 +2492,7 @@ def TrySearchTerm(text, language_code):
     except ObjectDoesNotExist:
         AddPendingTerm(lowerterm, language_code, 'Search {0} not indexed yet.'.format(text))
         return None
+
 
 # Try to search for a specific term or collection of terms from a list.
 # Combine these terms and return the result.
@@ -2505,6 +2543,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
     # Add this to pending so we get a non-half-assed version.
     AddPendingTerm(text, language_code, 'Search {0} not indexed yet.'.format(text))
     return term
+
 
 def GenerateIndexStats(save=False, verbose=False, nolinks=False):
     start = timezone.now()
@@ -2570,6 +2609,7 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
         stats.save()
     return stats
 
+
 # Generates a monthly search report for the specified month, or for the current month
 # if no month or year is specified.
 def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
@@ -2606,6 +2646,7 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
         report.save()
     print(str(report.total_searches) + ' searches in ' + report.language + ' in ' + str(report.year) + '-' + str(report.month))
     return report
+
 
 def GenerateMonthlySearchReports(month=None, year=None, language=None):
     # Only index the specified language.
@@ -2803,6 +2844,7 @@ def LogQueries(queries):
 
     return totaltime
 
+
 # Use one of URL (as text) or domain (as a DomainInfo object)
 # This allows us to be flexible in how we block.
 def PornBlock(item=None, url=None):
@@ -2894,6 +2936,7 @@ def PornBlock(item=None, url=None):
         # when we try to requeue ranked keywords. Ignore it.
         pass
 
+
 def BannedSearchString(text):
     # print 'Checking {0} for banned search string.'.format(text)
     if '\0' in text:
@@ -2909,6 +2952,7 @@ def BannedSearchString(text):
     except ObjectDoesNotExist:
         pass
     return False
+
 
 def DeleteDomainLinks(domain):
     """
@@ -2939,6 +2983,7 @@ def DeleteDomainLinks(domain):
     if num > 0:
         print('Deleting {0} PageJavaScript items for {1}'.format(num, domain))
         links.delete()
+
 
 def RequeueRankedKeywordsForDomain(domain):
     """
@@ -2985,6 +3030,7 @@ def RequeueRankedKeywordsForDomain(domain):
                 reason = reason[0:240]
             pending.reason = reason
             pending.save()
+
 
 def IsBotAgent(text):
     # Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
@@ -3398,6 +3444,7 @@ def IsBotAgent(text):
         return True
     return False
 
+
 def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=False):
     """
     Grabs an existing IndexTerm for the specified keyword. Raises ValueError if those
@@ -3430,6 +3477,7 @@ def CalculatePageRankForExistingTerm(siteinfo, keywords, lang='en', verbose=Fals
     if verbose:
         print('Page {0} would rank {1} for {2}'.format(siteinfo.url, rank, keywords))
     return rank
+
 
 def SplitTitleAndGetPageRanks(siteinfo, minlength=3):
     """
@@ -3529,6 +3577,7 @@ def TakeScreenshot(url):
         # We can still get these errors, but at least the phantomjs process will terminate.
         pass
     return shot
+
 
 def GetFavicons(domain):
     url = 'https://{0}'.format(domain)
@@ -3682,6 +3731,7 @@ def GetIndexAverageAge(language):
     else:
         return timedelta(days=0)
 
+
 def GetPagesAverageAge(language):
     total_items = 0
     total_ages = datetime.timedelta(days=0)
@@ -3695,11 +3745,13 @@ def GetPagesAverageAge(language):
     else:
         return timedelta(days=0)
 
+
 def GetOldestIndexAge(language):
     imodel = GetIndexModelFromLanguage(language)
     for item in imodel.objects.order_by('date_indexed').values_list('date_indexed', flat=True):
         return item
     return None
+
 
 def GetOldestPageAge(language):
     imodel = GetSiteInfoModelFromLanguage(language)
@@ -3707,37 +3759,39 @@ def GetOldestPageAge(language):
         return item
     return None
 
+
 def CalculateDomainSuffixStats(tldwithdot):
-            print('Checking {0}'.format(tldwithdot))
-            num_domains = DomainInfo.objects.filter(url__endswith=tldwithdot).values('url').count()
-            print('Domains ending in {0}: {1}'.format(tldwithdot, num_domains))
-            num_domains_with_pages = 0
-            for lang in language_list:
-                site_model = GetSiteInfoModelFromLanguage(lang)
-                with_pages = site_model.objects.filter(rooturl__endswith=tldwithdot).values('rooturl').distinct().count()
-                if with_pages > 0:
-                    print('Num domains ending in {0} with pages in {1} index: {2}'.format(tldwithdot, lang, with_pages))
-                    num_domains_with_pages += with_pages
-            print('Total num domains ending in {0} with pages in all indexes: {1}'.format(tldwithdot, num_domains_with_pages))
-            num_blocked_domains = BlockedSite.objects.filter(url__endswith=tldwithdot).values('url').count()
-            print('Num domains ending in {0} that are blocked: {1}'.format(tldwithdot, num_blocked_domains))
-            if num_domains_with_pages > 0:
-                ratio = (num_blocked_domains * 100.0) / num_domains_with_pages
-                print('Ratio of blocked domains to domains with pages in index: {0}%'.format(ratio))
-            else:
-                ratio = 0
-                print('No domains ending in {0} in index, cannot calculate ratio.'.format(tldwithdot))
-            try:
-                suffix = DomainSuffix.objects.get(extension=tldwithdot)
-            except ObjectDoesNotExist:
-                suffix = DomainSuffix()
-                suffix.extension = tldwithdot
-            suffix.num_known = num_domains
-            suffix.num_crawled = num_domains_with_pages
-            suffix.num_blocked = num_blocked_domains
-            suffix.blocked_to_crawled_ratio = ratio
-            suffix.save()
-            return suffix
+    print('Checking {0}'.format(tldwithdot))
+    num_domains = DomainInfo.objects.filter(url__endswith=tldwithdot).values('url').count()
+    print('Domains ending in {0}: {1}'.format(tldwithdot, num_domains))
+    num_domains_with_pages = 0
+    for lang in language_list:
+        site_model = GetSiteInfoModelFromLanguage(lang)
+        with_pages = site_model.objects.filter(rooturl__endswith=tldwithdot).values('rooturl').distinct().count()
+        if with_pages > 0:
+            print('Num domains ending in {0} with pages in {1} index: {2}'.format(tldwithdot, lang, with_pages))
+            num_domains_with_pages += with_pages
+    print('Total num domains ending in {0} with pages in all indexes: {1}'.format(tldwithdot, num_domains_with_pages))
+    num_blocked_domains = BlockedSite.objects.filter(url__endswith=tldwithdot).values('url').count()
+    print('Num domains ending in {0} that are blocked: {1}'.format(tldwithdot, num_blocked_domains))
+    if num_domains_with_pages > 0:
+        ratio = (num_blocked_domains * 100.0) / num_domains_with_pages
+        print('Ratio of blocked domains to domains with pages in index: {0}%'.format(ratio))
+    else:
+        ratio = 0
+        print('No domains ending in {0} in index, cannot calculate ratio.'.format(tldwithdot))
+    try:
+        suffix = DomainSuffix.objects.get(extension=tldwithdot)
+    except ObjectDoesNotExist:
+        suffix = DomainSuffix()
+        suffix.extension = tldwithdot
+    suffix.num_known = num_domains
+    suffix.num_crawled = num_domains_with_pages
+    suffix.num_blocked = num_blocked_domains
+    suffix.blocked_to_crawled_ratio = ratio
+    suffix.save()
+    return suffix
+
 
 def GetNumberOfDomainPages(domain):
     """
@@ -3766,6 +3820,7 @@ def GetNumberOfDomainPages(domain):
         domain.num_urls_last_updated = timezone.now()
         domain.save()
         return pages
+
 
 def GetNumberOfDomainKeywordsRanked(domain):
     """

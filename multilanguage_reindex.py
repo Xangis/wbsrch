@@ -14,7 +14,7 @@ lang_index_counts = {'lt': 4, 'lv': 3, 'is': 4, 'sw': 2, 'yo': 2, 'so': 2, 'wo':
 
 while True:
     for language in language_list:
-        if language is 'en' or (language in hidden_language_list):
+        if language == 'en' or (language in hidden_language_list):
             continue
         # Reindex one old term for every 10 new terms being indexed.
         # We do things in larger batches than the en daemon in order to

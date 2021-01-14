@@ -752,11 +752,6 @@ class PendingIndexAdmin(admin.ModelAdmin):
 
     def block_these_terms(modeladmin, request, queryset):
         for item in queryset:
-            name = item.__class__.__name__
-            if name == 'PendingIndex':
-                lang = 'en'
-            else:
-                lang = name[-2:]
             try:
                 BadQuery.objects.get(keywords=item.keywords)
             except ObjectDoesNotExist:

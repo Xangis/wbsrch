@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponsePermanen
 from django.shortcuts import render_to_response, render
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError, connection
+from django.db import connection
 from django.core.cache import cache
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -181,23 +181,12 @@ def index(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
-    index_model = GetIndexModelFromLanguage(language_code)
-    # Show the most recently indexed search terms as long as they have 5 or more results.
-    # We don't want to show sparse/empty queries.
     superuser = False
     if request.user and request.user.is_superuser:
         superuser = True
 
     cached = False
-    #recent_terms = cache.get('recent_terms_' + language_code)
-    #if not recent_terms:
-    #    recent_terms = list(index_model.objects.filter(num_results__gt=9, actively_blocked=False, typo_for__isnull=True, is_language__isnull=True).order_by('-date_indexed')[:10])
-    #    # Cache for up to 180 seconds.
-    #    cache.set('recent_terms_' + language_code, recent_terms, 180)
-    #else:
-    #    cached = True
 
-    #return render(request, 'index.htm', {'language_code': language_code, 'recent_terms': recent_terms, 'superuser': superuser, 'cached': cached})
     return render(request, 'index.htm', {'language_code': language_code, 'superuser': superuser, 'cached': cached})
 
 
@@ -211,10 +200,6 @@ def analytics(request):
 
 def apps(request):
     return HttpResponsePermanentRedirect('https://apps.wbsrch.com')
-
-
-def browser(request):
-    return HttpResponsePermanentRedirect('https://browser.wbsrch.com')
 
 
 def images(request):
@@ -380,7 +365,7 @@ def domain(request):
         if BannedSearchString(domain):
             return HttpResponseForbidden('Only a bot would make this request. Denied.')
         rawdomain = domain
-        site_model = GetSiteInfoModelFromLanguage(language_code)
+        # site_model = GetSiteInfoModelFromLanguage(language_code)
         ranking_model = GetKeywordRankingModelFromLanguage(language_code)
         # Normalize URL
         if domain.startswith('http:') or domain.startswith('https:'):
@@ -425,7 +410,7 @@ def domain(request):
                 pass
 
         # Get pages for site, but only if it's not blocked.
-        siteinfos = []
+        # siteinfos = []
         #if not blocked:
         #    siteinfos = site_model.objects.filter(rooturl=rawdomain).values('id', 'url', 'pagetitle', 'pagedescription', 'pagetext', 'rooturl')[:MAX_SEARCH_RESULTS]
 
@@ -537,7 +522,7 @@ def ipaddry(request):
         #num_siteinfos_cache = cache.get('pages_at_ip_' + ip)
         #if not num_siteinfos_cache:
         #    num_siteinfos = site_model.objects.filter(ip=ip).count()
-            # Cache for up to 1 week
+        # Cache for up to 1 week
         #    cache.set('pages_at_ip_' + ip, num_siteinfos, 604800)
         #else:
         #    cached = True
@@ -1230,7 +1215,7 @@ def getfile(request, filename):
         print('File {0} found'.format(filename))
         record.count = record.count + 1
         record.save()
-    except:
+    except Exception:
         print('File not found.')
         return render_to_response('browser.htm')
     response = HttpResponse()
