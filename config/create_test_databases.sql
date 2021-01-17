@@ -1,0 +1,16 @@
+create database zetaweb;
+create database indexes;
+create database urls;
+create database news;
+create user zetaweb with password 'password';
+create user indexes with password 'password';
+create user urls with password 'password';
+create user news with password 'password';
+alter database zetaweb owner to zetaweb;
+alter database indexes owner to indexes;
+alter database urls owner to urls;
+alter database news owner to news;
+alter user zetaweb createdb;
+alter user news createdb;
+alter user indexes createdb;
+alter user news createdb;
