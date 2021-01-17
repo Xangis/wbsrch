@@ -13,7 +13,7 @@ from dir.models import *
 from dir.utils import *
 from django_q.tasks import async_task
 from dir.language import language_name_reverse
-from dir.crawler import CrawlSingleUrl, Crawler
+from dir.crawler import CrawlSingleUrl, Crawler, RemoveExtraSpaces
 from urllib.parse import urlparse
 from datetime import date, timedelta
 import itertools
@@ -591,6 +591,7 @@ def CleanSearchTerm(searchterm):
     # Normalize any search  terms that contain stupid characters or sql injection tricks.
     if "'[0]" in searchterm:
         searchterm = searchterm.replace("'[0]", "")
+    searchterm = RemoveExtraSpaces(searchterm)
     return searchterm
 
 
