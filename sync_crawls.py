@@ -11,7 +11,7 @@ print('Input: ' + options.input)
 print('Output: ' + options.output)
 
 
-def ProcessUnmatchedDomainFields(fields):
+def ProcessUnmatchedDomainFields(fields, existing_record):
     # TODO: Pass in all values for existing as key-value pairs of some sort.
     # Replace values in fields as necessary.
     # Update record in DB when needs_save = True.
@@ -30,14 +30,17 @@ def ProcessUnmatchedDomainFields(fields):
                     print('Existing value is newer, not copying')
                 else:
                     print('Input value is newer, copying over')
+                    existing_record['robots_last_updated'] = inval
+                    existing_record['robots_ip'] = fields['robots_ip'][0]
                     needs_save = True
             else:
                 print('No robots_ip in mismatched fields, ignoring difference in robots_last_updated.')
         else:
             raise ValueError(field)
+    print('ProcessUnmatchedDomainFields: Save = {0}'.format(needs_save))
 
 
-def ProcessUnmatchedPageFields(fields):
+def ProcessUnmatchedPageFields(fields, existing_record):
     needs_save = False
     for item in fields.items():
         field = item[0]
@@ -47,15 +50,17 @@ def ProcessUnmatchedPageFields(fields):
         if field == 'firstcrawled':
             if inval < outval:
                 print('Input value was crawled earlier, copying over.')
+                existing_record['firstcrawled'] = inval
                 needs_save = True
             else:
                 print('Existing value was crawled earlier, not copying.')
         elif field == 'lastcrawled':
             if inval > outval:
                 print('Input value was crawled more recently, copying over.')
-                if 'robots_ip' in fields:
+                if 'pagetext' in fields:
+                    existing_record['lastcrawled'] = inval
+                    existing_record['pagetext'] = fields['pagetext'][0]
                     needs_save = True
-                    # TODO: Copy both lastcrawled AND page text.
                 else:
                     print('No pagetext in fields, cannot copy it over.')
             else:
@@ -65,6 +70,7 @@ def ProcessUnmatchedPageFields(fields):
             pass
         else:
             raise ValueError(field)
+    print('ProcessUnmatchedPageFields: Save = {0}'.format(needs_save))
 
 
 indb = psycopg2.connect(options.input)
@@ -107,6 +113,7 @@ while row is not None:
     outcur.execute(existing_query, (url,))
     num_existing = outcur.rowcount
     if num_existing > 0:
+        existing_record = {}
         print('The domain {0} already exists in the output database.'.format(url))
         existing_row = outcur.fetchone()
         existing_colnames = [desc[0] for desc in outcur.description]
@@ -118,6 +125,7 @@ while row is not None:
             #print('Existing column {0} ({1}) is {2} in source'.format(index, existing_colnames[index], colpos[existing_colnames[index]]))
             inval = row[colpos[existing_colnames[index]]]
             outval = existing_row[index]
+            existing_record[existing_colnames[index]] = existing_row[index]
             if existing_colnames[index] in ignored_columns:
                 # print('Ignoring column {0}'.format(existing_colnames[index]))
                 pass
@@ -129,7 +137,7 @@ while row is not None:
                 unmatched_fields[existing_colnames[index]] = (inval, outval)
     else:
         print('The domain {0} is new.'.format(url))
-    ProcessUnmatchedDomainFields(unmatched_fields)
+    ProcessUnmatchedDomainFields(unmatched_fields, existing_record)
     row = incur.fetchone()
 
 print('--- END PROCESSING DOMAINS ---\n')
@@ -161,6 +169,7 @@ while row is not None:
     outcur.execute(existing_query, (url,))
     num_existing = outcur.rowcount
     if num_existing > 0:
+        existing_record = {}
         print('The domain {0} already exists in the output database.'.format(url))
         existing_row = outcur.fetchone()
         existing_colnames = [desc[0] for desc in outcur.description]
@@ -172,6 +181,7 @@ while row is not None:
             #print('Existing column {0} ({1}) is {2} in source'.format(index, existing_colnames[index], colpos[existing_colnames[index]]))
             inval = row[colpos[existing_colnames[index]]]
             outval = existing_row[index]
+            existing_record[existing_colnames[index]] = existing_row[index]
             if existing_colnames[index] in ignored_columns:
                 # print('Ignoring column {0}'.format(existing_colnames[index]))
                 pass
@@ -183,7 +193,7 @@ while row is not None:
                 unmatched_fields[existing_colnames[index]] = (inval, outval)
     else:
         print('The domain {0} is new.'.format(url))
-    ProcessUnmatchedPageFields(unmatched_fields)
+    ProcessUnmatchedPageFields(unmatched_fields, existing_record)
     row = incur.fetchone()
 
 incur.close()
