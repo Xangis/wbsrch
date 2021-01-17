@@ -82,21 +82,6 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
                     needs_save = True
             else:
                 print('No robots_ip in mismatched fields, ignoring difference in robots_last_updated.')
-        elif field == 'domains_linking_in':
-            # Handled by domains_linking_in_last_updated.
-            pass
-        elif field == 'domains_linking_in_last_updated':
-            if 'domains_linking_in' in fields:
-                if inval < outval:
-                    print('Existing value is newer, not copying')
-                else:
-                    print('Input value is newer, copying over')
-                    existing_record['domains_linking_in_last_updated'] = inval
-                    existing_record['domains_linking_in'] = fields['domains_linking_in'][0]
-                    needs_save = True
-            else:
-                # TODO: Don't ignore this. The number may not have changed.
-                print('No domains_linking_in in mismatched fields, ignoring difference in domains_linking_in_last_updated.')
         elif field == 'whois_last_updated':
             # TODO: Copy in all whois fields:
             # whois_address
@@ -255,9 +240,11 @@ colnames = [desc[0] for desc in incur.description]
 
 existing_query = 'SELECT * FROM dir_domaininfo WHERE URL = %s'
 
-ignored_columns = ['id', 'majestic_rank', 'majestic_outdated', 'majestic_refsubnets', 'majestic_rank_date', 'alexa_rank', 'alexa_outdated',
+# We ignore calculated columns and columsn imported by other means.
+ignored_columns = ['id', 'majestic_rank', 'majestic_outdated', 'majestic_refsubnets',
+'majestic_rank_date', 'alexa_rank', 'alexa_outdated', 'domains_linking_in', 'domains_linking_in_last_updated',
 'alexa_rank_date', 'quantcast_rank', 'quantcast_rank_date', 'quantcast_outdated',
-'domcop_rank', 'domcop_pagerank', 'domcop_pagerank_outdated', 'domcop_pagerank_date']
+'domcop_rank', 'domcop_pagerank', 'domcop_pagerank_outdated', 'domcop_pagerank_date',]
 
 row = incur.fetchone()
 while row is not None:
