@@ -3442,6 +3442,59 @@ def IsBotAgent(text):
     # Firefox/3.0.6
     if 'Firefox/2.0.0.6' in text or 'Firefox/3.0.6' in text:
         return True
+    # Mozilla/5.0 (compatible; Adsbot/3.1)
+    if 'Adsbot' in text:
+        return True
+    # Mozilla/5.0 (compatible; Google-Apps-Script)
+    if 'Google-Apps-Script' in text:
+        return True
+    # Mozilla/5.0 (compatible; Qwantify/2.4w; +https://www.qwant.com/)/2.4w
+    if 'Qwantify' in text:
+        return True
+    # Mozilla/5.0 (compatible; Daum/4.1; +http://cs.daum.net/faq/15/4118.html?faqId=28966)
+    if 'Daum' in text:
+        return True
+    # Spambot
+    # WordPress/4.9.10; https://buyrealfollowerslikessubscribers.com
+    # WordPress/4.9.10; http://buyrealfollowerslikessubscribers.com
+    if 'buyrealfollowerslikessubscribers.com' in text:
+        return True
+    # NinjaBot/2.0 (+http://www.imninjas.com)
+    if 'NinjaBot' in text:
+        return True
+    # PiplBot (+http://www.pipl.com/bot/)
+    if 'PiplBot' in text:
+        return True
+    # netEstate NE Crawler (+http://www.website-datenbank.de/)
+    if 'netEstate NE Craler' in text:
+        return True
+    # CCBot/2.0 (https://commoncrawl.org/faq/)
+    if 'CCBot' in text:
+        return True
+    # TurnitinBot (https://turnitin.com/robot/crawlerinfo.html)
+    if 'TurnitinBot' in text:
+        return True
+    # searchVIU.com Linkbot
+    if 'searchVIU.com' in text:
+        return True
+    # php-requests/1.7
+    if 'php-requests' in text:
+        return True
+    # node.io
+    if 'node.io' in text:
+        return True
+    # Perlu - HTML Analyzer and Relationship Builder 1.1
+    if 'Perlu' in text:
+        return True
+    # rest-client/2.0.2 (linux-gnu x86_64) ruby/2.6.0p0
+    if 'rest-client' in text:
+        return True
+    # YisouSpider
+    if 'YisouSpider' in text:
+        return True
+    # scalaj-http/1.0
+    if 'scalaj-http' in text:
+        return True
     return False
 
 
