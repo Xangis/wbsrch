@@ -309,7 +309,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
             item.extract()
             break
     text = ' '.join(soup.findAll(text=True))
-    text = text.replace('\n', ' ')
+    text = RemoveExtraSpaces(text)
     if text:
         text = re.sub('\s+', ' ', text).strip()
     if len(text) < 8192:
