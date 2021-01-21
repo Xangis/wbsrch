@@ -1,6 +1,17 @@
 server {
 	listen 80;
         listen 443 ssl;
+	server_name browser.wbsrch.com;
+        ssl_certificate /etc/letsencrypt/live/wbsrch.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/wbsrch.com/privkey.pem;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+	rewrite ^/(.*) https://wbsrch.com/browser/ permanent;
+	}
+
+server {
+	listen 80;
+        listen 443 ssl;
 	server_name www.wbsrch.com;
         ssl_certificate /etc/letsencrypt/live/wbsrch.com/fullchain.pem;
         ssl_certificate_key /etc/letsencrypt/live/wbsrch.com/privkey.pem;
