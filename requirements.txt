@@ -36,7 +36,6 @@ Unidecode==0.04.19
 # Installer does not work with python3
 # django-memcachedkeys==0.1.0
 simhash==2.0.0
-Jinja2==2.10.1
 backports.functools-lru-cache==1.6.1
 favicon==0.5.1
 psycopg2-binary==2.8.6
