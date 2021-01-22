@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from dir.exceptions import InvalidLanguageException
 from langid.langid import LanguageIdentifier, model
 identifier = LanguageIdentifier.from_modelstring(model, norm_probs=True)
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qsl
 
 language_name_reverse = {
 'catalan': 'ca',
@@ -236,7 +236,7 @@ def GetUrlParameterLanguage(url):
     lang = None
     parsedurl = urlparse(url)
     if parsedurl.query:
-        queryparams = dict(urlparse.parse_qsl(parsedurl.query))
+        queryparams = dict(parse_qsl(parsedurl.query))
         if 'lang' in queryparams:
             lang = queryparams['lang']
         elif 'Lang' in queryparams:
@@ -494,7 +494,7 @@ def IdentifyPageLanguage(url, html):
     # Next we extract what information we can from the HTML content.
     #langloc = html.find(u'lang=')
     #contentloc = html.find(u'content-language')
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, features="html.parser")
     html_lang = None
     content_lang = None
     try:

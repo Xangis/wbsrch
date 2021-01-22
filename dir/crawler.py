@@ -120,7 +120,7 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     Populates a SiteInfo object from HTML. When parsing the HTML, also creates
     and saves any IFrame and JavaScript objects. Does not save PageLink objects.
     """
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, features="html.parser")
     if soup.title:
         try:
             siteinfo.pagetitle = RemoveExtraSpaces(html_decode(soup.title.string).strip()[0:255])

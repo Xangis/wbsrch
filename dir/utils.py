@@ -2180,7 +2180,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
 
 
 def MarkURLContentsAsSpam(html, ip=None):
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, features="html.parser")
     domains = []
     for link in soup.find_all('a'):
         hr = link.get('href')
