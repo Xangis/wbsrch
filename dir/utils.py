@@ -2320,7 +2320,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
                 # in already has the highest score.
                 # topurl = search_result[item.rooturl[4:]]['urls'][0]['url']
-                # highest = urlparse.urlparse(topurl).netloc
+                # highest = urlparse(topurl).netloc
                 # if highest != item.rooturl[4:]:
                 #    print u'WWW is most prominently shown and highest scoring item is {0}. We will switch these'.format(highest)
                 #    search_result[highest] = search_result.pop(item.rooturl[4:])
@@ -2333,7 +2333,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
                 # in already has the highest score.
                 # topurl = search_result['www.' + item.rooturl]['urls'][0]['url']
-                # highest = urlparse.urlparse(topurl).netloc
+                # highest = urlparse(topurl).netloc
                 # if highest != ('www.' + item.rooturl):
                 #    print u'non-WWW is most prominently shown and highest scoring item is {0}. We will switch these'.format(highest)
                 #    search_result[highest] = search_result.pop('www.' + item.rooturl)

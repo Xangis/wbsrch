@@ -54,7 +54,7 @@ language_name_reverse = {
 
 def GetInfixLanguage(url, descriptive=False):
     # Remove query parameters from the URL before testing.
-    parsedurl = urlparse.urlparse(url)
+    parsedurl = urlparse(url)
     url = parsedurl.scheme + '://' + parsedurl.netloc.lower() + parsedurl.path + parsedurl.params
     # fr
     for language in language_list:
@@ -234,7 +234,7 @@ def GetInfixLanguage(url, descriptive=False):
 
 def GetUrlParameterLanguage(url):
     lang = None
-    parsedurl = urlparse.urlparse(url)
+    parsedurl = urlparse(url)
     if parsedurl.query:
         queryparams = dict(urlparse.parse_qsl(parsedurl.query))
         if 'lang' in queryparams:

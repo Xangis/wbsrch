@@ -336,7 +336,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
             pass
         realurl = normaled
     try:
-        ipaddr = socket.gethostbyname(urlparse.urlparse(realurl).hostname)
+        ipaddr = socket.gethostbyname(urlparse(realurl).hostname)
         if descriptive:
             print('IP Address is: {0}'.format(ipaddr))
     except Exception:
