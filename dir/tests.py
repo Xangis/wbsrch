@@ -701,6 +701,30 @@ class MakeRealUrlTestCase(TestCase):
         url = '//someothersite.com?name=me'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://someothersite.com?name=me')
 
+    def test_noslash_domainurl1(self):
+        url = 'tutorial.htm'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
+
+    def test_noslash_domainurl2(self):
+        url = 'tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial?name=me')
+
+    def test_noslash_domainurl3(self):
+        url = 'pages/tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/pages/tutorial?name=me')
+
+    def test_noslash_domainurl4(self):
+        url = 'tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', secur=True), u'https://wbsrch.com/tutorial?name=me')
+
+    def test_noslash_domainurl5(self):
+        url = 'pages/tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', True), u'https://wbsrch.com/pages/tutorial?name=me')
+
+    def test_slash_domainurl_b(self):
+        url = '/pages/tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', True), u'https://wbsrch.com/pages/tutorial?name=me')
+
     def test_normal_url(self):
         url = 'http://wbsrch.com/tutorial'
         self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial')
