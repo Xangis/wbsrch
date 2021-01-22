@@ -18,13 +18,13 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.utils import timezone
-from models import *
-from exceptions import *
-from utils import *
-from crawler import *
-from indexer import *
-from language import *
-from domain import *
+from dir.models import *
+from dir.exceptions import *
+from dir.utils import *
+from dir.crawler import *
+from dir.indexer import *
+from dir.language import *
+from dir.domain import *
 from zetaweb.settings import *
 from datetime import timedelta
 
