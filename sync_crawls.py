@@ -102,7 +102,7 @@ def SavePage(page, update=False):
     inurlcur.execute(iframe_query, (url,))
     row = inurlcur.fetchone()
     while row is not None:
-        print(row)
+        # print(row)
         iframe_insert = 'INSERT INTO dir_pageiframe (rooturl_source, url_source, url_destination, rooturl_destination) VALUES (%s, %s, %s, %s)'
         # print(outurlcur.mogrify(iframe_insert, (row[1], row[2], row[3], row[4])))
         outurlcur.execute(iframe_insert, (row[1], row[2], row[3], row[4]))
@@ -113,7 +113,7 @@ def SavePage(page, update=False):
     inurlcur.execute(js_query, (url,))
     row = inurlcur.fetchone()
     while row is not None:
-        print(row)
+        # print(row)
         js_insert = 'INSERT INTO dir_pagejavascript (rooturl_source, url_source, url_destination, rooturl_destination, filename) VALUES (%s, %s, %s, %s, %s)'
         # print(outurlcur.mogrify(js_insert, (row[1], row[2], row[3], row[4], row[5])))
         outurlcur.execute(js_insert, (row[1], row[2], row[3], row[4], row[5]))
@@ -124,7 +124,7 @@ def SavePage(page, update=False):
     inurlcur.execute(link_query, (url,))
     row = inurlcur.fetchone()
     while row is not None:
-        print(row)
+        # print(row)
         link_insert = 'INSERT INTO dir_pagelink (rooturl_source, url_source, url_destination, rooturl_destination, anchor_text) VALUES (%s, %s, %s, %s, %s)'
         # print(outurlcur.mogrify(link_insert, (row[1], row[2], row[3], row[4], row[5])))
         outurlcur.execute(link_insert, (row[1], row[2], row[3], row[4], row[5]))
@@ -580,7 +580,7 @@ if not options.nourls:
     new = 0
     row = inurlcur.fetchone()
     while row is not None:
-        print(row)
+        # print(row)
         url = row[2]
         existing_url_query = 'SELECT * FROM site_info WHERE URL = %s'
         outcur.execute(existing_url_query, (url,))
