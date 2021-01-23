@@ -6,6 +6,8 @@ import argparse
 parser = argparse.ArgumentParser(description="Sync data between databases")
 parser.add_argument('input', action='store', type=str, help='Input db, example: "dbname=suppliers user=postgres password=postgres"')
 parser.add_argument('output', action='store', type=str, help='Output db, example: "dbname=zetaweb user=postgres password=postgres"')
+parser.add_argument('-p', '--nopages', default=False, action='store_true', dest='nopages', help='Do not updated pages.')
+parser.add_argument('-d', '--nodomains', default=False, action='store_true', dest='nodomains', help='Do not updated domains.')
 options = parser.parse_args()
 
 #
@@ -36,13 +38,14 @@ def SaveDomain(domain, update=False):
 
     if not update:
         statement = 'INSERT INTO dir_domaininfo (%s) values %s'
-        # cursor.execute(statement, (AsIs(','.join(columns)), tuple(values)))
-        print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values))))
+        # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values))))
+        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
+        outdb.commit()
     else:
         statement = 'UPDATE dir_domaininfo SET (%s) = (%s) WHERE id = %s'
-        # cursor.execute(statement, (AsIs(','.join(columns)), tuple(values)))
-        print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), domain['id'])))
-
+        # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), domain['id'])))
+        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
+        outdb.commit()
 
 
 def SavePage(page, update=False):
@@ -54,12 +57,14 @@ def SavePage(page, update=False):
         print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values))))
     else:
         statement = 'UPDATE site_info SET (%s) = (%s) WHERE id = %s'
-        # cursor.execute(statement, (AsIs(','.join(columns)), tuple(values)))
-        print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), page['id'])))
+        # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), page['id'])))
+        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
+        outdb.commit()
 
 
 def ProcessUnmatchedDomainFields(fields, existing_record):
-    # TODO: Pass in all values for existing as key-value pairs of some sort.
+    # existing_record contains the record as it is in the database.
+    # fields contains source fields that differ.
     # Replace values in fields as necessary.
     # Update record in DB when needs_save = True.
     needs_save = False
@@ -83,7 +88,7 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
             else:
                 print('No robots_ip in mismatched fields, ignoring difference in robots_last_updated.')
         elif field == 'whois_last_updated':
-            # TODO: Copy in all whois fields:
+            # If our data is newer, copy in all whois fields:
             # whois_address
             # whois_city
             # whois_country
@@ -95,19 +100,32 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
             # whois_nameservers
             # whois_org
             #
-            # We need to be smart about this -- if a domain goes private or expires, we don't
-            # want to delete previous data.
-            #
-            #if 'robots_ip' in fields:
-            #    if inval < outval:
-            #        print('Existing value is newer, not copying')
-            #    else:
-            #        print('Input value is newer, copying over')
-            #        existing_record['robots_last_updated'] = inval
-            #        existing_record['robots_ip'] = fields['robots_ip'][0]
-            #        needs_save = True
-            #else:
-            #    print('No robots_ip in mismatched fields, ignoring difference in robots_last_updated.')
+            # If a domain goes private or expires, we don't wan to delete previous data.
+            # However, since None values are discarded before they ever reach this function,
+            # this won't be a problem.
+            if inval > outval:
+                existing_record['whois_last_updated'] = fields['whois_last_udated'][0]
+                if 'whois_address' in fields:
+                    existing_record['whois_address'] = fields['whois_address'][0]
+                if 'whois_city' in fields:
+                    existing_record['whois_city'] = fields['whois_city'][0]
+                if 'whois_country' in fields:
+                    existing_record['whois_country'] = fields['whois_country'][0]
+                if 'whois_name' in fields:
+                    existing_record['whois_name'] = fields['whois_name'][0]
+                if 'whois_registrar' in fields:
+                    existing_record['whois_registrar'] = fields['whois_registrar'][0]
+                if 'whois_state' in fields:
+                    existing_record['whois_state'] = fields['whois_state'][0]
+                if 'whois_zipcode' in fields:
+                    existing_record['whois_zipcode'] = fields['whois_zipcode'][0]
+                if 'whois_emails' in fields:
+                    existing_record['whois_emails'] = fields['whois_emails'][0]
+                if 'whois_nameservers' in fields:
+                    existing_record['whois_nameservers'] = fields['whois_nameservers'][0]
+                if 'whois_org' in fields:
+                    existing_record['whois_org'] = fields['whois_org'][0]
+                needs_save = True
             pass
         elif field == 'domain_created':
             if outval is None:
@@ -162,9 +180,14 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
     print('ProcessUnmatchedDomainFields: Save = {0}'.format(needs_save))
     if needs_save:
         SaveDomain(existing_record, update=True)
+        return True
+    else:
+        return False
 
 
 def ProcessUnmatchedPageFields(fields, existing_record):
+    # existing_record contains the record as it is in the database.
+    # fields contains source fields that differ.
     needs_save = False
     for item in fields.items():
         field = item[0]
@@ -227,66 +250,80 @@ def ProcessUnmatchedPageFields(fields, existing_record):
         SavePage(existing_record, update=True)
 
 
-#
-# Here we do domains.
-#
-print('--- PROCESSING DOMAINS ---')
+if not options.nodomains:
+    #
+    # Here we do domains.
+    #
+    print('--- PROCESSING DOMAINS ---')
 
-incur.execute("SELECT * FROM dir_domaininfo")
-print('Number of dir_domaininfo: {0}'.format(incur.rowcount))
+    incur.execute("SELECT * FROM dir_domaininfo")
+    print('Number of dir_domaininfo: {0}'.format(incur.rowcount))
 
-colnames = [desc[0] for desc in incur.description]
-# print(colnames)
+    colnames = [desc[0] for desc in incur.description]
+    # print(colnames)
 
-existing_query = 'SELECT * FROM dir_domaininfo WHERE URL = %s'
+    existing_query = 'SELECT * FROM dir_domaininfo WHERE URL = %s'
 
-# We ignore calculated columns and columsn imported by other means.
-ignored_columns = ['id', 'majestic_rank', 'majestic_outdated', 'majestic_refsubnets',
-'majestic_rank_date', 'alexa_rank', 'alexa_outdated', 'domains_linking_in', 'domains_linking_in_last_updated',
-'alexa_rank_date', 'quantcast_rank', 'quantcast_rank_date', 'quantcast_outdated',
-'domcop_rank', 'domcop_pagerank', 'domcop_pagerank_outdated', 'domcop_pagerank_date',]
+    # We ignore calculated columns and columsn imported by other means.
+    ignored_columns = ['id', 'majestic_rank', 'majestic_outdated', 'majestic_refsubnets',
+    'majestic_rank_date', 'alexa_rank', 'alexa_outdated', 'domains_linking_in', 'domains_linking_in_last_updated',
+    'alexa_rank_date', 'quantcast_rank', 'quantcast_rank_date', 'quantcast_outdated',
+    'domcop_rank', 'domcop_pagerank', 'domcop_pagerank_outdated', 'domcop_pagerank_date',]
 
-row = incur.fetchone()
-while row is not None:
-    unmatched_fields = {}
-    # print(row)
-    url = row[1]
-    outcur.execute(existing_query, (url,))
-    num_existing = outcur.rowcount
-    if num_existing > 0:
-        existing_record = {}
-        print('The domain {0} already exists in the output database.'.format(url))
-        existing_row = outcur.fetchone()
-        existing_colnames = [desc[0] for desc in outcur.description]
-        # print(existing_colnames)
-        colpos = {}
-        for index in range(len(colnames)):
-            colpos[colnames[index]] = index
-        for index in range(len(existing_row)):
-            #print('Existing column {0} ({1}) is {2} in source'.format(index, existing_colnames[index], colpos[existing_colnames[index]]))
-            inval = row[colpos[existing_colnames[index]]]
-            outval = existing_row[index]
-            existing_record[existing_colnames[index]] = existing_row[index]
-            if existing_colnames[index] in ignored_columns:
-                # print('Ignoring column {0}'.format(existing_colnames[index]))
-                pass
-            elif inval is None:
-                # print('Empty input value for {0}, skipping'.format(existing_colnames[index]))
-                pass
-            elif inval != outval:
-                #print('Field {0} ({1}) does not match. Input: {2}, Output: {3}'.format(existing_colnames[index], index, inval, outval))
-                unmatched_fields[existing_colnames[index]] = (inval, outval)
-        ProcessUnmatchedDomainFields(unmatched_fields, existing_record)
-    else:
-        print('The domain {0} is new.'.format(url))
-        record = {}
-        for index in range(len(row)):
-            if colnames[index] != 'id':
-                record[colnames[index]] = row[index]
-        SaveDomain(record)
+    new = 0
+    updated = 0
+    notupdated = 0
     row = incur.fetchone()
+    while row is not None:
+        unmatched_fields = {}
+        # print(row)
+        url = row[1]
+        outcur.execute(existing_query, (url,))
+        num_existing = outcur.rowcount
+        if num_existing > 0:
+            existing_record = {}
+            print('The domain {0} already exists in the output database.'.format(url))
+            existing_row = outcur.fetchone()
+            existing_colnames = [desc[0] for desc in outcur.description]
+            # print(existing_colnames)
+            colpos = {}
+            for index in range(len(colnames)):
+                colpos[colnames[index]] = index
+            for index in range(len(existing_row)):
+                # print('Existing column {0} ({1}) is {2} in source'.format(index, existing_colnames[index], colpos[existing_colnames[index]]))
+                inval = row[colpos[existing_colnames[index]]]
+                outval = existing_row[index]
+                existing_record[existing_colnames[index]] = existing_row[index]
+                if existing_colnames[index] in ignored_columns:
+                    # print('Ignoring column {0}'.format(existing_colnames[index]))
+                    pass
+                elif inval is None:
+                    # print('Empty input value for {0}, skipping'.format(existing_colnames[index]))
+                    pass
+                elif inval != outval:
+                    # print('Field {0} ({1}) does not match. Input: {2}, Output: {3}'.format(existing_colnames[index], index, inval, outval))
+                    unmatched_fields[existing_colnames[index]] = (inval, outval)
+            if ProcessUnmatchedDomainFields(unmatched_fields, existing_record):
+                updated += 1
+            else:
+                notupdated += 1
+        else:
+            print('The domain {0} is new.'.format(url))
+            record = {}
+            for index in range(len(row)):
+                if colnames[index] != 'id':
+                    record[colnames[index]] = row[index]
+            SaveDomain(record)
+            new += 1
+        row = incur.fetchone()
 
-print('--- END PROCESSING DOMAINS ---\n')
+    print('--- END PROCESSING DOMAINS ---\n')
+    print('{0} existed and were updated, {1} existed and were not updated, {2} were newly added'.format(updated, notupdated, new))
+    print('------------------------------\n')
+
+if options.nopages:
+    print('Done')
+    exit(0)
 
 #
 # Here we do pages.
@@ -324,7 +361,7 @@ while row is not None:
         for index in range(len(colnames)):
             colpos[colnames[index]] = index
         for index in range(len(existing_row)):
-            #print('Existing column {0} ({1}) is {2} in source'.format(index, existing_colnames[index], colpos[existing_colnames[index]]))
+            # print('Existing column {0} ({1}) is {2} in source'.format(index, existing_colnames[index], colpos[existing_colnames[index]]))
             inval = row[colpos[existing_colnames[index]]]
             outval = existing_row[index]
             existing_record[existing_colnames[index]] = existing_row[index]
@@ -335,7 +372,7 @@ while row is not None:
                 # print('Empty input value for {0}, skipping'.format(existing_colnames[index]))
                 pass
             elif inval != outval:
-                #print('Field {0} ({1}) does not match. Input: {2}, Output: {3}'.format(existing_colnames[index], index, inval, outval))
+                # print('Field {0} ({1}) does not match. Input: {2}, Output: {3}'.format(existing_colnames[index], index, inval, outval))
                 unmatched_fields[existing_colnames[index]] = (inval, outval)
         ProcessUnmatchedPageFields(unmatched_fields, existing_record)
     else:
