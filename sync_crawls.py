@@ -1,3 +1,5 @@
+# time python sync_crawls.py "dbname=zetaweb_addendum user=zetaweb password=password" "dbname=zetaweb user=zetaweb password=password"
+# "dbname=urls_addendum user=urls password=password" "dbname=urls user=urls password=password" -p -d|tee sync_crawls_domains_2021-01-22.txt
 import psycopg2
 from psycopg2.extensions import AsIs
 import argparse
@@ -6,8 +8,11 @@ import argparse
 parser = argparse.ArgumentParser(description="Sync data between databases")
 parser.add_argument('input', action='store', type=str, help='Input db, example: "dbname=suppliers user=postgres password=postgres"')
 parser.add_argument('output', action='store', type=str, help='Output db, example: "dbname=zetaweb user=postgres password=postgres"')
-parser.add_argument('-p', '--nopages', default=False, action='store_true', dest='nopages', help='Do not updated pages.')
-parser.add_argument('-d', '--nodomains', default=False, action='store_true', dest='nodomains', help='Do not updated domains.')
+parser.add_argument('inputurls', action='store', type=str, help='Input db, example: "dbname=suppliers user=postgres password=postgres"')
+parser.add_argument('outputurls', action='store', type=str, help='Output db, example: "dbname=zetaweb user=postgres password=postgres"')
+parser.add_argument('-p', '--nopages', default=False, action='store_true', dest='nopages', help='Do not update pages.')
+parser.add_argument('-d', '--nodomains', default=False, action='store_true', dest='nodomains', help='Do not update domains.')
+parser.add_argument('-u', '--nourls', default=False, action='store_true', dest='nourls', help='Do not update pending urls.')
 options = parser.parse_args()
 
 #
@@ -15,12 +20,18 @@ options = parser.parse_args()
 #
 print('Input: ' + options.input)
 print('Output: ' + options.output)
+print('Inputurls: ' + options.inputurls)
+print('Outputurls: ' + options.outputurls)
 
 indb = psycopg2.connect(options.input)
 outdb = psycopg2.connect(options.output)
+inurldb = psycopg2.connect(options.inputurls)
+outurldb = psycopg2.connect(options.outputurls)
 
 incur = indb.cursor()
 outcur = outdb.cursor()
+inurlcur = inurldb.cursor()
+outurlcur = outurldb.cursor()
 
 incur.execute("SELECT version()")
 outcur.execute("SELECT version()")
@@ -268,7 +279,7 @@ if not options.nodomains:
     ignored_columns = ['id', 'majestic_rank', 'majestic_outdated', 'majestic_refsubnets',
     'majestic_rank_date', 'alexa_rank', 'alexa_outdated', 'domains_linking_in', 'domains_linking_in_last_updated',
     'alexa_rank_date', 'quantcast_rank', 'quantcast_rank_date', 'quantcast_outdated',
-    'domcop_rank', 'domcop_pagerank', 'domcop_pagerank_outdated', 'domcop_pagerank_date',]
+    'domcop_rank', 'domcop_pagerank', 'domcop_pagerank_outdated', 'domcop_pagerank_date']
 
     new = 0
     updated = 0
@@ -321,68 +332,122 @@ if not options.nodomains:
     print('{0} existed and were updated, {1} existed and were not updated, {2} were newly added'.format(updated, notupdated, new))
     print('------------------------------\n')
 
-if options.nopages:
-    print('Done')
-    exit(0)
 
-#
-# Here we do pages.
-#
-print('--- PROCESSING PAGES ---')
+if not options.nopages:
+    #
+    # Here we do pages.
+    #
+    print('--- PROCESSING PAGES ---')
 
-incur.execute("SELECT * FROM site_info")
-print('Number of site_info: {0}'.format(incur.rowcount))
+    incur.execute("SELECT * FROM site_info")
+    print('Number of site_info: {0}'.format(incur.rowcount))
 
-# 31 columns:
-# ['id', 'rooturl', 'url', 'pagetitle', 'pagedescription', 'pagefirstheadtag', 'pagefirsth2tag', 'pagefirsth3tag', 'pagekeywords', 'pagecontents',
-#  'pagetext', 'pagesize', 'lastcrawled', 'firstcrawled', 'ip', 'num_errors', 'error_info', 'server_header', 'content_type_header', 'num_css_files',
-#  'num_images', 'num_javascripts', 'num_iframes', 'num_audio_tags', 'num_video_tags', 'num_svg_tags', 'num_canvas_tags', 'image_alt_tags', 'image_title_tags', 'image_filenames',
-#  'simhash_value']
-colnames = [desc[0] for desc in incur.description]
-# print(colnames)
+    # 31 columns:
+    # ['id', 'rooturl', 'url', 'pagetitle', 'pagedescription', 'pagefirstheadtag', 'pagefirsth2tag', 'pagefirsth3tag', 'pagekeywords', 'pagecontents',
+    #  'pagetext', 'pagesize', 'lastcrawled', 'firstcrawled', 'ip', 'num_errors', 'error_info', 'server_header', 'content_type_header', 'num_css_files',
+    #  'num_images', 'num_javascripts', 'num_iframes', 'num_audio_tags', 'num_video_tags', 'num_svg_tags', 'num_canvas_tags', 'image_alt_tags', 'image_title_tags', 'image_filenames',
+    #  'simhash_value']
+    colnames = [desc[0] for desc in incur.description]
+    # print(colnames)
 
-existing_query = 'SELECT * FROM site_info WHERE URL = %s'
+    existing_query = 'SELECT * FROM site_info WHERE URL = %s'
 
-ignored_columns = ['id', 'simhash_value']
-row = incur.fetchone()
-while row is not None:
-    unmatched_fields = {}
-    # print(row)
-    url = row[2]
-    outcur.execute(existing_query, (url,))
-    num_existing = outcur.rowcount
-    if num_existing > 0:
-        existing_record = {}
-        print('The url {0} already exists in the output database.'.format(url))
-        existing_row = outcur.fetchone()
-        existing_colnames = [desc[0] for desc in outcur.description]
-        # print(existing_colnames)
-        colpos = {}
-        for index in range(len(colnames)):
-            colpos[colnames[index]] = index
-        for index in range(len(existing_row)):
-            # print('Existing column {0} ({1}) is {2} in source'.format(index, existing_colnames[index], colpos[existing_colnames[index]]))
-            inval = row[colpos[existing_colnames[index]]]
-            outval = existing_row[index]
-            existing_record[existing_colnames[index]] = existing_row[index]
-            if existing_colnames[index] in ignored_columns:
-                # print('Ignoring column {0}'.format(existing_colnames[index]))
-                pass
-            elif inval is None:
-                # print('Empty input value for {0}, skipping'.format(existing_colnames[index]))
-                pass
-            elif inval != outval:
-                # print('Field {0} ({1}) does not match. Input: {2}, Output: {3}'.format(existing_colnames[index], index, inval, outval))
-                unmatched_fields[existing_colnames[index]] = (inval, outval)
-        ProcessUnmatchedPageFields(unmatched_fields, existing_record)
-    else:
-        print('The url {0} is new.'.format(url))
-        record = {}
-        for index in range(len(row)):
-            if colnames[index] != 'id':
-                record[colnames[index]] = row[index]
-        SavePage(record)
+    ignored_columns = ['id', 'simhash_value']
+
+    updated = 0
+    notupdated = 0
+    new = 0
     row = incur.fetchone()
+    while row is not None:
+        unmatched_fields = {}
+        # print(row)
+        url = row[2]
+        outcur.execute(existing_query, (url,))
+        num_existing = outcur.rowcount
+        if num_existing > 0:
+            existing_record = {}
+            print('The url {0} already exists in the output database.'.format(url))
+            existing_row = outcur.fetchone()
+            existing_colnames = [desc[0] for desc in outcur.description]
+            # print(existing_colnames)
+            colpos = {}
+            for index in range(len(colnames)):
+                colpos[colnames[index]] = index
+            for index in range(len(existing_row)):
+                # print('Existing column {0} ({1}) is {2} in source'.format(index, existing_colnames[index], colpos[existing_colnames[index]]))
+                inval = row[colpos[existing_colnames[index]]]
+                outval = existing_row[index]
+                existing_record[existing_colnames[index]] = existing_row[index]
+                if existing_colnames[index] in ignored_columns:
+                    # print('Ignoring column {0}'.format(existing_colnames[index]))
+                    pass
+                elif inval is None:
+                    # print('Empty input value for {0}, skipping'.format(existing_colnames[index]))
+                    pass
+                elif inval != outval:
+                    # print('Field {0} ({1}) does not match. Input: {2}, Output: {3}'.format(existing_colnames[index], index, inval, outval))
+                    unmatched_fields[existing_colnames[index]] = (inval, outval)
+            ProcessUnmatchedPageFields(unmatched_fields, existing_record)
+        else:
+            print('The url {0} is new.'.format(url))
+            record = {}
+            for index in range(len(row)):
+                if colnames[index] != 'id':
+                    record[colnames[index]] = row[index]
+            SavePage(record)
+        row = incur.fetchone()
+
+        print('--- END PROCESSING DOMAINS ---\n')
+        print('{0} existed and were updated, {1} existed and were not updated, {2} were newly added'.format(updated, notupdated, new))
+        print('------------------------------\n')
+
+
+if not options.nourls:
+    #
+    # Here we do pending urls.
+    #
+    print('--- PROCESSING PENDING URLS ---')
+
+    inurlcur.execute("SELECT * FROM dir_crawlableurl")
+    print('Number of dir_crawlableurl: {0}'.format(inurlcur.rowcount))
+
+    updated = 0
+    alreadycrawled = 0
+    alreadypending = 0
+    new = 0
+    row = inurlcur.fetchone()
+    while row is not None:
+        print(row)
+        url = row[2]
+        existing_url_query = 'SELECT * FROM site_info WHERE URL = %s'
+        outcur.execute(existing_url_query, (url,))
+        num_existing = outcur.rowcount
+        if num_existing > 0:
+            alreadycrawled += 1
+            row = inurlcur.fetchone()
+            continue
+        existing_crawlableurl_query = 'SELECT * FROM dir_crawlableurl WHERE URL = %s'
+        outurlcur.execute(existing_crawlableurl_query, (url,))
+        num_existing = outcur.rowcount
+        if num_existing > 0:
+            alreadypending += 1
+            row = inurlcur.fetchone()
+            continue
+
+        print('The url {0} is new.'.format(url))
+        new += 1
+        insert_query = "INSERT INTO dir_crawlableurl (rooturl, url, randval) VALUES (%s, %s, %s)"
+        print(outurlcur.mogrify(insert_query, (row[1], row[2], row[3])))
+        #outcur.execute(insert_query, (row[0], row[1], row[2]))
+        #outdb.commit()
+        row = inurlcur.fetchone()
+
+    print('--- END PROCESSING PENDING URLS ---\n')
+    print('{0} were already crawled, {1} were already pending, {2} were newly added'.format(alreadycrawled, alreadypending, new))
+    print('-----------------------------------\n')
+
 
 incur.close()
 outcur.close()
+inurlcur.close()
+outurlcur.close()
