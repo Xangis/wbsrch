@@ -303,6 +303,8 @@ def ProcessUnmatchedPageFields(fields, existing_record):
                         existing_record['num_canvas_tags'] = fields['num_canvas_tags'][0]
                     if 'num_video_tags' in fields:
                         existing_record['num_video_tags'] = fields['num_video_tags'][0]
+                    if 'num_audio_tags' in fields:
+                        existing_record['num_audio_tags'] = fields['num_audio_tags'][0]
                     if 'num_errors' in fields:
                         # This one's tricky. If there are no errors, we clear them.
                         # if there are errors, we add them.
@@ -384,6 +386,9 @@ def ProcessUnmatchedPageFields(fields, existing_record):
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
         elif field == 'num_video_tags':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'num_audio_tags':
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
         elif field == 'num_images':
