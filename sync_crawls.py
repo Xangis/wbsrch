@@ -65,12 +65,14 @@ def SavePage(page, update=False):
 
     if not update:
         statement = 'INSERT INTO site_info (%s) values %s'
-        print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values))))
+        # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values))))
+        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
+        outdb.commit()
     else:
         statement = 'UPDATE site_info SET (%s) = (%s) WHERE id = %s'
-        print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), page['id'])))
-        # outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
-        # outdb.commit()
+        # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), page['id'])))
+        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values), page['id']))
+        outdb.commit()
 
     url = page['url']
 
@@ -78,21 +80,21 @@ def SavePage(page, update=False):
     # There are only links to replace if it's an update/
     if update:
         existing_iframe_query = 'DELETE FROM dir_pageiframe WHERE url_source = %s'
-        print(outurlcur.mogrify(existing_iframe_query, (url, )))
-        # outurlcur.execute(existing_iframe_query, (url,))
-        # outurldb.commit()
+        # print(outurlcur.mogrify(existing_iframe_query, (url, )))
+        outurlcur.execute(existing_iframe_query, (url,))
+        outurldb.commit()
         if outurlcur.rowcount > 0:
             print('Deleted {0} old dir_pageiframe entries'.format(outurlcur.rowcount))
         existing_javascript_query = 'DELETE FROM dir_pagejavascript WHERE url_source = %s'
-        print(outurlcur.mogrify(existing_javascript_query, (url, )))
-        # outurlcur.execute(existing_javascript_query, (url,))
-        # outurldb.commit()
+        # print(outurlcur.mogrify(existing_javascript_query, (url, )))
+        outurlcur.execute(existing_javascript_query, (url,))
+        outurldb.commit()
         if outurlcur.rowcount > 0:
             print('Deleted {0} old dir_pagejavascript entries'.format(outurlcur.rowcount))
         existing_link_query = 'SELECT * FROM dir_pagelink WHERE url_source = %s'
-        print(outurlcur.mogrify(existing_link_query, (url, )))
-        # outurlcur.execute(existing_link_query, (url,))
-        # outurldb.commit()
+        # print(outurlcur.mogrify(existing_link_query, (url, )))
+        outurlcur.execute(existing_link_query, (url,))
+        outurldb.commit()
         if outurlcur.rowcount > 0:
             print('Deleted {0} old dir_pagelinke entries'.format(outurlcur.rowcount))
 
@@ -101,10 +103,10 @@ def SavePage(page, update=False):
     row = inurlcur.fetchone()
     while row is not None:
         print(row)
-        iframe_insert = 'INSERT INTO dir_pageiframe (rooturl_source, url_source, url_destination, rooturl_desination) VALUES (%s, %s, %s, %s)'
-        print(outurlcur.mogrify(iframe_insert, (row[1], row[2], row[3], row[4])))
-        # outurlcur.execute(iframe_insert, (row[1], row[2], row[3], row[4]))
-        # outurldb.commit()
+        iframe_insert = 'INSERT INTO dir_pageiframe (rooturl_source, url_source, url_destination, rooturl_destination) VALUES (%s, %s, %s, %s)'
+        # print(outurlcur.mogrify(iframe_insert, (row[1], row[2], row[3], row[4])))
+        outurlcur.execute(iframe_insert, (row[1], row[2], row[3], row[4]))
+        outurldb.commit()
         row = inurlcur.fetchone()
 
     js_query = 'SELECT * FROM dir_pagejavascript WHERE url_source = %s'
@@ -112,10 +114,10 @@ def SavePage(page, update=False):
     row = inurlcur.fetchone()
     while row is not None:
         print(row)
-        js_insert = 'INSERT INTO dir_pagejavascript (rooturl_source, url_source, url_destination, rooturl_desination, filename) VALUES (%s, %s, %s, %s, %s)'
-        print(outurlcur.mogrify(js_insert, (row[1], row[2], row[3], row[4], row[5])))
-        # outurlcur.execute(js_insert, (row[1], row[2], row[3], row[4], row[5]))
-        # outurldb.commit()
+        js_insert = 'INSERT INTO dir_pagejavascript (rooturl_source, url_source, url_destination, rooturl_destination, filename) VALUES (%s, %s, %s, %s, %s)'
+        # print(outurlcur.mogrify(js_insert, (row[1], row[2], row[3], row[4], row[5])))
+        outurlcur.execute(js_insert, (row[1], row[2], row[3], row[4], row[5]))
+        outurldb.commit()
         row = inurlcur.fetchone()
 
     link_query = 'SELECT * FROM dir_pagelink WHERE url_source = %s'
@@ -123,10 +125,10 @@ def SavePage(page, update=False):
     row = inurlcur.fetchone()
     while row is not None:
         print(row)
-        link_insert = 'INSERT INTO dir_pagelink (rooturl_source, url_source, url_destination, rooturl_desination, anchor_text) VALUES (%s, %s, %s, %s, %s)'
-        print(outurlcur.mogrify(link_insert, (row[1], row[2], row[3], row[4], row[5])))
-        # outurlcur.execute(link_insert, (row[1], row[2], row[3], row[4], row[5]))
-        # outurldb.commit()
+        link_insert = 'INSERT INTO dir_pagelink (rooturl_source, url_source, url_destination, rooturl_destination, anchor_text) VALUES (%s, %s, %s, %s, %s)'
+        # print(outurlcur.mogrify(link_insert, (row[1], row[2], row[3], row[4], row[5])))
+        outurlcur.execute(link_insert, (row[1], row[2], row[3], row[4], row[5]))
+        outurldb.commit()
         row = inurlcur.fetchone()
 
 
@@ -277,6 +279,8 @@ def ProcessUnmatchedPageFields(fields, existing_record):
                     existing_record['pagetext'] = fields['pagetext'][0]
                     # If it didn't change, we don't care. If it went from something to
                     # nothing there will be a delta.
+                    if 'ip' in fields:
+                        existing_record['ip'] = fields['ip'][0]
                     if 'pagetitle' in fields:
                         existing_record['pagetitle'] = fields['pagetitle'][0]
                     if 'pagecontents' in fields:
@@ -337,6 +341,9 @@ def ProcessUnmatchedPageFields(fields, existing_record):
                     print('No pagetext in fields, cannot copy it over.')
             else:
                 print('Existing value was crawled more recently, not copying.')
+        elif field == 'ip':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
         elif field == 'pagetext':
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
@@ -507,6 +514,7 @@ if not options.nopages:
 
     existing_query = 'SELECT * FROM site_info WHERE URL = %s'
 
+    # Simhash value is generated on save.
     ignored_columns = ['id', 'simhash_value']
 
     updated = 0
