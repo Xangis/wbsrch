@@ -2419,76 +2419,76 @@ class PornBlockTestCase(TestCase):
         domain.save()
 
     def testPornBlockChild(self):
-            """
-            Checks that all of the urls and parent urls are deleted and the domains blocked
-            when you pornblock a child URL.
-            """
-            site = SiteInfo.objects.get(url=u'http://ass.pornsite.com/2/')
-            PornBlock(site)
-            assurls = SiteInfo.objects.filter(rooturl=u'ass.pornsite.com').count()
-            pornurls = SiteInfo.objects.filter(rooturl=u'pornsite.com').count()
-            assexclusion = BlockedSite.objects.filter(url=u'ass.pornsite.com')
-            pornexclusion = BlockedSite.objects.filter(url=u'pornsite.com')
-            self.assertEqual(assurls, 0)
-            self.assertEqual(pornurls, 0)
-            self.assertEqual(assexclusion.count(), 1)
-            self.assertEqual(pornexclusion.count(), 1)
-            self.assertEqual(pornexclusion[0].exclude_subdomains, True)
+        """
+        Checks that all of the urls and parent urls are deleted and the domains blocked
+        when you pornblock a child URL.
+        """
+        site = SiteInfo.objects.get(url=u'http://ass.pornsite.com/2/')
+        PornBlock(site)
+        assurls = SiteInfo.objects.filter(rooturl=u'ass.pornsite.com').count()
+        pornurls = SiteInfo.objects.filter(rooturl=u'pornsite.com').count()
+        assexclusion = BlockedSite.objects.filter(url=u'ass.pornsite.com')
+        pornexclusion = BlockedSite.objects.filter(url=u'pornsite.com')
+        self.assertEqual(assurls, 0)
+        self.assertEqual(pornurls, 0)
+        self.assertEqual(assexclusion.count(), 1)
+        self.assertEqual(pornexclusion.count(), 1)
+        self.assertEqual(pornexclusion[0].exclude_subdomains, True)
 
     def testPornBlockParent(self):
-            """
-            Checks to be sure that child domain URLs are unaffected when the parent is blocked.
-            """
-            site = SiteInfo.objects.get(url=u'http://pornsite2.com/2/')
-            PornBlock(site)
-            assurls = SiteInfo.objects.filter(rooturl=u'ass.pornsite2.com').count()
-            pornurls = SiteInfo.objects.filter(rooturl=u'pornsite2.com').count()
-            assexclusion = BlockedSite.objects.get(url=u'ass.pornsite2.com')
-            pornexclusion = BlockedSite.objects.filter(url=u'pornsite2.com')
-            self.assertEqual(assurls, 1)
-            self.assertEqual(pornurls, 0)
-            self.assertEqual(assexclusion.count(), 0)
-            self.assertEqual(pornexclusion.count(), 1)
-            self.assertEqual(pornexclusion[0].exclude_subdomains, True)
+        """
+        Checks to be sure that child domain URLs are unaffected when the parent is blocked.
+        """
+        site = SiteInfo.objects.get(url=u'http://pornsite2.com/2/')
+        PornBlock(site)
+        assurls = SiteInfo.objects.filter(rooturl=u'ass.pornsite2.com').count()
+        pornurls = SiteInfo.objects.filter(rooturl=u'pornsite2.com').count()
+        assexclusion = BlockedSite.objects.get(url=u'ass.pornsite2.com')
+        pornexclusion = BlockedSite.objects.filter(url=u'pornsite2.com')
+        self.assertEqual(assurls, 1)
+        self.assertEqual(pornurls, 0)
+        self.assertEqual(assexclusion.count(), 0)
+        self.assertEqual(pornexclusion.count(), 1)
+        self.assertEqual(pornexclusion[0].exclude_subdomains, True)
 
     def testPornBlockParent(self):
-            site = SiteInfo.objects.get(url=u'http://pornsite3.com/2/')
-            PornBlock(site)
-            pornurls = SiteInfo.objects.filter(rooturl=u'pornsite3.com').count()
-            pornexclusion = BlockedSite.objects.filter(url=u'pornsite3.com')
-            DomainInfo.objects.get(url=u'pornsite3.com')
-            self.assertEqual(pornurls, 0)
-            self.assertEqual(pornexclusion.count(), 1)
-            self.assertEqual(pornexclusion[0].exclude_subdomains, True)
+        site = SiteInfo.objects.get(url=u'http://pornsite3.com/2/')
+        PornBlock(site)
+        pornurls = SiteInfo.objects.filter(rooturl=u'pornsite3.com').count()
+        pornexclusion = BlockedSite.objects.filter(url=u'pornsite3.com')
+        DomainInfo.objects.get(url=u'pornsite3.com')
+        self.assertEqual(pornurls, 0)
+        self.assertEqual(pornexclusion.count(), 1)
+        self.assertEqual(pornexclusion[0].exclude_subdomains, True)
 
     def testPornBlockItalian(self):
-            site = SiteInfo_it.objects.get(url=u'http://ass.pornsite.it/2/')
-            PornBlock(site)
-            assurls = SiteInfo_it.objects.filter(rooturl=u'ass.pornsite.it').count()
-            pornurls = SiteInfo_it.objects.filter(rooturl=u'pornsite.it').count()
-            assexclusion = BlockedSite.objects.filter(url=u'ass.pornsite.it')
-            pornexclusion = BlockedSite.objects.filter(url=u'pornsite.it')
-            self.assertEqual(assurls, 0)
-            self.assertEqual(pornurls, 0)
-            self.assertEqual(assexclusion.count(), 1)
-            self.assertEqual(pornexclusion.count(), 1)
-            self.assertEqual(pornexclusion[0].exclude_subdomains, True)
+        site = SiteInfo_it.objects.get(url=u'http://ass.pornsite.it/2/')
+        PornBlock(site)
+        assurls = SiteInfo_it.objects.filter(rooturl=u'ass.pornsite.it').count()
+        pornurls = SiteInfo_it.objects.filter(rooturl=u'pornsite.it').count()
+        assexclusion = BlockedSite.objects.filter(url=u'ass.pornsite.it')
+        pornexclusion = BlockedSite.objects.filter(url=u'pornsite.it')
+        self.assertEqual(assurls, 0)
+        self.assertEqual(pornurls, 0)
+        self.assertEqual(assexclusion.count(), 1)
+        self.assertEqual(pornexclusion.count(), 1)
+        self.assertEqual(pornexclusion[0].exclude_subdomains, True)
 
     def testPornBlockNotporn(self):
-            site = SiteInfo.objects.get(url=u'http://notporn.com/2/')
-            PornBlock(site)
-            pornurls = SiteInfo.objects.filter(rooturl=u'notporn.com').count()
-            pornexclusion = BlockedSite.objects.filter(url=u'notporn.com')
-            self.assertEqual(pornurls, 1)
-            self.assertEqual(pornexclusion.count(), 0)
+        site = SiteInfo.objects.get(url=u'http://notporn.com/2/')
+        PornBlock(site)
+        pornurls = SiteInfo.objects.filter(rooturl=u'notporn.com').count()
+        pornexclusion = BlockedSite.objects.filter(url=u'notporn.com')
+        self.assertEqual(pornurls, 1)
+        self.assertEqual(pornexclusion.count(), 0)
 
     def tearDown(self):
-            for info in SiteInfo.objects.all():
-                info.delete()
-            for info in SiteInfo_it.objects.all():
-                info.delete()
-            for info in DomainInfo.objects.all():
-                info.delete()
+        for info in SiteInfo.objects.all():
+            info.delete()
+        for info in SiteInfo_it.objects.all():
+            info.delete()
+        for info in DomainInfo.objects.all():
+            info.delete()
 
 class WhoisTestCase(TestCase):
     def testDomainAge(self):

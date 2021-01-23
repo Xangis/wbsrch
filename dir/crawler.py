@@ -738,184 +738,184 @@ def RemoveFromDatabase(url, descriptive=False, all_languages=True, model=None):
 
 
 def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
+    try:
+        root = GetRootUrl(url)
+        domain = DomainInfo.objects.get(url=root)
+    except ObjectDoesNotExist:
+        # Always create domain info and check for robots.txt even if the domain doesn't exist yet.
+        domain = DomainInfo()
+        domain.url = root
         try:
-            root = GetRootUrl(url)
-            domain = DomainInfo.objects.get(url=root)
-        except ObjectDoesNotExist:
-            # Always create domain info and check for robots.txt even if the domain doesn't exist yet.
-            domain = DomainInfo()
-            domain.url = root
-            try:
-                print('Created new DomainInfo entry for {0}.'.format(root))
-            except Exception:
-                print('Created new DomainInfo entry.')
-        if domain.robots_last_updated is None:
-            print('Robots file never checked for database {0}, retrieving now.'.format(root))
-            try:
-                GetRobotsFile(domain)
-            except Exception as e:
-                print('Could not get robots file. Acting as if no robots file exists. Exception: {0}'.format(e))
-            if not AllowedByRobots(url, domain):
-                print('This URL is blocked by the robots.txt file.')
-                RemoveFromPending(pendinglinks, url)
-                if recrawl:
-                    count = RemoveFromDatabase(url, descriptive)
-                    if count > 0:
-                        print('Removed {0} instances of {1} from the database.'.format(count, url))
-                return False
-        try:
-            print('Retrieving {0}'.format(url))
+            print('Created new DomainInfo entry for {0}.'.format(root))
         except Exception:
-            print('Retrieving URL')
-        req = urllib.request.Request(url)
-        req.add_header('User-agent', 'Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)')
+            print('Created new DomainInfo entry.')
+    if domain.robots_last_updated is None:
+        print('Robots file never checked for database {0}, retrieving now.'.format(root))
         try:
-            response = urllib.request.urlopen(req, timeout=20)
-            if ParseHtml(pendinglinks, url, response, descriptive, recrawl):
-                return True
-            else:
-                if descriptive:
-                    print('Failed to parse HTML.')
-                return False
-        except urllib.error.HTTPError as e:
-            # 4XX errors are immediately fatal and we remove the URL.
-            if e.code == 404 or e.code == 403 or e.code == 401 or e.code == 400 or e.code == 410 or e.code == 406:
-                if descriptive:
-                    print('HTTP Error: {0}'.format(e.code))
-                RemoveFromPending(pendinglinks, url)
-                if recrawl:
-                    remove_model = GetSiteInfoModelFromURL(url, descriptive)
-                    count = RemoveFromDatabase(url, descriptive, model=remove_model)
+            GetRobotsFile(domain)
+        except Exception as e:
+            print('Could not get robots file. Acting as if no robots file exists. Exception: {0}'.format(e))
+        if not AllowedByRobots(url, domain):
+            print('This URL is blocked by the robots.txt file.')
+            RemoveFromPending(pendinglinks, url)
+            if recrawl:
+                count = RemoveFromDatabase(url, descriptive)
+                if count > 0:
                     print('Removed {0} instances of {1} from the database.'.format(count, url))
+            return False
+    try:
+        print('Retrieving {0}'.format(url))
+    except Exception:
+        print('Retrieving URL')
+    req = urllib.request.Request(url)
+    req.add_header('User-agent', 'Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)')
+    try:
+        response = urllib.request.urlopen(req, timeout=20)
+        if ParseHtml(pendinglinks, url, response, descriptive, recrawl):
+            return True
+        else:
+            if descriptive:
+                print('Failed to parse HTML.')
+            return False
+    except urllib.error.HTTPError as e:
+        # 4XX errors are immediately fatal and we remove the URL.
+        if e.code == 404 or e.code == 403 or e.code == 401 or e.code == 400 or e.code == 410 or e.code == 406:
+            if descriptive:
+                print('HTTP Error: {0}'.format(e.code))
+            RemoveFromPending(pendinglinks, url)
+            if recrawl:
+                remove_model = GetSiteInfoModelFromURL(url, descriptive)
+                count = RemoveFromDatabase(url, descriptive, model=remove_model)
+                print('Removed {0} instances of {1} from the database.'.format(count, url))
+            return False
+        elif e.code == 302:
+            try:
+                print('HTTP Error: {0} - {1}'.format(e.code, e.reason))
+            except Exception:
+                print('302 Redirect.')
+            if recrawl:
+                try:
+                    # Regular 302 errors are handled normally and transparenty by the
+                    # BeautifulSoup library. It's only fatal 302 errors that will reach
+                    # this code block. Those errors will be infinite redirect loop errors.
+                    site_model = GetSiteInfoModelFromURL(url)
+                    info = site_model.objects.get(url=url)
+                    AddError(info, str(e.code), 'HTTP Error {0} - {1}'.format(e.code, e.reason))
+                except Exception:
+                    pass
+                # May want to return False in all cases, not just recrawl.
                 return False
-            elif e.code == 302:
-                try:
-                    print('HTTP Error: {0} - {1}'.format(e.code, e.reason))
-                except Exception:
-                    print('302 Redirect.')
-                if recrawl:
-                    try:
-                        # Regular 302 errors are handled normally and transparenty by the
-                        # BeautifulSoup library. It's only fatal 302 errors that will reach
-                        # this code block. Those errors will be infinite redirect loop errors.
-                        site_model = GetSiteInfoModelFromURL(url)
-                        info = site_model.objects.get(url=url)
-                        AddError(info, str(e.code), 'HTTP Error {0} - {1}'.format(e.code, e.reason))
-                    except Exception:
-                        pass
-                    # May want to return False in all cases, not just recrawl.
-                    return False
-            # For recrawling a 500-series error, log an error. If we consistently get them, the URL will delete itself.
-            elif e.code == 503 or e.code == 502 or e.code == 500 or e.code == 504 or e.code == 501:
-                try:
-                    print('HTTP Error: {0} - {1}'.format(e.code, e.reason))
-                except Exception:
-                    print('HTTP Error (unprintable)')
+        # For recrawling a 500-series error, log an error. If we consistently get them, the URL will delete itself.
+        elif e.code == 503 or e.code == 502 or e.code == 500 or e.code == 504 or e.code == 501:
+            try:
+                print('HTTP Error: {0} - {1}'.format(e.code, e.reason))
+            except Exception:
+                print('HTTP Error (unprintable)')
+            try:
+                site_model = GetSiteInfoModelFromURL(url)
+                info = site_model.objects.get(url=url)
+                AddError(info, str(e.code), 'HTTP Error {0}'.format(e.code))
+            except Exception:
+                pass
+        else:
+            print('HTTP Error: {0} - {1}'.format(e.code, e.reason))
+            if recrawl:
                 try:
                     site_model = GetSiteInfoModelFromURL(url)
                     info = site_model.objects.get(url=url)
                     AddError(info, str(e.code), 'HTTP Error {0}'.format(e.code))
                 except Exception:
                     pass
-            else:
-                print('HTTP Error: {0} - {1}'.format(e.code, e.reason))
+    except urllib.error.URLError as e:
+        print('Unable to crawl URL {0}: urllib2.URLError is {1}'.format(url, e.args))
+        RemoveFromPending(pendinglinks, url)
+        if isinstance(e.args, tuple):
+            if descriptive:
+                print('Error: {0} [{1}]'.format(e.args[0], type(e.args[0])))
+            if isinstance(e.args[0], socket.timeout):
+                print('Timed out retrieving URL: {0}'.format(url))
+                RemoveFromPending(pendinglinks, url)
                 if recrawl:
                     try:
                         site_model = GetSiteInfoModelFromURL(url)
+                        print('Logging Error to {0}'.format(site_model))
                         info = site_model.objects.get(url=url)
-                        AddError(info, str(e.code), 'HTTP Error {0}'.format(e.code))
-                    except Exception:
+                        AddError(info, "socket.timeout", 'Timed out Retrieving URL')
+                    except ObjectDoesNotExist:
                         pass
-        except urllib.error.URLError as e:
-            print('Unable to crawl URL {0}: urllib2.URLError is {1}'.format(url, e.args))
-            RemoveFromPending(pendinglinks, url)
-            if isinstance(e.args, tuple):
-                if descriptive:
-                    print('Error: {0} [{1}]'.format(e.args[0], type(e.args[0])))
-                if isinstance(e.args[0], socket.timeout):
-                    print('Timed out retrieving URL: {0}'.format(url))
-                    RemoveFromPending(pendinglinks, url)
-                    if recrawl:
-                        try:
-                            site_model = GetSiteInfoModelFromURL(url)
-                            print('Logging Error to {0}'.format(site_model))
-                            info = site_model.objects.get(url=url)
-                            AddError(info, "socket.timeout", 'Timed out Retrieving URL')
-                        except ObjectDoesNotExist:
-                            pass
-                    return False
-                if isinstance(e.args[0], socket.gaierror):
-                    print('This is a socket.gaierror - Error: {0}, Message: {1}'.format(e.args[0].errno, e.args[0].strerror))
-                    # A DNS lookup failure means we should remove it from the database.
-                    if e.args[0].errno == -2 and recrawl:
-                        print('Removing this URL from the database.')
-                        count = RemoveFromDatabase(url, descriptive)
-                        print('Removed {0} instances of {1} from the database.'.format(count, url))
-            if recrawl:
-                try:
-                    site_model = GetSiteInfoModelFromURL(url)
-                    info = site_model.objects.get(url=url)
-                    AddError(info, "urllib2.URLError", 'e.args: {0} ({1}) [{2}] '.format(e.args[0], type(e.args[0]), dir(e.args[0])))
-                except ObjectDoesNotExist:
-                    pass
-            return False
-        except socket.timeout as e:
-            print('Timed out retrieving URL: {0} - {1}'.format(url, e))
-            RemoveFromPending(pendinglinks, url)
-            if recrawl:
-                try:
-                    site_model = GetSiteInfoModelFromURL(url)
-                    info = site_model.objects.get(url=url)
-                    AddError(info, "socket.timeout", 'Timed out Retrieving URL')
-                except Exception:
-                    pass
-            return False
-        except socket.error as e:
-            print('Socket error {0} retrieving URL: {1}'.format(e, url))
-            RemoveFromPending(pendinglinks, url)
-            if recrawl:
-                try:
-                    site_model = GetSiteInfoModelFromURL(url)
-                    info = site_model.objects.get(url=url)
-                    AddError(info, "socket.error", str(e))
-                except Exception:
-                    pass
-            return False
-        except ValueError as e:
-            try:
-                print('Value error, cannot crawl URL: {0} - {1}'.format(url, e))
-            except Exception:
-                print('Value error, cannot crawl URL: {0}'.format(e))
-            RemoveFromPending(pendinglinks, url)
+                return False
+            if isinstance(e.args[0], socket.gaierror):
+                print('This is a socket.gaierror - Error: {0}, Message: {1}'.format(e.args[0].errno, e.args[0].strerror))
+                # A DNS lookup failure means we should remove it from the database.
+                if e.args[0].errno == -2 and recrawl:
+                    print('Removing this URL from the database.')
+                    count = RemoveFromDatabase(url, descriptive)
+                    print('Removed {0} instances of {1} from the database.'.format(count, url))
+        if recrawl:
             try:
                 site_model = GetSiteInfoModelFromURL(url)
                 info = site_model.objects.get(url=url)
-                AddError(info, 'ValueError', str(e))
-            except Exception:
+                AddError(info, "urllib2.URLError", 'e.args: {0} ({1}) [{2}] '.format(e.args[0], type(e.args[0]), dir(e.args[0])))
+            except ObjectDoesNotExist:
                 pass
-            return False
-        except http.client.HTTPException as e:
-            print('httplib.HTTPException retrieving URL: {0} - {1}'.format(url, e))
-            RemoveFromPending(pendinglinks, url)
+        return False
+    except socket.timeout as e:
+        print('Timed out retrieving URL: {0} - {1}'.format(url, e))
+        RemoveFromPending(pendinglinks, url)
+        if recrawl:
             try:
                 site_model = GetSiteInfoModelFromURL(url)
                 info = site_model.objects.get(url=url)
-                AddError(info, 'HttpError', str(e))
+                AddError(info, "socket.timeout", 'Timed out Retrieving URL')
             except Exception:
                 pass
-            return False
-        except http.client.BadStatusLine as e:
-            print('httplib.BadStatusLine retrieving URL: {0} - {1}'.format(url, e))
-            RemoveFromPending(pendinglinks, url)
-            return False
-        except http.client.IncompleteRead as e:
-            print('httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url, e))
-            RemoveFromPending(pendinglinks, url)
-            return False
-        except http.client.InvalidURL as e:
-            print('Invalid URL: {0} - {1}'.format(url, e))
-            RemoveFromPending(pendinglinks, url)
-            return False
+        return False
+    except socket.error as e:
+        print('Socket error {0} retrieving URL: {1}'.format(e, url))
+        RemoveFromPending(pendinglinks, url)
+        if recrawl:
+            try:
+                site_model = GetSiteInfoModelFromURL(url)
+                info = site_model.objects.get(url=url)
+                AddError(info, "socket.error", str(e))
+            except Exception:
+                pass
+        return False
+    except ValueError as e:
+        try:
+            print('Value error, cannot crawl URL: {0} - {1}'.format(url, e))
+        except Exception:
+            print('Value error, cannot crawl URL: {0}'.format(e))
+        RemoveFromPending(pendinglinks, url)
+        try:
+            site_model = GetSiteInfoModelFromURL(url)
+            info = site_model.objects.get(url=url)
+            AddError(info, 'ValueError', str(e))
+        except Exception:
+            pass
+        return False
+    except http.client.HTTPException as e:
+        print('httplib.HTTPException retrieving URL: {0} - {1}'.format(url, e))
+        RemoveFromPending(pendinglinks, url)
+        try:
+            site_model = GetSiteInfoModelFromURL(url)
+            info = site_model.objects.get(url=url)
+            AddError(info, 'HttpError', str(e))
+        except Exception:
+            pass
+        return False
+    except http.client.BadStatusLine as e:
+        print('httplib.BadStatusLine retrieving URL: {0} - {1}'.format(url, e))
+        RemoveFromPending(pendinglinks, url)
+        return False
+    except http.client.IncompleteRead as e:
+        print('httplib.IncompleteRead read crawling URL: {0} - {1}'.format(url, e))
+        RemoveFromPending(pendinglinks, url)
+        return False
+    except http.client.InvalidURL as e:
+        print('Invalid URL: {0} - {1}'.format(url, e))
+        RemoveFromPending(pendinglinks, url)
+        return False
 
 
 def Crawl(pendinglinks, max, sleep=10, descriptive=False, recrawl=False):
