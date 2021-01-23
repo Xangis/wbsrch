@@ -428,7 +428,7 @@ if not options.nourls:
             continue
         existing_crawlableurl_query = 'SELECT * FROM dir_crawlableurl WHERE URL = %s'
         outurlcur.execute(existing_crawlableurl_query, (url,))
-        num_existing = outcur.rowcount
+        num_existing = outurlcur.rowcount
         if num_existing > 0:
             alreadypending += 1
             row = inurlcur.fetchone()
@@ -437,9 +437,9 @@ if not options.nourls:
         print('The url {0} is new.'.format(url))
         new += 1
         insert_query = "INSERT INTO dir_crawlableurl (rooturl, url, randval) VALUES (%s, %s, %s)"
-        print(outurlcur.mogrify(insert_query, (row[1], row[2], row[3])))
-        #outcur.execute(insert_query, (row[0], row[1], row[2]))
-        #outdb.commit()
+        # print(outurlcur.mogrify(insert_query, (row[1], row[2], row[3])))
+        outurlcur.execute(insert_query, (row[1], row[2], row[3]))
+        outurldb.commit()
         row = inurlcur.fetchone()
 
     print('--- END PROCESSING PENDING URLS ---\n')
