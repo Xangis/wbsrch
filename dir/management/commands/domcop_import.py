@@ -50,15 +50,15 @@ def LoadDomcopFile(filename, skip):
             # Column 2 = pagerank.
             if len(row) >= 3:
                 print('Domain {0} ranks {1}'.format(row[1], row[0]))
-                GetRootDomain(row[2])
+                GetRootDomain(row[1])
                 # UpdateDomcopRank(domain_name, rank, pagerank)
                 if UpdateDomcopRank(row[1], row[0], row[2]):
                     if not CanCrawlUrl(row[2]):
-                        print('Domain {0} cannot be crawled, not adding to crawl needed'.format(row[2]))
-                        crawl_blocked.append(row[2])
+                        print('Domain {0} cannot be crawled, not adding to crawl needed'.format(row[1]))
+                        crawl_blocked.append(row[1])
                     else:
-                        crawl_needed.append(row[2])
-                processed.append(row[2])
+                        crawl_needed.append(row[1])
+                processed.append(row[1])
     with open("domcop_new.txt", 'w') as outfile:
         for item in crawl_needed:
             outfile.write('%s\n' % item)
