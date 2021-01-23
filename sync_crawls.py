@@ -68,9 +68,66 @@ def SavePage(page, update=False):
         print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values))))
     else:
         statement = 'UPDATE site_info SET (%s) = (%s) WHERE id = %s'
-        # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), page['id'])))
-        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
-        outdb.commit()
+        print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), page['id'])))
+        # outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
+        # outdb.commit()
+
+    url = page['url']
+
+    # Now we need to replace the links in each of the url tables.
+    # There are only links to replace if it's an update/
+    if update:
+        existing_iframe_query = 'DELETE FROM dir_pageiframe WHERE url_source = %s'
+        print(outurlcur.mogrify(existing_iframe_query, (url, )))
+        # outurlcur.execute(existing_iframe_query, (url,))
+        # outurldb.commit()
+        if outurlcur.rowcount > 0:
+            print('Deleted {0} old dir_pageiframe entries'.format(outurlcur.rowcount))
+        existing_javascript_query = 'DELETE FROM dir_pagejavascript WHERE url_source = %s'
+        print(outurlcur.mogrify(existing_javascript_query, (url, )))
+        # outurlcur.execute(existing_javascript_query, (url,))
+        # outurldb.commit()
+        if outurlcur.rowcount > 0:
+            print('Deleted {0} old dir_pagejavascript entries'.format(outurlcur.rowcount))
+        existing_link_query = 'SELECT * FROM dir_pagelink WHERE url_source = %s'
+        print(outurlcur.mogrify(existing_link_query, (url, )))
+        # outurlcur.execute(existing_link_query, (url,))
+        # outurldb.commit()
+        if outurlcur.rowcount > 0:
+            print('Deleted {0} old dir_pagelinke entries'.format(outurlcur.rowcount))
+
+    iframe_query = 'SELECT * FROM dir_pageiframe WHERE url_source = %s'
+    inurlcur.execute(iframe_query, (url,))
+    row = inurlcur.fetchone()
+    while row is not None:
+        print(row)
+        iframe_insert = 'INSERT INTO dir_pageiframe (rooturl_source, url_source, url_destination, rooturl_desination) VALUES (%s, %s, %s, %s)'
+        print(outurlcur.mogrify(iframe_insert, (row[1], row[2], row[3], row[4])))
+        # outurlcur.execute(iframe_insert, (row[1], row[2], row[3], row[4]))
+        # outurldb.commit()
+        row = inurlcur.fetchone()
+
+    js_query = 'SELECT * FROM dir_pagejavascript WHERE url_source = %s'
+    inurlcur.execute(js_query, (url,))
+    row = inurlcur.fetchone()
+    while row is not None:
+        print(row)
+        js_insert = 'INSERT INTO dir_pagejavascript (rooturl_source, url_source, url_destination, rooturl_desination, filename) VALUES (%s, %s, %s, %s, %s)'
+        print(outurlcur.mogrify(js_insert, (row[1], row[2], row[3], row[4], row[5])))
+        # outurlcur.execute(js_insert, (row[1], row[2], row[3], row[4], row[5]))
+        # outurldb.commit()
+        row = inurlcur.fetchone()
+
+    link_query = 'SELECT * FROM dir_pagelink WHERE url_source = %s'
+    inurlcur.execute(link_query, (url,))
+    row = inurlcur.fetchone()
+    while row is not None:
+        print(row)
+        link_insert = 'INSERT INTO dir_pagelink (rooturl_source, url_source, url_destination, rooturl_desination, anchor_text) VALUES (%s, %s, %s, %s, %s)'
+        print(outurlcur.mogrify(link_insert, (row[1], row[2], row[3], row[4], row[5])))
+        # outurlcur.execute(link_insert, (row[1], row[2], row[3], row[4], row[5]))
+        # outurldb.commit()
+        row = inurlcur.fetchone()
 
 
 def ProcessUnmatchedDomainFields(fields, existing_record):
@@ -224,13 +281,55 @@ def ProcessUnmatchedPageFields(fields, existing_record):
                         existing_record['pagetitle'] = fields['pagetitle'][0]
                     if 'pagecontents' in fields:
                         existing_record['pagecontents'] = fields['pagecontents'][0]
+                    if 'pagedescription' in fields:
+                        existing_record['pagedescription'] = fields['pagedescription'][0]
+                    if 'pagekeywords' in fields:
+                        existing_record['pagekeywords'] = fields['pagekeywords'][0]
+                    if 'pagefirstheadtag' in fields:
+                        existing_record['pagefirstheadtag'] = fields['pagefirstheadtag'][0]
+                    if 'pagefirsth2tag' in fields:
+                        existing_record['pagefirsth2tag'] = fields['pagefirsth2tag'][0]
+                    if 'pagefirsth3tag' in fields:
+                        existing_record['pagefirsth3tag'] = fields['pagefirsth3tag'][0]
                     if 'pagesize' in fields:
                         existing_record['pagesize'] = fields['pagesize'][0]
                     if 'server_header' in fields:
                         existing_record['server_header'] = fields['server_header'][0]
                     if 'num_javascripts' in fields:
                         existing_record['num_javascripts'] = fields['num_javascripts'][0]
-                        print('TODO: Copy javascript entries from urls table')
+                    if 'num_css_files' in fields:
+                        existing_record['num_css_files'] = fields['num_css_files'][0]
+                    if 'num_canvas_tags' in fields:
+                        existing_record['num_canvas_tags'] = fields['num_canvas_tags'][0]
+                    if 'num_video_tags' in fields:
+                        existing_record['num_video_tags'] = fields['num_video_tags'][0]
+                    if 'num_errors' in fields:
+                        # This one's tricky. If there are no errors, we clear them.
+                        # if there are errors, we add them.
+                        if fields['num_errors'] == 0:
+                            existing_record['num_errors'] = None
+                            existing_record['error_info'] = None
+                        else:
+                            existing_record['num_errors'] += fields['num_errors'][0]
+                            if 'error_info' in fields:
+                                existing_record['error_info'] += fields['error_info'][0]
+                        existing_record['num_errors'] = fields['num_errors'][0]
+                    if 'num_images' in fields:
+                        existing_record['num_images'] = fields['num_images'][0]
+                    if 'num_iframes' in fields:
+                        existing_record['num_iframes'] = fields['num_iframes'][0]
+                    if 'image_filenames' in fields:
+                        existing_record['image_filenames'] = fields['image_filenames'][0]
+                    if 'num_svg_tags' in fields:
+                        existing_record['num_svg_tags'] = fields['num_svg_tags'][0]
+                    if 'image_alt_tags' in fields:
+                        existing_record['image_alt_tags'] = fields['image_alt_tags'][0]
+                    if 'image_title_tags' in fields:
+                        existing_record['image_title_tags'] = fields['image_title_tags'][0]
+                    if 'server_header' in fields:
+                        existing_record['server_header'] = fields['server_header'][0]
+                    if 'content_type_header' in fields:
+                        existing_record['content_type_header'] = fields['content_type_header'][0]
                     needs_save = True
                 else:
                     print('No pagetext in fields, cannot copy it over.')
@@ -245,13 +344,64 @@ def ProcessUnmatchedPageFields(fields, existing_record):
         elif field == 'pagecontents':
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
+        elif field == 'pagedescription':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'pagekeywords':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'pagefirstheadtag':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'pagefirsth2tag':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'pagefirsth3tag':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
         elif field == 'pagesize':
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
         elif field == 'num_javascripts':
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
+        elif field == 'num_css_files':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'num_svg_tags':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'num_iframes':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'num_errors':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'error_info':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'num_canvas_tags':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'num_video_tags':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'num_images':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'image_alt_tags':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'image_title_tags':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'image_filenames':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
         elif field == 'server_header':
+            # Don't bother comparing now, only if lastcrawled is newer.
+            pass
+        elif field == 'content_type_header':
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
         else:
@@ -273,7 +423,7 @@ if not options.nodomains:
     colnames = [desc[0] for desc in incur.description]
     # print(colnames)
 
-    existing_query = 'SELECT * FROM dir_domaininfo WHERE URL = %s'
+    existing_query = 'SELECT * FROM dir_domaininfo WHERE url = %s'
 
     # We ignore calculated columns and columsn imported by other means.
     ignored_columns = ['id', 'majestic_rank', 'majestic_outdated', 'majestic_refsubnets',
@@ -397,9 +547,9 @@ if not options.nopages:
             SavePage(record)
         row = incur.fetchone()
 
-        print('--- END PROCESSING DOMAINS ---\n')
-        print('{0} existed and were updated, {1} existed and were not updated, {2} were newly added'.format(updated, notupdated, new))
-        print('------------------------------\n')
+    print('--- END PROCESSING PAGES ---\n')
+    print('{0} existed and were updated, {1} existed and were not updated, {2} were newly added'.format(updated, notupdated, new))
+    print('----------------------------\n')
 
 
 if not options.nourls:
