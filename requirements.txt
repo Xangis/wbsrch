@@ -36,7 +36,6 @@ Unidecode==0.04.19
 # Installer does not work with python3
 # django-memcachedkeys==0.1.0
 simhash==2.0.0
-Jinja2==2.10.1
 backports.functools-lru-cache==1.6.1
 favicon==0.5.1
 psycopg2-binary==2.8.6
@@ -44,7 +43,7 @@ Pillow==8.1.0
 selenium==3.141.0
 requests==2.25.1
 zone-file==0.1.5
-tlds==2019051700
-tox==3.21.0
+tlds==2021012000
+tox==3.21.2
 elasticsearch==7.10.1
 gunicorn==20.0.4

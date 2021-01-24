@@ -13,125 +13,125 @@ BAD_DATE_STRINGS = ('b', ':', 'N', 'None', '0', '2', 'B')
 
 # Accepts a DomainInfo object and updates its whois information.
 def UpdateDomainWhois(domain, detailed=False):
-            print('Updating {0}'.format(domain.url))
-            info = GetDomainInfo(domain.url)
-            if info:
-                if detailed:
-                    print('Domain Info: {0}'.format(info))
-                try:
-                    domain.domain_created = info['creation_date'][0]
-                except TypeError:
-                    domain.domain_created = info['creation_date']
-                except KeyError:
-                    pass
-                if domain.domain_created in BAD_DATE_STRINGS:
-                    print('Invalid domain_created date "{0}". Resetting to None'.format(domain.domain_created))
-                    domain.domain_created = None
-                try:
-                    domain.domain_expires = info['expiration_date'][0]
-                except TypeError:
-                    domain.domain_expires = info['expiration_date']
-                except KeyError:
-                    pass
-                if domain.domain_expires in BAD_DATE_STRINGS:
-                    print('Invalid domain_expires date "{0}". Resetting to None'.format(domain.domain_expires))
-                    domain.domain_expires = None
-                try:
-                    domain.domain_updated = info['updated_date'][0]
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                if domain.domain_updated in BAD_DATE_STRINGS:
-                    print('Invalid domain_updated date "{0}". Resetting to None'.format(domain.domain_updated))
-                    domain.domain_updated = None
-                try:
-                    domain.whois_name = info['name'][0:60]
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                try:
-                    domain.whois_city = info['city'][0:40]
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                try:
-                    domain.whois_country = info['country'][0:16]
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                try:
-                    domain.whois_state = info['state'][0:3]
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                try:
-                    domain.whois_address = info['address'][0:60]
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                try:
-                    domain.whois_org = info['org'][0:60]
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                try:
-                    domain.whois_registrar = info['registrar'][0:60]
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                try:
-                    domain.whois_zipcode = info['zipcode'][0:8]
-                except TypeError:
-                    pass
-                except KeyError:
-                    pass
-                try:
-                    domain.whois_nameservers = info['name_servers']
-                except KeyError:
-                    pass
-                try:
-                    domain.whois_emails = info['emails']
-                except KeyError:
-                    pass
-            else:
-                print('Could not get whois info for {0}'.format(domain.url))
-            domain.whois_last_updated = timezone.now()
-            if detailed:
-                print('Created: {0}, Expires: {1}, Update Date: {2}, Name: {3}, City: {4}, Country: {5}, State: {6}, Address: {7}, Org: {8}, Registrar: {9}, Zipcode: {10}, Nameservers: {11}, EMails: {12}'.format(
-                    domain.domain_created, domain.domain_expires, domain.domain_updated, domain.whois_name, domain.whois_city, domain.whois_country, domain.whois_state, domain.whois_address, domain.whois_org, domain.whois_registrar, domain.whois_zipcode, domain.whois_nameservers, domain.whois_emails))
-            try:
-                domain.save()
-            except DataError as e:
-                print('DataError: Failed to get domain info for {0}: {1}'.format(domain.url, e))
-                print(serializers.serialize("json", [domain, ], indent=4))
-            except AmbiguousTimeError as e:
-                print('AmbiguousTimeError: Failed to get domain info for {0}: {1}'.format(domain.url, e))
-                print(serializers.serialize("json", [domain, ], indent=4))
-            except ValidationError as e:
-                print('ValidationError: Failed to get domain info for {0}: {1}'.format(domain.url, e))
-                try:
-                    print(serializers.serialize("json", [domain, ], indent=4))
-                except ValueError:
-                    print('domain_created: "{0}"'.format(domain.domain_created))
-                    print('domain_expires: "{0}"'.format(domain.domain_expires))
-                    print('domain_updated: "{0}"'.format(domain.domain_updated))
-                except AttributeError:
-                    print('domain_created: "{0}"'.format(domain.domain_created))
-                    print('domain_expires: "{0}"'.format(domain.domain_expires))
-                    print('domain_updated: "{0}"'.format(domain.domain_updated))
-            except NonExistentTimeError:
-                domain.domain_created = None
-                domain.domain_expires = None
-                domain.domain_updated = None
-                domain.save()
+    print('Updating {0}'.format(domain.url))
+    info = GetDomainInfo(domain.url)
+    if info:
+        if detailed:
+            print('Domain Info: {0}'.format(info))
+        try:
+            domain.domain_created = info['creation_date'][0]
+        except TypeError:
+            domain.domain_created = info['creation_date']
+        except KeyError:
+            pass
+        if domain.domain_created in BAD_DATE_STRINGS:
+            print('Invalid domain_created date "{0}". Resetting to None'.format(domain.domain_created))
+            domain.domain_created = None
+        try:
+            domain.domain_expires = info['expiration_date'][0]
+        except TypeError:
+            domain.domain_expires = info['expiration_date']
+        except KeyError:
+            pass
+        if domain.domain_expires in BAD_DATE_STRINGS:
+            print('Invalid domain_expires date "{0}". Resetting to None'.format(domain.domain_expires))
+            domain.domain_expires = None
+        try:
+            domain.domain_updated = info['updated_date'][0]
+        except TypeError:
+            pass
+        except KeyError:
+            pass
+        if domain.domain_updated in BAD_DATE_STRINGS:
+            print('Invalid domain_updated date "{0}". Resetting to None'.format(domain.domain_updated))
+            domain.domain_updated = None
+        try:
+            domain.whois_name = info['name'][0:60]
+        except TypeError:
+            pass
+        except KeyError:
+            pass
+        try:
+            domain.whois_city = info['city'][0:40]
+        except TypeError:
+            pass
+        except KeyError:
+            pass
+        try:
+            domain.whois_country = info['country'][0:16]
+        except TypeError:
+            pass
+        except KeyError:
+            pass
+        try:
+            domain.whois_state = info['state'][0:3]
+        except TypeError:
+            pass
+        except KeyError:
+            pass
+        try:
+            domain.whois_address = info['address'][0:60]
+        except TypeError:
+            pass
+        except KeyError:
+            pass
+        try:
+            domain.whois_org = info['org'][0:60]
+        except TypeError:
+            pass
+        except KeyError:
+            pass
+        try:
+            domain.whois_registrar = info['registrar'][0:60]
+        except TypeError:
+            pass
+        except KeyError:
+            pass
+        try:
+            domain.whois_zipcode = info['zipcode'][0:8]
+        except TypeError:
+            pass
+        except KeyError:
+            pass
+        try:
+            domain.whois_nameservers = info['name_servers']
+        except KeyError:
+            pass
+        try:
+            domain.whois_emails = info['emails']
+        except KeyError:
+            pass
+    else:
+        print('Could not get whois info for {0}'.format(domain.url))
+    domain.whois_last_updated = timezone.now()
+    if detailed:
+        print('Created: {0}, Expires: {1}, Update Date: {2}, Name: {3}, City: {4}, Country: {5}, State: {6}, Address: {7}, Org: {8}, Registrar: {9}, Zipcode: {10}, Nameservers: {11}, EMails: {12}'.format(
+            domain.domain_created, domain.domain_expires, domain.domain_updated, domain.whois_name, domain.whois_city, domain.whois_country, domain.whois_state, domain.whois_address, domain.whois_org, domain.whois_registrar, domain.whois_zipcode, domain.whois_nameservers, domain.whois_emails))
+    try:
+        domain.save()
+    except DataError as e:
+        print('DataError: Failed to get domain info for {0}: {1}'.format(domain.url, e))
+        print(serializers.serialize("json", [domain, ], indent=4))
+    except AmbiguousTimeError as e:
+        print('AmbiguousTimeError: Failed to get domain info for {0}: {1}'.format(domain.url, e))
+        print(serializers.serialize("json", [domain, ], indent=4))
+    except ValidationError as e:
+        print('ValidationError: Failed to get domain info for {0}: {1}'.format(domain.url, e))
+        try:
+            print(serializers.serialize("json", [domain, ], indent=4))
+        except ValueError:
+            print('domain_created: "{0}"'.format(domain.domain_created))
+            print('domain_expires: "{0}"'.format(domain.domain_expires))
+            print('domain_updated: "{0}"'.format(domain.domain_updated))
+        except AttributeError:
+            print('domain_created: "{0}"'.format(domain.domain_created))
+            print('domain_expires: "{0}"'.format(domain.domain_expires))
+            print('domain_updated: "{0}"'.format(domain.domain_updated))
+    except NonExistentTimeError:
+        domain.domain_created = None
+        domain.domain_expires = None
+        domain.domain_updated = None
+        domain.save()
 
 def GetDomainAge(domain):
     """

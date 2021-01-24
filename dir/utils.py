@@ -465,7 +465,14 @@ def MakeRealUrl(url, domain=None, secure=False):
     elif domain and '/' not in url:
         url = scheme + domain + '/' + url
     elif not url.startswith('http'):
-        url = scheme + '//' + url
+        print('Scheme: {0}, Domain: {1}, URL: {2}'.format(scheme, domain, url))
+        if domain:
+            if not url.startswith(domain):
+                url = scheme + '//' + domain + '/' + url
+            else:
+                url = scheme + '//' + url
+        else:
+            url = scheme + '//' + url
     url = NormalizeUrl(url, pre_crawl_replacement=True, secure=secure)
     return url
 
@@ -1675,10 +1682,14 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
 # Removes all URLs for that domain. Nukes them from the main site info table,
 # and if the domain is tagged with a language, nukes them from that language
 # table too.
-def RemoveURLsForDomain(rooturl):
+def RemoveURLsForDomain(rooturl, verbose=False):
     # First we delete from the main pool to get any uncategorized or
     # unprocessed URLs
-    SiteInfo.objects.filter(rooturl=rooturl).delete()
+    pages = SiteInfo.objects.filter(rooturl=rooturl)
+    if len(pages) > 0:
+        if verbose:
+            print('Deleting {0} pages for domain {1} from en index.'.format(len(pages), rooturl))
+        pages.delete()
     # Now we delete any URLs in the language table specific to that URL,
     # if any.
     try:
@@ -1686,7 +1697,11 @@ def RemoveURLsForDomain(rooturl):
         if domain.language_association and domain.language_association != 'en':
             try:
                 site_model = GetSiteInfoModelFromLanguage(domain.language_association)
-                site_model.objects.filter(rooturl=rooturl).delete()
+                pages = site_model.objects.filter(rooturl=rooturl)
+                if len(pages) > 0:
+                    if verbose:
+                        print('Deleting {0} pages for domain {1} from {2} index.'.format(len(pages), rooturl, domain.language_association))
+                    pages.delete()
             except InvalidLanguageException:
                 # This can legitimately happen when removing URLs from an unsupported language,
                 # like Armenian, that doesn't have a language table.
@@ -1694,7 +1709,11 @@ def RemoveURLsForDomain(rooturl):
     except ObjectDoesNotExist:
         pass
     # Now we nuke all crawlable URLs.
-    CrawlableUrl.objects.filter(rooturl=rooturl).delete()
+    urls = CrawlableUrl.objects.filter(rooturl=rooturl)
+    if len(urls) > 0:
+        if verbose:
+            print('Deleting {0} urls from dir_crawlableurl for domain {1}'.format(len(urls), rooturl))
+        urls.delete()
 
 
 def IsHtmlUrl(url):
@@ -2180,7 +2199,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
 
 
 def MarkURLContentsAsSpam(html, ip=None):
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, features="html.parser")
     domains = []
     for link in soup.find_all('a'):
         hr = link.get('href')
@@ -2320,7 +2339,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
                 # in already has the highest score.
                 # topurl = search_result[item.rooturl[4:]]['urls'][0]['url']
-                # highest = urlparse.urlparse(topurl).netloc
+                # highest = urlparse(topurl).netloc
                 # if highest != item.rooturl[4:]:
                 #    print u'WWW is most prominently shown and highest scoring item is {0}. We will switch these'.format(highest)
                 #    search_result[highest] = search_result.pop(item.rooturl[4:])
@@ -2333,7 +2352,7 @@ def JsonifyIndexTerm(term, language='en', save=True, limit=200, verbose=False):
                 # This is unnecessary because the URLs come to us sorted highest to lowest score, so the first one
                 # in already has the highest score.
                 # topurl = search_result['www.' + item.rooturl]['urls'][0]['url']
-                # highest = urlparse.urlparse(topurl).netloc
+                # highest = urlparse(topurl).netloc
                 # if highest != ('www.' + item.rooturl):
                 #    print u'non-WWW is most prominently shown and highest scoring item is {0}. We will switch these'.format(highest)
                 #    search_result[highest] = search_result.pop('www.' + item.rooturl)

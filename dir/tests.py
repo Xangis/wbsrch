@@ -18,13 +18,13 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.utils import timezone
-from models import *
-from exceptions import *
-from utils import *
-from crawler import *
-from indexer import *
-from language import *
-from domain import *
+from dir.models import *
+from dir.exceptions import *
+from dir.utils import *
+from dir.crawler import *
+from dir.indexer import *
+from dir.language import *
+from dir.domain import *
 from zetaweb.settings import *
 from datetime import timedelta
 
@@ -79,14 +79,14 @@ class GetRootUrlTestCase(TestCase):
         url = GetRootUrl(u'https://www.zetacentauri.com:80')
         self.assertEqual(url, u'www.zetacentauri.com')
 
-    def test_url_with_subdomain(self):
+    def test_url_with_subdomain2(self):
         """
         Tests that a URL with a subdomain works.
         """
         url = GetRootUrl(u'://www.zetacentauri.com')
         self.assertEqual(url, u'www.zetacentauri.com')
 
-    def test_url_with_subdomain2(self):
+    def test_url_with_subdomain3(self):
         """
         Tests that a URL with a subdomain works (2).
         """
@@ -171,221 +171,228 @@ class IsValidHtmlUrlTestCase(TestCase):
         """
         Tests that a URL ending with MP3 does not register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.mp3"
+        url = "http://wbsrch.com/tutorial.mp3"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_wav_url(self):
         """
         Tests that a URL ending with wav does not register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.wav"
+        url = "http://wbsrch.com/tutorial.wav"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_htm_url(self):
         """
         Tests that a URL ending with htm does register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.htm"
+        url = "http://wbsrch.com/tutorial.htm"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_aspx_url(self):
         """
         Tests that a URL ending with aspx does register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.aspx"
+        url = "http://wbsrch.com/tutorial.aspx"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_html_url(self):
         """
         Tests that a URL ending with html does register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.html"
+        url = "http://wbsrch.com/tutorial.html"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_slash_url(self):
         """
         Tests that a URL ending with / does register as valid.
         """
-        url = u"http://wbsrch.com/tutorial/"
+        url = "http://wbsrch.com/tutorial/"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_php_url(self):
         """
         Tests that a URL ending with php does register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.php"
+        url = "http://wbsrch.com/tutorial.php"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_md5_url(self):
         """
         Tests that a URL ending with md5 does register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.file.name.md5"
+        url = "http://wbsrch.com/tutorial.file.name.md5"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_pl_url(self):
         """
         Tests that a URL ending with .pl does register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.pl"
+        url = "http://wbsrch.com/tutorial.pl"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_js_url(self):
         """
         Tests that a URL starting with javascript: does not register as valid.
         """
-        url = u"javascript:alert(0)"
+        url = "javascript:alert(0)"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_mailto_url(self):
         """
         Tests that a URL starting with mailto: does not register as valid.
         """
-        url = u"mailto:example@example.com"
+        url = "mailto:example@example.com"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_exe_url(self):
         """
         Tests that a URL ending with exe does not register as valid.
         """
-        url = u"http://wbsrch.com/run.exe"
+        url = "http://wbsrch.com/run.exe"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_zip_domain(self):
         """
-        Tests that a URL ending with exe does not register as valid.
+        Tests that a URL ending with zip does not register as valid.
         """
-        url = u"http://wbsrch.zip"
+        url = "http://wbsrch.zip"
         self.assertTrue(IsHtmlUrl(url))
+
+    def test_zip_domain2(self):
+        """
+        Tests that a URL ending with ip does not register as valid.
+        """
+        url = "http://wbsrch.zip/wbsrch.zip"
+        self.assertFalse(IsHtmlUrl(url))
 
     def test_mov_domain(self):
         """
-        Tests that a URL ending with exe does not register as valid.
+        Tests that a URL ending with mov does not register as valid.
         """
-        url = u"http://wbsrch.mov/"
+        url = "http://wbsrch.mov/"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_mov_url(self):
         """
-        Tests that a URL ending with exe does not register as valid.
+        Tests that a URL ending with mov does not register as valid.
         """
-        url = u"http://wbsrch.com/wbsrch.mov"
+        url = "http://wbsrch.com/wbsrch.mov"
         self.assertFalse(IsHtmlUrl(url))
 
-    def test_mov_url(self):
+    def test_mov_url2(self):
         """
-        Tests that a URL ending with exe does not register as valid.
+        Tests that a URL ending with mov does not register as valid.
         """
-        url = u"http://wbsrch.com/wbsrch.mov?t=30s"
+        url = "http://wbsrch.com/wbsrch.mov?t=30s"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_xpi_url(self):
-        url = u"http://wbsrch.com/addon.xpi"
+        url = "http://wbsrch.com/addon.xpi"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_pdf_url(self):
         """
         Tests that a URL ending with pdf does not register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.pdf"
+        url = "http://wbsrch.com/tutorial.pdf"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_gif_url(self):
         """
         Tests that a URL ending with gif does not register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.gif"
+        url = "http://wbsrch.com/tutorial.gif"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_png_url(self):
         """
         Tests that a URL ending with png does not register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.png"
+        url = "http://wbsrch.com/tutorial.png"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_au_url(self):
         """
         Tests that a URL ending with au does register as valid.
         """
-        url = u"http://somesite.au"
+        url = "http://somesite.au"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_mpg_url(self):
         """
         Tests that a URL ending with mpg does not register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.mpg"
+        url = "http://wbsrch.com/tutorial.mpg"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_swf_url(self):
         """
         Tests that a URL ending with swf does not register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.swf"
+        url = "http://wbsrch.com/tutorial.swf"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_apk_url(self):
         """
         Tests that a URL ending with apk does not register as valid.
         """
-        url = u"http://wbsrch.com/tutorial.apk"
+        url = "http://wbsrch.com/tutorial.apk"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_jpg_url(self):
         """
         Tests that a URL ending with JPG does not register as valid. Upper to test case-insensitive match.
         """
-        url = u"http://wbsrch.com/tutorial.JPG"
+        url = "http://wbsrch.com/tutorial.JPG"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_jpeg_url(self):
         """
         Tests that a URL ending with Jpeg does not register as valid. Upper to test case-insensitive match.
         """
-        url = u"http://wbsrch.com/tutorial.Jpeg"
+        url = "http://wbsrch.com/tutorial.Jpeg"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_long_https_jpeg_url(self):
         """
         Tests that a URL ending with Jpeg does not register as valid. Upper to test case-insensitive match.
         """
-        url = u"https://wbsrch.com/site/images/tutorial.jpeg"
+        url = "https://wbsrch.com/site/images/tutorial.jpeg"
         self.assertFalse(IsHtmlUrl(url))
 
 class BlockedDomainTestCase(TestCase):
     def setUp(self):
         site = BlockedSite()
-        site.url = u'www.yandex.ru'
+        site.url = 'www.yandex.ru'
         site.reason = 8
         site.save()
 
     def test_root_url(self):
-        url = u'http://www.yandex.ru'
+        url = 'http://www.yandex.ru'
         rooturl = GetRootUrl(url)
         blocked_domain = BlockedSite.objects.filter(url=rooturl)
         self.assertEqual(blocked_domain.count(), 1)
 
     def test_rootslash_url(self):
-        url = u'http://www.yandex.ru/'
+        url = 'http://www.yandex.ru/'
         rooturl = GetRootUrl(url)
         blocked_domain = BlockedSite.objects.filter(url=rooturl)
         self.assertEqual(blocked_domain.count(), 1)
 
     def test_full_url(self):
-        url = u'http://www.yandex.ru/index/'
+        url = 'http://www.yandex.ru/index/'
         rooturl = GetRootUrl(url)
         blocked_domain = BlockedSite.objects.filter(url=rooturl)
         self.assertEqual(blocked_domain.count(), 1)
 
     def test_subdomain_url(self):
-        url = u'http://en.yandex.ru'
+        url = 'http://en.yandex.ru'
         rooturl = GetRootUrl(url)
         blocked_domain = BlockedSite.objects.filter(url=rooturl)
         self.assertEqual(blocked_domain.count(), 0)
 
     def test_safe_url(self):
-        url = u'http://www.google.com'
+        url = 'http://www.google.com'
         rooturl = GetRootUrl(url)
         blocked_domain = BlockedSite.objects.filter(url=rooturl)
         self.assertEqual(blocked_domain.count(), 0)
@@ -398,42 +405,42 @@ class BlockedDomainTestCase(TestCase):
 class CanCrawlUrlTestCase(TestCase):
     def setUp(self):
         site = BlockedSite()
-        site.url = u'www.yandex.ru'
+        site.url = 'www.yandex.ru'
         site.reason = 8
         site.save()
         site = BlockedSite()
-        site.url = u'morespamsite.com'
+        site.url = 'morespamsite.com'
         site.reason = 7
         site.exclude_subdomains = True
         site.save()
         domain = DomainInfo()
-        domain.url = u'www.spamsite.com'
+        domain.url = 'www.spamsite.com'
         domain.max_urls = 1
         domain.save()
         domain = DomainInfo()
-        domain.url = u'www.italiansite.it'
+        domain.url = 'www.italiansite.it'
         domain.max_urls = 1
         domain.language_association = 'it'
         domain.save()
         domain = DomainInfo()
-        domain.url = u'english.somesite.cn'
+        domain.url = 'english.somesite.cn'
         domain.language_association = 'en'
         domain.save()
         domain = DomainInfo()
-        domain.url = u'www.othersite.com'
+        domain.url = 'www.othersite.com'
         domain.max_urls = 1000
         domain.save()
         info = SiteInfo()
-        info.rooturl = u'www.spamsite.com'
-        info.url = u'http://www.spamsite.com/1/'
+        info.rooturl = 'www.spamsite.com'
+        info.url = 'http://www.spamsite.com/1/'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'www.spamsite.com'
-        info.url = u'http://www.spamsite.com/2/'
+        info.rooturl = 'www.spamsite.com'
+        info.url = 'http://www.spamsite.com/2/'
         info.save()
         info = SiteInfo_it()
-        info.rooturl = u'www.italiansite.it'
-        info.url = u'http://www.italiansite.it/'
+        info.rooturl = 'www.italiansite.it'
+        info.url = 'http://www.italiansite.it/'
         info.save()
         domainext = DomainSuffix()
         domainext.extension = '.hr'
@@ -444,87 +451,87 @@ class CanCrawlUrlTestCase(TestCase):
         domainext.save()
 
     def test_safe_url(self):
-        url = u'http://wbsrch.com'
+        url = 'http://wbsrch.com'
         self.assertTrue(CanCrawlUrl(url))
 
     def test_safe_recrawl_url(self):
-        url = u'http://wbsrch.com'
+        url = 'http://wbsrch.com'
         self.assertTrue(CanReCrawlUrl(url))
 
     def test_safe_short_url(self):
-        url = u'wbsrch.com'
+        url = 'wbsrch.com'
         self.assertTrue(CanCrawlUrl(url))
 
     def test_safe_recrawl_url2(self):
-        url = u'wbsrch.com/admin/dir/siteinfo/'
+        url = 'wbsrch.com/admin/dir/siteinfo/'
         self.assertTrue(CanReCrawlUrl(url))
 
     def test_safe_recrawl_url3(self):
-        url = u'http://somesite.au'
+        url = 'http://somesite.au'
         self.assertTrue(CanReCrawlUrl(url))
 
     def test_bad_url(self):
-        url = u'http://wbsrch.com/tutorial.mp3'
+        url = 'http://wbsrch.com/tutorial.mp3'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_another_bad_url(self):
-        url = u'https://wbsrch.com/images/en/tutorial.jpg'
+        url = 'https://wbsrch.com/images/en/tutorial.jpg'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_bad_short_url(self):
-        url = u'wbsrch.com/tutorial.mp3'
+        url = 'wbsrch.com/tutorial.mp3'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_blocked_url(self):
-        url = u'http://www.yandex.ru'
+        url = 'http://www.yandex.ru'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_blocked_url2(self):
-        url = u'http://morespamsite.com'
+        url = 'http://morespamsite.com'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_blocked_url3(self):
-        url = u'http://spampage.morespamsite.com'
+        url = 'http://spampage.morespamsite.com'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_blocked_short_url(self):
-        url = u'www.yandex.ru'
+        url = 'www.yandex.ru'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_blocked_extension_url(self):
-        url = u'www.taobao.cn'
+        url = 'www.taobao.cn'
         self.assertFalse(CanCrawlUrl(url))
 
-    def test_blocked_extension_url(self):
-        url = u'www.taobao.cn'
+    def test_blocked_extension_url2(self):
+        url = 'www.taobao.cn'
         self.assertTrue(CanReCrawlUrl(url))
 
     def test_blocked_extension_allowed_domain_url(self):
-        url = u'http://english.somesite.cn/some_url.htm'
+        url = 'http://english.somesite.cn/some_url.htm'
         self.assertTrue(CanCrawlUrl(url))
 
     def test_allowed_extension_url(self):
-        url = u'www.croatia.hr'
+        url = 'www.croatia.hr'
         self.assertTrue(CanCrawlUrl(url))
 
     def test_maxxed_url(self):
-        url = u'http://www.spamsite.com'
+        url = 'http://www.spamsite.com'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_maxxed_recrawl_url(self):
-        url = u'http://www.spamsite.com'
+        url = 'http://www.spamsite.com'
         self.assertTrue(CanReCrawlUrl(url))
 
     def test_maxxed_language_url(self):
-        url = u'http://www.italiansite.it/url/'
+        url = 'http://www.italiansite.it/url/'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_unmaxxed_url(self):
-        url = u'http://www.othersite.com'
+        url = 'http://www.othersite.com'
         self.assertTrue(CanCrawlUrl(url))
 
     def test_maxxed_short_url(self):
-        url = u'www.spamsite.com'
+        url = 'www.spamsite.com'
         self.assertFalse(CanCrawlUrl(url))
 
     def tearDown(self):
@@ -541,459 +548,504 @@ class CanCrawlUrlTestCase(TestCase):
 
 class NormalizeUrlTestCase(TestCase):
     def test_normal_url(self):
-        url = u'http://wbsrch.com/tutorial.htm'
+        url = 'http://wbsrch.com/tutorial.htm'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial.htm')
 
     def test_normal_url2(self):
-        url = u'http://wbsrch.com'
+        url = 'http://wbsrch.com'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com')
 
-    def test_normal_url2(self):
-        url = u'http://wbsrch.com/'
+    def test_normal_url3(self):
+        url = 'http://wbsrch.com/'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/')
 
     def test_jsession_url(self):
-        url = u'http://farm.myswitzerland.com/on-the-farm/Airolojsessionid=94AFB92FD66F248EC3EF279B7A6732EF'
+        url = 'http://farm.myswitzerland.com/on-the-farm/Airolojsessionid=94AFB92FD66F248EC3EF279B7A6732EF'
         self.assertEqual(NormalizeUrl(url), u'http://farm.myswitzerland.com/on-the-farm/Airolo')
 
     def test_jsession_url2(self):
-        url = u'https://secure2.convio.net/fmnh/site/SPageServer/jsessionid=F1C5BEC5FD279BA9953C87FD37D5F89D.app274b?donate=now&pagename=api_donate'
+        url = 'https://secure2.convio.net/fmnh/site/SPageServer/jsessionid=F1C5BEC5FD279BA9953C87FD37D5F89D.app274b?donate=now&pagename=api_donate'
         self.assertEqual(NormalizeUrl(url), u'https://secure2.convio.net/fmnh/site/SPageServer/?donate=now&pagename=api_donate')
 
     def test_jsession_url3(self):
-        url = u'https://www.psiservice.com/psiweb/index.jsp;jsessionid=450B52BF0268B30DE854C552309E3E6A'
+        url = 'https://www.psiservice.com/psiweb/index.jsp;jsessionid=450B52BF0268B30DE854C552309E3E6A'
         self.assertEqual(NormalizeUrl(url), u'https://www.psiservice.com/psiweb/index.jsp')
 
     def test_jsession_url4(self):
-        url = u'http://sage-ereference.com/publicstart;jsessionid=169E7071B011936163BDD68A0C95BD32?authRejection=true'
+        url = 'http://sage-ereference.com/publicstart;jsessionid=169E7071B011936163BDD68A0C95BD32?authRejection=true'
         self.assertEqual(NormalizeUrl(url), u'http://sage-ereference.com/publicstart?authRejection=true')
 
     def test_doubleslash_url(self):
-        url = u'//wbsrch.com/tutorial.htm'
+        url = '//wbsrch.com/tutorial.htm'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial.htm')
 
     def test_another_normal_url(self):
-        url = u'http://wbsrch.com/tutorial/'
+        url = 'http://wbsrch.com/tutorial/'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial/')
 
     def test_third_normal_url(self):
-        url = u'http://wbsrch.com/tutorial'
+        url = 'http://wbsrch.com/tutorial'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial')
 
     def test_query_url(self):
-        url = u'http://wbsrch.com/search/?q=term&r=termtwo'
+        url = 'http://wbsrch.com/search/?q=term&r=termtwo'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/search/?q=term&r=termtwo')
 
     def test_another_query_url(self):
-        url = u'http://wbsrch.com/index.php?q=term&r=termtwo'
+        url = 'http://wbsrch.com/index.php?q=term&r=termtwo'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_sessionid_url(self):
-        url = u'http://wbsrch.com/index.php?q=term&r=termtwo&PHPSESSID=1234567abc'
+        url = 'http://wbsrch.com/index.php?q=term&r=termtwo&PHPSESSID=1234567abc'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_utm_url(self):
-        url = u'http://wbsrch.com/index.php?q=term&r=termtwo&utm_source=abc&utm_medium=def&utm_campaign=456&utm_term=789&utm_content=123'
+        url = 'http://wbsrch.com/index.php?q=term&r=termtwo&utm_source=abc&utm_medium=def&utm_campaign=456&utm_term=789&utm_content=123'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_sessionid_lower_url(self):
-        url = u'http://wbsrch.com/index.php?q=term&r=termtwo&jsessionid=1234567abc'
+        url = 'http://wbsrch.com/index.php?q=term&r=termtwo&jsessionid=1234567abc'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_justsessionid_url(self):
-        url = u'http://wbsrch.com/index.php?zenid=1234567abc'
+        url = 'http://wbsrch.com/index.php?zenid=1234567abc'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php')
 
     def test_fragment_url(self):
-        url = u'http://wbsrch.com/tutorial.htm#fragment'
+        url = 'http://wbsrch.com/tutorial.htm#fragment'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial.htm')
 
     def test_https_subdomain_url(self):
-        url = u'https://el.wbsrch.com/tutorial.htm'
+        url = 'https://el.wbsrch.com/tutorial.htm'
         self.assertEqual(NormalizeUrl(url), u'https://el.wbsrch.com/tutorial.htm')
 
     def test_port_url(self):
-        url = u'https://wbsrch.com:8080/tutorial.htm'
+        url = 'https://wbsrch.com:8080/tutorial.htm'
         self.assertEqual(NormalizeUrl(url), u'https://wbsrch.com:8080/tutorial.htm')
 
     def test_capital_url(self):
-        url = u'https://DE.WBSRCH.COM/tutorial.htm'
+        url = 'https://DE.WBSRCH.COM/tutorial.htm'
 
         self.assertEqual(NormalizeUrl(url), u'https://de.wbsrch.com/tutorial.htm')
 
     def test_capital_after_url(self):
-        url = u'https://es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM'
+        url = 'https://es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM'
         self.assertEqual(NormalizeUrl(url), u'https://es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM')
 
     def test_mixed_capital_url(self):
-        url = u'https://fr.WBSRCH.com/TUTORIAL_and_WHATNOT.htm'
+        url = 'https://fr.WBSRCH.com/TUTORIAL_and_WHATNOT.htm'
         self.assertEqual(NormalizeUrl(url), u'https://fr.wbsrch.com/TUTORIAL_and_WHATNOT.htm')
 
 class MakeRealUrlTestCase(TestCase):
     def test_doubleslash_domain_url(self):
-        url = u'//wbsrch.com/tutorial.htm'
+        url = '//wbsrch.com/tutorial.htm'
         self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial.htm')
 
     def test_slash_url(self):
-        url = u'/tutorial.htm'
+        url = '/tutorial.htm'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
 
     def test_slash_url2(self):
-        url = u'/tutorial.html'
+        url = '/tutorial.html'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.html')
 
     def test_slash_url3(self):
-        url = u'/tutorial.php'
+        url = '/tutorial.php'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.php')
 
     def test_colonslash_url6(self):
-        url = u'://tutorial.site/tutorial.php'
+        url = '://tutorial.site/tutorial.php'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://tutorial.site/tutorial.php')
 
     def test_colonslash_url7(self):
-        url = u'//tutorial.site/tutorial/'
+        url = '//tutorial.site/tutorial/'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://tutorial.site/tutorial/')
 
     def test_slash_url5(self):
-        url = u'/tutorial/tutorial.htm'
+        url = '/tutorial/tutorial.htm'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/tutorial.htm')
 
     def test_doubleslash_domainurl(self):
-        url = u'//wbsrch.com/tutorial/'
+        url = '//wbsrch.com/tutorial/'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/')
 
+    def test_justdomain_nohttp(self):
+        # Pass in domain to make it work.
+        url = 'wbsrch.com/tutorial/'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/')
+
+    def test_justdomain_nohttp2(self):
+        url = 'wbsrch.com/tutorial/'
+        self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial/')
+
+    def test_justdomain_nohttp3(self):
+        url = 'browser.wbsrch.com/tutorial/tutorial.htm'
+        self.assertEqual(MakeRealUrl(url), u'http://browser.wbsrch.com/tutorial/tutorial.htm')
+
     def test_doubleslash_domainurl2(self):
-        url = u'//wbsrch.com'
+        url = '//wbsrch.com'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com')
 
+    def test_nakeddomain(self):
+        url = 'wbsrch.com'
+        self.assertEqual(MakeRealUrl(url, None), u'http://wbsrch.com')
+
+    def test_nakeddomain2(self):
+        url = 'browser.wbsrch.com'
+        self.assertEqual(MakeRealUrl(url), u'http://browser.wbsrch.com')
+
     def test_doubleslash_domainurl3(self):
-        url = u'//wbsrch.com/tutorial.htm'
+        url = '//wbsrch.com/tutorial.htm'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
 
     def test_colondoubleslash_domainurl(self):
-        url = u'://wbsrch.com/tutorial.htm'
+        url = '://wbsrch.com/tutorial.htm'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
 
     def test_doubleslash_domainurl4(self):
-        url = u'//wbsrch.com/'
+        url = '//wbsrch.com/'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/')
 
     def test_doubleslash_domainurl5(self):
-        url = u'//wbsrch.com/tutorial/cheese/crackers/'
+        url = '//wbsrch.com/tutorial/cheese/crackers/'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/cheese/crackers/')
 
     def test_doubleslash_domainurl6(self):
-        url = u'//someothersite.com'
+        url = '//someothersite.com'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://someothersite.com')
 
     def test_doubleslash_domainurl7(self):
-        url = u'//someothersite.com/tutorial.htm'
+        url = '//someothersite.com/tutorial.htm'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://someothersite.com/tutorial.htm')
 
     def test_doubleslash_domainurl8(self):
-        url = u'//someothersite.com?name=me'
+        url = '//someothersite.com?name=me'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://someothersite.com?name=me')
 
+    def test_noslash_domainurl1(self):
+        url = 'tutorial.htm'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
+
+    def test_noslash_domainurl2(self):
+        url = 'tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial?name=me')
+
+    def test_noslash_domainurl3(self):
+        url = 'pages/tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/pages/tutorial?name=me')
+
+    def test_noslash_domainurl4(self):
+        url = 'tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', secur=True), u'https://wbsrch.com/tutorial?name=me')
+
+    def test_noslash_domainurl5(self):
+        url = 'pages/tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', True), u'https://wbsrch.com/pages/tutorial?name=me')
+
+    def test_slash_domainurl_b(self):
+        url = '/pages/tutorial?name=me'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', True), u'https://wbsrch.com/pages/tutorial?name=me')
+
     def test_normal_url(self):
-        url = u'http://wbsrch.com/tutorial'
+        url = 'http://wbsrch.com/tutorial'
         self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial')
 
     def test_query_url(self):
-        url = u'http://wbsrch.com/search/?q=term&r=termtwo'
+        url = 'http://wbsrch.com/search/?q=term&r=termtwo'
         self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/search/?q=term&r=termtwo')
 
     def test_doubleslash_query_url(self):
-        url = u'//wbsrch.com/index.php?q=term&r=termtwo'
+        url = '//wbsrch.com/index.php?q=term&r=termtwo'
         self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_sessionid_url(self):
-        url = u'wbsrch.com/index.php?q=term&r=termtwo&PHPSESSID=1234567abc'
+        url = 'wbsrch.com/index.php?q=term&r=termtwo&PHPSESSID=1234567abc'
         self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_secure_utm_url(self):
-        url = u'https://wbsrch.com/index.php?q=term&r=termtwo&utm_source=abc&utm_medium=def&utm_campaign=456&utm_term=789&utm_content=123'
+        url = 'https://wbsrch.com/index.php?q=term&r=termtwo&utm_source=abc&utm_medium=def&utm_campaign=456&utm_term=789&utm_content=123'
         self.assertEqual(MakeRealUrl(url), u'https://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_javascript_url(self):
-        url = u'javascript:void(0)'
+        url = 'javascript:void(0)'
         self.assertEqual(MakeRealUrl(url), u'javascript:void(0)')
 
     def test_mailto_url(self):
-        url = u'mailto:bob@bob.com'
+        url = 'mailto:bob@bob.com'
         self.assertEqual(MakeRealUrl(url), u'mailto:bob@bob.com')
 
     def test_fileurlwithsessionid_url(self):
-        url = u'index.php?zenid=1234567abc'
+        url = 'index.php?zenid=1234567abc'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/index.php')
 
     def test_fragment_url(self):
-        url = u'wbsrch.com/tutorial.htm#fragment'
+        url = 'wbsrch.com/tutorial.htm#fragment'
         self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial.htm')
 
     def test_https_subdomain_url(self):
-        url = u'https://el.wbsrch.com/tutorial.htm'
+        url = 'https://el.wbsrch.com/tutorial.htm'
         self.assertEqual(MakeRealUrl(url), u'https://el.wbsrch.com/tutorial.htm')
 
     def test_port_url(self):
-        url = u'https://wbsrch.com:8080/tutorial.htm'
+        url = 'https://wbsrch.com:8080/tutorial.htm'
         self.assertEqual(MakeRealUrl(url), u'https://wbsrch.com:8080/tutorial.htm')
 
     def test_capital_url(self):
-        url = u'https://DE.WBSRCH.COM/tutorial.htm'
+        url = 'https://DE.WBSRCH.COM/tutorial.htm'
         self.assertEqual(MakeRealUrl(url), u'https://de.wbsrch.com/tutorial.htm')
 
     def test_capital_after_url(self):
-        url = u'//es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM'
+        url = '//es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM'
         self.assertEqual(MakeRealUrl(url), u'http://es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM')
 
     def test_mixed_capital_url(self):
-        url = u'fr.WBSRCH.com/TUTORIAL_and_WHATNOT.htm'
+        url = 'fr.WBSRCH.com/TUTORIAL_and_WHATNOT.htm'
         self.assertEqual(MakeRealUrl(url), u'http://fr.wbsrch.com/TUTORIAL_and_WHATNOT.htm')
 
 class InfixLanguageTestCase(TestCase):
     def test_english_infix(self):
-        url = u'https://www.wbsrch.com/en/welcome.htm'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'https://www.wbsrch.com/en/welcome.htm'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_no_infix(self):
-        url = u'https://wbsrch.com/'
+        url = 'https://wbsrch.com/'
         self.assertIsNone(GetInfixLanguage(url))
 
     def test_swahili_infix(self):
-        url = u'https://wbsrch.com/swahili/web/site/'
-        self.assertEqual(u'sw', GetInfixLanguage(url))
+        url = 'https://wbsrch.com/swahili/web/site/'
+        self.assertEqual('sw', GetInfixLanguage(url))
 
     def test_danish_infix(self):
-        url = u'http://www.sbs.com.au/yourlanguage/danish/'
-        self.assertEqual(u'da', GetInfixLanguage(url))
+        url = 'http://www.sbs.com.au/yourlanguage/danish/'
+        self.assertEqual('da', GetInfixLanguage(url))
 
     def test_german_infix(self):
-        url = u'http://www.sbs.com.au/yourlanguage/german/'
-        self.assertEqual(u'de', GetInfixLanguage(url))
+        url = 'http://www.sbs.com.au/yourlanguage/german/'
+        self.assertEqual('de', GetInfixLanguage(url))
 
     def test_de_de_infix(self):
-        url = u'http://www.example.com/de-de/index/'
-        self.assertEqual(u'de', GetInfixLanguage(url))
+        url = 'http://www.example.com/de-de/index/'
+        self.assertEqual('de', GetInfixLanguage(url))
 
     def test_fr_fr_infix(self):
-        url = u'http://www.example.com/fr-fr/'
-        self.assertEqual(u'fr', GetInfixLanguage(url))
+        url = 'http://www.example.com/fr-fr/'
+        self.assertEqual('fr', GetInfixLanguage(url))
 
     def test_fr_fr_uppercaseinfix(self):
-        url = u'http://www.example.com/fr-FR/'
-        self.assertEqual(u'fr', GetInfixLanguage(url))
+        url = 'http://www.example.com/fr-FR/'
+        self.assertEqual('fr', GetInfixLanguage(url))
 
     def test_fr_fr_uppercaseunderscoreinfix(self):
-        url = u'http://www.example.com/fr_FR/'
-        self.assertEqual(u'fr', GetInfixLanguage(url))
+        url = 'http://www.example.com/fr_FR/'
+        self.assertEqual('fr', GetInfixLanguage(url))
 
     def test_fr_fr_underscoreinfix(self):
-        url = u'http://www.example.com/fr_fr/'
-        self.assertEqual(u'fr', GetInfixLanguage(url))
+        url = 'http://www.example.com/fr_fr/'
+        self.assertEqual('fr', GetInfixLanguage(url))
 
     def test_sv_se_infix(self):
-        url = u'http://www.example.com/sv-se/'
-        self.assertEqual(u'sv', GetInfixLanguage(url))
+        url = 'http://www.example.com/sv-se/'
+        self.assertEqual('sv', GetInfixLanguage(url))
 
     def test_sv_se_underscoreinfix(self):
-        url = u'http://www.example.com/sv_se/'
-        self.assertEqual(u'sv', GetInfixLanguage(url))
+        url = 'http://www.example.com/sv_se/'
+        self.assertEqual('sv', GetInfixLanguage(url))
 
     def test_fr_ch_infix(self):
-        url = u'http://www.example.com/fr-ch/index.htm'
-        self.assertEqual(u'fr', GetInfixLanguage(url))
+        url = 'http://www.example.com/fr-ch/index.htm'
+        self.assertEqual('fr', GetInfixLanguage(url))
 
     def test_en_za_infix(self):
-        url = u'http://www.example.com/en-za/site/index/'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'http://www.example.com/en-za/site/index/'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_es_es_infix(self):
-        url = u'http://www.example.com/es-es/index.htm'
-        self.assertEqual(u'es', GetInfixLanguage(url))
+        url = 'http://www.example.com/es-es/index.htm'
+        self.assertEqual('es', GetInfixLanguage(url))
 
     def test_uppercase_infix(self):
-        url = u'http://www.example.com/SW/index.htm'
-        self.assertEqual(u'sw', GetInfixLanguage(url))
+        url = 'http://www.example.com/SW/index.htm'
+        self.assertEqual('sw', GetInfixLanguage(url))
 
     def test_it_it_infix(self):
-        url = u'http://www.example.com/it-it/index/page.htm'
-        self.assertEqual(u'it', GetInfixLanguage(url))
+        url = 'http://www.example.com/it-it/index/page.htm'
+        self.assertEqual('it', GetInfixLanguage(url))
 
     def test_langname_infix(self):
-        url = u'http://www.example.com/italian/index/page.htm'
-        self.assertEqual(u'it', GetInfixLanguage(url))
+        url = 'http://www.example.com/italian/index/page.htm'
+        self.assertEqual('it', GetInfixLanguage(url))
 
     def test_shortlangname_infix(self):
-        url = u'http://www.example.com/por/index/page.htm'
-        self.assertEqual(u'pt', GetInfixLanguage(url))
+        url = 'http://www.example.com/por/index/page.htm'
+        self.assertEqual('pt', GetInfixLanguage(url))
 
     def test_ru_infix(self):
-        url = u'http://www.example.com/ru/index/page.htm'
+        url = 'http://www.example.com/ru/index/page.htm'
         try:
             GetInfixLanguage(url)
         except InvalidLanguageException as e:
             self.assertEqual(e.language, u'ru')
 
     def test_zh_cn_infix(self):
-        url = u'http://www.example.com/zh-cn/index/page.htm'
+        url = 'http://www.example.com/zh-cn/index/page.htm'
         try:
             GetInfixLanguage(url)
         except InvalidLanguageException as e:
             self.assertEqual(e.language, u'zh')
 
     def test_uk_uk_infix(self):
-        url = u'http://www.example.com/uk-UA/index/page.htm'
+        url = 'http://www.example.com/uk-UA/index/page.htm'
         try:
             GetInfixLanguage(url)
         except InvalidLanguageException as e:
             self.assertEqual(e.language, u'uk')
 
     def test_somali_infix(self):
-        url = u'http://www.bbc.co.uk/somali/topics/video'
-        self.assertEqual(u'so', GetInfixLanguage(url))
+        url = 'http://www.bbc.co.uk/somali/topics/video'
+        self.assertEqual('so', GetInfixLanguage(url))
 
     def test_somali_infix_again(self):
-        url = u'http://www.bbc.co.uk/somali'
-        self.assertEqual(u'so', GetInfixLanguage(url))
+        url = 'http://www.bbc.co.uk/somali'
+        self.assertEqual('so', GetInfixLanguage(url))
 
     def test_hausa_infix(self):
-        url = u'https://wbsrch.com/hausa'
-        self.assertEqual(u'ha', GetInfixLanguage(url))
+        url = 'https://wbsrch.com/hausa'
+        self.assertEqual('ha', GetInfixLanguage(url))
 
     def test_turkce__infix(self):
-        url = u'https://wbsrch.com/turkce/index.htm'
-        self.assertEqual(u'tr', GetInfixLanguage(url))
+        url = 'https://wbsrch.com/turkce/index.htm'
+        self.assertEqual('tr', GetInfixLanguage(url))
 
     def test_portuguese_infix(self):
-        url = u'https://wbsrch.com/portuguese'
-        self.assertEqual(u'pt', GetInfixLanguage(url))
+        url = 'https://wbsrch.com/portuguese'
+        self.assertEqual('pt', GetInfixLanguage(url))
 
     def test_invalid_infix(self):
-        url = u'https://wbsrch.com/de-ca/welcome.htm'
+        url = 'https://wbsrch.com/de-ca/welcome.htm'
         self.assertIsNone(GetInfixLanguage(url))
 
     def test_no_infix_with_prefix(self):
-        url = u'https://de.wbsrch.com/welcome.htm'
+        url = 'https://de.wbsrch.com/welcome.htm'
         self.assertIsNone(GetInfixLanguage(url))
 
     def test_french_infix(self):
-        url = u'https://www.wbsrch.com/fr/welcome/index.php'
-        self.assertEqual(u'fr', GetInfixLanguage(url))
+        url = 'https://www.wbsrch.com/fr/welcome/index.php'
+        self.assertEqual('fr', GetInfixLanguage(url))
 
     # These are specific use cases that have failed in production in the past.
 
     def test_tough_infix1(self):
-        url = u'http://www.myswitzerland.com/de-ch/empfehlungen/sommerferien.html'
-        self.assertEqual(u'de', GetInfixLanguage(url))
+        url = 'http://www.myswitzerland.com/de-ch/empfehlungen/sommerferien.html'
+        self.assertEqual('de', GetInfixLanguage(url))
 
     def test_tough_infix2(self):
-        url = u'https://www.xing.com/company/haufe-gruppe'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'https://www.xing.com/company/haufe-gruppe'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_tough_infix3(self):
-        url = u'http://www.bloglovin.com/wolfj'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'http://www.bloglovin.com/wolfj'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_tough_infix4(self):
-        url = u'http://www.dell.com/co/empresas/p/latitude-laptops.aspx?s=bsd&c=co&%7Eck=mn&l=es'
-        self.assertEqual(u'es', GetUrlParameterLanguage(url))
+        url = 'http://www.dell.com/co/empresas/p/latitude-laptops.aspx?s=bsd&c=co&%7Eck=mn&l=es'
+        self.assertEqual('es', GetUrlParameterLanguage(url))
 
     def test_tough_infix5(self):
-        url = u'http://studybible.info/Hungarian/1%20Corinthians'
-        self.assertEqual(u'hu', GetInfixLanguage(url))
+        url = 'http://studybible.info/Hungarian/1%20Corinthians'
+        self.assertEqual('hu', GetInfixLanguage(url))
 
     def test_tough_infix6(self):
-        url = u'http://studybible.info/Croatian/1%20Corinthians'
-        self.assertEqual(u'hr', GetInfixLanguage(url))
+        url = 'http://studybible.info/Croatian/1%20Corinthians'
+        self.assertEqual('hr', GetInfixLanguage(url))
 
     def test_tough_infix7(self):
-        url = u'http://studybible.info/Estonian/1%20Corinthians'
-        self.assertEqual(u'et', GetInfixLanguage(url))
+        url = 'http://studybible.info/Estonian/1%20Corinthians'
+        self.assertEqual('et', GetInfixLanguage(url))
 
     def test_tough_infix8(self):
-        url = u'http://studybible.info/Danish/1%20Corinthians'
-        self.assertEqual(u'da', GetInfixLanguage(url))
+        url = 'http://studybible.info/Danish/1%20Corinthians'
+        self.assertEqual('da', GetInfixLanguage(url))
 
     def test_tough_infix9(self):
-        url = u'http://www.zomato.com/london/kings-cross-restaurants'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'http://www.zomato.com/london/kings-cross-restaurants'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_tough_infix10(self):
-        url = u'http://www.rhonealpesjob.com/wolseleyfrance'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'http://www.rhonealpesjob.com/wolseleyfrance'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_tough_infix11(self):
-        url = u'http://subtitlesbank.com/cs/subtitles/language/fr/'
-        self.assertEqual(u'cs', GetInfixLanguage(url))
+        url = 'http://subtitlesbank.com/cs/subtitles/language/fr/'
+        self.assertEqual('cs', GetInfixLanguage(url))
 
     def test_tough_infix12(self):
-        url = u'http://subtitlesbank.com/el/subtitles/language/fr/'
-        self.assertEqual(u'el', GetInfixLanguage(url))
+        url = 'http://subtitlesbank.com/el/subtitles/language/fr/'
+        self.assertEqual('el', GetInfixLanguage(url))
 
     def test_tough_infix13(self):
-        url = u'http://www.bloglovin.com/littlecoltposts'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'http://www.bloglovin.com/littlecoltposts'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_tough_infix14(self):
-        url = u'https://www.fedex.com/lite/lite-ship.html?locale=en_gb&cntry_code=gb'
-        self.assertEqual(u'en', GetUrlParameterLanguage(url))
+        url = 'https://www.fedex.com/lite/lite-ship.html?locale=en_gb&cntry_code=gb'
+        self.assertEqual('en', GetUrlParameterLanguage(url))
 
     def test_tough_infix15(self):
-        url = u'http://www.gmx.net/magazine/wirtschaft/haushalt-strom-sparen-18916260'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'http://www.gmx.net/magazine/wirtschaft/haushalt-strom-sparen-18916260'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_tough_infix16(self):
-        url = u'http://newpressrelease.com/finance/71851-how-to-choose-an-unsecured-line-of-credit'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'http://newpressrelease.com/finance/71851-how-to-choose-an-unsecured-line-of-credit'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_tough_infix17(self):
-        url = u'http://www.adtech.com/products/lite.html'
-        self.assertEqual(u'en', GetInfixLanguage(url))
+        url = 'http://www.adtech.com/products/lite.html'
+        self.assertEqual('en', GetInfixLanguage(url))
 
     def test_tough_infix18(self):
-        url = u'http://www.directorioforuns.com/pt/tag/mundo/az'
-        self.assertEqual(u'pt', GetInfixLanguage(url))
+        url = 'http://www.directorioforuns.com/pt/tag/mundo/az'
+        self.assertEqual('pt', GetInfixLanguage(url))
 
 
 class PageLanguageTestCase(TestCase):
     def test_get_page_language(self):
-        url = u'http://de.wbsrch.de/de/welcome.htm'
-        html = u'<html lang="de"><head><title>Title</title><meta name="Content-Language" content="de"></head><body>Hallo, Deutschland.</body></html>'
+        url = 'http://de.wbsrch.de/de/welcome.htm'
+        html = '<html lang="de"><head><title>Title</title><meta name="Content-Language" content="de"></head><body>Hallo, Deutschland.</body></html>'
         self.assertEqual(IdentifyPageLanguage(url, html)[0], 'de')
 
     def test_get_page_language_prefix(self):
-        url = u'http://lv.wbsrch.com'
-        html = u'<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
+        url = 'http://lv.wbsrch.com'
+        html = '<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
         self.assertEqual(IdentifyPageLanguage(url, html)[0], 'lv')
 
     def test_get_page_badlanguage_prefix(self):
-        url = u'http://ja.wbsrch.com'
-        html = u'<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
+        url = 'http://ja.wbsrch.com'
+        html = '<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
         self.assertEqual(IdentifyPageLanguage(url, html)[0], 'ja')
 
     def test_get_page_badlanguage_suffix(self):
-        url = u'http://wbsrch.az'
-        html = u'<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
+        url = 'http://wbsrch.az'
+        html = '<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
         self.assertEqual(IdentifyPageLanguage(url, html)[0], 'az')
 
     def test_get_page_language_infix(self):
-        url = u'http://wbsrch.com/sv/page/'
-        html = u'<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
+        url = 'http://wbsrch.com/sv/page/'
+        html = '<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
         self.assertEqual(IdentifyPageLanguage(url, html)[0], 'sv')
 
     def test_get_blocked_page_language_infix(self):
-        url = u'http://wbsrch.com/ru/page/'
-        html = u'<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
+        url = 'http://wbsrch.com/ru/page/'
+        html = '<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
         self.assertEqual(IdentifyPageLanguage(url, html)[0], 'ru')
 
     def test_get_locale_language_infix(self):
-        url = u'http://wbsrch.com/es-ar/page/'
-        html = u'<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
+        url = 'http://wbsrch.com/es-ar/page/'
+        html = '<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
         self.assertEqual(IdentifyPageLanguage(url, html)[0], 'es')
 
     def test_get_blocked_locale_language_infix(self):
-        url = u'http://wbsrch.com/ar-eg/page/'
-        html = u'<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
+        url = 'http://wbsrch.com/ar-eg/page/'
+        html = '<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
         self.assertEqual(IdentifyPageLanguage(url, html)[0], 'ar')
 
 
@@ -1127,19 +1179,19 @@ class LanguageModelTestCase(TestCase):
     def test_zh_log(self):
         self.assertRaises(InvalidLanguageException, GetSearchLogModelFromLanguage, 'zh')
 
-    def test_de_url(self):
+    def test_de_keywodr(self):
         model = GetKeywordRankingModelFromLanguage('de')
         self.assertEqual(model, KeywordRanking_de)
 
-    def test_en_US_url(self):
+    def test_en_US_keyword(self):
         model = GetKeywordRankingModelFromLanguage('en-US')
         self.assertEqual(model, KeywordRanking)
 
-    def test_en_url(self):
+    def test_en_keyword(self):
         model = GetKeywordRankingModelFromLanguage('en')
         self.assertEqual(model, KeywordRanking)
 
-    def test_empty_url(self):
+    def test_empty_keyword(self):
         model = GetKeywordRankingModelFromLanguage(None)
         self.assertEqual(model, KeywordRanking)
 
@@ -1150,36 +1202,36 @@ class LanguageModelTestCase(TestCase):
 class UpdateAlexaRankTestCase(TestCase):
     def setUp(self):
         domain = DomainInfo()
-        domain.url = u'www.spamsite.com'
+        domain.url = 'www.spamsite.com'
         domain.alexa_rank = 999
         domain.save()
         domain = DomainInfo()
-        domain.url = u'spamsite.com'
+        domain.url = 'spamsite.com'
         domain.alexa_rank = 998
         domain.save()
         domain = DomainInfo()
-        domain.url = u'spamsite2.com'
+        domain.url = 'spamsite2.com'
         domain.alexa_rank = 997
         domain.save()
         domain = DomainInfo()
-        domain.url = u'www.spamsite3.com'
+        domain.url = 'www.spamsite3.com'
         domain.alexa_rank = 996
         domain.save()
         domain = DomainInfo()
-        domain.url = u'spamsite4.com'
+        domain.url = 'spamsite4.com'
         domain.alexa_rank = 995
         domain.save()
         domain = DomainInfo()
-        domain.url = u'www.spamsite4.com'
+        domain.url = 'www.spamsite4.com'
         domain.alexa_rank = 994
         domain.save()
         domain = DomainInfo()
-        domain.url = u'www.spamsite6.com'
+        domain.url = 'www.spamsite6.com'
         domain.alexa_rank = 993
         domain.save()
 
     def test_update_raw_url(self):
-        url = u'spamsite2.com'
+        url = 'spamsite2.com'
         rank = 100
         UpdateAlexaRank(url, rank)
         domain = DomainInfo.objects.get(url=url)
@@ -1187,7 +1239,7 @@ class UpdateAlexaRankTestCase(TestCase):
         # TODO: Assert exception if we query www.spamsite2.com
 
     def test_update_www_url(self):
-        url = u'www.spamsite3.com'
+        url = 'www.spamsite3.com'
         rank = 200
         UpdateAlexaRank(url, rank)
         domain = DomainInfo.objects.get(url=url)
@@ -1195,8 +1247,8 @@ class UpdateAlexaRankTestCase(TestCase):
         # TODO: Assert exception if we query spamsite3.com
 
     def test_update_www_url_and_base(self):
-        url = u'www.spamsite.com'
-        baseurl = u'spamsite.com'
+        url = 'www.spamsite.com'
+        baseurl = 'spamsite.com'
         rank = 300
         UpdateAlexaRank(url, rank)
         domain = DomainInfo.objects.get(url=url)
@@ -1206,8 +1258,8 @@ class UpdateAlexaRankTestCase(TestCase):
         pass
 
     def test_update_base_url_and_www(self):
-        url = u'spamsite4.com'
-        wwwurl = u'www.spamsite4.com'
+        url = 'spamsite4.com'
+        wwwurl = 'www.spamsite4.com'
         rank = 400
         UpdateAlexaRank(url, rank)
         domain = DomainInfo.objects.get(url=url)
@@ -1216,7 +1268,7 @@ class UpdateAlexaRankTestCase(TestCase):
         self.assertEqual(domain.alexa_rank, rank)
 
     def test_add_new_url(self):
-        url = u'spamsite5.com'
+        url = 'spamsite5.com'
         rank = 500
         UpdateAlexaRank(url, rank)
         domain = DomainInfo.objects.get(url=url)
@@ -1224,8 +1276,8 @@ class UpdateAlexaRankTestCase(TestCase):
         # TODO: Assert exception if we query www.spamsite5.com
 
     def test_add_new_url_existing_www(self):
-        url = u'spamsite6.com'
-        wwwurl = u'www.spamsite6.com'
+        url = 'spamsite6.com'
+        wwwurl = 'www.spamsite6.com'
         rank = 500
         UpdateAlexaRank(url, rank)
         domain = DomainInfo.objects.get(url=url)
@@ -1241,32 +1293,32 @@ class UpdateAlexaRankTestCase(TestCase):
 class RecrawlUrlTestCase(TestCase):
     def setUp(self):
         info = SiteInfo()
-        info.rooturl = u'wbsrch.com'
-        info.url = u'http://wbsrch.com/'
+        info.rooturl = 'wbsrch.com'
+        info.url = 'http://wbsrch.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'wbsrch.com'
-        info.url = u'http://wbsrch.com/search/'
+        info.rooturl = 'wbsrch.com'
+        info.url = 'http://wbsrch.com/search/'
         info.lastcrawled = timezone.now()
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'wbsrch.com'
-        info.url = u'http://wbsrch.com/changelog/'
+        info.rooturl = 'wbsrch.com'
+        info.url = 'http://wbsrch.com/changelog/'
         info.lastcrawled = timezone.now() - timedelta(days=5)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'wbsrch.com'
-        info.url = u'http://wbsrch.com/privacy/'
+        info.rooturl = 'wbsrch.com'
+        info.url = 'http://wbsrch.com/privacy/'
         info.lastcrawled = timezone.now() - timedelta(days=3)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'wbsrch.com'
-        info.url = u'http://wbsrch.com/policy/'
+        info.rooturl = 'wbsrch.com'
+        info.url = 'http://wbsrch.com/policy/'
         info.lastcrawled = timezone.now() - timedelta(days=9)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
@@ -1395,8 +1447,8 @@ class IndexerTestCase(TestCase):
 
     def setUp(self):
         info = SiteInfo()
-        info.rooturl = u'wbsrch.com'
-        info.url = u'http://wbsrch.com/'
+        info.rooturl = 'wbsrch.com'
+        info.url = 'http://wbsrch.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagedescription = 'wbsrch search engine'
@@ -1404,22 +1456,22 @@ class IndexerTestCase(TestCase):
         info.pagetitle = 'WbSrch Search Engine'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'zetacentauri.com'
-        info.url = u'https://zetacentauri.com/'
+        info.rooturl = 'zetacentauri.com'
+        info.url = 'https://zetacentauri.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagekeywords = 'wbsrch, pants'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'zetacentauri.com'
-        info.url = u'http://zetacentauri.com/'
+        info.rooturl = 'zetacentauri.com'
+        info.url = 'http://zetacentauri.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagekeywords = 'wbsrch'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'zetacentauri.com'
-        info.url = u'http://zetacentauri.com/page.htm'
+        info.rooturl = 'zetacentauri.com'
+        info.url = 'http://zetacentauri.com/page.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
@@ -1427,8 +1479,8 @@ class IndexerTestCase(TestCase):
         info.pagetitle = 'WbSrch Search Engine'
         info.save()
         info = SiteInfo_de()
-        info.rooturl = u'zetacentauri.com'
-        info.url = u'http://zetacentauri.com/page.htm'
+        info.rooturl = 'zetacentauri.com'
+        info.url = 'http://zetacentauri.com/page.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
@@ -1436,8 +1488,8 @@ class IndexerTestCase(TestCase):
         info.pagetitle = 'WbSrch Search Engine'
         info.save()
         info = SiteInfo_fr()
-        info.rooturl = u'zeta-cen-tau.com'
-        info.url = u'http://zeta-cen-tau.com/pa-e.htm'
+        info.rooturl = 'zeta-cen-tau.com'
+        info.url = 'http://zeta-cen-tau.com/pa-e.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
@@ -1445,8 +1497,8 @@ class IndexerTestCase(TestCase):
         info.pagetitle = 'WbSrch Search Engine'
         info.save()
         info = SiteInfo_fr()
-        info.rooturl = u'zeta-centaur.com'
-        info.url = u'http://zeta-centaur.com/page.htm'
+        info.rooturl = 'zeta-centaur.com'
+        info.url = 'http://zeta-centaur.com/page.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
@@ -1454,8 +1506,8 @@ class IndexerTestCase(TestCase):
         info.pagetitle = 'WbSrch Search Engine'
         info.save()
         info = SiteInfo_fr()
-        info.rooturl = u'zetacentauri.com'
-        info.url = u'http://zetacentauri.com/page.htm'
+        info.rooturl = 'zetacentauri.com'
+        info.url = 'http://zetacentauri.com/page.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
@@ -1463,8 +1515,8 @@ class IndexerTestCase(TestCase):
         info.pagetitle = 'WbSrch Search Engine'
         info.save()
         info = SiteInfo_fr()
-        info.rooturl = u'zetacentauri.com'
-        info.url = u'http://zetacentauri.com/page_underscore.htm'
+        info.rooturl = 'zetacentauri.com'
+        info.url = 'http://zetacentauri.com/page_underscore.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
@@ -1472,8 +1524,8 @@ class IndexerTestCase(TestCase):
         info.pagetitle = 'WbSrch Search Engine'
         info.save()
         info = SiteInfo_fr()
-        info.rooturl = u'zetacentauri.com'
-        info.url = u'http://zetacentauri.com/page_two_underscores.htm'
+        info.rooturl = 'zetacentauri.com'
+        info.url = 'http://zetacentauri.com/page_two_underscores.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
@@ -1481,8 +1533,8 @@ class IndexerTestCase(TestCase):
         info.pagetitle = 'WbSrch Search Engine'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'216.151.3.15'
-        info.url = u'http://216.151.3.15/xxy.z'
+        info.rooturl = '216.151.3.15'
+        info.url = 'http://216.151.3.15/xxy.z'
         info.lastcrawled = timezone.now() - timedelta(days=20)
         info.pagecontents = ' '
         info.pagedescription = ' '
@@ -1598,8 +1650,8 @@ class SearchTestCase(TestCase):
         term.search_results = '{}'
         term.save()
         info = SiteInfo()
-        info.rooturl = u'wbsrch.com'
-        info.url = u'http://wbsrch.com/'
+        info.rooturl = 'wbsrch.com'
+        info.url = 'http://wbsrch.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagedescription = 'wbsrch search engine'
@@ -1607,8 +1659,8 @@ class SearchTestCase(TestCase):
         info.pagetitle = 'WbSrch Search Engine'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'horsemonkey.com'
-        info.url = u'http://horsemonkey.com/'
+        info.rooturl = 'horsemonkey.com'
+        info.url = 'http://horsemonkey.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>Horse Monkey</title></head><body><h1>Horse Monkey</h1></body></html>'
         info.pagedescription = 'horse monkey'
@@ -1616,8 +1668,8 @@ class SearchTestCase(TestCase):
         info.pagetitle = 'Horse Monkey'
         info.save()
         info = SiteInfo_de()
-        info.rooturl = u'zimmer.de'
-        info.url = u'http://zimmer.de/'
+        info.rooturl = 'zimmer.de'
+        info.url = 'http://zimmer.de/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>Zimmer</title></head><body><h1>Zimmer</h1></body></html>'
         info.pagedescription = 'zimmer'
@@ -1830,8 +1882,8 @@ class URLErrorTestCase(TestCase):
 
     def testAddError(self):
         url = SiteInfo()
-        url.rooturl = u'wbsrch.com'
-        url.url = u'http://wbsrch.com/'
+        url.rooturl = 'wbsrch.com'
+        url.url = 'http://wbsrch.com/'
         url.lastcrawled = timezone.now() - timedelta(days=40)
         url.save()
         AddError(url, '502', 'Bad Gateway')
@@ -1840,8 +1892,8 @@ class URLErrorTestCase(TestCase):
 
     def testClearErrors(self):
         url = SiteInfo()
-        url.rooturl = u'wbsrch.com'
-        url.url = u'http://wbsrch.com/someurl/'
+        url.rooturl = 'wbsrch.com'
+        url.url = 'http://wbsrch.com/someurl/'
         url.lastcrawled = timezone.now() - timedelta(days=40)
         url.num_errors = 1
         url.error_info = '2014-02-06, 502, Bad Gateway\n'
@@ -1851,8 +1903,8 @@ class URLErrorTestCase(TestCase):
 
     def testDeleteAtMaxErrors(self):
         url = SiteInfo()
-        url.rooturl = u'wbsrch.com'
-        url.url = u'http://wbsrch.com/someotherurl/'
+        url.rooturl = 'wbsrch.com'
+        url.url = 'http://wbsrch.com/someotherurl/'
         url.lastcrawled = timezone.now() - timedelta(days=40)
         url.num_errors = 4
         url.error_info = '2014-02-06, 502, Bad Gateway\n2014-02-07, 502, Bad Gateway\n2014-02-08, 502, Bad Gateway\n2014-02-09, 502, Bad Gateway\n'
@@ -2007,7 +2059,7 @@ class ViewsTestCase(TestCase):
         logs = SearchLog.objects.all().count()
         self.assertEqual(logs, 2)
 
-    def testSearchCheese(self):
+    def testSearchCheese2(self):
         response = self.client.get('/search/?q=cheese&domain=cheese.com')
         self.assertEqual(response.status_code, 200)
 
@@ -2023,7 +2075,7 @@ class ViewsTestCase(TestCase):
         response = self.client.get('/popular-searches/')
         self.assertEqual(response.status_code, 200)
 
-    def testPopularSearches(self):
+    def testPopularSearches2(self):
         response = self.client.get('/popular-searches/2011/03/')
         self.assertEqual(response.status_code, 404)
 
@@ -2049,35 +2101,35 @@ class ViewsTestCase(TestCase):
 class BlockedSiteTestCase(TestCase):
     def setUp(self):
         info = SiteInfo()
-        info.rooturl = u'spamsite.com'
-        info.url = u'http://spamsite.com/1/'
+        info.rooturl = 'spamsite.com'
+        info.url = 'http://spamsite.com/1/'
         info.save()
         info = SiteInfo_cs()
-        info.rooturl = u'spamsite.cz'
-        info.url = u'http://spamsite.cz/1/'
+        info.rooturl = 'spamsite.cz'
+        info.url = 'http://spamsite.cz/1/'
         info.save()
         info = SiteInfo_cs()
-        info.rooturl = u'spamsite.cz'
-        info.url = u'http://spamsite.cz/2/'
+        info.rooturl = 'spamsite.cz'
+        info.url = 'http://spamsite.cz/2/'
         info.save()
         info = SiteInfo_cs()
-        info.rooturl = u'notaspamsite.cz'
-        info.url = u'http://notaspamsite.cz/1/'
+        info.rooturl = 'notaspamsite.cz'
+        info.url = 'http://notaspamsite.cz/1/'
         info.save()
         domain = DomainInfo()
-        domain.url = u'spamsite.cz'
+        domain.url = 'spamsite.cz'
         domain.language_association = u'cs'
         domain.save()
 
     def testExcludeUrl(self):
         exclude = BlockedSite()
-        exclude.url = u'spamsite.com'
+        exclude.url = 'spamsite.com'
         exclude.save()
         self.assertEqual(SiteInfo.objects.all().count(), 0)
 
     def testExcludeCzechUrl(self):
         exclude = BlockedSite()
-        exclude.url = u'spamsite.cz'
+        exclude.url = 'spamsite.cz'
         exclude.save()
         self.assertEqual(SiteInfo_cs.objects.all().count(), 1)
 
@@ -2143,12 +2195,12 @@ class ModelStringsTestCase(TestCase):
 class IndexStatsTestCase(TestCase):
     def setUp(self):
         info = SiteInfo()
-        info.rooturl = u'spamsite.com'
-        info.url = u'http://spamsite.com/1/'
+        info.rooturl = 'spamsite.com'
+        info.url = 'http://spamsite.com/1/'
         info.save()
         info = SiteInfo_cs()
-        info.rooturl = u'spamsite.cz'
-        info.url = u'http://spamsite.cz/1/'
+        info.rooturl = 'spamsite.cz'
+        info.url = 'http://spamsite.cz/1/'
         info.save()
         pending = PendingIndex()
         pending.keywords = 'hippo'
@@ -2207,45 +2259,45 @@ class IndexStatsTestCase(TestCase):
 class MoveSiteTestCase(TestCase):
     def setUp(self):
         info = SiteInfo()
-        info.rooturl = u'example.com'
-        info.url = u'http://example.com/1/'
+        info.rooturl = 'example.com'
+        info.url = 'http://example.com/1/'
         info.lastcrawled = timezone.now()
         info.save()
         info = SiteInfo()
-        info.rooturl = u'exampletwo.com'
-        info.url = u'http://exampletwo.com/1/'
+        info.rooturl = 'exampletwo.com'
+        info.url = 'http://exampletwo.com/1/'
         info.lastcrawled = timezone.now()
         info.save()
         info = SiteInfo()
-        info.rooturl = u'examplethree.com'
-        info.url = u'http://examplethree.com/1/'
+        info.rooturl = 'examplethree.com'
+        info.url = 'http://examplethree.com/1/'
         info.lastcrawled = timezone.now()
         info.save()
         info = SiteInfo()
-        info.rooturl = u'examplefour.com'
-        info.url = u'http://examplefour.com/1/'
+        info.rooturl = 'examplefour.com'
+        info.url = 'http://examplefour.com/1/'
         info.lastcrawled = timezone.now()
         info.save()
         info = SiteInfo()
-        info.rooturl = u'examplefour.com'
-        info.url = u'http://examplefour.com/2/'
+        info.rooturl = 'examplefour.com'
+        info.url = 'http://examplefour.com/2/'
         info.lastcrawled = timezone.now()
         info.save()
         info = SiteInfo_cs()
-        info.rooturl = u'example.cz'
-        info.url = u'http://example.cz/1/'
+        info.rooturl = 'example.cz'
+        info.url = 'http://example.cz/1/'
         info.lastcrawled = timezone.now()
         info.save()
         domain = DomainInfo()
-        domain.url = u'example.com'
+        domain.url = 'example.com'
         domain.language_association = 'en'
         domain.save()
         domain = DomainInfo()
-        domain.url = u'exampletwo.com'
+        domain.url = 'exampletwo.com'
         domain.language_association = ''
         domain.save()
         domain = DomainInfo()
-        domain.url = u'example.cz'
+        domain.url = 'example.cz'
         domain.language_association = 'cz'
         domain.save()
 
@@ -2286,7 +2338,7 @@ class MoveSiteTestCase(TestCase):
         frenchurls = SiteInfo_fr.objects.all().count()
         self.assertEqual(frenchurls, 1)
         domain = DomainInfo.objects.get(url='example.com')
-        self.assertEqual(domain.language_association, 'en')
+        self.assertEqual(domain.language_association, 'fr')
         englishurls = SiteInfo.objects.filter(rooturl=u'example.com').count()
         self.assertEqual(englishurls, 0)
 
@@ -2300,7 +2352,7 @@ class MoveSiteTestCase(TestCase):
         englishurls = SiteInfo.objects.filter(rooturl=u'example.cz').count()
         self.assertEqual(englishurls, 1)
         domain = DomainInfo.objects.get(url='example.cz')
-        self.assertEqual(domain.language_association, 'cz')
+        self.assertEqual(domain.language_association, 'en')
         czechurls = SiteInfo_cs.objects.filter(rooturl=u'example.cz').count()
         self.assertEqual(czechurls, 0)
 
@@ -2322,142 +2374,142 @@ class MoveSiteTestCase(TestCase):
 class PornBlockTestCase(TestCase):
     def setUp(self):
         info = SiteInfo()
-        info.rooturl = u'notporn.com'
-        info.url = u'http://notporn.com/1/'
+        info.rooturl = 'notporn.com'
+        info.url = 'http://notporn.com/1/'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'notporn.com'
-        info.url = u'http://notporn.com/2/'
+        info.rooturl = 'notporn.com'
+        info.url = 'http://notporn.com/2/'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'pornsite.com'
-        info.url = u'http://pornsite.com/1/'
+        info.rooturl = 'pornsite.com'
+        info.url = 'http://pornsite.com/1/'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'pornsite.com'
-        info.url = u'http://pornsite.com/2/'
+        info.rooturl = 'pornsite.com'
+        info.url = 'http://pornsite.com/2/'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'ass.pornsite2.com'
-        info.url = u'http://ass.pornsite2.com/2/'
+        info.rooturl = 'ass.pornsite2.com'
+        info.url = 'http://ass.pornsite2.com/2/'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'pornsite2.com'
-        info.url = u'http://pornsite2.com/2/'
+        info.rooturl = 'pornsite2.com'
+        info.url = 'http://pornsite2.com/2/'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'pornsite3.com'
-        info.url = u'http://pornsite3.com/2/'
+        info.rooturl = 'pornsite3.com'
+        info.url = 'http://pornsite3.com/2/'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'ass.pornsite.com'
-        info.url = u'http://ass.pornsite.com/1/'
+        info.rooturl = 'ass.pornsite.com'
+        info.url = 'http://ass.pornsite.com/1/'
         info.save()
         info = SiteInfo()
-        info.rooturl = u'ass.pornsite.com'
-        info.url = u'http://ass.pornsite.com/2/'
+        info.rooturl = 'ass.pornsite.com'
+        info.url = 'http://ass.pornsite.com/2/'
         info.save()
         info = SiteInfo_it()
-        info.rooturl = u'pornsite.it'
-        info.url = u'http://pornsite.it/1/'
+        info.rooturl = 'pornsite.it'
+        info.url = 'http://pornsite.it/1/'
         info.save()
         info = SiteInfo_it()
-        info.rooturl = u'pornsite.it'
-        info.url = u'http://pornsite.it/2/'
+        info.rooturl = 'pornsite.it'
+        info.url = 'http://pornsite.it/2/'
         info.save()
         info = SiteInfo_it()
-        info.rooturl = u'ass.pornsite.it'
-        info.url = u'http://ass.pornsite.it/2/'
+        info.rooturl = 'ass.pornsite.it'
+        info.url = 'http://ass.pornsite.it/2/'
         info.save()
         domain = DomainInfo()
-        domain.url = u'notporn.com'
+        domain.url = 'notporn.com'
         domain.is_unblockable = True
         domain.save()
         domain = DomainInfo()
-        domain.url = u'pornsite3.com'
+        domain.url = 'pornsite3.com'
         domain.is_unblockable = False
-        domain.language_association = u'en'
+        domain.language_association = 'en'
         domain.save()
         domain = DomainInfo()
-        domain.url = u'pornsite.it'
+        domain.url = 'pornsite.it'
         domain.language_association = u'it'
         domain.save()
         domain = DomainInfo()
-        domain.url = u'ass.pornsite.it'
+        domain.url = 'ass.pornsite.it'
         domain.language_association = u'it'
         domain.save()
 
     def testPornBlockChild(self):
-            """
-            Checks that all of the urls and parent urls are deleted and the domains blocked
-            when you pornblock a child URL.
-            """
-            site = SiteInfo.objects.get(url=u'http://ass.pornsite.com/2/')
-            PornBlock(site)
-            assurls = SiteInfo.objects.filter(rooturl=u'ass.pornsite.com').count()
-            pornurls = SiteInfo.objects.filter(rooturl=u'pornsite.com').count()
-            assexclusion = BlockedSite.objects.filter(url=u'ass.pornsite.com')
-            pornexclusion = BlockedSite.objects.filter(url=u'pornsite.com')
-            self.assertEqual(assurls, 0)
-            self.assertEqual(pornurls, 0)
-            self.assertEqual(assexclusion.count(), 1)
-            self.assertEqual(pornexclusion.count(), 1)
-            self.assertEqual(pornexclusion[0].exclude_subdomains, True)
+        """
+        Checks that all of the urls and parent urls are deleted and the domains blocked
+        when you pornblock a child URL.
+        """
+        site = SiteInfo.objects.get(url=u'http://ass.pornsite.com/2/')
+        PornBlock(site)
+        assurls = SiteInfo.objects.filter(rooturl=u'ass.pornsite.com').count()
+        pornurls = SiteInfo.objects.filter(rooturl=u'pornsite.com').count()
+        assexclusion = BlockedSite.objects.filter(url=u'ass.pornsite.com')
+        pornexclusion = BlockedSite.objects.filter(url=u'pornsite.com')
+        self.assertEqual(assurls, 0)
+        self.assertEqual(pornurls, 0)
+        self.assertEqual(assexclusion.count(), 1)
+        self.assertEqual(pornexclusion.count(), 1)
+        self.assertEqual(pornexclusion[0].exclude_subdomains, True)
 
     def testPornBlockParent(self):
-            """
-            Checks to be sure that child domain URLs are unaffected when the parent is blocked.
-            """
-            site = SiteInfo.objects.get(url=u'http://pornsite2.com/2/')
-            PornBlock(site)
-            assurls = SiteInfo.objects.filter(rooturl=u'ass.pornsite2.com').count()
-            pornurls = SiteInfo.objects.filter(rooturl=u'pornsite2.com').count()
-            assexclusion = BlockedSite.objects.get(url=u'ass.pornsite2.com')
-            pornexclusion = BlockedSite.objects.filter(url=u'pornsite2.com')
-            self.assertEqual(assurls, 1)
-            self.assertEqual(pornurls, 0)
-            self.assertEqual(assexclusion.count(), 0)
-            self.assertEqual(pornexclusion.count(), 1)
-            self.assertEqual(pornexclusion[0].exclude_subdomains, True)
+        """
+        Checks to be sure that child domain URLs are unaffected when the parent is blocked.
+        """
+        site = SiteInfo.objects.get(url=u'http://pornsite2.com/2/')
+        PornBlock(site)
+        assurls = SiteInfo.objects.filter(rooturl=u'ass.pornsite2.com').count()
+        pornurls = SiteInfo.objects.filter(rooturl=u'pornsite2.com').count()
+        assexclusion = BlockedSite.objects.get(url=u'ass.pornsite2.com')
+        pornexclusion = BlockedSite.objects.filter(url=u'pornsite2.com')
+        self.assertEqual(assurls, 1)
+        self.assertEqual(pornurls, 0)
+        self.assertEqual(assexclusion.count(), 0)
+        self.assertEqual(pornexclusion.count(), 1)
+        self.assertEqual(pornexclusion[0].exclude_subdomains, True)
 
-    def testPornBlockParent(self):
-            site = SiteInfo.objects.get(url=u'http://pornsite3.com/2/')
-            PornBlock(site)
-            pornurls = SiteInfo.objects.filter(rooturl=u'pornsite3.com').count()
-            pornexclusion = BlockedSite.objects.filter(url=u'pornsite3.com')
-            DomainInfo.objects.get(url=u'pornsite3.com')
-            self.assertEqual(pornurls, 0)
-            self.assertEqual(pornexclusion.count(), 1)
-            self.assertEqual(pornexclusion[0].exclude_subdomains, True)
+    def testPornBlockParent2(self):
+        site = SiteInfo.objects.get(url=u'http://pornsite3.com/2/')
+        PornBlock(site)
+        pornurls = SiteInfo.objects.filter(rooturl=u'pornsite3.com').count()
+        pornexclusion = BlockedSite.objects.filter(url=u'pornsite3.com')
+        DomainInfo.objects.get(url=u'pornsite3.com')
+        self.assertEqual(pornurls, 0)
+        self.assertEqual(pornexclusion.count(), 1)
+        self.assertEqual(pornexclusion[0].exclude_subdomains, True)
 
     def testPornBlockItalian(self):
-            site = SiteInfo_it.objects.get(url=u'http://ass.pornsite.it/2/')
-            PornBlock(site)
-            assurls = SiteInfo_it.objects.filter(rooturl=u'ass.pornsite.it').count()
-            pornurls = SiteInfo_it.objects.filter(rooturl=u'pornsite.it').count()
-            assexclusion = BlockedSite.objects.filter(url=u'ass.pornsite.it')
-            pornexclusion = BlockedSite.objects.filter(url=u'pornsite.it')
-            self.assertEqual(assurls, 0)
-            self.assertEqual(pornurls, 0)
-            self.assertEqual(assexclusion.count(), 1)
-            self.assertEqual(pornexclusion.count(), 1)
-            self.assertEqual(pornexclusion[0].exclude_subdomains, True)
+        site = SiteInfo_it.objects.get(url=u'http://ass.pornsite.it/2/')
+        PornBlock(site)
+        assurls = SiteInfo_it.objects.filter(rooturl=u'ass.pornsite.it').count()
+        pornurls = SiteInfo_it.objects.filter(rooturl=u'pornsite.it').count()
+        assexclusion = BlockedSite.objects.filter(url=u'ass.pornsite.it')
+        pornexclusion = BlockedSite.objects.filter(url=u'pornsite.it')
+        self.assertEqual(assurls, 0)
+        self.assertEqual(pornurls, 0)
+        self.assertEqual(assexclusion.count(), 1)
+        self.assertEqual(pornexclusion.count(), 1)
+        self.assertEqual(pornexclusion[0].exclude_subdomains, True)
 
     def testPornBlockNotporn(self):
-            site = SiteInfo.objects.get(url=u'http://notporn.com/2/')
-            PornBlock(site)
-            pornurls = SiteInfo.objects.filter(rooturl=u'notporn.com').count()
-            pornexclusion = BlockedSite.objects.filter(url=u'notporn.com')
-            self.assertEqual(pornurls, 1)
-            self.assertEqual(pornexclusion.count(), 0)
+        site = SiteInfo.objects.get(url=u'http://notporn.com/2/')
+        PornBlock(site)
+        pornurls = SiteInfo.objects.filter(rooturl=u'notporn.com').count()
+        pornexclusion = BlockedSite.objects.filter(url=u'notporn.com')
+        self.assertEqual(pornurls, 1)
+        self.assertEqual(pornexclusion.count(), 0)
 
     def tearDown(self):
-            for info in SiteInfo.objects.all():
-                info.delete()
-            for info in SiteInfo_it.objects.all():
-                info.delete()
-            for info in DomainInfo.objects.all():
-                info.delete()
+        for info in SiteInfo.objects.all():
+            info.delete()
+        for info in SiteInfo_it.objects.all():
+            info.delete()
+        for info in DomainInfo.objects.all():
+            info.delete()
 
 class WhoisTestCase(TestCase):
     def testDomainAge(self):
