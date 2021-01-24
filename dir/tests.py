@@ -79,14 +79,14 @@ class GetRootUrlTestCase(TestCase):
         url = GetRootUrl(u'https://www.zetacentauri.com:80')
         self.assertEqual(url, u'www.zetacentauri.com')
 
-    def test_url_with_subdomain(self):
+    def test_url_with_subdomain2(self):
         """
         Tests that a URL with a subdomain works.
         """
         url = GetRootUrl(u'://www.zetacentauri.com')
         self.assertEqual(url, u'www.zetacentauri.com')
 
-    def test_url_with_subdomain2(self):
+    def test_url_with_subdomain3(self):
         """
         Tests that a URL with a subdomain works (2).
         """
@@ -253,35 +253,35 @@ class IsValidHtmlUrlTestCase(TestCase):
 
     def test_zip_domain(self):
         """
-        Tests that a URL ending with exe does not register as valid.
+        Tests that a URL ending with zip does not register as valid.
         """
         url = "http://wbsrch.zip"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_zip_domain2(self):
         """
-        Tests that a URL ending with exe does not register as valid.
+        Tests that a URL ending with ip does not register as valid.
         """
         url = "http://wbsrch.zip/wbsrch.zip"
         self.assertFalse(IsHtmlUrl(url))
 
     def test_mov_domain(self):
         """
-        Tests that a URL ending with exe does not register as valid.
+        Tests that a URL ending with mov does not register as valid.
         """
         url = "http://wbsrch.mov/"
         self.assertTrue(IsHtmlUrl(url))
 
     def test_mov_url(self):
         """
-        Tests that a URL ending with exe does not register as valid.
+        Tests that a URL ending with mov does not register as valid.
         """
         url = "http://wbsrch.com/wbsrch.mov"
         self.assertFalse(IsHtmlUrl(url))
 
-    def test_mov_url(self):
+    def test_mov_url2(self):
         """
-        Tests that a URL ending with exe does not register as valid.
+        Tests that a URL ending with mov does not register as valid.
         """
         url = "http://wbsrch.com/wbsrch.mov?t=30s"
         self.assertFalse(IsHtmlUrl(url))
@@ -502,7 +502,7 @@ class CanCrawlUrlTestCase(TestCase):
         url = 'www.taobao.cn'
         self.assertFalse(CanCrawlUrl(url))
 
-    def test_blocked_extension_url(self):
+    def test_blocked_extension_url2(self):
         url = 'www.taobao.cn'
         self.assertTrue(CanReCrawlUrl(url))
 
@@ -555,7 +555,7 @@ class NormalizeUrlTestCase(TestCase):
         url = 'http://wbsrch.com'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com')
 
-    def test_normal_url2(self):
+    def test_normal_url3(self):
         url = 'http://wbsrch.com/'
         self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/')
 
@@ -669,9 +669,30 @@ class MakeRealUrlTestCase(TestCase):
         url = '//wbsrch.com/tutorial/'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/')
 
+    def test_justdomain_nohttp(self):
+        # Pass in domain to make it work.
+        url = 'wbsrch.com/tutorial/'
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/')
+
+    def test_justdomain_nohttp2(self):
+        url = 'wbsrch.com/tutorial/'
+        self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial/')
+
+    def test_justdomain_nohttp3(self):
+        url = 'browser.wbsrch.com/tutorial/tutorial.htm'
+        self.assertEqual(MakeRealUrl(url), u'http://browser.wbsrch.com/tutorial/tutorial.htm')
+
     def test_doubleslash_domainurl2(self):
         url = '//wbsrch.com'
         self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com')
+
+    def test_nakeddomain(self):
+        url = 'wbsrch.com'
+        self.assertEqual(MakeRealUrl(url, None), u'http://wbsrch.com')
+
+    def test_nakeddomain2(self):
+        url = 'browser.wbsrch.com'
+        self.assertEqual(MakeRealUrl(url), u'http://browser.wbsrch.com')
 
     def test_doubleslash_domainurl3(self):
         url = '//wbsrch.com/tutorial.htm'
@@ -1158,19 +1179,19 @@ class LanguageModelTestCase(TestCase):
     def test_zh_log(self):
         self.assertRaises(InvalidLanguageException, GetSearchLogModelFromLanguage, 'zh')
 
-    def test_de_url(self):
+    def test_de_keywodr(self):
         model = GetKeywordRankingModelFromLanguage('de')
         self.assertEqual(model, KeywordRanking_de)
 
-    def test_en_US_url(self):
+    def test_en_US_keyword(self):
         model = GetKeywordRankingModelFromLanguage('en-US')
         self.assertEqual(model, KeywordRanking)
 
-    def test_en_url(self):
+    def test_en_keyword(self):
         model = GetKeywordRankingModelFromLanguage('en')
         self.assertEqual(model, KeywordRanking)
 
-    def test_empty_url(self):
+    def test_empty_keyword(self):
         model = GetKeywordRankingModelFromLanguage(None)
         self.assertEqual(model, KeywordRanking)
 
@@ -2038,7 +2059,7 @@ class ViewsTestCase(TestCase):
         logs = SearchLog.objects.all().count()
         self.assertEqual(logs, 2)
 
-    def testSearchCheese(self):
+    def testSearchCheese2(self):
         response = self.client.get('/search/?q=cheese&domain=cheese.com')
         self.assertEqual(response.status_code, 200)
 
@@ -2054,7 +2075,7 @@ class ViewsTestCase(TestCase):
         response = self.client.get('/popular-searches/')
         self.assertEqual(response.status_code, 200)
 
-    def testPopularSearches(self):
+    def testPopularSearches2(self):
         response = self.client.get('/popular-searches/2011/03/')
         self.assertEqual(response.status_code, 404)
 
@@ -2451,7 +2472,7 @@ class PornBlockTestCase(TestCase):
         self.assertEqual(pornexclusion.count(), 1)
         self.assertEqual(pornexclusion[0].exclude_subdomains, True)
 
-    def testPornBlockParent(self):
+    def testPornBlockParent2(self):
         site = SiteInfo.objects.get(url=u'http://pornsite3.com/2/')
         PornBlock(site)
         pornurls = SiteInfo.objects.filter(rooturl=u'pornsite3.com').count()
