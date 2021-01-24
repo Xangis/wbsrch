@@ -465,7 +465,14 @@ def MakeRealUrl(url, domain=None, secure=False):
     elif domain and '/' not in url:
         url = scheme + domain + '/' + url
     elif not url.startswith('http'):
-        url = scheme + '//' + domain + '/' + url
+        print('Scheme: {0}, Domain: {1}, URL: {2}'.format(scheme, domain, url))
+        if domain:
+            if not url.startswith(domain):
+                url = scheme + '//' + domain + '/' + url
+            else:
+                url = scheme + '//' + url
+        else:
+            url = scheme + '//' + url
     url = NormalizeUrl(url, pre_crawl_replacement=True, secure=secure)
     return url
 
