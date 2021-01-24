@@ -1682,10 +1682,14 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
 # Removes all URLs for that domain. Nukes them from the main site info table,
 # and if the domain is tagged with a language, nukes them from that language
 # table too.
-def RemoveURLsForDomain(rooturl):
+def RemoveURLsForDomain(rooturl, verbose=False):
     # First we delete from the main pool to get any uncategorized or
     # unprocessed URLs
-    SiteInfo.objects.filter(rooturl=rooturl).delete()
+    pages = SiteInfo.objects.filter(rooturl=rooturl)
+    if len(pages) > 0:
+        if verbose:
+            print('Deleting {0} pages for domain {1} from en index.'.format(len(pages), rooturl))
+        pages.delete()
     # Now we delete any URLs in the language table specific to that URL,
     # if any.
     try:
@@ -1693,7 +1697,11 @@ def RemoveURLsForDomain(rooturl):
         if domain.language_association and domain.language_association != 'en':
             try:
                 site_model = GetSiteInfoModelFromLanguage(domain.language_association)
-                site_model.objects.filter(rooturl=rooturl).delete()
+                pages = site_model.objects.filter(rooturl=rooturl)
+                if len(pages) > 0:
+                    if verbose:
+                        print('Deleting {0} pages for domain {1} from {2} index.'.format(len(pages), rooturl, domain.language_association))
+                    pages.delete()
             except InvalidLanguageException:
                 # This can legitimately happen when removing URLs from an unsupported language,
                 # like Armenian, that doesn't have a language table.
@@ -1701,7 +1709,11 @@ def RemoveURLsForDomain(rooturl):
     except ObjectDoesNotExist:
         pass
     # Now we nuke all crawlable URLs.
-    CrawlableUrl.objects.filter(rooturl=rooturl).delete()
+    urls = CrawlableUrl.objects.filter(rooturl=rooturl)
+    if len(urls) > 0:
+        if verbose:
+            print('Deleting {0} urls from dir_crawlableurl for domain {1}'.format(len(urls), rooturl))
+        urls.delete()
 
 
 def IsHtmlUrl(url):
