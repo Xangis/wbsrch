@@ -2,13 +2,13 @@
 <XML_DIZ_INFO>
   <MASTER_PAD_VERSION_INFO>
     <MASTER_PAD_VERSION>4.0</MASTER_PAD_VERSION>
-    <MASTER_PAD_EDITOR>RoboSoft 4.0.789</MASTER_PAD_EDITOR>
+    <MASTER_PAD_EDITOR>RoboSoft 4.0.797</MASTER_PAD_EDITOR>
     <MASTER_PAD_EDITOR_URL>http://robosoft.rudenko.com</MASTER_PAD_EDITOR_URL>
     <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://www.asp-shareware.org/pad</MASTER_PAD_INFO>
   </MASTER_PAD_VERSION_INFO>
   <RoboSoft>
     <Company_UIN>CMP-010119BADC3</Company_UIN>
-    <Company_Description></Company_Description>
+    <Company_Description>WbSrch is an indepdendent search engine with a suite of tools including maps, domain stats, music search, and a web browser. It was started in 2013 in Portland, Oregon, USA.</Company_Description>
     <Product_UIN>APP-0101192CB47</Product_UIN>
     <Search_String>WbBrowse</Search_String>
     <Publish_on_CD>FALSE</Publish_on_CD>
@@ -89,33 +89,35 @@
   <PAD_Certification_Promotion>
     <Apply_For_Certification>N</Apply_For_Certification>
   </PAD_Certification_Promotion>
-  <Dynamic_PAD>
-    <Dynamic_Distributive>N</Dynamic_Distributive>
-  </Dynamic_PAD>
+  <ASBMPlannerID1stRound>5</ASBMPlannerID1stRound>
+  <Issues>11</Issues>
+  <ASBMPlannerID2ndRound>6</ASBMPlannerID2ndRound>
   <Program_Info>
-    <Program_Name>WbBrowse</Program_Name>
-    <Program_Version>2.0</Program_Version>
-    <Program_Release_Month>12</Program_Release_Month>
-    <Program_Release_Day>25</Program_Release_Day>
-    <Program_Release_Year>2020</Program_Release_Year>
-    <Program_Cost_Dollars>0</Program_Cost_Dollars>
-    <Program_Type>Freeware</Program_Type>
-    <Program_Release_Status>Major Update</Program_Release_Status>
-    <Program_Install_Support>Install and Uninstall</Program_Install_Support>
-    <Program_OS_Support>Win7 x32,Win7 x64,Windows 8</Program_OS_Support>
-    <Program_Language>English</Program_Language>
-    <Program_Change_Info>Updated web engine.</Program_Change_Info>
-    <Program_System_Requirements>No special requirements.</Program_System_Requirements>
-    <Program_Category_Class>Network &amp; Internet::Browsers</Program_Category_Class>
+    <Program_Target_Platform>Windows</Program_Target_Platform>
     <File_Info>
-      <File_Size_Bytes>40917812</File_Size_Bytes>
-      <File_Size_K>39960</File_Size_K>
-      <File_Size_MB>39</File_Size_MB>
+      <Automatically_Detect_File_Size>N</Automatically_Detect_File_Size>
+      <File_Size_Bytes>63115302</File_Size_Bytes>
+      <File_Size_K>61636</File_Size_K>
+      <File_Size_MB>60.19</File_Size_MB>
       <Filename_Versioned></Filename_Versioned>
       <Filename_Previous></Filename_Previous>
       <Filename_Generic></Filename_Generic>
       <Filename_Long></Filename_Long>
     </File_Info>
+    <Program_Name>WbBrowse</Program_Name>
+    <Program_Version>2.0</Program_Version>
+    <Program_Release_Month>01</Program_Release_Month>
+    <Program_Release_Day>24</Program_Release_Day>
+    <Program_Release_Year>2021</Program_Release_Year>
+    <Program_Cost_Dollars>0</Program_Cost_Dollars>
+    <Program_Type>Freeware</Program_Type>
+    <Program_Release_Status>Major Update</Program_Release_Status>
+    <Program_Install_Support>Install and Uninstall</Program_Install_Support>
+    <Program_OS_Support>Win2000,WinXP,Win7 x32,Win7 x64,Windows 8,Windows 10,WinServer,WinOther,Windows2000,Windows2003,Windows Server 2000,Windows Server 2003,Windows Server 2008,Windows Server 2008r2,Windows Server 2012,Windows Tablet PC Edition 2005,Windows Media Center Edition 2005,WinVista,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Ultimate,WinVista x64,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64,Windows Vista Ultimate x64</Program_OS_Support>
+    <Program_Language>English</Program_Language>
+    <Program_Change_Info>Updated web engine.</Program_Change_Info>
+    <Program_System_Requirements>No special requirements.</Program_System_Requirements>
+    <Program_Category_Class>Network &amp; Internet::Browsers</Program_Category_Class>
     <Expire_Info>
       <Has_Expire_Info>N</Has_Expire_Info>
       <Expire_Based_On>Days</Expire_Based_On>
@@ -125,7 +127,7 @@
       <Expire_Day></Expire_Day>
       <Expire_Year></Expire_Year>
     </Expire_Info>
-    <Program_Categories>Internet Browsers,Internet Browser,Web Browsers,Web Browser,Browsers,Internet,Network</Program_Categories>
+    <Program_Categories>Internet Browsers,Internet Browser,Web Browsers,Web Browser,browsers &amp; plugins,Browsers,browser</Program_Categories>
     <Limitations>No limitations.</Limitations>
     <Program_Cost_Other_Code></Program_Cost_Other_Code>
     <Program_Cost_Other></Program_Cost_Other>
@@ -137,6 +139,12 @@
     <FacebookProductPage></FacebookProductPage>
     <GooglePlusProductPage></GooglePlusProductPage>
   </Program_Info>
+  <Dynamic_PAD>
+    <Dynamic_Distributive>N</Dynamic_Distributive>
+  </Dynamic_PAD>
+  <Allmyapps>
+    <Allmyapps_Terms_And_Conditions>Y</Allmyapps_Terms_And_Conditions>
+  </Allmyapps>
   <Web_Info>
     <Application_URLs>
       <Application_Info_URL>https://wbsrch.com/browser/</Application_Info_URL>
@@ -146,7 +154,7 @@
       <Application_Order_URL></Application_Order_URL>
     </Application_URLs>
     <Download_URLs>
-      <Primary_Download_URL>http://wbbrowse.com/WbBrowse1.0Setup.exe</Primary_Download_URL>
+      <Primary_Download_URL>https://wbsrch.com/software/WbBrowse2.0Setup.exe</Primary_Download_URL>
       <Secondary_Download_URL></Secondary_Download_URL>
       <Additional_Download_URL_1></Additional_Download_URL_1>
       <Additional_Download_URL_2></Additional_Download_URL_2>
@@ -154,7 +162,7 @@
   </Web_Info>
   <Permissions>
     <Distribution_Permissions>This program is freeware and may be distributed freely.</Distribution_Permissions>
-    <EULA>WbBrowse is copyright (c) 2014-2020 Jason Champion
+    <EULA>WbBrowse is copyright (c) 2014-2021 Jason Champion
 
 
 
@@ -186,9 +194,6 @@ software.
 
 WbBrowse uses the Qt libraries, whcih can be obtained at www.qt.io.</EULA>
   </Permissions>
-  <ASBMPlannerID1stRound>5</ASBMPlannerID1stRound>
-  <Issues>11</Issues>
-  <ASBMPlannerID2ndRound>6</ASBMPlannerID2ndRound>
   <AppStore>
     <AppStore_AppID></AppStore_AppID>
     <AppStore_Category></AppStore_Category>
@@ -211,9 +216,9 @@ WbBrowse uses the Qt libraries, whcih can be obtained at www.qt.io.</EULA>
       <Char_Desc_450>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX. It is based on WebKit and was built using the Qt framework. It uses the same rendering engine as Safari and web pages will render in a similar fashion. WbBrowse was built by the WbSrch search engine development team.</Char_Desc_450>
       <Char_Desc_2000>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX. It is based on WebKit and was built using the Qt framework. It uses the same rendering engine as Safari and web pages will render in a similar fashion.
 
-Wbbrowse supports private browsing, bookmarking, page inspection, and modern HTML5 site elements such video and audio. It has both install and uninstall support and ha no spyware, adware, or "add-on spam" in its installer.
+WbBrowse supports private browsing, bookmarking, page inspection, and modern HTML5 site elements such video and audio. It has both install and uninstall support and has no spyware, adware, or "add-on spam" in its installer.
 
-WbBrowse was built by the WbSrch search engine development team. WbSrch is a search engine that was created in 2013 and launched in 2014.</Char_Desc_2000>
+WbBrowse was built by the WbSrch search engine development team. WbSrch is a search engine that was created in 2013 and launched in 2014 and is currently online at https://wbsrch.com.</Char_Desc_2000>
     </English>
   </Program_Descriptions>
 </XML_DIZ_INFO>
