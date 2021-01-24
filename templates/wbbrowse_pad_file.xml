@@ -151,7 +151,7 @@
       <Application_Screenshot_URL>https://wbsrch.com/images/Wikipedia_on_WbBrowse.png</Application_Screenshot_URL>
       <Application_Icon_URL>https://wbsrch.com/favicon.png</Application_Icon_URL>
       <Application_XML_File_URL>https://wbsrch.com/wbbrowse_pad_file.xml</Application_XML_File_URL>
-      <Application_Order_URL></Application_Order_URL>
+      <Application_Order_URL>https://wbsrch.com/browser/</Application_Order_URL>
     </Application_URLs>
     <Download_URLs>
       <Primary_Download_URL>https://wbsrch.com/software/WbBrowse2.0Setup.exe</Primary_Download_URL>
