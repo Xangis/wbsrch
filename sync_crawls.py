@@ -59,17 +59,18 @@ def SaveDomain(domain, update=False):
         outdb.commit()
 
 
-def SavePage(page, update=False):
+def SavePage(page, update=False, lang='site_info'):
     columns = page.keys()
     values = [page[column] for column in columns]
 
     if not update:
-        statement = 'INSERT INTO site_info (%s) values %s'
+        statement = "INSERT INTO {0} (%s) values %s".format(lang)
+        print(statement)
         # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values))))
         outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
         outdb.commit()
     else:
-        statement = 'UPDATE site_info SET (%s) = (%s) WHERE id = %s'
+        statement = 'UPDATE {0} SET (%s) = (%s) WHERE id = %s'.format(lang)
         # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), page['id'])))
         outcur.execute(statement, (AsIs(','.join(columns)), tuple(values), page['id']))
         outdb.commit()
@@ -96,7 +97,7 @@ def SavePage(page, update=False):
         outurlcur.execute(existing_link_query, (url,))
         outurldb.commit()
         if outurlcur.rowcount > 0:
-            print('Deleted {0} old dir_pagelinke entries'.format(outurlcur.rowcount))
+            print('Deleted {0} old dir_pagelink entries'.format(outurlcur.rowcount))
 
     iframe_query = 'SELECT * FROM dir_pageiframe WHERE url_source = %s'
     inurlcur.execute(iframe_query, (url,))
@@ -132,7 +133,7 @@ def SavePage(page, update=False):
         row = inurlcur.fetchone()
 
 
-def ProcessUnmatchedDomainFields(fields, existing_record):
+def ProcessUnmatchedDomainFields(fields, existing_record, lang):
     # existing_record contains the record as it is in the database.
     # fields contains source fields that differ.
     # Replace values in fields as necessary.
@@ -142,14 +143,14 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
         field = item[0]
         inval = item[1][0]
         outval = item[1][1]
-        print('Field: {0}, Inval: {1}, Outval: {2}'.format(field, inval, outval))
+        # print('Field: {0}, Inval: {1}, Outval: {2}'.format(field, inval, outval))
         if field == 'robots_ip':
             # Don't bother comparing now, only compare if robots date is wrong.
             pass
         elif field == 'robots_last_updated':
             if 'robots_ip' in fields:
                 if inval < outval:
-                    print('Existing value is newer, not copying')
+                    print('Existing robots_last_updated value is newer, not copying')
                 else:
                     print('Input value is newer, copying over')
                     existing_record['robots_last_updated'] = inval
@@ -247,15 +248,15 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
             pass
         else:
             raise ValueError(field)
-    print('ProcessUnmatchedDomainFields: Save = {0}'.format(needs_save))
+    # print('ProcessUnmatchedDomainFields: Save = {0}'.format(needs_save))
     if needs_save:
-        SaveDomain(existing_record, update=True)
+        SaveDomain(existing_record, update=True, lang=lang)
         return True
     else:
         return False
 
 
-def ProcessUnmatchedPageFields(fields, existing_record):
+def ProcessUnmatchedPageFields(fields, existing_record, lang='site_info'):
     # existing_record contains the record as it is in the database.
     # fields contains source fields that differ.
     needs_save = False
@@ -263,7 +264,7 @@ def ProcessUnmatchedPageFields(fields, existing_record):
         field = item[0]
         inval = item[1][0]
         outval = item[1][1]
-        print('Field: {0}, Inval: {1}, Outval: {2}'.format(field, inval, outval))
+        # print('Field: {0}, Inval: {1}, Outval: {2}'.format(field, inval, outval))
         if field == 'firstcrawled':
             if inval < outval:
                 print('Input value was crawled earlier, copying over.')
@@ -418,9 +419,9 @@ def ProcessUnmatchedPageFields(fields, existing_record):
             pass
         else:
             raise ValueError(field)
-    print('ProcessUnmatchedPageFields: Save = {0}'.format(needs_save))
+    # print('ProcessUnmatchedPageFields: Save = {0}'.format(needs_save))
     if needs_save:
-        SavePage(existing_record, update=True)
+        SavePage(existing_record, update=True, lang=lang)
 
 
 if not options.nodomains:
@@ -455,7 +456,7 @@ if not options.nodomains:
         num_existing = outcur.rowcount
         if num_existing > 0:
             existing_record = {}
-            print('The domain {0} already exists in the output database.'.format(url))
+            # print('The domain {0} already exists in the output database.'.format(url))
             existing_row = outcur.fetchone()
             existing_colnames = [desc[0] for desc in outcur.description]
             # print(existing_colnames)
@@ -504,6 +505,8 @@ if not options.nopages:
     incur.execute("SELECT * FROM site_info")
     print('Number of site_info: {0}'.format(incur.rowcount))
 
+    language_list = ['en', 'an', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
+
     # 31 columns:
     # ['id', 'rooturl', 'url', 'pagetitle', 'pagedescription', 'pagefirstheadtag', 'pagefirsth2tag', 'pagefirsth3tag', 'pagekeywords', 'pagecontents',
     #  'pagetext', 'pagesize', 'lastcrawled', 'firstcrawled', 'ip', 'num_errors', 'error_info', 'server_header', 'content_type_header', 'num_css_files',
@@ -512,7 +515,8 @@ if not options.nopages:
     colnames = [desc[0] for desc in incur.description]
     # print(colnames)
 
-    existing_query = 'SELECT * FROM site_info WHERE URL = %s'
+    domainquery = 'SELECT language_association FROM dir_domaininfo WHERE url = %s'
+    lang = 'site_info'
 
     # Simhash value is generated on save.
     ignored_columns = ['id', 'simhash_value']
@@ -525,11 +529,24 @@ if not options.nopages:
         unmatched_fields = {}
         # print(row)
         url = row[2]
-        outcur.execute(existing_query, (url,))
+        rooturl = row[1]
+        outcur.execute(domainquery, (rooturl,))
+        if outcur.rowcount > 0:
+            domainrow = outcur.fetchone()
+            if domainrow[0] in language_list:
+                if domainrow[0] == 'en':
+                    lang = 'site_info'
+                else:
+                    lang = 'dir_siteinfo_{0}'.format(domainrow[0])
+                print('Using table {0} for language association {1}'.format(lang, domainrow[0]))
+        else:
+            lang = 'site_info'
+        query = 'SELECT * FROM {} WHERE URL = %s'.format(lang)
+        outcur.execute(query, (url,))
         num_existing = outcur.rowcount
         if num_existing > 0:
             existing_record = {}
-            print('The url {0} already exists in the output database.'.format(url))
+            # print('The url {0} already exists in the output database table {1}.'.format(url, lang))
             existing_row = outcur.fetchone()
             existing_colnames = [desc[0] for desc in outcur.description]
             # print(existing_colnames)
@@ -550,14 +567,14 @@ if not options.nopages:
                 elif inval != outval:
                     # print('Field {0} ({1}) does not match. Input: {2}, Output: {3}'.format(existing_colnames[index], index, inval, outval))
                     unmatched_fields[existing_colnames[index]] = (inval, outval)
-            ProcessUnmatchedPageFields(unmatched_fields, existing_record)
+            ProcessUnmatchedPageFields(unmatched_fields, existing_record, lang)
         else:
             print('The url {0} is new.'.format(url))
             record = {}
             for index in range(len(row)):
                 if colnames[index] != 'id':
                     record[colnames[index]] = row[index]
-            SavePage(record)
+            SavePage(record, update=False, lang=lang)
         row = incur.fetchone()
 
     print('--- END PROCESSING PAGES ---\n')
@@ -582,6 +599,8 @@ if not options.nourls:
     while row is not None:
         # print(row)
         url = row[2]
+        # TODO: Make this language aware -- check language of domain before
+        # checking for existing page.
         existing_url_query = 'SELECT * FROM site_info WHERE URL = %s'
         outcur.execute(existing_url_query, (url,))
         num_existing = outcur.rowcount
@@ -597,7 +616,7 @@ if not options.nourls:
             row = inurlcur.fetchone()
             continue
 
-        print('The url {0} is new.'.format(url))
+        print('The pending url {0} is new.'.format(url))
         new += 1
         insert_query = "INSERT INTO dir_crawlableurl (rooturl, url, randval) VALUES (%s, %s, %s)"
         # print(outurlcur.mogrify(insert_query, (row[1], row[2], row[3])))
