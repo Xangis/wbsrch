@@ -55,7 +55,7 @@ def SaveDomain(domain, update=False):
     else:
         statement = 'UPDATE dir_domaininfo SET (%s) = (%s) WHERE id = %s'
         # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), domain['id'])))
-        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
+        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values), domain['id']))
         outdb.commit()
 
 
@@ -133,7 +133,7 @@ def SavePage(page, update=False, lang='site_info'):
         row = inurlcur.fetchone()
 
 
-def ProcessUnmatchedDomainFields(fields, existing_record, lang):
+def ProcessUnmatchedDomainFields(fields, existing_record):
     # existing_record contains the record as it is in the database.
     # fields contains source fields that differ.
     # Replace values in fields as necessary.
@@ -148,16 +148,16 @@ def ProcessUnmatchedDomainFields(fields, existing_record, lang):
             # Don't bother comparing now, only compare if robots date is wrong.
             pass
         elif field == 'robots_last_updated':
-            if 'robots_ip' in fields:
-                if inval < outval:
-                    print('Existing robots_last_updated value is newer, not copying')
-                else:
-                    print('Input value is newer, copying over')
-                    existing_record['robots_last_updated'] = inval
+            if not outval or (inval > outval):
+                print('robots_last_updated input value for {0} is newer, copying over'.format(existing_record['url']))
+                existing_record['robots_last_updated'] = inval
+                if 'robots_ip' in fields:
                     existing_record['robots_ip'] = fields['robots_ip'][0]
-                    needs_save = True
+                if 'robots_txt' in fields:
+                    existing_record['robots_txt'] = fields['robots_txt'][0]
+                needs_save = True
             else:
-                print('No robots_ip in mismatched fields, ignoring difference in robots_last_updated.')
+                print('Existing robots_last_updated value is newer, not copying')
         elif field == 'whois_last_updated':
             # If our data is newer, copy in all whois fields:
             # whois_address
@@ -174,8 +174,8 @@ def ProcessUnmatchedDomainFields(fields, existing_record, lang):
             # If a domain goes private or expires, we don't wan to delete previous data.
             # However, since None values are discarded before they ever reach this function,
             # this won't be a problem.
-            if inval > outval:
-                existing_record['whois_last_updated'] = fields['whois_last_udated'][0]
+            if not outval or (inval > outval):
+                existing_record['whois_last_updated'] = fields['whois_last_updated'][0]
                 if 'whois_address' in fields:
                     existing_record['whois_address'] = fields['whois_address'][0]
                 if 'whois_city' in fields:
@@ -200,7 +200,7 @@ def ProcessUnmatchedDomainFields(fields, existing_record, lang):
             pass
         elif field == 'domain_created':
             if outval is None:
-                existing_record['domain_ceated'] = inval
+                existing_record['domain_created'] = inval
                 needs_save = True
             else:
                 raise ValueError('Input domain_created is {0} and output domain_created is {1} and we do not know what to do.'.format(inval, outval))
@@ -246,11 +246,14 @@ def ProcessUnmatchedDomainFields(fields, existing_record, lang):
         elif field == 'whois_org':
             # Handled by whois_last_updated.
             pass
+        elif field == 'robots_txt':
+            # Handled by robots_last_updated.
+            pass
         else:
             raise ValueError(field)
     # print('ProcessUnmatchedDomainFields: Save = {0}'.format(needs_save))
     if needs_save:
-        SaveDomain(existing_record, update=True, lang=lang)
+        SaveDomain(existing_record, update=True)
         return True
     else:
         return False
@@ -487,7 +490,7 @@ if not options.nodomains:
             for index in range(len(row)):
                 if colnames[index] != 'id':
                     record[colnames[index]] = row[index]
-            SaveDomain(record)
+            SaveDomain(record, update=False)
             new += 1
         row = incur.fetchone()
 
