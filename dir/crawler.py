@@ -362,6 +362,18 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
             print('Removed {0} instances of {1} from the {2} database.'.format(count, url, remove_model))
         return False
     rooturl = GetRootUrl(realurl)
+    # We may have been redirected to a URL that isn't in the DomainInfo table yet.
+    # Make sure it is.
+    try:
+        domain = DomainInfo.objects.get(url=rooturl)
+    except ObjectDoesNotExist:
+        domain = DomainInfo()
+        domain.url = rooturl
+        domain.save()
+        try:
+            print('Created new DomainInfo entry for {0}.'.format(rooturl))
+        except Exception:
+            print('Created new DomainInfo entry.')
     # We need to check the real root url for blocking too. We do this in addition to
     # when we add to the pending list because we may have received something different
     # due to a redirect and we don't want to save it.
@@ -745,6 +757,7 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
         # Always create domain info and check for robots.txt even if the domain doesn't exist yet.
         domain = DomainInfo()
         domain.url = root
+        domain.save()
         try:
             print('Created new DomainInfo entry for {0}.'.format(root))
         except Exception:
