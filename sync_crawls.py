@@ -65,7 +65,7 @@ def SavePage(page, update=False, lang='site_info'):
 
     if not update:
         statement = "INSERT INTO {0} (%s) values %s".format(lang)
-        print(statement)
+        # print(statement)
         # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values))))
         outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
         outdb.commit()
