@@ -570,13 +570,18 @@ if not options.nopages:
                 elif inval != outval:
                     # print('Field {0} ({1}) does not match. Input: {2}, Output: {3}'.format(existing_colnames[index], index, inval, outval))
                     unmatched_fields[existing_colnames[index]] = (inval, outval)
-            ProcessUnmatchedPageFields(unmatched_fields, existing_record, lang)
+            if len(unmatched_fields.items()):
+                ProcessUnmatchedPageFields(unmatched_fields, existing_record, lang)
+                updated += 1
+            else:
+                notupdated += 1
         else:
             print('The url {0} is new.'.format(url))
             record = {}
             for index in range(len(row)):
                 if colnames[index] != 'id':
                     record[colnames[index]] = row[index]
+            new += 1
             SavePage(record, update=False, lang=lang)
         row = incur.fetchone()
 
