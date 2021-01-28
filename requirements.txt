@@ -37,7 +37,7 @@ Unidecode==0.04.19
 # django-memcachedkeys==0.1.0
 simhash==2.0.0
 backports.functools-lru-cache==1.6.1
-favicon==0.5.1
+favicon==0.7.0
 psycopg2-binary==2.8.6
 Pillow==8.1.0
 selenium==3.141.0
