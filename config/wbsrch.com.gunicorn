@@ -1,5 +1,11 @@
 server {
 	listen 80;
+	server_name 139.64.135.85;
+        return 301 https://wbsrch.com/;
+}
+
+server {
+	listen 80;
         listen 443 ssl;
 	server_name browser.wbsrch.com;
         ssl_certificate /etc/letsencrypt/live/wbsrch.com/fullchain.pem;
