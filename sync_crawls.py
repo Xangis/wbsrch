@@ -157,7 +157,8 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
                     existing_record['robots_txt'] = fields['robots_txt'][0]
                 needs_save = True
             else:
-                print('Existing robots_last_updated value is newer, not copying')
+                # print('Existing robots_last_updated value is newer, not copying')
+                pass
         elif field == 'whois_last_updated':
             # If our data is newer, copy in all whois fields:
             # whois_address
@@ -202,20 +203,35 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
             if outval is None:
                 existing_record['domain_created'] = inval
                 needs_save = True
-            else:
-                raise ValueError('Input domain_created is {0} and output domain_created is {1} and we do not know what to do.'.format(inval, outval))
+            elif inval > outval:
+                # This can happen if a name is dropped and then re-registered.
+                existing_record['domain_expires'] = inval
+                needs_save = True
         elif field == 'domain_expires':
             if outval is None:
                 existing_record['domain_expires'] = inval
                 needs_save = True
-            else:
-                raise ValueError('Input domain_expires is {0} and output domain_expires is {1} and we do not know what to do.'.format(inval, outval))
+            elif outval < inval:
+                existing_record['domain_expires'] = inval
+                needs_save = True
         elif field == 'domain_updated':
             if outval is None:
                 existing_record['domain_updated'] = inval
                 needs_save = True
-            else:
-                raise ValueError('Input domain_updated is {0} and output domain_updated is {1} and we do not know what to do.'.format(inval, outval))
+            elif outval < inval:
+                existing_record['domain_updated'] = inval
+        elif field == 'is_unblockable':
+            # We always keep this value because it's only ever set manually and intentionally.
+            if outval is None or outval == False:
+                if inval == True:
+                    existing_record['is_unblockable'] = inval
+                    needs_save = True
+        elif field == 'verified_notporn':
+            # We always keep this value because it's only ever set manually and intentionally.
+            if outval is None or outval == False:
+                if inval == True:
+                    existing_record['verified_notporn'] = inval
+                    needs_save = True
         elif field == 'whois_address':
             # Handled by whois_last_updated.
             pass
@@ -450,8 +466,12 @@ if not options.nodomains:
     new = 0
     updated = 0
     notupdated = 0
+    processed = 0
     row = incur.fetchone()
     while row is not None:
+        processed += 1
+        if processed % 100000 == 0:
+            print('{0} domains processed'.format(processed))
         unmatched_fields = {}
         # print(row)
         url = row[1]
@@ -527,8 +547,12 @@ if not options.nopages:
     updated = 0
     notupdated = 0
     new = 0
+    processed = 0
     row = incur.fetchone()
     while row is not None:
+        processed += 1
+        if processed % 100000 == 0:
+            print('{0} pages processed'.format(processed))
         unmatched_fields = {}
         # print(row)
         url = row[2]
@@ -603,8 +627,12 @@ if not options.nourls:
     alreadycrawled = 0
     alreadypending = 0
     new = 0
+    processed = 0
     row = inurlcur.fetchone()
     while row is not None:
+        processed += 1
+        if processed % 100000 == 0:
+            print('{0} urls processed'.format(processed))
         # print(row)
         url = row[2]
         # TODO: Make this language aware -- check language of domain before
