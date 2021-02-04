@@ -89,25 +89,24 @@
   <PAD_Certification_Promotion>
     <Apply_For_Certification>N</Apply_For_Certification>
   </PAD_Certification_Promotion>
-  <ASBMPlannerID1stRound>5</ASBMPlannerID1stRound>
-  <Issues>11</Issues>
-  <ASBMPlannerID2ndRound>6</ASBMPlannerID2ndRound>
+  <ASBMPlannerID1stRound>49</ASBMPlannerID1stRound>
+  <Issues>12</Issues>
   <Program_Info>
     <Program_Target_Platform>Windows</Program_Target_Platform>
     <File_Info>
       <Automatically_Detect_File_Size>N</Automatically_Detect_File_Size>
-      <File_Size_Bytes>63115302</File_Size_Bytes>
-      <File_Size_K>61636</File_Size_K>
-      <File_Size_MB>60.19</File_Size_MB>
+      <File_Size_Bytes>69721088</File_Size_Bytes>
+      <File_Size_K>68087</File_Size_K>
+      <File_Size_MB>66.49</File_Size_MB>
       <Filename_Versioned></Filename_Versioned>
       <Filename_Previous></Filename_Previous>
       <Filename_Generic></Filename_Generic>
       <Filename_Long></Filename_Long>
     </File_Info>
     <Program_Name>WbBrowse</Program_Name>
-    <Program_Version>2.0</Program_Version>
-    <Program_Release_Month>01</Program_Release_Month>
-    <Program_Release_Day>24</Program_Release_Day>
+    <Program_Version>3.0</Program_Version>
+    <Program_Release_Month>02</Program_Release_Month>
+    <Program_Release_Day>04</Program_Release_Day>
     <Program_Release_Year>2021</Program_Release_Year>
     <Program_Cost_Dollars>0</Program_Cost_Dollars>
     <Program_Type>Freeware</Program_Type>
@@ -115,8 +114,8 @@
     <Program_Install_Support>Install and Uninstall</Program_Install_Support>
     <Program_OS_Support>Win2000,WinXP,Win7 x32,Win7 x64,Windows 8,Windows 10,WinServer,WinOther,Windows2000,Windows2003,Windows Server 2000,Windows Server 2003,Windows Server 2008,Windows Server 2008r2,Windows Server 2012,Windows Tablet PC Edition 2005,Windows Media Center Edition 2005,WinVista,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Ultimate,WinVista x64,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64,Windows Vista Ultimate x64</Program_OS_Support>
     <Program_Language>English</Program_Language>
-    <Program_Change_Info>Updated web engine.</Program_Change_Info>
-    <Program_System_Requirements>No special requirements.</Program_System_Requirements>
+    <Program_Change_Info>Updated web engine. Many feature improvements and fixes.</Program_Change_Info>
+    <Program_System_Requirements>Windows.</Program_System_Requirements>
     <Program_Category_Class>Network &amp; Internet::Browsers</Program_Category_Class>
     <Expire_Info>
       <Has_Expire_Info>N</Has_Expire_Info>
@@ -127,7 +126,7 @@
       <Expire_Day></Expire_Day>
       <Expire_Year></Expire_Year>
     </Expire_Info>
-    <Program_Categories>Internet Browsers,Internet Browser,Web Browsers,Web Browser,browsers &amp; plugins,Browsers,browser</Program_Categories>
+    <Program_Categories>Internet Browsers,Internet Browser,Web Browsers,Web Browser,browsers &amp; plug,browsers &amp; plugins,Browsers,browser,communications</Program_Categories>
     <Limitations>No limitations.</Limitations>
     <Program_Cost_Other_Code></Program_Cost_Other_Code>
     <Program_Cost_Other></Program_Cost_Other>
@@ -145,16 +144,17 @@
   <Allmyapps>
     <Allmyapps_Terms_And_Conditions>Y</Allmyapps_Terms_And_Conditions>
   </Allmyapps>
+  <ASBMPlannerID2ndRound>50</ASBMPlannerID2ndRound>
   <Web_Info>
     <Application_URLs>
       <Application_Info_URL>https://wbsrch.com/browser/</Application_Info_URL>
+      <Application_Order_URL>https://wbsrch.com/browser/</Application_Order_URL>
       <Application_Screenshot_URL>https://wbsrch.com/images/Wikipedia_on_WbBrowse.png</Application_Screenshot_URL>
       <Application_Icon_URL>https://wbsrch.com/favicon.png</Application_Icon_URL>
       <Application_XML_File_URL>https://wbsrch.com/wbbrowse_pad_file.xml</Application_XML_File_URL>
-      <Application_Order_URL>https://wbsrch.com/browser/</Application_Order_URL>
     </Application_URLs>
     <Download_URLs>
-      <Primary_Download_URL>https://wbsrch.com/software/WbBrowse2.0Setup.exe</Primary_Download_URL>
+      <Primary_Download_URL>https://wbsrch.com/software/WbBrowse3.0Setup.exe</Primary_Download_URL>
       <Secondary_Download_URL></Secondary_Download_URL>
       <Additional_Download_URL_1></Additional_Download_URL_1>
       <Additional_Download_URL_2></Additional_Download_URL_2>
@@ -209,14 +209,14 @@ WbBrowse uses the Qt libraries, whcih can be obtained at www.qt.io.</EULA>
   </AppStore>
   <Program_Descriptions>
     <English>
-      <Keywords>browser, web browser, tabbed browser</Keywords>
-      <Char_Desc_45>A tabbed web browser.</Char_Desc_45>
+      <Keywords>browser, web browser, tabbed browser, internet, internet browser, chrome, chromium, blink</Keywords>
+      <Char_Desc_45>A full-featured tabbed web browser.</Char_Desc_45>
       <Char_Desc_80>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX.</Char_Desc_80>
-      <Char_Desc_250>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX. It is based on WebKit and was built using the Qt framework. It uses the same rendering engine as Safari and pages will render similarly.</Char_Desc_250>
-      <Char_Desc_450>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX. It is based on WebKit and was built using the Qt framework. It uses the same rendering engine as Safari and web pages will render in a similar fashion. WbBrowse was built by the WbSrch search engine development team.</Char_Desc_450>
-      <Char_Desc_2000>WbBrowse is a tabbed web browser available on Windows, Linux, and OSX. It is based on WebKit and was built using the Qt framework. It uses the same rendering engine as Safari and web pages will render in a similar fashion.
+      <Char_Desc_250>WbBrowse is a full-featured tabbed web browser available on Windows, Linux, and OSX. It is based on the Blink engine and includes the features of a modern web browser.</Char_Desc_250>
+      <Char_Desc_450>WbBrowse is a full-featured tabbed web browser available on Windows, Linux, and OSX. It is based on Blink and was built using the Qt framework. It uses the same rendering engine as Chrome and web pages will render in a similar fashion. It features print support, file downloads, private browsing, bookmark management, and web history. WbBrowse was built by the WbSrch search engine development team.</Char_Desc_450>
+      <Char_Desc_2000>WbBrowse is a full-featured tabbed web browser available on Windows, Linux, and OSX. It is based on Blink and was built using the Qt framework. It uses the same rendering engine as Chrome and web pages will render in a similar fashion.
 
-WbBrowse supports private browsing, bookmarking, page inspection, and modern HTML5 site elements such video and audio. It has both install and uninstall support and has no spyware, adware, or "add-on spam" in its installer.
+It features print support, file downloads, private browsing, bookmark management, web history, and source code view. It also supports modern HTML5 site elements such video and audio. It has both install and uninstall support and has no spyware, adware, or "add-on spam" in its installer.
 
 WbBrowse was built by the WbSrch search engine development team. WbSrch is a search engine that was created in 2013 and launched in 2014 and is currently online at https://wbsrch.com.</Char_Desc_2000>
     </English>
