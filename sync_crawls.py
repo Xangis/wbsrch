@@ -13,6 +13,8 @@ parser.add_argument('outputurls', action='store', type=str, help='Output db, exa
 parser.add_argument('-p', '--nopages', default=False, action='store_true', dest='nopages', help='Do not update pages.')
 parser.add_argument('-d', '--nodomains', default=False, action='store_true', dest='nodomains', help='Do not update domains.')
 parser.add_argument('-u', '--nourls', default=False, action='store_true', dest='nourls', help='Do not update pending urls.')
+parser.add_argument('-l', '--limit', type=int, dest='limit', default=None, help='Limit of records to process in each section.')
+parser.add_argument('-o', '--offset', type=int, dest='offset', default=None, help='Offset of records to process in each section.')
 options = parser.parse_args()
 
 #
@@ -290,10 +292,11 @@ def ProcessUnmatchedPageFields(fields, existing_record, lang='site_info'):
                 existing_record['firstcrawled'] = inval
                 needs_save = True
             else:
-                print('Existing value was crawled earlier, not copying.')
+                pass
+                # print('Existing value was crawled earlier, not copying.')
         elif field == 'lastcrawled':
             if inval > outval:
-                print('Input value was crawled more recently, copying over.')
+                # print('Input value was crawled more recently, copying over.')
                 if 'pagetext' in fields:
                     existing_record['lastcrawled'] = inval
                     existing_record['pagetext'] = fields['pagetext'][0]
@@ -358,9 +361,11 @@ def ProcessUnmatchedPageFields(fields, existing_record, lang='site_info'):
                         existing_record['content_type_header'] = fields['content_type_header'][0]
                     needs_save = True
                 else:
-                    print('No pagetext in fields, cannot copy it over.')
+                    pass
+                    # print('No pagetext in fields, cannot copy it over.')
             else:
-                print('Existing value was crawled more recently, not copying.')
+                pass
+                # print('Existing value was crawled more recently, not copying.')
         elif field == 'ip':
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
@@ -449,7 +454,10 @@ if not options.nodomains:
     #
     print('--- PROCESSING DOMAINS ---')
 
-    incur.execute("SELECT * FROM dir_domaininfo")
+    if options.limit or options.offset:
+        incur.execute("SELECT * FROM dir_domaininfo ORDER BY url LIMIT %s OFFSET %s", (options.limit, options.offset))
+    else:
+        incur.execute("SELECT * FROM dir_domaininfo ORDER BY url")
     print('Number of dir_domaininfo: {0}'.format(incur.rowcount))
 
     colnames = [desc[0] for desc in incur.description]
@@ -470,7 +478,7 @@ if not options.nodomains:
     row = incur.fetchone()
     while row is not None:
         processed += 1
-        if processed % 100000 == 0:
+        if processed % 50000 == 0:
             print('{0} domains processed'.format(processed))
         unmatched_fields = {}
         # print(row)
@@ -525,7 +533,10 @@ if not options.nopages:
     #
     print('--- PROCESSING PAGES ---')
 
-    incur.execute("SELECT * FROM site_info")
+    if options.limit or options.offset:
+        incur.execute("SELECT * FROM site_info ORDER BY rooturl LIMIT %s OFFSET %s", (options.limit, options.offset))
+    else:
+        incur.execute("SELECT * FROM site_info ORDER BY rooturl")
     print('Number of site_info: {0}'.format(incur.rowcount))
 
     language_list = ['en', 'an', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
@@ -551,7 +562,7 @@ if not options.nopages:
     row = incur.fetchone()
     while row is not None:
         processed += 1
-        if processed % 100000 == 0:
+        if processed % 50000 == 0:
             print('{0} pages processed'.format(processed))
         unmatched_fields = {}
         # print(row)
@@ -565,7 +576,7 @@ if not options.nopages:
                     lang = 'site_info'
                 else:
                     lang = 'dir_siteinfo_{0}'.format(domainrow[0])
-                print('Using table {0} for language association {1}'.format(lang, domainrow[0]))
+                # print('Using table {0} for language association {1}'.format(lang, domainrow[0]))
         else:
             lang = 'site_info'
         query = 'SELECT * FROM {} WHERE URL = %s'.format(lang)
@@ -620,7 +631,11 @@ if not options.nourls:
     #
     print('--- PROCESSING PENDING URLS ---')
 
-    inurlcur.execute("SELECT * FROM dir_crawlableurl")
+    if options.limit or options.offset:
+        inurlcur.execute("SELECT * FROM dir_crawlableurl ORDER BY rooturl LIMIT %s OFFSET %s", (options.limit, options.offset))
+    else:
+        inurlcur.execute("SELECT * FROM dir_crawlableurl ORDER BY rooturl")
+    print('Number of site_info: {0}'.format(incur.rowcount))
     print('Number of dir_crawlableurl: {0}'.format(inurlcur.rowcount))
 
     updated = 0
@@ -631,7 +646,7 @@ if not options.nourls:
     row = inurlcur.fetchone()
     while row is not None:
         processed += 1
-        if processed % 100000 == 0:
+        if processed % 50000 == 0:
             print('{0} urls processed'.format(processed))
         # print(row)
         url = row[2]
