@@ -224,14 +224,14 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
                 existing_record['domain_updated'] = inval
         elif field == 'is_unblockable':
             # We always keep this value because it's only ever set manually and intentionally.
-            if outval is None or outval == False:
-                if inval == True:
+            if not outval:
+                if inval:
                     existing_record['is_unblockable'] = inval
                     needs_save = True
         elif field == 'verified_notporn':
             # We always keep this value because it's only ever set manually and intentionally.
-            if outval is None or outval == False:
-                if inval == True:
+            if not outval:
+                if inval:
                     existing_record['verified_notporn'] = inval
                     needs_save = True
         elif field == 'whois_address':
