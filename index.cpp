@@ -5,10 +5,197 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <chrono>
+#include <algorithm>
+#include <cctype>
+#include <list>
 #include <pqxx/pqxx>
 
 using namespace std;
+using namespace std::chrono;
 using namespace pqxx;
+
+struct IndexTerm {
+    std::string keywords;
+    int num_results;
+    int num_pages;
+    bool saved;
+    std::string page_rankings;
+    float index_time;
+    bool new_term;
+    bool actively_blocked;
+};
+
+template <std::ctype_base::mask mask>
+class IsNot
+{
+    std::locale myLocale;       // To ensure lifetime of facet...
+    std::ctype<char> const* myCType;
+public:
+    IsNot( std::locale const& l = std::locale() )
+        : myLocale( l )
+        , myCType( &std::use_facet<std::ctype<char> >( l ) )
+    {
+    }
+    bool operator()( char ch ) const
+    {
+        return ! myCType->is( mask, ch );
+    }
+};
+
+typedef IsNot<std::ctype_base::space> IsNotSpace;
+
+std::string strip( std::string const& original )
+{
+    std::string::const_iterator right = std::find_if( original.rbegin(), original.rend(), IsNotSpace() ).base();
+    std::string::const_iterator left = std::find_if(original.begin(), right, IsNotSpace() );
+    return std::string( left, right );
+}
+
+std::string lower(std::string original)
+{
+    std::transform(original.begin(), original.end(), original.begin(), [](unsigned char c){ return std::tolower(c); });
+    return original;
+}
+
+std::string GetPageTermQuery(IndexTerm term)
+{
+    std::string spacelesskeywords = term.keywords.replace(' ', '%');
+    std::string asciikeywords = unidecode(spacelesskeywords);
+    if( spacelesskeywords != asciikeywords )
+        printf("Checking URL as %s", asciikeywords);
+    std::string akp = '%' + asciikeywords + '%';
+    std::string sql_query;
+    if( term.num_pages > 100000 )
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
+                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
+                     "%s OR pagefirstheadtag ILIKE %s) LIMIT 1000000");
+    else if( term.num_pages > 40000 )
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
+                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
+                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s) LIMIT 1000000");
+    else if( term.num_pages > 10000 )
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
+                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
+                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000");
+    else if( term.num_pages > 3000 )
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
+                     " WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR url ILIKE " +
+                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000");
+    else
+        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
+                     " WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR pagetext ILIKE " +
+                     "%s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000");
+    return sql_query;
+}
+
+void BuildIndexForTerm(std::string keywords)
+{
+    if( keywords.empty() )
+    {
+        return;
+    }
+    cout << "Indexing " << keywords << endl;
+    auto start = high_resolution_clock::now();
+
+    bool multiword = false;
+    if(keywords.find(" ") != string::npos)
+        multiword = true;
+
+     keywords = strip(keywords);
+
+    if( keywords.length() < 1)
+        printf("Keyword is empty after calling strip(). Refusing to index.");
+        return;
+
+    keywords = lower(keywords);
+    term.new_term = false;
+    IndexTerm term;
+    term.keywords = keywords;
+    term.num_results = 0;
+    term.num_pages = 0;
+
+    query = "SELECT id, num_results, num_pages, date_indexed FROM dir_indexterm where keywords = " + keywords;
+    nontransaction N(C);
+    result R (N.exec(query.str()));
+    N.commit();
+
+    auto data = R[0];
+
+    if( !data )
+    {
+        term.new_term = true;
+    }
+
+    // Store the num_pages if the previous index is found because it determines how many fields we will query.
+
+    // printf("(Reindex) Term had {0} results and {1} pages last index on {2}".format(term.num_results, term.num_pages, term.date_indexed))
+
+    query = GetPageTermQuery();
+
+    nontransaction O(C);
+    result S( O.exec( query.c_str() ));
+    O.commit();
+    std::list<std::pair<int, float>> ratings;
+    for (result::const_iterator item = S.begin(); item != S.end(); ++item )
+    {
+        int weight = CalculateTermValue(item, keywords, "en");
+        ratings.insert(weight, item.id);
+    }
+    term.num_pages = ratings.size();
+    sort(ratings.begin(), ratings.end());
+    if(ratings.size() > 5000)
+    {
+        ratings = std::list<std::pair<int, float>>(ratings.begin() + 1, ratings.end)
+    }
+
+    if( multiword )
+    {
+        ratings = AddIndividualWords(ratings, keywords, "en");
+        if(ratings.size() > 5000)
+        {
+            ratings = std::list<std::pair<int, float>>(ratings.begin() + 1, ratings.end)
+        }
+    }
+
+    term.page_rankings = ratings.toString();
+    term.num_results = len(ratings);
+    auto end = high_resolution_clock::now();
+    auto elapsed = duration_cast<milliseconds>(end-start);
+    term.index_time = elapsed / 1000.0;
+    cout << "Indexing " << term << " took " << term.index_time << " seconds." << endl;
+    auto jsonifystart = high_resolution_clock::now();
+    term.saved = false;
+
+    if( !new_term || term.num_pages > 0)
+    {
+        std::string individualwords = term.keywords.split(' ');
+        int blocked = term_model.objects.filter(keywords__in=individualwords, actively_blocked=True).count()
+        if(blocked > 0)
+        {
+            printf("Marking this term as blocked because at least one of the words in it is blocked.");
+            term.actively_blocked = true;
+        }
+        // JsonifyIndexTerm needs to update rankings.
+        term.JsonifyIndexTerm(term, "en");
+        SaveTerm(term);
+        term.saved = true;
+    }
+    else
+    {
+        printf("Not saving term because it does not have at least one result.");
+    }
+
+    auto jsonifyend = high_resolution_clock::now();
+    auto jsonifyelapsed = duration_cast<milliseconds>(jsonifyend-jsonifystart);
+    term.index_time = jsonifyelapsed / 1000.0;
+    count << "Jsonify " << term << " took " << jsonifyelapsed / 1000.0 << " seconds." << endl;
+
+    printf("Index Time for '%s': %f seconds, Jsonify Time: %f seconds (includes ranking update), %d pages, %d results.",
+        term.keywords, term.index_time, jsonify_delta.total_seconds(), term.num_pages, term.num_results);
+
+    return term.saved;
+}
 
 int main(int argc, char* argv[]) {
    if( argc < 2 ) {
@@ -62,151 +249,7 @@ int main(int argc, char* argv[]) {
          std::string keywords = c[1].as<string>();
          cout << "ID = " << id << ", Keywords = " << keywords << endl;
 
-         // Python: BuildIndexForTerm(keywords)
-         /* Python Code
-    start = timezone.now()
-    multiword = False
-    if ' ' in keywords:
-        multiword = True
-    # We have to keep track of the number of previous queries and add from there because
-    # when we index multiple terms, queries are additive.
-    if verbose:
-        prevqueries = len(connection.queries)
-    keywords = keywords.strip()
-    if len(keywords) < 1:
-        if verbose:
-            print('BuildIndexForTerm: Search term is empty. Refusing to index.')
-        return False
-    keywords = keywords.lower()
-    term = None
-    new = False
-    term_model = GetIndexModelFromLanguage(lang)
-    site_model = GetSiteInfoModelFromLanguage(lang)
-    try:
-        term = term_model.objects.get(keywords=keywords)
-        if term.num_pages is None:
-            term.num_pages = 0
-    except ObjectDoesNotExist:
-        term = term_model()
-        term.keywords = keywords
-        term.num_results = 0
-        term.num_pages = 0
-        new = True
-    if verbose:
-        print('{0} Indexing term ({1}): {2}'.format(timezone.now().isoformat(), lang, keywords))
-        if term.num_results > 0:
-            print('(Reindex) Term had {0} results and {1} pages last index on {2}'.format(term.num_results, term.num_pages, term.date_indexed))
-    # We do not need pagecontents, lastcrawled, or firstcrawled. This may or may not save some effort.
-    # However, leaving out pagetext saves a *lot* of effort and computation time.
-    kp = '%' + keywords + '%' # Allow us to do raw ILIKE queries without formatting problems.
-    spacelesskeywords = keywords.replace(' ', '%')
-    asciikeywords = unidecode(spacelesskeywords)
-    if spacelesskeywords != asciikeywords:
-        print('Checking URL as {0}'.format(asciikeywords))
-    akp = '%' + asciikeywords + '%'
-    # Don't even bother selecting on page text, keywords, or description ILIKE for massive queries.
-    # Since title, first head tag, and URL are most important. About 1.2% of queries fit this and
-    # indexing them can be a multi-hour process on a slow server.
-    #
-    # On 2015-03-18 added a limit of 1 million rows to every query. Results for anything with a million rows will be crappy
-    # and a popularity contest anyway, at least that gives us a chance of succeeding in our indexing.
-    querystart = timezone.now()
-    if term.num_pages > 100000:
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
-                     site_model._meta.db_table +
-                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
-                     "%s OR pagefirstheadtag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, akp, kp])
-    elif term.num_pages > 40000:
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
-                     site_model._meta.db_table +
-                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
-                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, akp, kp, kp])
-    elif term.num_pages > 10000:
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
-                     site_model._meta.db_table +
-                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
-                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, akp, kp, kp, kp])
-    # If we have more than 3000 results, ignore the specific page text because we can get what we
-    # need from the head tag, url, keywords, description, and title (mostly).
-    elif abbreviated or term.num_pages > 3000:
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
-                     site_model._meta.db_table +
-                     " WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR url ILIKE " +
-                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, kp, kp, akp, kp, kp, kp])
-    else:
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM " +
-                     site_model._meta.db_table +
-                     " WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR pagetext ILIKE " +
-                     "%s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000")
-        index_items = site_model.objects.raw(sql_query, [kp, kp, kp, kp, akp, kp, kp, kp])
-    if verbose:
-        print(sql_query.replace("%s", ("'" + kp + "'")))
-    ratings = []
-    if verbose:
-        querydelta = timezone.now() - querystart
-        print('Query took: {0} seconds'.format(querydelta.total_seconds()))
-        print('{0} Calculating values.'.format(timezone.now().isoformat()))
-    # Calculate the score for each page we've found.
-    termcalcstart = timezone.now()
-    for item in index_items:
-        try:
-            weight = CalculateTermValue(item, keywords, abbreviated, lang)
-        # Any problem calculating the term's value and it gets a zero.
-        except Exception:
-            weight = 0
-        ratings.append([item.id, weight])
-    term.num_pages = len(ratings)
-    # Sort by score
-    if verbose:
-        termcalcdelta = timezone.now() - termcalcstart
-        print('Calculating term values took: {0} seconds'.format(termcalcdelta.total_seconds()))
-        print('{0} Sorting index by score.'.format(timezone.now().isoformat()))
-    ratings.sort(key=lambda tup: tup[1], reverse=True)
-    ratings = ratings[0:5000]
-    # Load existing terms for multi-word phrases.
-    if multiword and type:
-        ratings = AddIndividualWords(ratings, keywords, type, lang)
-        # Re-trim the ratings so we're still at 5000 max.
-        ratings = ratings[0:5000]
-    term.keywords = keywords
-    term.page_rankings = str(ratings)
-    term.num_results = len(ratings)
-    end_delta = timezone.now() - start
-    term.index_time = end_delta.total_seconds()
-
-    if verbose:
-        print('{0} Saving index term.'.format(timezone.now().isoformat()))
-    jsonify_start = timezone.now()
-    # Don't save new index terms unless it has at least one result.
-    saved = True
-    if not new or term.num_pages > 0:
-        if new and multiword:
-            individualwords = term.keywords.split(' ')
-            blocked = term_model.objects.filter(keywords__in=individualwords, actively_blocked=True).count()
-            if blocked > 0:
-                print('Marking this term as blocked because at least one of the words in it is blocked.')
-                term.actively_blocked = True
-        term.save()
-        JsonifyIndexTerm(term, lang, verbose=verbose)
-    else:
-        if verbose:
-            print('Not saving index term because it does not have at least one result.')
-        saved = False
-    jsonify_delta = timezone.now() - jsonify_start
-    if verbose:
-        print('{0} Done indexing: {1}, {2} results from {3} pages.'.format(timezone.now().isoformat(), keywords, term.num_results, term.num_pages))
-        LogQueries(connection.queries[prevqueries:])
-    try:
-        print("Index Time for '{0}': {1} seconds, Jsonify Time: {2} seconds (includes ranking update), {3} pages, {4} results.".format(
-            term.keywords, term.index_time, jsonify_delta.total_seconds(), term.num_pages, term.num_results))
-    except Exception:
-        pass
-    return saved
-         */
+         BuildIndexForTerm(keywords);
 
          // Python: RemoveFromPending(keywords)
          std::string sqlthree("DELETE FROM dir_pendingindex WHERE KEYWORDS = %s");
