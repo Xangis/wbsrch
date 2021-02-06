@@ -9,6 +9,9 @@
 #include <algorithm>
 #include <cctype>
 #include <list>
+#include <regex>
+#include <vector>
+//#include <format.h>
 #include <pqxx/pqxx>
 
 using namespace std;
@@ -58,42 +61,91 @@ std::string lower(std::string original)
     return original;
 }
 
+string replace( string const & in, string const & from, string const & to )
+{
+  return std::regex_replace( in, std::regex(from), to );
+}
+
+vector<string> split(string const &in, char splitchar)
+{
+    vector<string> strings;
+    istringstream f(in);
+    string s;    
+    while (getline(f, s, splitchar)) {
+        cout << s << endl;
+        strings.push_back(s);
+    }
+    return strings;
+}
+
+std::string removeAccented( const char* str ) {
+    const char*
+    //   "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"
+    tr = "AAAAAAECEEEEIIIIDNOOOOOx0UUUUYPsaaaaaaeceeeeiiiiOnooooo/0uuuuypy";
+    std::string out;
+    int slen = strlen(str);
+    for( int i = 0; i < slen; i++ )
+    {
+        unsigned char ch = (unsigned char)str[i];
+        if ( ch >=192 ) {
+            ch = tr[ ch-192 ];
+        }
+        out += (char)ch;
+    }
+    return str;
+}
+
 std::string GetPageTermQuery(IndexTerm term)
 {
-    std::string spacelesskeywords = term.keywords.replace(' ', '%');
-    std::string asciikeywords = unidecode(spacelesskeywords);
+    std::string spacelesskeywords = replace(term.keywords, std::string(" "), std::string("%"));
+    std::string asciikeywords = std::string(removeAccented(spacelesskeywords.c_str()));
     if( spacelesskeywords != asciikeywords )
-        printf("Checking URL as %s", asciikeywords);
+        cout << "Checking URL as " << asciikeywords << endl;
     std::string akp = '%' + asciikeywords + '%';
     std::string sql_query;
     if( term.num_pages > 100000 )
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
-                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
-                     "%s OR pagefirstheadtag ILIKE %s) LIMIT 1000000");
+        sql_query = std::string("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info WHERE (pagetitle ILIKE {} OR url ILIKE {} OR pagefirstheadtag ILIKE {}) LIMIT 1000000");
     else if( term.num_pages > 40000 )
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
-                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
-                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s) LIMIT 1000000");
+        sql_query = std::string("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info WHERE (pagetitle ILIKE %s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s) LIMIT 1000000");
     else if( term.num_pages > 10000 )
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
-                     " WHERE (pagetitle ILIKE %s OR url ILIKE " +
-                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000");
+        sql_query = std::string("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info WHERE (pagetitle ILIKE %s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000");
     else if( term.num_pages > 3000 )
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
-                     " WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR url ILIKE " +
-                     "%s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000");
+        sql_query = std::string("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000");
     else
-        sql_query = ("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info" +
-                     " WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR pagetext ILIKE " +
-                     "%s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000");
+        sql_query = std::string("SELECT id, rooturl, url, pagetitle, pagedescription, pagefirstheadtag, pagekeywords, pagetext, pagesize FROM site_info WHERE (pagetitle ILIKE %s OR pagekeywords LIKE %s OR pagedescription ILIKE %s OR pagetext ILIKE %s OR url ILIKE %s OR pagefirstheadtag ILIKE %s OR pagefirsth2tag ILIKE %s OR pagefirsth3tag ILIKE %s) LIMIT 1000000");
     return sql_query;
 }
 
-void BuildIndexForTerm(std::string keywords)
+void AddIndividualWords(list<std::pair<int, float>> ratings, std::string keywords, std::string language)
+{
+    return;
+}
+
+float CalculateTermValue(char* page, std::string keywords, std::string language)
+{
+    return 0.0;
+}
+
+std::string GetPageTermQuery(std::string query)
+{
+    return query;
+}
+
+bool JsonifyIndexTerm(IndexTerm term, std::string language)
+{
+    return true;
+}
+
+bool SaveTerm(IndexTerm term)
+{
+    return true;
+}
+
+bool BuildIndexForTerm(std::string keywords, connection C)
 {
     if( keywords.empty() )
     {
-        return;
+        return false;
     }
     cout << "Indexing " << keywords << endl;
     auto start = high_resolution_clock::now();
@@ -106,23 +158,21 @@ void BuildIndexForTerm(std::string keywords)
 
     if( keywords.length() < 1)
         printf("Keyword is empty after calling strip(). Refusing to index.");
-        return;
+        return false;
 
     keywords = lower(keywords);
-    term.new_term = false;
     IndexTerm term;
+    term.new_term = false;
     term.keywords = keywords;
     term.num_results = 0;
     term.num_pages = 0;
 
-    query = "SELECT id, num_results, num_pages, date_indexed FROM dir_indexterm where keywords = " + keywords;
+    std::string query = "SELECT id, num_results, num_pages, date_indexed FROM dir_indexterm where keywords = " + keywords;
     nontransaction N(C);
-    result R (N.exec(query.str()));
+    result R (N.exec(query.c_str()));
     N.commit();
 
-    auto data = R[0];
-
-    if( !data )
+    if( R.size() < 1 )
     {
         term.new_term = true;
     }
@@ -131,7 +181,7 @@ void BuildIndexForTerm(std::string keywords)
 
     // printf("(Reindex) Term had {0} results and {1} pages last index on {2}".format(term.num_results, term.num_pages, term.date_indexed))
 
-    query = GetPageTermQuery();
+    query = GetPageTermQuery(term);
 
     nontransaction O(C);
     result S( O.exec( query.c_str() ));
@@ -158,26 +208,43 @@ void BuildIndexForTerm(std::string keywords)
         }
     }
 
-    term.page_rankings = ratings.toString();
+    std::string encoded_rankings = "[";
+    bool first = true;
+    for( std::list<std::pair<int, float>> >::iterator i; i < i.end(); i++)
+    {
+        if( !first )
+        {
+            encoded_rankings += ", " 
+        }
+        encoded_rankings << "[" << i.first() << ", " << i.second() << "]";
+        first = false;
+    }
+    encoded_rankings << "]";
+    
+    term.page_rankings = encoded_rankings;
+    // [[775416, 12.0], [752310, 12.0], [1073551, 10.0], [1068168, 7.5], [556956, 4.0]]
     term.num_results = len(ratings);
     auto end = high_resolution_clock::now();
     auto elapsed = duration_cast<milliseconds>(end-start);
     term.index_time = elapsed / 1000.0;
-    cout << "Indexing " << term << " took " << term.index_time << " seconds." << endl;
+    cout << "Indexing " << term.keywords << " took " << term.index_time << " seconds." << endl;
     auto jsonifystart = high_resolution_clock::now();
     term.saved = false;
 
-    if( !new_term || term.num_pages > 0)
+    if( !term.new_term || term.num_pages > 0)
     {
-        std::string individualwords = term.keywords.split(' ');
-        int blocked = term_model.objects.filter(keywords__in=individualwords, actively_blocked=True).count()
+        std::vector<std::string> individualwords = split(term.keywords, ' ');
+        std::string blockedquery = "SELECT COUNT(*) FROM dir_indexterm WHERE actively_blocked = true AND keywords in (%s)";
+        result S( O.exec( blockedquery.c_str() ));
+        O.commit();
+        // TODO: Get count from result.
         if(blocked > 0)
         {
             printf("Marking this term as blocked because at least one of the words in it is blocked.");
             term.actively_blocked = true;
         }
         // JsonifyIndexTerm needs to update rankings.
-        term.JsonifyIndexTerm(term, "en");
+        JsonifyIndexTerm(term, "en");
         SaveTerm(term);
         term.saved = true;
     }
