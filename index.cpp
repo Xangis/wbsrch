@@ -11,8 +11,10 @@
 #include <list>
 #include <regex>
 #include <vector>
+//#include <tuple>
 //#include <format.h>
 #include <pqxx/pqxx>
+//#include <pqxx/result.hxx>
 
 using namespace std;
 using namespace std::chrono;
@@ -116,12 +118,12 @@ std::string GetPageTermQuery(IndexTerm term)
     return sql_query;
 }
 
-void AddIndividualWords(list<std::pair<int, float>> ratings, std::string keywords, std::string language)
+list<std::pair<float, int>> AddIndividualWords(list<std::pair<float, int>> ratings, std::string keywords, std::string language)
 {
-    return;
+    return ratings;
 }
 
-float CalculateTermValue(char* page, std::string keywords, std::string language)
+float CalculateTermValue(std::vector<std::string> rowdata, std::string keywords, std::string language)
 {
     return 0.0;
 }
@@ -186,17 +188,24 @@ bool BuildIndexForTerm(std::string keywords, connection C)
     nontransaction O(C);
     result S( O.exec( query.c_str() ));
     O.commit();
-    std::list<std::pair<int, float>> ratings;
-    for (result::const_iterator item = S.begin(); item != S.end(); ++item )
+    std::list<std::pair<float, int>> ratings;
+    for (result::const_iterator row = S.begin(); row != S.end(); ++row )
     {
-        int weight = CalculateTermValue(item, keywords, "en");
-        ratings.insert(weight, item.id);
+        int id = row[0].as<int>();
+        std::vector<std::string> rowdata;
+        for(pqxx::row field = row.begin(); field != row.end(); ++field)
+        {
+            rowdata.push_back(field);
+        }
+        float weight = CalculateTermValue(rowdata, keywords, "en");
+        ratings.insert(weight, id);
     }
     term.num_pages = ratings.size();
     sort(ratings.begin(), ratings.end());
     if(ratings.size() > 5000)
     {
-        ratings = std::list<std::pair<int, float>>(ratings.begin() + 1, ratings.end)
+        cout << "TODO: Write a slice function to trim ratings down to 5000" << endl;
+        //ratings = std::list<std::pair<int, float>>(ratings.begin() + 1, ratings.end)
     }
 
     if( multiword )
@@ -204,29 +213,30 @@ bool BuildIndexForTerm(std::string keywords, connection C)
         ratings = AddIndividualWords(ratings, keywords, "en");
         if(ratings.size() > 5000)
         {
-            ratings = std::list<std::pair<int, float>>(ratings.begin() + 1, ratings.end)
+            cout << "TODO: Write a slice function to trim ratings down to 5000" << endl;
+            //ratings = std::list<std::pair<int, float>>(ratings.begin() + 1, ratings.end)
         }
     }
 
-    std::string encoded_rankings = "[";
+    std::string encoded_rankings = std::string("[");
     bool first = true;
-    for( std::list<std::pair<int, float>> >::iterator i; i < i.end(); i++)
+    for( std::list<std::pair<int, float>>::iterator i; i < i.end(); i++)
     {
         if( !first )
         {
-            encoded_rankings += ", " 
+            encoded_rankings += ", ";
         }
-        encoded_rankings << "[" << i.first() << ", " << i.second() << "]";
+        encoded_rankings += std::string("[") + (*i).first + ", " + (*i).second + std::string("]");
         first = false;
     }
-    encoded_rankings << "]";
-    
+    encoded_rankings += "]";
+
     term.page_rankings = encoded_rankings;
     // [[775416, 12.0], [752310, 12.0], [1073551, 10.0], [1068168, 7.5], [556956, 4.0]]
-    term.num_results = len(ratings);
+    term.num_results = ratings.size();
     auto end = high_resolution_clock::now();
     auto elapsed = duration_cast<milliseconds>(end-start);
-    term.index_time = elapsed / 1000.0;
+    term.index_time = elapsed.count() / 1000.0;
     cout << "Indexing " << term.keywords << " took " << term.index_time << " seconds." << endl;
     auto jsonifystart = high_resolution_clock::now();
     term.saved = false;
@@ -238,7 +248,7 @@ bool BuildIndexForTerm(std::string keywords, connection C)
         result S( O.exec( blockedquery.c_str() ));
         O.commit();
         // TODO: Get count from result.
-        if(blocked > 0)
+        if(term.actively_blocked > 0)
         {
             printf("Marking this term as blocked because at least one of the words in it is blocked.");
             term.actively_blocked = true;
@@ -255,11 +265,12 @@ bool BuildIndexForTerm(std::string keywords, connection C)
 
     auto jsonifyend = high_resolution_clock::now();
     auto jsonifyelapsed = duration_cast<milliseconds>(jsonifyend-jsonifystart);
-    term.index_time = jsonifyelapsed / 1000.0;
-    count << "Jsonify " << term << " took " << jsonifyelapsed / 1000.0 << " seconds." << endl;
+    float jsonifyseconds = jsonifyelapsed.count() / 1000.0;
+    cout << "Jsonify " << term.keywords << " took " << jsonifyseconds << " seconds." << endl;
 
-    printf("Index Time for '%s': %f seconds, Jsonify Time: %f seconds (includes ranking update), %d pages, %d results.",
-        term.keywords, term.index_time, jsonify_delta.total_seconds(), term.num_pages, term.num_results);
+    cout << "Index Time for '" << term.keywords << "': " << term.index_time << " seconds, Jsonify Time: " <<
+            jsonifyseconds << " seconds (includes ranking update), " << term.num_pages << " pages, " <<
+            term.num_results << " results." << endl;
 
     return term.saved;
 }
@@ -316,7 +327,7 @@ int main(int argc, char* argv[]) {
          std::string keywords = c[1].as<string>();
          cout << "ID = " << id << ", Keywords = " << keywords << endl;
 
-         BuildIndexForTerm(keywords);
+         BuildIndexForTerm(keywords, C);
 
          // Python: RemoveFromPending(keywords)
          std::string sqlthree("DELETE FROM dir_pendingindex WHERE KEYWORDS = %s");
