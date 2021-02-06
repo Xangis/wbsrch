@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from argparse import RawTextHelpFormatter
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError, connection
@@ -22,6 +23,12 @@ def TrimDomain(domain):
     return domain
 
 class Command(BaseCommand):
+    # This is so we can display newlines in the help text.
+    def create_parser(self, *args, **kwargs):
+        parser = super(Command, self).create_parser(*args, **kwargs)
+        parser.formatter_class = RawTextHelpFormatter
+        return parser
+
     help = """Performs semi-manual or automatic language categorization for domains.
 
     To perform automatic categorization, which kind of works but is very experimental, you should use a command something like this:
@@ -43,6 +50,10 @@ class Command(BaseCommand):
     To automatically blog and categorize all domains ending in .fi:
 
         python manage.py categorize_language -g -t -i 99999999 -u .fi
+
+    To re-categorize a specific mis-categorized domain (an NL domain miscategorized as RW, in this case):
+
+        python manage.py categorize_language -l rw -u airfoto.frl -x
 """
     def add_arguments(self, parser):
         parser.add_argument('-a', '--autotag', default=None, action='store', dest='autotag', help='Automatically tag this comma-seperated list of language codes, only works with -c.')
