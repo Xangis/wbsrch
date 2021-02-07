@@ -42,7 +42,7 @@ INDEXES_HOST = os.getenv('INDEXES_HOST', '127.0.0.1')
 LIVE_INDEXES_HOST = os.getenv('INDEXES_HOST', '10.0.0.29')
 NEWS_HOST = os.getenv('NEWS_HOST', '127.0.0.1')
 LIVE_INDEXES_DATABASE = os.getenv('LIVE_INDEXES_DATABASE', 'indexes')
-LIVE_INDEXES_DATABASE = os.getenv('LIVE_INDEXES_DATABASE', 'indexes_original')
+LIVE_INDEXES_DATABASE = os.getenv('LIVE_INDEXES_DATABASE', 'indexes')
 
 if DEBUG:
     DATABASES = {

@@ -2,9 +2,7 @@
 from django.db import connections
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from dir.models import SearchLog, PendingIndex, language_list
-from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
-import codecs
+from dir.models import SearchLog, PendingIndex, language_list, ChangelogItem, DomainSearchLog, IPSearchLog, DomainSuffix, IndexStats
 
 
 def dictfetchall(cursor):
@@ -39,19 +37,93 @@ class Command(BaseCommand):
                     newest_date = last_log.last_search
                 else:
                     newest_date = '2010-01-01'
+                print('Last log: {0}'.format(newest_date))
                 query = "SELECT * FROM dir_searchlog WHERE last_search > '{0}' ORDER BY last_search LIMIT 10".format(newest_date)
                 cursor.execute(query)
                 print('Newer search logs:')
+                # {'id': 5738100, 'keywords': 'belia', 'result_count': 250, 'last_search': datetime.datetime(2016, 5, 1, 19, 24, 50, 936411, tzinfo=<UTC>),
+                # 'search_time': Decimal('0.07'), 'indexed': True, 'referer': None, 'ip': '207.46.13.40',
+                # 'browserstring': 'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)', 'is_bot': True, 'ip_country': 'US',
+                # 'search_id': UUID('c4b1f620-3691-4d08-9b31-1233af606371')}
                 for item in dictfetchall(cursor):
                     print(item)
                 query = 'SELECT * FROM dir_indexstats ORDER BY date DESC LIMIT 1'
                 result = cursor.fetchone()
+
                 last_pendingindex = PendingIndex.objects.all().order_by('-date_added').first()
                 if last_pendingindex:
                     newest_date = last_pendingindex.date_added
+                    newest_date = '2010-01-01'
                 else:
                     newest_date = '2010-01-01'
+                print('Last pending index: {0}'.format(newest_date))
                 query = "SELECT * FROM dir_pendingindex WHERE date_added > '{0}' ORDER BY date_added LIMIT 10".format(newest_date)
+                cursor.execute(query)
                 print('Newer pending indexes:')
+                for item in dictfetchall(cursor):
+                    print(item)
+
+                last_changelogitem = ChangelogItem.objects.all().order_by('-date_added').first()
+                if last_changelogitem:
+                    newest_date = last_changelogitem.date_added
+                    newest_date = '2010-01-01'
+                else:
+                    newest_date = '2010-01-01'
+                print('Last changelog item: {0}'.format(newest_date))
+                query = "SELECT * FROM dir_changelogitem WHERE date_added > '{0}' ORDER BY date_added LIMIT 10".format(newest_date)
+                cursor.execute(query)
+                print('Newer changelog items:')
+                for item in dictfetchall(cursor):
+                    print(item)
+
+                last_domainsearchlog = DomainSearchLog.objects.all().order_by('-last_search').first()
+                if last_domainsearchlog:
+                    newest_date = last_domainsearchlog.last_search
+                    newest_date = '2010-01-01'
+                else:
+                    newest_date = '2010-01-01'
+                print('Last domain search log: {0}'.format(newest_date))
+                query = "SELECT * FROM dir_domainsearchlog WHERE last_search > '{0}' ORDER BY last_search LIMIT 10".format(newest_date)
+                cursor.execute(query)
+                print('Newer domain search logs:')
+                for item in dictfetchall(cursor):
+                    print(item)
+
+                last_ipsearchlog = IPSearchLog.objects.all().order_by('-last_search').first()
+                if last_ipsearchlog:
+                    newest_date = last_ipsearchlog.last_search
+                    newest_date = '2010-01-01'
+                else:
+                    newest_date = '2010-01-01'
+                print('Last IP search log: {0}'.format(newest_date))
+                query = "SELECT * FROM dir_ipsearchlog WHERE last_search > '{0}' ORDER BY last_search LIMIT 10".format(newest_date)
+                cursor.execute(query)
+                print('Newer IP search logs:')
+                for item in dictfetchall(cursor):
+                    print(item)
+
+                last_indexstats = IndexStats.objects.all().order_by('-create_date').first()
+                if last_indexstats:
+                    newest_date = last_indexstats.create_date
+                    newest_date = '2010-01-01'
+                else:
+                    newest_date = '2010-01-01'
+                print('Last domain search log: {0}'.format(newest_date))
+                query = "SELECT * FROM dir_indexstats WHERE create_date > '{0}' ORDER BY create_date LIMIT 10".format(newest_date)
+                cursor.execute(query)
+                print('Newer index stats:')
+                for item in dictfetchall(cursor):
+                    print(item)
+
+                last_domainsuffix = DomainSuffix.objects.all().order_by('-last_updated').first()
+                if last_domainsuffix:
+                    newest_date = last_domainsuffix.last_updated
+                    newest_date = '2010-01-01'
+                else:
+                    newest_date = '2010-01-01'
+                print('Last domain suffix: {0}'.format(newest_date))
+                query = "SELECT * FROM dir_domainsuffix WHERE last_updated > '{0}' ORDER BY last_updated LIMIT 10".format(newest_date)
+                cursor.execute(query)
+                print('Newer domain suffixes:')
                 for item in dictfetchall(cursor):
                     print(item)
