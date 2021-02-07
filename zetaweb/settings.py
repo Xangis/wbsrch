@@ -32,10 +32,12 @@ EMAIL_PORT = 25
 ZETAWEB_PASSWORD = os.getenv('ZETAWEB_PASSWORD', 'password')
 URLS_PASSWORD = os.getenv('URLS_PASSWORD', 'password')
 INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'password')
+LIVE_INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'jf89mvk9.3r9jn.8fjf')
 NEWS_PASSWORD = os.getenv('NEWS_PASSWORD', 'password')
 ZETAWEB_HOST = os.getenv('ZETAWEB_HOST', '127.0.0.1')
 URLS_HOST = os.getenv('URLS_HOST', '127.0.0.1')
 INDEXES_HOST = os.getenv('INDEXES_HOST', '127.0.0.1')
+LIVE_INDEXES_HOST = os.getenv('INDEXES_HOST', 'wbsrch.com')
 NEWS_HOST = os.getenv('NEWS_HOST', '127.0.0.1')
 
 if DEBUG:
@@ -64,6 +66,14 @@ if DEBUG:
             'HOST': INDEXES_HOST,
             'PORT': '',
         },
+        'live_indexes': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'indexes',
+            'USER': 'indexes',
+            'PASSWORD': LIVE_INDEXES_PASSWORD,
+            'HOST': LIVE_INDEXES_HOST,
+            'PORT': '',
+        },
         'news': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'news',
@@ -80,7 +90,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'indexes',
             'USER': 'indexes',
-            'PASSWORD': 'jf89mvk9.3r9jn.8fjf',
+            'PASSWORD': LIVE_INDEXES_PASSWORD,
             'HOST': INDEXES_HOST,
             'PORT': '',
         },
@@ -88,7 +98,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'indexes',
             'USER': 'indexes',
-            'PASSWORD': 'jf89mvk9.3r9jn.8fjf',
+            'PASSWORD': LIVE_INDEXES_PASSWORD,
             'HOST': INDEXES_HOST,
             'PORT': '',
         },
