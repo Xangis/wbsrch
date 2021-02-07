@@ -7,6 +7,15 @@ from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
 import codecs
 
 
+def dictfetchall(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+
+
 class Command(BaseCommand):
     help = """
     Two-way sync with master indexes server.
@@ -26,15 +35,23 @@ class Command(BaseCommand):
                 continue
             with connections['live_indexes'].cursor() as cursor:
                 last_log = SearchLog.objects.all().order_by('-id').first()
-                newest_date = last_log.last_search
-                query = 'SELECT * FROM dir_searchlog WHERE last_search > {0} ORDER BY last_search'.format(newest_date)
+                if last_log:
+                    newest_date = last_log.last_search
+                else:
+                    newest_date = '2010-01-01'
+                query = "SELECT * FROM dir_searchlog WHERE last_search > '{0}' ORDER BY last_search LIMIT 10".format(newest_date)
                 cursor.execute(query)
-                for item in cursor.dictfetchall():
+                print('Newer search logs:')
+                for item in dictfetchall(cursor):
                     print(item)
                 query = 'SELECT * FROM dir_indexstats ORDER BY date DESC LIMIT 1'
                 result = cursor.fetchone()
                 last_pendingindex = PendingIndex.objects.all().order_by('-date_added').first()
-                newest_date = last_pendingindex.date_added
-                query = 'SELECT * FROM dir_pendingindex WHERE date_added > {0} ORDER BY date_added'.format(newest_date)
-                for item in cursor.dictfetchall():
+                if last_pendingindex:
+                    newest_date = last_pendingindex.date_added
+                else:
+                    newest_date = '2010-01-01'
+                query = "SELECT * FROM dir_pendingindex WHERE date_added > '{0}' ORDER BY date_added LIMIT 10".format(newest_date)
+                print('Newer pending indexes:')
+                for item in dictfetchall(cursor):
                     print(item)
