@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
 
          // cout << "Executing: " << sqltwo << endl;
 
-         nontransaction O(D);
+         nontransaction O(C);
          result S( O.exec( sqltwo.c_str() ));
          O.commit();
          for (result::const_iterator d = S.begin(); d != S.end(); ++d) {
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
                  if( log ) {
                      cout << "Added domain " << url << endl;
                  }
-                 nontransaction P(D);
+                 nontransaction P(C);
                  result T( P.exec( sqlthree.c_str() ));
                  P.commit();
              }
