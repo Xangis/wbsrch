@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+#
+# Takes a folder containing ICANN zone files and processes them into
+# separate files in the out/ directory containing one domain per line.
+#
+# Requires a LOT of RAM because the .com zone file is ~22GB.
 import codecs
 import argparse
 import os

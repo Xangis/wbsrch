@@ -36,4 +36,4 @@ urls/commoncrawl/*.txt
 domain_update
 ensure_domaininfo
 env/
-
+urls/icann/out/*.txt
