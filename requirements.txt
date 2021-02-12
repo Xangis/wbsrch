@@ -9,7 +9,7 @@ nltk==3.5
 ipaddr==2.2.0
 python-whois==0.7.3
 # Requires python-dev
-numpy==1.19.5
+numpy==1.20.1
 csscompressor==0.9.5
 python-dateutil==2.8.1
 robotexclusionrulesparser==1.7.1
