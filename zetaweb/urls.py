@@ -4,7 +4,6 @@ from django.contrib import admin
 from zetaweb import settings
 from dir import views
 from dir import api
-from blog.views import *
 import django
 admin.autodiscover()
 
@@ -36,11 +35,8 @@ urlpatterns = [
     url(r'^criteria/$', views.criteria, name='criteria'),
     url(r'^terms/$', views.terms, name='terms'),
     url(r'^contact/$', views.contact, name='contact'),
-    url(r'^articles/$', articles),
     url(r'^browser/$', views.browser),
     url(r'^software/(?P<filename>[-_.a-zA-Z0-9]+.(exe|zip|gz|msi|tar|tgz|deb|pkg|mpkg|xz))$', views.getfile),
-    url(r'^article/(?P<post_url>[a-zA-Z0-9_-]+)/$', post_url),
-    url(r'^article-category/(?P<category>[a-zA-Z0-9_-]+)/$', article_category),
     # Redirects to other sites.
     url(r'^ads/$', views.ads),
     url(r'^analytics/$', views.analytics),
