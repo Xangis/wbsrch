@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from dir.models import DomainInfo
 from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
+from dir.views import CleanSearchTerm
 import codecs
 
 
@@ -43,7 +44,7 @@ class Command(BaseCommand):
                 try:
                     line = GetRootUrl(line.strip().lower())
                 except Exception:
-                    line = line.strip().lower()
+                    line = CleanSearchTerm(line.strip().lower())
                 # Do not queue anything less than 2 characters long.
                 if len(line) < 2:
                     continue
