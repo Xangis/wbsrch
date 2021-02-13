@@ -67,6 +67,9 @@ It should be run periodically to refresh the GeoIP data.
 The system also use NLTK and needs to download module for it and install additional stopwords files.
 Run nltk_download.sh to do that (be sure your virtualenv is active).
 
+Then checkout https://github.com/xangis/extra-stopwords and run the copy.sh script from the downloaded
+folder.
+
 # Database
 
 WbSrch requires 4 PostgreSQL databases. They can be on the same server, or on different servers. They are:
