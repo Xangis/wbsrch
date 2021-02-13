@@ -1746,6 +1746,8 @@ def IsHtmlUrl(url):
             return False
     if 'javascript:' in url or 'mailto:' in url or 'tel:' in url:
         return False
+    if url.startswith('ftp:') or url.startswith('sftp:') or url.startswith('mailto:'):
+        return False
     if url == '.' or url == '..' or url == './' or url == '../' or url == '~' or url == ':':
         return False
     return True

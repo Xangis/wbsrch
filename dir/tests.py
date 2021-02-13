@@ -534,6 +534,22 @@ class CanCrawlUrlTestCase(TestCase):
         url = 'www.spamsite.com'
         self.assertFalse(CanCrawlUrl(url))
 
+    def test_ftp_url(self):
+        url = 'ftp://user:pass@example.com/home'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_ftp_url2(self):
+        url = 'ftp://user:pass@example.com:22/home'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_sftp_url(self):
+        url = 'sftp://example.com/home/'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_mailto_url(self):
+        url = 'mailto:bob@bob.com'
+        self.assertFalse(CanCrawlUrl(url))
+
     def tearDown(self):
         for site in BlockedSite.objects.all():
             site.delete()
