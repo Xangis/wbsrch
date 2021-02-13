@@ -35,16 +35,6 @@ def html_decode(s):
     return s
 
 
-def RemoveExtraSpaces(text):
-    if not text:
-        return text
-    text = text.replace('\n', '')
-    text = text.replace('\r', '')
-    text = text.replace('\t', '')
-    text = re.sub(' +', ' ', text)
-    return text
-
-
 def Crawler(options):
     pendinglinks = []
     if options['justthisurl']:

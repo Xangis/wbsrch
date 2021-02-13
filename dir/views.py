@@ -13,7 +13,7 @@ from dir.models import *
 from dir.utils import *
 from django_q.tasks import async_task
 from dir.language import language_name_reverse
-from dir.crawler import CrawlSingleUrl, Crawler, RemoveExtraSpaces
+from dir.crawler import CrawlSingleUrl, Crawler
 from urllib.parse import urlparse
 from datetime import date, timedelta
 import itertools
@@ -566,35 +566,6 @@ def ipaddry(request):
     return render(request, 'ip.htm', {'language_code': language_code, 'cached': cached})
 
 
-def CleanSearchTerm(searchterm):
-    if len(searchterm) > 240:
-        searchterm = searchterm[0:240]
-    searchterm = searchterm.lower()
-    # We get these mostly because of the way people link to us. We translate them back
-    # to the actual characters they represent.
-    if '%2520' in searchterm:
-        searchterm = searchterm.replace('%2520', ' ')
-    if '%252c' in searchterm:
-        searchterm = searchterm.replace('%252c', ',')
-    if '%253a' in searchterm:
-        searchterm = searchterm.replace('%253a', ':')
-    if '%20' in searchterm:
-        searchterm = searchterm.replace('%20', ' ')
-    if '%3f' in searchterm:
-        searchterm = searchterm.replace('%3f', '?')
-    if '%25' in searchterm:
-        searchterm = searchterm.replace('%25', '%')
-    if '%2c' in searchterm:
-        searchterm = searchterm.replace('%2c', ',')
-    if '%2c' in searchterm:
-        searchterm = searchterm.replace('%3a', ':')
-    # Normalize any search  terms that contain stupid characters or sql injection tricks.
-    if "'[0]" in searchterm:
-        searchterm = searchterm.replace("'[0]", "")
-    searchterm = RemoveExtraSpaces(searchterm)
-    return searchterm
-
-
 def search(request):
     log = None
     exclude = []
@@ -617,7 +588,7 @@ def search(request):
             return HttpResponsePermanentRedirect('/search/?q={0}'.format(result.searchterm))
     # Search
     if result.searchterm:
-        result.searchterm = CleanSearchTerm(result.searchterm)
+        result.searchterm = CleanSearchText(result.searchterm)
         if BannedSearchString(result.searchterm):
             return HttpResponseForbidden('Only a bot would make this request. Denied.')
         # Break term into individual words

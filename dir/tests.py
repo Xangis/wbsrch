@@ -736,7 +736,7 @@ class MakeRealUrlTestCase(TestCase):
 
     def test_noslash_domainurl4(self):
         url = 'tutorial?name=me'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', secur=True), u'https://wbsrch.com/tutorial?name=me')
+        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', secure=True), u'https://wbsrch.com/tutorial?name=me')
 
     def test_noslash_domainurl5(self):
         url = 'pages/tutorial?name=me'
@@ -1036,7 +1036,10 @@ class PageLanguageTestCase(TestCase):
     def test_get_blocked_page_language_infix(self):
         url = 'http://wbsrch.com/ru/page/'
         html = '<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
-        self.assertEqual(IdentifyPageLanguage(url, html)[0], 'ru')
+        try:
+            IdentifyPageLanguage(url, html)
+        except InvalidLanguageException as e:
+            self.assertEqual(str(e), 'ru')
 
     def test_get_locale_language_infix(self):
         url = 'http://wbsrch.com/es-ar/page/'
@@ -1046,7 +1049,10 @@ class PageLanguageTestCase(TestCase):
     def test_get_blocked_locale_language_infix(self):
         url = 'http://wbsrch.com/ar-eg/page/'
         html = '<html><head><title>&nbsp;</title></head><body>&nbsp;</body></html>'
-        self.assertEqual(IdentifyPageLanguage(url, html)[0], 'ar')
+        try:
+            IdentifyPageLanguage(url, html)
+        except InvalidLanguageException as e:
+            self.assertEqual(str(e), 'ar')
 
 
 class DomainExtensionTestCase(TestCase):
@@ -1454,6 +1460,7 @@ class IndexerTestCase(TestCase):
         info.pagedescription = 'wbsrch search engine'
         info.pagekeywords = 'wbsrch, search, engine'
         info.pagetitle = 'WbSrch Search Engine'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo()
         info.rooturl = 'zetacentauri.com'
@@ -1461,6 +1468,7 @@ class IndexerTestCase(TestCase):
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagekeywords = 'wbsrch, pants'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo()
         info.rooturl = 'zetacentauri.com'
@@ -1468,6 +1476,7 @@ class IndexerTestCase(TestCase):
         info.lastcrawled = timezone.now() - timedelta(days=40)
         info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagekeywords = 'wbsrch'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo()
         info.rooturl = 'zetacentauri.com'
@@ -1477,6 +1486,7 @@ class IndexerTestCase(TestCase):
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo_de()
         info.rooturl = 'zetacentauri.com'
@@ -1486,6 +1496,7 @@ class IndexerTestCase(TestCase):
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zeta-cen-tau.com'
@@ -1495,6 +1506,7 @@ class IndexerTestCase(TestCase):
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zeta-centaur.com'
@@ -1504,6 +1516,7 @@ class IndexerTestCase(TestCase):
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zetacentauri.com'
@@ -1513,6 +1526,7 @@ class IndexerTestCase(TestCase):
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zetacentauri.com'
@@ -1522,6 +1536,7 @@ class IndexerTestCase(TestCase):
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zetacentauri.com'
@@ -1531,6 +1546,7 @@ class IndexerTestCase(TestCase):
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
+        info.pagesize = len(info.pagecontents)
         info.save()
         info = SiteInfo()
         info.rooturl = '216.151.3.15'
@@ -1540,6 +1556,7 @@ class IndexerTestCase(TestCase):
         info.pagedescription = ' '
         info.pagekeywords = ' '
         info.pagetitle = ' '
+        info.pagesize = len(info.pagecontents)
         info.save()
 
     def testIndexTerm(self):
@@ -1874,6 +1891,87 @@ class SearchTestCase(TestCase):
             item.delete()
         for item in BadQuery.objects.all():
             item.delete()
+
+
+class CleanSearchTextTestCase(TestCase):
+    def setUp(self):
+        pass
+
+    def testCleanSearchText1(self):
+        text = CleanSearchText("test")
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText2(self):
+        text = CleanSearchText("test ")
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText3(self):
+        text = CleanSearchText(" test")
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText4(self):
+        text = CleanSearchText("test-")
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText5(self):
+        text = CleanSearchText("test'")
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText6(self):
+        text = CleanSearchText("test,")
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText7(self):
+        text = CleanSearchText("     test   ")
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText8(self):
+        text = CleanSearchText("test   test")
+        self.assertEqual(text, "test test")
+
+    def testCleanSearchText9(self):
+        text = CleanSearchText("test   test    ")
+        self.assertEqual(text, "test test")
+
+    def testCleanSearchText10(self):
+        text = CleanSearchText("'test")
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText11(self):
+        text = CleanSearchText("test   test    ")
+        self.assertEqual(text, "test test")
+
+    def testCleanSearchText12(self):
+        text = CleanSearchText('"test')
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText13(self):
+        text = CleanSearchText('TEST')
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText14(self):
+        text = CleanSearchText('tESt')
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText15(self):
+        text = CleanSearchText('tESt\\')
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText16(self):
+        text = CleanSearchText('tESt/')
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText17(self):
+        text = CleanSearchText('test%20test ')
+        self.assertEqual(text, "test test")
+
+    def testCleanSearchText18(self):
+        text = CleanSearchText('%20test%20test%20')
+        self.assertEqual(text, "test test")
+
+    def testCleanSearchText19(self):
+        text = CleanSearchText('@}----')
+        self.assertEqual(text, "@}----")
 
 
 class URLErrorTestCase(TestCase):

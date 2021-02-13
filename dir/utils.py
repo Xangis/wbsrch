@@ -2484,27 +2484,75 @@ def AddPendingTerm(item, language_code='en', reason=None):
             pass
 
 
+def RemoveExtraSpaces(text):
+    if not text:
+        return text
+    text = text.replace('\n', '')
+    text = text.replace('\r', '')
+    text = text.replace('\t', '')
+    text = re.sub(' +', ' ', text)
+    return text
+
+
+def CleanSearchText(text):
+    if len(text) > 240:
+        text = text[0:240]
+    text = text.lower()
+    # We get these mostly because of the way people link to us. We translate them back
+    # to the actual characters they represent.
+    if '%2520' in text:
+        text = text.replace('%2520', ' ')
+    if '%252c' in text:
+        text = text.replace('%252c', ',')
+    if '%253a' in text:
+        text = text.replace('%253a', ':')
+    if '%20' in text:
+        text = text.replace('%20', ' ')
+    if '%3f' in text:
+        text = text.replace('%3f', '?')
+    if '%25' in text:
+        text = text.replace('%25', '%')
+    if '%2c' in text:
+        text = text.replace('%2c', ',')
+    if '%2c' in text:
+        text = text.replace('%3a', ':')
+    if '%%20' in text:
+        text = text.replace('%%20', ' ')
+    # We don't do this first because the above operations add spaces sometimes.
+    text = text.strip()
+
+    # Normalize any search terms that contain stupid characters or sql injection tricks.
+    if "'[0]" in text:
+        text = text.replace("'[0]", "")
+
+    text = RemoveExtraSpaces(text)
+
+    # Get rid of dumb punctuation
+    if text.startswith("'") and not text.endswith("'"):
+        text = text[1:]
+    elif text.endswith("'") and not text.startswith("'"):
+        text = text[:-1]
+    elif text.startswith('"') and not text.endswith('"'):
+        text = text[1:]
+    elif text.endswith('"') and not text.startswith('"'):
+        text = text[:-1]
+    if text.endswith('|'):
+        text = text[0:-1]
+    if text.endswith(','):
+        text = text[0:-1]
+    if len(text) > 2 and text.endswith('-') and '--' not in text:
+        text = text[0:-1]
+    if text.endswith('/'):
+        text = text[0:-1]
+    if text.endswith('\\'):
+        text = text[0:-1]
+    return text
+
 # Try to search for a specific search term or phrase. If found, return
 # it. Otherwise, add it to the pending terms and return None.
 def TrySearchTerm(text, language_code):
     term_model = GetIndexModelFromLanguage(language_code)
-    lowerterm = text.lower().strip()
-    if lowerterm.startswith("'") and not lowerterm.endswith("'"):
-        lowerterm = lowerterm[1:]
-    elif lowerterm.endswith("'") and not lowerterm.startswith("'"):
-        lowerterm = lowerterm[:-1]
-    elif lowerterm.startswith('"') and not lowerterm.endswith('"'):
-        lowerterm = lowerterm[1:]
-    elif lowerterm.endswith('"') and not lowerterm.startswith('"'):
-        lowerterm = lowerterm[:-1]
-    if lowerterm.endswith('|'):
-        lowerterm = lowerterm[0:-1]
-    if lowerterm.endswith('/'):
-        lowerterm = lowerterm[0:-1]
-    if '%%20' in lowerterm:
-        lowerterm.replace('%%20', ' ')
-    if '%20' in lowerterm:
-        lowerterm.replace('%20', ' ')
+    lowerterm = CleanSearchText(text)
     try:
         term = term_model.objects.get(keywords=lowerterm)
         return term
