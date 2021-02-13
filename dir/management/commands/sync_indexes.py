@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import connections
 from django.core.management.base import BaseCommand
-from dir.models import SearchLog, PendingIndex, language_list, ChangelogItem, DomainSearchLog, IPSearchLog, DomainSuffix, IndexStats, ResultClick
+from dir.models import SearchLog, PendingIndex, language_list, ChangelogItem, DomainSearchLog, IPSearchLog, DomainSuffix, IndexStats, ResultClick, IndexTerm
 
 
 def dictfetchall(cursor):
@@ -200,6 +200,40 @@ class Command(BaseCommand):
                     cursor.execute(query)
                     count += 1
                 print('Added {0} new IndexStats entries'.format(count))
+
+                query = "SELECT * FROM dir_indexterm ORDER BY date_indexed DESC LIMIT 1"
+                cursor.execute(query)
+                newest_date = '2010-01-01'
+                for item in dictfetchall(cursor):
+                    newest_date = item['date_indexed']
+                    print('Last index term: {0}'.format(newest_date))
+                last_terms = IndexTerm.objects.filter(date_indexed__gt=newest_date).order_by('date_indexed')
+                print('{0} index terms are newer on the local machine'.format(last_terms.count()))
+                count = 0
+                updated = 0
+                for item in last_terms:
+                    result = cursor.execute("SELECT count(*) FROM dir_indexterm WHERE keywords = %s", [item.keywords])
+                    existing_count = cursor.fetchone()[0]
+                    if existing_count > 0:
+                        print('Updating {0}'.format(item.keywords))
+                        query = ("UPDATE dir_indexterm SET page_rankings = %s, num_results = %s, num_pages = %s, "
+                                 "index_time = %s, search_results = %s, actively_blocked = %s, refused = %s, "
+                                 "typo_for = %s, is_language = %s, term_weight = %s, date_indexed = %s, show_ad = %s, "
+                                 "verified_english = %s WHERE keywords = %s")
+                        cursor.execute(query, [item.page_rankings, item.num_results, item.num_pages, item.index_time,
+                            item.search_results, item.actively_blocked, item.refused, item.typo_for, item.is_language,
+                            item.term_weight, item.date_indexed, item.show_ad, item.verified_english, item.keywords])
+                        updated += 1
+                    else:
+                        print('Adding {0}'.format(item.keywords))
+                        query = ("INSERT INTO dir_indexterm (keywords, page_rankings, num_results, num_pages, index_time, "
+                                 "search_results, actively_blocked, refused, typo_for, is_language, term_weight, "
+                                 "date_indexed, show_ad, verified_english) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                        cursor.execute(query, [item.keywords, item.page_rankings, item.num_results, item.num_pages,
+                            item.index_time, item.search_results, item.actively_blocked, item.refused, item.typo_for,
+                            item.is_language, item.term_weight, item.date_indexed, item.show_ad, item.verified_english])
+                        count += 1
+                print('Added {0} new IndexTerm entries and updated {1} existing IndexTerm entries.'.format(count, updated))
 
                 last_domainsuffix = DomainSuffix.objects.all().order_by('-last_updated').first()
                 if last_domainsuffix:
