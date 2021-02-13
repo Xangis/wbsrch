@@ -167,7 +167,7 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
                 print('Index term (unprintable) not found, cannot use for calculations.')
             continue
         # No point in adding up a word with no results, and this way we don't have to worry about divide by zero.
-        if word.num_results == 0:
+        if word.num_pages == 0:
             print('Index term {0} has zero results, nothing to calculate.')
             continue
         # All formula comments are spreadsheet formulas (assuming number of results for word in cell B2)
@@ -183,50 +183,50 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
             factor = 0.5
         elif type == 'loghalf':
             # =1/POWER(2, (LOG(B2, 10)))
-            factor = 1 / math.pow(2, (math.log(word.num_results, 10)))
+            factor = 1 / math.pow(2, (math.log(word.num_pages, 10)))
         elif type == 'cuberoot':
             # =100 - POWER(B2, 1/3)
-            factor = 100.0 - math.pow(word.num_results, (1.0 / 3.0)) / 100.0
+            factor = 100.0 - math.pow(word.num_pages, (1.0 / 3.0)) / 100.0
         elif type == 'cuberootb':
             # =101 - POWER(B2, 1/3)
-            factor = 101.0 - math.pow(word.num_results, (1.0 / 3.0)) / 100.0
+            factor = 101.0 - math.pow(word.num_pages, (1.0 / 3.0)) / 100.0
         elif type == 'fourthroot':
             # =(33.333 - POWER(B2, 1/4)) * 3
-            factor = ((33.33 - math.pow(word.num_results, (1.0 / 4.0))) * 3) / 100.0
+            factor = ((33.33 - math.pow(word.num_pages, (1.0 / 4.0))) * 3) / 100.0
         elif type == 'fourthrootb':
             # =(32.0 - POWER(B2, 1/4)) * 3
-            factor = ((32.0 - math.pow(word.num_results, (1.0 / 4.0))) * 3) / 100.0
+            factor = ((32.0 - math.pow(word.num_pages, (1.0 / 4.0))) * 3) / 100.0
         elif type == 'logdivide':
             # =1 / (LOG(B2, 10)+1)
-            factor = 1.0 / (math.log(word.num_results, 10) + 1.0)
+            factor = 1.0 / (math.log(word.num_pages, 10) + 1.0)
         elif type == 'fourthrootandlog':
             # Takes the average of the fourthrootb and the logdivide calculations, but with slightly different
             # max/scaling factors.
-            factora = ((29 - math.pow(word.num_results, (1.0 / 4.0))) * 3) / 100.0
-            factorb = 0.80 / (math.log(word.num_results, 10) + 1.0)
+            factora = ((29 - math.pow(word.num_pages, (1.0 / 4.0))) * 3) / 100.0
+            factorb = 0.80 / (math.log(word.num_pages, 10) + 1.0)
             factor = (factora + factorb) / 2.0
         elif type == 'squareroot1200':
             # =(1200 - SQRT(B2)) / 1200
-            factor = (1200.0 - math.sqrt(word.num_results)) / 1200.0
+            factor = (1200.0 - math.sqrt(word.num_pages)) / 1200.0
         elif type == 'squareroot1100':
             # =(1100 - SQRT(B2)) / 1100
-            factor = (1100.0 - math.sqrt(word.num_results)) / 1100.0
+            factor = (1100.0 - math.sqrt(word.num_pages)) / 1100.0
         elif type == 'squareroot1050':
             # =(1050 - SQRT(B2)) / 1050
-            factor = (1050.0 - math.sqrt(word.num_results)) / 1050.0
+            factor = (1050.0 - math.sqrt(word.num_pages)) / 1050.0
         elif type == 'squareroot1025':
             # =(1025 - SQRT(B2)) / 1025
-            factor = (1025.0 - math.sqrt(word.num_results)) / 1025.0
+            factor = (1025.0 - math.sqrt(word.num_pages)) / 1025.0
         elif type == 'squareroot1000':
             # =(1000 - SQRT(B2)) / 1000
-            factor = (1000.0 - math.sqrt(word.num_results)) / 1000.0
+            factor = (1000.0 - math.sqrt(word.num_pages)) / 1000.0
         else:
             print('Invalid merge type algorithm {0}'.format(type))
             return ratings
         try:
-            print('Merge factor for term {0} is {1} with {2} results'.format(singleword, factor, word.num_results))
+            print('Merge factor for term {0} is {1} with {2} results'.format(singleword, factor, word.num_pages))
         except Exception:
-            print('Merge factor for term (unprintable) is {0} with {1} results'.format(factor, word.num_results))
+            print('Merge factor for term (unprintable) is {0} with {1} results'.format(factor, word.num_pages))
         page_rankings = ujson.loads(word.page_rankings)
         for item in page_rankings:
             #print 'Checking {0} in page_rankings.'.format(item)
