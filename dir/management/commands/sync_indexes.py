@@ -183,17 +183,23 @@ class Command(BaseCommand):
                     count += 1
                 print('Added {0} new IPSearchLog entries'.format(count))
 
-                last_indexstats = IndexStats.objects.all().order_by('-create_date').first()
-                if last_indexstats:
-                    newest_date = last_indexstats.create_date
-                else:
-                    newest_date = '2010-01-01'
-                print('Last index stats: {0}'.format(newest_date))
-                query = "SELECT * FROM dir_indexstats WHERE create_date > '{0}' ORDER BY create_date".format(newest_date)
+                query = "SELECT * FROM dir_indexstats ORDER BY create_date DESC LIMIT 1"
                 cursor.execute(query)
-                print('Newer index stats:')
+                newest_date = '2010-01-01'
                 for item in dictfetchall(cursor):
-                    print(item)
+                    newest_date = item['create_date']
+                    print('Last index stats: {0}'.format(newest_date))
+                last_indexstats = IndexStats.objects.filter(create_date__gt=newest_date).order_by('create_date')
+                print('Newer index stats:')
+                count = 0
+                for item in last_indexstats:
+                    print(item.__dict__)
+                    query = "INSERT INTO dir_indexstats (num_excluded, langs, total_urls, total_indexes, total_pendingindexes, create_date, most_linked_to_domains, last_most_linked_to, generation_time) VALUES ({0}, '{1}', {2}, {3}, {4}, '{5}', '{6}', '{7}', {8})".format(
+                        item.num_excluded, item.langs, item.total_urls, item.total_indexes, item.total_pendingindexes, item.create_date, item.most_linked_to_domains, item.last_most_linked_to, item.generation_time)
+                    print(query)
+                    cursor.execute(query)
+                    count += 1
+                print('Added {0} new IndexStats entries'.format(count))
 
                 last_domainsuffix = DomainSuffix.objects.all().order_by('-last_updated').first()
                 if last_domainsuffix:
