@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import connections
 from django.core.management.base import BaseCommand
-from dir.models import SearchLog, PendingIndex, language_list, ChangelogItem, DomainSearchLog, IPSearchLog, DomainSuffix, IndexStats, ResultClick, IndexTerm
+from dir.models import SearchLog, PendingIndex, language_list, ChangelogItem, DomainSearchLog, IPSearchLog, DomainSuffix, IndexStats, ResultClick, IndexTerm, KeywordRanking
 
 
 def dictfetchall(cursor):
@@ -224,6 +224,12 @@ class Command(BaseCommand):
                             item.search_results, item.actively_blocked, item.refused, item.typo_for, item.is_language,
                             item.term_weight, item.date_indexed, item.show_ad, item.verified_english, item.keywords])
                         updated += 1
+                        # Now delete keyword ranking info so we can replace it later.
+                        query = ('DELETE FROM dir_keywordranking WHERE keywords = %s')
+                        cursor.execute(query, [item.keywords])
+                        deleted_count = cursor.rowcount
+                        if deleted_count > 0:
+                            print('Deleted {0} keyword rankings.'.format(deleted_count))
                     else:
                         print('Adding {0}'.format(item.keywords))
                         query = ("INSERT INTO dir_indexterm (keywords, page_rankings, num_results, num_pages, index_time, "
@@ -233,6 +239,14 @@ class Command(BaseCommand):
                             item.index_time, item.search_results, item.actively_blocked, item.refused, item.typo_for,
                             item.is_language, item.term_weight, item.date_indexed, item.show_ad, item.verified_english])
                         count += 1
+                    keywords = KeywordRanking.objects.filter(keywords=item.keywords)
+                    query = ("INSERT INTO dir_keywordranking (keywords, rank, rooturl, show) VALUES (%s, %s, %s, %s)")
+                    num_rankings = 0
+                    for keyword in keywords:
+                        cursor.execute(query, [keyword.keywords, keyword.rank, keyword.rooturl, keyword.show])
+                        num_rankings += 1
+                    print('Added {0} keyword rankings'.format(num_rankings))
+
                 print('Added {0} new IndexTerm entries and updated {1} existing IndexTerm entries.'.format(count, updated))
 
                 last_domainsuffix = DomainSuffix.objects.all().order_by('-last_updated').first()

@@ -21,9 +21,9 @@ class Command(BaseCommand):
         parser.add_argument('-o', '--offset', default=0, action='store', type=int, dest='offset', help='Term slice offset - number of items from beginning to start. (default=0)')
         parser.add_argument('-f', '--file', default=None, action='store', dest='file', help='Load term list from specified file.')
         parser.add_argument('-j', '--justthisterm', default=None, action='store', dest='justthisterm', help='Index just this term. Overrides file, pending, or reindex.')
-        parser.add_argument('-t', '--type', default='fourthrootandlog', action='store', dest='type', help=('Type of indexing to use.'
+        parser.add_argument('-t', '--type', default='logdivide', action='store', dest='type', help=('Type of indexing to use.'
         'Valid index types are: full, half, loghalf, cuberoot, cuberootb, fourthroot, fourthrootb, logdivide, fourthrootandlog, squareroot1200, squareroot1100, '
-        'squareroot1050, squareroot1025, and squareroot1000. (default=fourthrootandlog)'))
+        'squareroot1050, squareroot1025, and squareroot1000. (default=logdivide)'))
         parser.add_argument('-x', '--random', default=False, action='store_true', dest='random', help='Select elements in random order.')
 
     def handle(self, *args, **options):

@@ -1746,6 +1746,8 @@ def IsHtmlUrl(url):
             return False
     if 'javascript:' in url or 'mailto:' in url or 'tel:' in url:
         return False
+    if url.startswith('ftp:') or url.startswith('sftp:') or url.startswith('mailto:'):
+        return False
     if url == '.' or url == '..' or url == './' or url == '../' or url == '~' or url == ':':
         return False
     return True
@@ -2530,11 +2532,15 @@ def CleanSearchText(text):
     # Get rid of dumb punctuation
     if text.startswith("'") and not text.endswith("'"):
         text = text[1:]
-    elif text.endswith("'") and not text.startswith("'"):
+    if text.endswith("'") and not text.startswith("'"):
         text = text[:-1]
-    elif text.startswith('"') and not text.endswith('"'):
+    if text.startswith('"') and not text.endswith('"'):
         text = text[1:]
-    elif text.endswith('"') and not text.startswith('"'):
+    if text.endswith('"') and not text.startswith('"'):
+        text = text[:-1]
+    if text.startswith('(') and ')' not in text:
+        text = text[1:]
+    if text.endswith(')') and '(' not in text:
         text = text[:-1]
     if text.endswith('|'):
         text = text[0:-1]

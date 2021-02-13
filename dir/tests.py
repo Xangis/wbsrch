@@ -534,6 +534,22 @@ class CanCrawlUrlTestCase(TestCase):
         url = 'www.spamsite.com'
         self.assertFalse(CanCrawlUrl(url))
 
+    def test_ftp_url(self):
+        url = 'ftp://user:pass@example.com/home'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_ftp_url2(self):
+        url = 'ftp://user:pass@example.com:22/home'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_sftp_url(self):
+        url = 'sftp://example.com/home/'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_mailto_url(self):
+        url = 'mailto:bob@bob.com'
+        self.assertFalse(CanCrawlUrl(url))
+
     def tearDown(self):
         for site in BlockedSite.objects.all():
             site.delete()
@@ -1972,6 +1988,26 @@ class CleanSearchTextTestCase(TestCase):
     def testCleanSearchText19(self):
         text = CleanSearchText('@}----')
         self.assertEqual(text, "@}----")
+
+    def testCleanSearchText20(self):
+        text = CleanSearchText('(test')
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText21(self):
+        text = CleanSearchText('"test)')
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText22(self):
+        text = CleanSearchText('(test)')
+        self.assertEqual(text, "(test)")
+
+    def testCleanSearchText23(self):
+        text = CleanSearchText('void(0)')
+        self.assertEqual(text, "void(0)")
+
+    def testCleanSearchText24(self):
+        text = CleanSearchText('empty()')
+        self.assertEqual(text, "empty()")
 
 
 class URLErrorTestCase(TestCase):

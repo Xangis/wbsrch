@@ -708,7 +708,7 @@ class IndexTermAdmin(admin.ModelAdmin):
                 lang = 'en'
             else:
                 lang = name[-2:]
-            BuildIndexForTerm(item.keywords, lang=lang, type='fourthrootandlog')
+            BuildIndexForTerm(item.keywords, lang=lang, type='logdivide')
 
     reindex_these_terms.short_description = "Reindex these term(s). (may time out)"
 
@@ -745,7 +745,7 @@ class PendingIndexAdmin(admin.ModelAdmin):
                 lang = 'en'
             else:
                 lang = name[-2:]
-            BuildIndexForTerm(item.keywords, lang=lang, type='fourthrootandlog')
+            BuildIndexForTerm(item.keywords, lang=lang, type='logdivide')
             item.delete()
 
     index_these_terms.short_description = "Index these term(s). (may time out)"
