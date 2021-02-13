@@ -1973,6 +1973,26 @@ class CleanSearchTextTestCase(TestCase):
         text = CleanSearchText('@}----')
         self.assertEqual(text, "@}----")
 
+    def testCleanSearchText20(self):
+        text = CleanSearchText('(test')
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText21(self):
+        text = CleanSearchText('"test)')
+        self.assertEqual(text, "test")
+
+    def testCleanSearchText22(self):
+        text = CleanSearchText('(test)')
+        self.assertEqual(text, "(test)")
+
+    def testCleanSearchText23(self):
+        text = CleanSearchText('void(0)')
+        self.assertEqual(text, "void(0)")
+
+    def testCleanSearchText24(self):
+        text = CleanSearchText('empty()')
+        self.assertEqual(text, "empty()")
+
 
 class URLErrorTestCase(TestCase):
     def setUp(self):

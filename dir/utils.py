@@ -2530,11 +2530,15 @@ def CleanSearchText(text):
     # Get rid of dumb punctuation
     if text.startswith("'") and not text.endswith("'"):
         text = text[1:]
-    elif text.endswith("'") and not text.startswith("'"):
+    if text.endswith("'") and not text.startswith("'"):
         text = text[:-1]
-    elif text.startswith('"') and not text.endswith('"'):
+    if text.startswith('"') and not text.endswith('"'):
         text = text[1:]
-    elif text.endswith('"') and not text.startswith('"'):
+    if text.endswith('"') and not text.startswith('"'):
+        text = text[:-1]
+    if text.startswith('(') and ')' not in text:
+        text = text[1:]
+    if text.endswith(')') and '(' not in text:
         text = text[:-1]
     if text.endswith('|'):
         text = text[0:-1]
