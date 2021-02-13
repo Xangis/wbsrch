@@ -11,6 +11,6 @@ parser.add_option('-n', '--noreindex', action='store_true', default=False, dest=
 print('Indexing ' + str(options.maxindexes) + ' terms at a time, at a max rate of one every ' + str(options.seconds) + ' seconds with noreindex = ' + str(options.noreindex) + '.')
 
 while True:
-    call(['python', 'manage.py', 'index', '-p', '-m', str(options.maxindexes), '-s', str(options.seconds), '-x'])
+    call(['python', 'manage.py', 'index', '-p', '-m', str(options.maxindexes), '-s', str(options.seconds), '-x', '-t', 'logdivide'])
     if not options.noreindex:
-        call(['python', 'manage.py', 'index', '-r', '-m', str(options.maxindexes), '-s', str(options.seconds), '-x'])
+        call(['python', 'manage.py', 'index', '-r', '-m', str(options.maxindexes), '-s', str(options.seconds), '-x', '-t', 'logdivide'])
