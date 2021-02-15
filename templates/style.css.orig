@@ -485,3 +485,13 @@ color: #23487A;
     margin-right: 5px;
   }
 }
+
+.centerad {
+margin-left: auto;
+margin-right: auto;
+margin-top: 4px;
+margin-bottom: 6px;
+width: 778px;
+background-color: #F9F9F9;
+padding: 2px;
+}
