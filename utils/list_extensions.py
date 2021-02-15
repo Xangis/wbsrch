@@ -16,7 +16,7 @@ def GetExtension(line):
     return pieces[0].strip()
 
 
-extensions = []
+extensions = set()
 filename = options.input
 f = open(filename, 'rb')
 reader = codecs.getreader('utf8')(f)
@@ -26,5 +26,5 @@ for line in reader.readlines():
         continue
     if ext:
         print(ext)
-    extensions.append(ext)
-print(extensions)
+    extensions.add(ext)
+print(list(extensions))
