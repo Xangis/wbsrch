@@ -3604,4 +3604,3 @@ class FileDownload(models.Model):
 
     class Meta:
         in_db = 'indexes'
-

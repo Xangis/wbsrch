@@ -48,7 +48,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         processed = 0
         added = 0
-        site_model = GetSiteInfoModelFromLanguage('sw')
+        site_model = GetSiteInfoModelFromLanguage('en')
         for page in site_model.objects.all():
             es.index(index='pages', doc_type='page', id=page.url, body=SiteInfoToJson(page, 'sw'))
             processed += 1
