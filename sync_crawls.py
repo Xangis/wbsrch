@@ -6,10 +6,10 @@ import argparse
 #from dateutil.parser import parse
 
 parser = argparse.ArgumentParser(description="Sync data between databases")
-parser.add_argument('input', action='store', type=str, help='Input db, example: "dbname=suppliers user=postgres password=postgres"')
+parser.add_argument('input', action='store', type=str, help='Input db, example: "dbname=zetaweb_crawl user=postgres password=postgres"')
 parser.add_argument('output', action='store', type=str, help='Output db, example: "dbname=zetaweb user=postgres password=postgres"')
-parser.add_argument('inputurls', action='store', type=str, help='Input db, example: "dbname=suppliers user=postgres password=postgres"')
-parser.add_argument('outputurls', action='store', type=str, help='Output db, example: "dbname=zetaweb user=postgres password=postgres"')
+parser.add_argument('inputurls', action='store', type=str, help='Input db, example: "dbname=urls_crawl user=postgres password=postgres"')
+parser.add_argument('outputurls', action='store', type=str, help='Output db, example: "dbname=urls user=postgres password=postgres"')
 parser.add_argument('-p', '--nopages', default=False, action='store_true', dest='nopages', help='Do not update pages.')
 parser.add_argument('-d', '--nodomains', default=False, action='store_true', dest='nodomains', help='Do not update domains.')
 parser.add_argument('-u', '--nourls', default=False, action='store_true', dest='nourls', help='Do not update pending urls.')

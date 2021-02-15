@@ -359,7 +359,8 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
     except ObjectDoesNotExist:
         domain = DomainInfo()
         domain.url = rooturl
-        domain.save()
+        if '.' in rooturl:
+            domain.save()
         try:
             print('Created new DomainInfo entry for {0}.'.format(rooturl))
         except Exception:
@@ -747,7 +748,8 @@ def CrawlPage(pendinglinks, url, descriptive=False, recrawl=False):
         # Always create domain info and check for robots.txt even if the domain doesn't exist yet.
         domain = DomainInfo()
         domain.url = root
-        domain.save()
+        if '.' in root:
+            domain.save()
         try:
             print('Created new DomainInfo entry for {0}.'.format(root))
         except Exception:

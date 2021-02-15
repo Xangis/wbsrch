@@ -16,7 +16,7 @@ def ProcessFile(filename):
     num_lines = sum(1 for line in open(fullpath))
     print('Crawling {0} with {1} domains.'.format(filename, num_lines))
     subprocess.call(['python', 'manage.py', 'crawl', '-f', fullpath, '-m', str(num_lines), '-s', '0'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    print('Done crawling {0}.'.format(filename, num_lines))
+    print('Done crawling {0} with {1} lines.'.format(filename, num_lines))
 
 
 if __name__ == '__main__':

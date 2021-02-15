@@ -5,6 +5,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description="Load a file containing one domain per line and count the number of domains with each extension.")
 parser.add_argument('input', action='store', type=str, help='Input filename.')
+parser.add_argument('-n', '--numeric', action='store_true', dest='numeric', default=False, help='Allow numeric extensions (IP addresses), default=False.')
 options = parser.parse_args()
 
 
@@ -15,13 +16,15 @@ def GetExtension(line):
     return pieces[0].strip()
 
 
-extensions = []
+extensions = set()
 filename = options.input
 f = open(filename, 'rb')
 reader = codecs.getreader('utf8')(f)
 for line in reader.readlines():
     ext = GetExtension(line)
+    if not options.numeric and ext.isnumeric():
+        continue
     if ext:
         print(ext)
-    extensions.append(ext)
-print(extensions)
+    extensions.add(ext)
+print(list(extensions))

@@ -2227,7 +2227,8 @@ def MarkURLContentsAsSpam(html, ip=None):
             if domain.rank_adjustment > -2:
                 domain.rank_adjustment = -2
                 domain.rank_reason = 7
-            domain.save()
+            if '.' in dom:
+                domain.save()
     if ip:
         try:
             address = IPAddress.objects.get(ip=ip)
@@ -2237,7 +2238,8 @@ def MarkURLContentsAsSpam(html, ip=None):
             address = IPAddress()
             address.ip = ip
         address.spam_commenter = True
-        address.save()
+        if '.' in ip:
+            address.save()
 
 
 def SetDomainLanguage(url, language):
@@ -2259,7 +2261,8 @@ def SetDomainLanguage(url, language):
         domain = DomainInfo()
         domain.url = url
         domain.language_association = language
-        domain.save()
+        if '.' in domain.url:
+            domain.save()
 
 
 def SetDomainInfixLanguage(url):
@@ -2284,7 +2287,8 @@ def SetDomainInfixLanguage(url):
         domain.uses_language_subdirs = True
         domain.uses_langid = False
         domain.uses_language_query_parameter = False
-        domain.save()
+        if '.' in url:
+            domain.save()
 
 
 def BuildJsonIndex(language='en', limit=None, only_empty=True, sleep=0):

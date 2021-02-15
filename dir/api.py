@@ -214,26 +214,26 @@ def domain_pages_in_index(request):
         pass
     if altdomain:
         try:
-            altdomaininfo = DomainInfo.objects.get(url=domain)
+            altdomaininfo = DomainInfo.objects.get(url=altdomain)
             altdomainfound = True
         except ObjectDoesNotExist:
             pass
 
     pages = 0
-    if domainfound:
-        pages = GetNumberOfDomainPages(domaininfo)
-        print('{0} pages for domain {1}'.format(pages, domain))
-    if altdomainfound:
-        added = GetNumberOfDomainPages(altdomaininfo)
-        print('{0} pages for domain {1} and {2} pages for domain {3} for a total of {4}'.format(pages, domain, added, altdomain, pages + added))
-        pages = pages + added
+    if domainfound and domaininfo.num_pages:
+        pages += domaininfo.num_pages
+        print('{0} pages for domain {1}'.format(domaininfo.num_pages, domain))
+    if altdomainfound and altdomaininfo.num_pages:
+        pages += altdomaininfo.num_pages
+        print('{0} pages for altdomain {1}'.format(altdomaininfo.num_pages, altdomain))
 
-    if domaininfo and not (domaininfo.language_association or (domaininfo.language_association == 'en')):
-        return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages}, status=200)
-    elif domaininfo:
-        return Response({'domain': domain, 'total_pages_crawled': pages, domaininfo.language_association: pages}, status=200)
-    else:
-        return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages}, status=200)
+    # TODO: Make the num_pages_in_index calculation take language association into account.
+    #if domaininfo and not (domaininfo.language_association or (domaininfo.language_association == 'en')):
+    #    return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages}, status=200)
+    #elif domaininfo:
+    #    return Response({'domain': domain, 'total_pages_crawled': pages, domaininfo.language_association: pages}, status=200)
+    #else:
+    return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages}, status=200)
 
 
 @api_view(['GET'])
@@ -243,7 +243,7 @@ def domain_keywords_ranked(request):
     if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
-    language = request.GET.get('lang', 'en')
+    #language = request.GET.get('lang', 'en')
     if not domain:
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
@@ -264,14 +264,16 @@ def domain_keywords_ranked(request):
             pass
 
     keywords = 0
-    if domainfound:
-        keywords = GetNumberOfDomainKeywordsRanked(domaininfo)
-        print('{0} keywords for domain {1}'.format(keywords, domain))
-    if altdomainfound:
-        added = GetNumberOfDomainKeywordsRanked(altdomaininfo)
-        print('{0} keywords for domain {1} and {2} keywords for domain {3} for a total of {4}'.format(keywords, domain, added, altdomain, keywords + added))
+    if domainfound and domaininfo.num_pages:
+        keywords += domaininfo.num_keywords_ranked
+        print('{0} keywords for domain {1}'.format(domaininfo.num_keywords_ranked, domain))
+    if altdomainfound and altdomaininfo.num_pages:
+        keywords += altdomaininfo.num_pages
+        print('{0} keywords for altdomain {1}'.format(altdomaininfo.num_keywords_ranked, altdomain))
 
-    return Response({'domain': domain, '{0}_ranked'.format(language): keywords}, status=200)
+    # TODO: Make the calculations language-aware.
+    #return Response({'domain': domain, '{0}_ranked'.format(language): keywords}, status=200)
+    return Response({'domain': domain, 'en_ranked': keywords}, status=200)
 
 
 @api_view(['GET'])
