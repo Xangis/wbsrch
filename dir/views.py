@@ -1187,9 +1187,9 @@ def getfile(request, filename):
         print('File {0} found'.format(filename))
         record.count = record.count + 1
         record.save()
-    except Exception:
-        print('File not found.')
-        return render_to_response('browser.htm')
+    except Exception as e:
+        print('File not found: {0}.'.format(e))
+        return HttpResponseRedirect('/browser/')
     response = HttpResponse()
     response['X-Accel-Redirect'] = '/files/' + filename
     response['Content-Type'] = ""
