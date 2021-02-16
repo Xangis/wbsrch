@@ -2623,7 +2623,7 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
         print('Most linked to domain list updated {0}. Nolinks is set to {1}.'.format(newest_stats.last_most_linked_to, nolinks))
     else:
         print('No most recent stats. Generating first one.')
-    if (not nolinks) and ((not newest_stats) or (newest_stats.last_most_linked_to < (timezone.now() - timedelta(days=30)).date())):
+    if (not nolinks) and ((not newest_stats) or (newest_stats.last_most_linked_to < (timezone.now() - timedelta(days=30)))):
         print('Most linked to domain list is older than 30 days, need to recalculate.')
         most_linked = DomainInfo.objects.filter(domains_linking_in_last_updated__isnull=False).order_by('-domains_linking_in').values('url', 'domains_linking_in')[0:1000]
         most_linked_list = []
