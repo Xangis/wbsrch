@@ -220,12 +220,12 @@ def domain_pages_in_index(request):
             pass
 
     pages = 0
-    if domainfound and domaininfo.num_pages:
-        pages += domaininfo.num_pages
-        print('{0} pages for domain {1}'.format(domaininfo.num_pages, domain))
-    if altdomainfound and altdomaininfo.num_pages:
-        pages += altdomaininfo.num_pages
-        print('{0} pages for altdomain {1}'.format(altdomaininfo.num_pages, altdomain))
+    if domainfound and domaininfo.num_urls:
+        pages += domaininfo.num_urls
+        print('{0} urls for domain {1}'.format(domaininfo.num_urls, domain))
+    if altdomainfound and altdomaininfo.num_urls:
+        pages += altdomaininfo.num_urls
+        print('{0} urls for altdomain {1}'.format(altdomaininfo.num_urls, altdomain))
 
     # TODO: Make the num_pages_in_index calculation take language association into account.
     #if domaininfo and not (domaininfo.language_association or (domaininfo.language_association == 'en')):
@@ -264,11 +264,11 @@ def domain_keywords_ranked(request):
             pass
 
     keywords = 0
-    if domainfound and domaininfo.num_pages:
+    if domainfound and domaininfo.num_keywords_ranked:
         keywords += domaininfo.num_keywords_ranked
         print('{0} keywords for domain {1}'.format(domaininfo.num_keywords_ranked, domain))
-    if altdomainfound and altdomaininfo.num_pages:
-        keywords += altdomaininfo.num_pages
+    if altdomainfound and altdomaininfo.num_keywords_ranked:
+        keywords += altdomaininfo.num_keywords_ranked
         print('{0} keywords for altdomain {1}'.format(altdomaininfo.num_keywords_ranked, altdomain))
 
     # TODO: Make the calculations language-aware.
