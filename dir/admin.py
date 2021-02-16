@@ -797,7 +797,7 @@ class DomainInfoAdmin(admin.ModelAdmin):
     list_display = ('url', 'language_association', 'alexa_rank', 'majestic_rank', 'domcop_pagerank')
     search_fields = ('url',)
     fields = ['url', ('language_association', 'rank_adjustment', 'rank_reason'),
-              ('is_unblockable', 'verified_notporn', 'only_crawl_rooturl', 'max_urls'),
+              ('is_unblockable', 'verified_notporn'),
               ('uses_language_subdirs', 'uses_language_query_parameter', 'uses_langid'),
               ('domains_linking_in', 'domains_linking_in_last_updated', 'favicons_last_updated'),
               ('alexa_rank', 'alexa_rank_date', 'majestic_rank', 'majestic_refsubnets', 'majestic_rank_date'),

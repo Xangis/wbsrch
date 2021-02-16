@@ -415,11 +415,9 @@ class CanCrawlUrlTestCase(TestCase):
         site.save()
         domain = DomainInfo()
         domain.url = 'www.spamsite.com'
-        domain.max_urls = 1
         domain.save()
         domain = DomainInfo()
         domain.url = 'www.italiansite.it'
-        domain.max_urls = 1
         domain.language_association = 'it'
         domain.save()
         domain = DomainInfo()
@@ -428,7 +426,6 @@ class CanCrawlUrlTestCase(TestCase):
         domain.save()
         domain = DomainInfo()
         domain.url = 'www.othersite.com'
-        domain.max_urls = 1000
         domain.save()
         info = SiteInfo()
         info.rooturl = 'www.spamsite.com'

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import connections
 from django.core.management.base import BaseCommand
-from dir.models import SearchLog, PendingIndex, language_list, ChangelogItem, DomainSearchLog, IPSearchLog, DomainSuffix, IndexStats, ResultClick, IndexTerm, KeywordRanking
+from dir.models import SearchLog, PendingIndex, language_list, ChangelogItem, DomainSearchLog, IPSearchLog, DomainSuffix, IndexStats, ResultClick, IndexTerm, KeywordRanking, DomainInfo
 
 
 def dictfetchall(cursor):
@@ -201,6 +201,77 @@ class Command(BaseCommand):
                     count += 1
                 print('Added {0} new IndexStats entries'.format(count))
 
+                query = "SELECT * FROM dir_domaininfo ORDER BY last_updated DESC LIMIT 1"
+                cursor.execute(query)
+                newest_date = '2010-01-01'
+                for item in dictfetchall(cursor):
+                    newest_date = item['last_updated']
+                    print('Last updated domain info: {0}'.format(newest_date))
+                last_domains = DomainInfo.objects.filter(last_updated__gt=newest_date).order_by('last_updated')
+                print('{0} domain infos are newer on the local machine'.format(last_domains.count()))
+                count = 0
+                updated = 0
+
+                for item in last_domains:
+                    result = cursor.execute("SELECT count(*) FROM dir_domaininfo WHERE url = %s", [item.url])
+                    existing_count = cursor.fetchone()[0]
+                    if existing_count > 0:
+                        print('Updating {0}'.format(item.keywords))
+                        query = ("UPDATE dir_domaininfo SET language_association = %s, notes = %s, rank_adustment = %s, "
+                                 "rank_reason = %s, alexa_rank = %s, alexa_rank_date = %s, alexa_outdated = %s, "
+                                 "majestic_rank = %s, majestic_refsubnets = %s, majestic_rank_date = %s, majestic_outdated = %s, "
+                                 "quantcast_rank = %s, quantcast_rank_date = %s, quantcast_outdated = %s, domcop_rank = %s, "
+                                 "domcop_pagerank = %s, domcop_pagerank_date = %s, domcop_pagerank_outdated = %s, "
+                                  "uses_language_subdirs = %s, uses_language_query_parameter = %s, uses_langid = %s, "
+                                  "is_unblockable = %s, domain_created = %s, domain_expires = %s, domain_updated = %s, "
+                                  "whois_last_updated = %s, robots_ip = %s, robots_txt = %s, robots_last_updated = %s, "
+                                  "domains_linking_in = %s, domains_linking_in_last_updated = %s, verified_notporn = %s, "
+                                  "num_urls = %s, num_urls_last_updated = %s, num_keywords_ranked = %s, "
+                                  "num_keywords_last_updated = %s, favicons_last_updated = %s, whois_name = %s, whois_city = %s, "
+                                  "whois_country = %s, whois_state = %s, whois_address = %s, whois_org = %s, whois_registrar = %s, "
+                                  "whois_zipcode = %s, whois_nameservers = %s, whois_emails = %s"
+                                  "last_updated = current_timestamp WHERE url = %s")
+                        cursor.execute(query, [item.language_association, item.notes, item.rank_adjustment, item.rank_reason,
+                            item.alexa_rank, item.alexa_rank_date, item.alexa_outdated, item.majestic_rank, item.majestic_refsubnets,
+                            item.majestic_rank_date, item.majestic_outdated, item.quantcast_rank, item.quantcast_rank_date,
+                            item.quantcast_outdated, item.domcop_rank, item.domcop_pagerank, item.domcop_pagerank_date,
+                            item.domcop_pagerank_outdated, item.uses_language_subdirs, item.uses_language_query_parameter, item.uses_langid,
+                            item.is_unblockable, item.domain_created, item.domain_expires, item.domain_updated,
+                            item.whois_last_updated, item.robots_ip, item.robots_txt, item.robots_last_updated, item.domains_linking_in,
+                            item.domains_linking_in_last_updated, item.verified_notporn, item.num_urls,
+                            item.num_urls_last_updated, item.num_keywords_ranked, item.num_keywords_last_updated, item.favicons_last_updated,
+                            item.whois_name, item.whois_city, item.whois_country, item.whois_state, item.whois_address, item.whois_org,
+                            item.whois_registrar, item.whois_zipcode, item.whois_nameservers, item.whois_emails, item.url])
+                        updated += 1
+                    else:
+                        print('Adding {0}'.format(item.keywords))
+                        query = ("INSERT INTO dir_domaininfo (url, language_association, notes, rank_adjustment, rank_reason, "
+                                 "alexa_rank, alexa_rank_date, alexa_outdated, majestic_rank, majestic_refsubnets, majestic_rank_date, "
+                                 "majestic_outdated, quantcast_rank, quantcast_rank_date, quantcast_outdated, domcop_rank, "
+                                 "domcop_pagerank, domcop_pagerank_date, domcop_pagerank_outdated, uses_language_subdirs, "
+                                 "uses_language_query_parameter, uses_langid, is_unblockable, domain_created, domain_expires, "
+                                 "domain_updated, whois_last_updated, robots_ip, robots_txt, robots_last_updated, domains_linking_in, "
+                                 "domains_linking_in_last_updated, verified_notporn, num_urls, num_urls_last_updated, "
+                                 "num_keywords_ranked, num_keywords_last_updated, favicons_last_updated, whois_name, whois_city, "
+                                 "whois_country, whois_state, whois_address, whois_org, whois_registrar, whois_zipcode, whois_nameservers, "
+                                 "whois_emails, last_updated) VALUES "
+                                 "(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, "
+                                 "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, current_timestamp)")
+                        cursor.execute(query, [item.url, item.language_association, item.notes, item.rank_adjustment,
+                            item.rank_reason, item.alexa_rank, item.alexa_rank_date, item.alexa_outdated, item.majestic_rank,
+                            item.majestic_refsubnets, item.majetic_rank_date, item.majestic_outdated, item.quantcast_rank,
+                            item.quantcast_rank_date, item.quantcast_outdated, item.domcop_rank, item.domcop_pagerank,
+                            item.domcop_pagerank_date, item.domcop_pagerank_outdated, item.uses_language_subdirs,
+                            item.uses_language_query_parameter, item.uses_langid, item.is_unblockable,
+                            item.domain_created, item.domain_expires, item.domain_updated, item.whois_last_updated, item.robots_ip,
+                            item.robots_txt, item.robots_last_updated, item.domains_linking_in, item.domains_linking_in_last_updated,
+                            item.verified_notporn, item.num_urls, item.num_urls_last_updated,
+                            item.num_keywords_ranked, item.num_keywords_last_updated, item.favicons_last_updated,
+                            item.whois_name, item.whois_city, item.whois_country, item.whois_state, item.whois_address, item.whois_org,
+                            item.whois_registrar, item.whois_zipcode, item.whois_nameservers, item.whois_emails])
+                        count += 1
+                print('Added {0} new DomainInfo entries and updated {1} existing DomainInfo entries.'.format(count, updated))
+
                 query = "SELECT * FROM dir_indexterm ORDER BY date_indexed DESC LIMIT 1"
                 cursor.execute(query)
                 newest_date = '2010-01-01'
@@ -212,7 +283,7 @@ class Command(BaseCommand):
                 count = 0
                 updated = 0
                 for item in last_terms:
-                    result = cursor.execute("SELECT count(*) FROM dir_indexterm WHERE keywords = %s", [item.keywords])
+                    cursor.execute("SELECT count(*) FROM dir_indexterm WHERE keywords = %s", [item.keywords])
                     existing_count = cursor.fetchone()[0]
                     if existing_count > 0:
                         print('Updating {0}'.format(item.keywords))
@@ -246,7 +317,6 @@ class Command(BaseCommand):
                         cursor.execute(query, [keyword.keywords, keyword.rank, keyword.rooturl, keyword.show])
                         num_rankings += 1
                     print('Added {0} keyword rankings'.format(num_rankings))
-
                 print('Added {0} new IndexTerm entries and updated {1} existing IndexTerm entries.'.format(count, updated))
 
                 last_domainsuffix = DomainSuffix.objects.all().order_by('-last_updated').first()

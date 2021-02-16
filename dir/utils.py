@@ -1794,27 +1794,6 @@ def IsDomainBlocked(checkdomain, verbose=False):
     return False
 
 
-def DomainLimitReached(checkdomain, verbose=False):
-    try:
-        domain = DomainInfo.objects.get(url=checkdomain)
-        if not domain.max_urls:
-            return False
-        if verbose:
-            print('Domain max urls: {0}, Language: {1}'.format(domain.max_urls, domain.language_association))
-        if domain.language_association:
-            site_model = GetSiteInfoModelFromLanguage(domain.language_association)
-        else:
-            site_model = GetSiteInfoModelFromLanguage('en')
-        total = site_model.objects.filter(rooturl=checkdomain).count()
-        if verbose:
-            print('Number of domain urls: {0}'.format(total))
-        if domain.max_urls and (total >= domain.max_urls):
-            return True
-    except ObjectDoesNotExist:
-        pass
-    return False
-
-
 def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False, secure=False):
     """
     Note that we're specifically NOT using unicode strings here because urllib just dies on them.
@@ -1932,11 +1911,7 @@ def CanCrawlUrl(url, verbose=False):
         return False
     if verbose:
         print('Testing CanCrawlURL for: ' + url)
-    # Check 'no new urls' setting for domain extension.
     rooturl = GetRootUrl(url)
-    # We only count domain limit on crawl, not recrawl.
-    if DomainLimitReached(rooturl, verbose):
-        return False
     return True
 
 
@@ -1960,13 +1935,6 @@ def CanReCrawlUrl(url, verbose=False):
     # Check "only root domain" crawl
     try:
         di = DomainInfo.objects.get(url=rooturl)
-        if di.only_crawl_rooturl:
-            if verbose:
-                print('This domain has only crawl root url set.')
-            if url != rooturl and url != (rooturl + '/') and url != ('http://' + rooturl) and url != ('https://' + rooturl) and url != ('http://' + rooturl + '/') and url != ('https://' + rooturl + '/'):
-                if verbose:
-                    print('Cannot crawl url because this domain has only crawl root url set and this is not the root url.')
-                return False
     except Exception:
         pass
     return True

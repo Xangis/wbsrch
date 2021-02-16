@@ -406,7 +406,6 @@ class DomainInfo(models.Model):
     quantcast_rank = models.IntegerField(null=True, blank=True)
     quantcast_rank_date = models.DateField(null=True, blank=True)
     quantcast_outdated = models.BooleanField(blank=True, default=False, db_index=True)
-    blocked_to_crawled_ratio = models.DecimalField(null=True, blank=True, decimal_places=3, max_digits=5)
     domcop_rank = models.IntegerField(null=True, blank=True)
     domcop_pagerank = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=4)
     domcop_pagerank_date = models.DateField(null=True, blank=True)
@@ -414,11 +413,10 @@ class DomainInfo(models.Model):
     uses_language_subdirs = models.BooleanField(default=False, blank=True)
     uses_language_query_parameter = models.BooleanField(default=False, blank=True, help_text='Does this domain use query parameters like "hl=en" to determine the language?')
     uses_langid = models.BooleanField(default=False, blank=True, help_text='Does this domain use langid to categorize individual pages?')
-    max_urls = models.IntegerField(null=True, default=None, blank=True)
     is_unblockable = models.BooleanField(blank=True, default=False, help_text='Is this domain unblockable, even by an idiot?')
     domain_created = models.DateTimeField(null=True, blank=True)
     domain_expires = models.DateTimeField(null=True, blank=True)
-    domain_updated = models.DateTimeField(null=True, blank=True)  # The last time WbSrch updated the domain.
+    domain_updated = models.DateTimeField(null=True, blank=True)  # The last time the whois server says the domain was updated.
     whois_last_updated = models.DateTimeField(null=True, blank=True)
     robots_ip = models.CharField(max_length=16, null=True, blank=True, db_index=True, help_text='The IP address of the server we retrieved (or tried to retrieve) the robots.txt from.')
     robots_txt = models.TextField(null=True, blank=True)
@@ -429,7 +427,6 @@ class DomainInfo(models.Model):
     # and ignore all attempts to pornblock it.
     verified_notporn = models.BooleanField(blank=True, default=False)
     # Only crawl the root url. With or without slash.
-    only_crawl_rooturl = models.BooleanField(blank=True, default=False)
     num_urls = models.IntegerField(null=True, blank=True)
     num_urls_last_updated = models.DateField(null=True, blank=True)
     num_keywords_ranked = models.IntegerField(null=True, blank=True)
@@ -445,6 +442,7 @@ class DomainInfo(models.Model):
     whois_zipcode = models.CharField(max_length=40, null=True, blank=True)
     whois_nameservers = models.TextField(null=True, blank=True)
     whois_emails = models.TextField(null=True, blank=True)
+    last_updated = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.url

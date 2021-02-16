@@ -55,7 +55,6 @@ urlpatterns = [
     url(r'^adminpanel/blocksite/$', views.adminpanel_blocksite, name='adminpanel-blocksite'),
     url(r'^adminpanel/movesite/$', views.adminpanel_movesite, name='adminpanel-movesite'),
     url(r'^adminpanel/topsites/$', views.adminpanel_topsites, name='adminpanel-topsites'),
-    url(r'^adminpanel/sitelimits/$', views.adminpanel_sitelimits, name='adminpanel-sitelimits'),
     url(r'^adminpanel/pagescore/$', views.adminpanel_pagescore, name='adminpanel-pagescore'),
     url(r'^adminpanel/searchlogs/$', views.adminpanel_searchlogs, name='adminpanel-searchlogs'),
     url(r'^adminpanel/$', views.adminpanel, name='adminpanel'),

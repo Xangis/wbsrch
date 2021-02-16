@@ -80,10 +80,10 @@ int main(int argc, char* argv[]) {
              {
                  // cout << "Adding " << url << " to database " << endl;
                  // insert into dir_domaininfo (url, rank_adjustment, alexa_outdated, uses_language_subdirs, uses_language_query_parameter,
-                 // uses_langid, is_unblockable, verified_notporn, majestic_outdated, only_crawl_rooturl, domcop_pagerank_outdated, quantcast_outdated) values
+                 // uses_langid, is_unblockable, verified_notporn, majestic_outdated, domcop_pagerank_outdated, quantcast_outdated) values
                  // ('pants.pants', 0, true, false, false, false, false, false, false, false, false, false);
-                 std::string sqlthree("INSERT INTO dir_domaininfo (url, rank_adjustment, alexa_outdated, uses_language_subdirs, uses_language_query_parameter, uses_langid, is_unblockable, verified_notporn, majestic_outdated, only_crawl_rooturl, domcop_pagerank_outdated, quantcast_outdated) values('");
-                 sqlthree = sqlthree + url + "', 0, true, false, false, false, false, false, false, false, false, false)";
+                 std::string sqlthree("INSERT INTO dir_domaininfo (url, rank_adjustment, alexa_outdated, uses_language_subdirs, uses_language_query_parameter, uses_langid, is_unblockable, verified_notporn, majestic_outdated, domcop_pagerank_outdated, quantcast_outdated) values('");
+                 sqlthree = sqlthree + url + "', 0, true, false, false, false, false, false, false, false, false)";
                  count += 1;
                  // cout << "Executing: " << sqlthree << endl;
                  if( log ) {

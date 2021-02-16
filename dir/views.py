@@ -1006,22 +1006,6 @@ def adminpanel_searchlogs(request):
           'unindexed': unindexed, 'nodomains': nodomains})
 
 
-@permission_required('is_superuser')
-def adminpanel_sitelimits(request):
-    counts = []
-    result = None
-    cursor = connection.cursor()
-    sites = DomainInfo.objects.filter(max_urls__isnull=False).order_by('-alexa_rank')
-    for site in sites:
-        table = 'site_info'
-        if site.language_association and site.language_association != 'en':
-            table = 'dir_siteinfo_' + site.language_association
-        cursor.execute("SELECT count(*) FROM " + table + " WHERE rooturl = '" + site.url + "'")
-        domain_counts = cursor.fetchall()
-        counts.append((site, domain_counts))
-    return render_to_response('adminpanel.htm', {'limit_counts': counts, 'result': result})
-
-
 # Gets a list of the domains with the most URLs that lack a language tag of any kind.
 @permission_required('is_superuser')
 def adminpanel_unclassified(request):
