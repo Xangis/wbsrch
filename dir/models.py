@@ -649,7 +649,7 @@ class IPSearchLog(SearchLogBase):
 
 class PendingIndexBase(models.Model):
     keywords = models.CharField(max_length=240, unique=True)
-    date_added = models.DateField(auto_now_add=True)
+    date_added = models.DateTimeField(auto_now_add=True)
     reason = models.CharField(max_length=240, blank=True, null=True)
 
     class Meta:
