@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import connections
 from django.core.management.base import BaseCommand
-from dir.models import SearchLog, PendingIndex, language_list, ChangelogItem, DomainSearchLog, IPSearchLog, DomainSuffix, IndexStats, ResultClick, IndexTerm, KeywordRanking, DomainInfo
+from dir.models import SearchLog, PendingIndex, language_list, ChangelogItem, DomainSearchLog, IPSearchLog, DomainSuffix, IndexStats, ResultClick, IndexTerm, KeywordRanking, DomainInfo, BlockedSite
 
 
 def dictfetchall(cursor):
@@ -183,6 +183,22 @@ class Command(BaseCommand):
                     count += 1
                 print('Added {0} new IPSearchLog entries'.format(count))
 
+                query = "SELECT * FROM dir_blockedsite ORDER BY date_added DESC LIMIT 1"
+                cursor.execute(query)
+                newest_date = '2010-01-01'
+                for item in dictfetchall(cursor):
+                    newest_date = item['date_added']
+                    print('Last blocked site: {0}'.format(newest_date))
+                last_blockedsites = BlockedSite.objects.filter(date_added__gt=newest_date).order_by('date_added')
+                print('Newer blocked sites:')
+                count = 0
+                for item in last_blockedsites:
+                    print(item.__dict__)
+                    query = "INSERT INTO dir_blockedsite (url, reason, detailedreason, exclude_subdomains, date_added) VALUES (%s, %s, %s, %s, %s)"
+                    cursor.execute(query, [item.url, item.reason, item.detailedreason, item.exclude_subdomains, item.date_added])
+                    count += 1
+                print('Added {0} new BlockedSite entries'.format(count))
+
                 query = "SELECT * FROM dir_indexstats ORDER BY create_date DESC LIMIT 1"
                 cursor.execute(query)
                 newest_date = '2010-01-01'
@@ -200,6 +216,17 @@ class Command(BaseCommand):
                     cursor.execute(query)
                     count += 1
                 print('Added {0} new IndexStats entries'.format(count))
+
+                query = "SELECT * FROM dir_domaininfo ORDER BY last_updated DESC LIMIT 1"
+                cursor.execute(query)
+                newest_date = '2010-01-01'
+                for item in dictfetchall(cursor):
+                    newest_date = item['last_updated']
+                    print('Last updated domain info: {0}'.format(newest_date))
+                last_domains = DomainInfo.objects.filter(last_updated__gt=newest_date).order_by('last_updated')
+                print('{0} domain infos are newer on the local machine'.format(last_domains.count()))
+                count = 0
+                updated = 0
 
                 query = "SELECT * FROM dir_domaininfo ORDER BY last_updated DESC LIMIT 1"
                 cursor.execute(query)
