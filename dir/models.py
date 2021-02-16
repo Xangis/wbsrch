@@ -224,8 +224,8 @@ class BlockedSite(models.Model):
 class IPAddress(models.Model):
     ip = models.CharField(max_length=16, blank=False, null=False, unique=True)
     spam_commenter = models.BooleanField(default=False, blank=True)
-    date_added = models.DateField(auto_now_add=True)
-    last_updated = models.DateField(auto_now=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         in_db = 'indexes'
@@ -241,7 +241,7 @@ class BadQuery(models.Model):
     individual phrases.
     """
     keywords = models.CharField(max_length=260, null=False, unique=True)
-    date_added = models.DateField(auto_now_add=True)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.keywords
@@ -451,14 +451,14 @@ class Screenshot(models.Model):
     domain = models.OneToOneField('DomainInfo', db_index=True, unique=True)
     file_large = models.TextField(null=True, blank=True, help_text='1280x800px image file location.')
     file_small = models.TextField(null=True, blank=True, help_text='320x200px image file location.')
-    date_taken = models.DateField(auto_now_add=True)
+    date_taken = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.domain.url
 
 class Favicon(models.Model):
     domain = models.ForeignKey('DomainInfo', db_index=True)
-    date_taken = models.DateField(auto_now_add=True)
+    date_taken = models.DateTimeField(auto_now_add=True)
     icon = models.TextField(null=False, blank=False)
     format = models.CharField(max_length=6, null=False, blank=False)
     width = models.IntegerField()
@@ -492,7 +492,7 @@ class DomainSuffix(models.Model):
     default_language = models.CharField(max_length=8, null=True, blank=True)
     # This is the score adjustment for the domain suffix when indexing.
     score_adjustment = models.IntegerField(default=0)
-    last_updated = models.DateField(null=True, blank=True, auto_now=True)
+    last_updated = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     def __str__(self):
         return self.extension
@@ -2445,9 +2445,9 @@ class IndexStats(models.Model):
     total_urls = models.IntegerField()
     total_indexes = models.IntegerField()
     total_pendingindexes = models.IntegerField()
-    create_date = models.DateField(auto_now_add=True)
+    create_date = models.DateTimeField(auto_now_add=True)
     most_linked_to_domains = models.TextField()
-    last_most_linked_to = models.DateField(null=True, blank=True)
+    last_most_linked_to = models.DateTimeField(null=True, blank=True)
     generation_time = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=8)
 
     def __str__(self):
@@ -2466,7 +2466,7 @@ class MonthlySearchReport(models.Model):
     year = models.IntegerField()
     # JSON data for the search term and number of times found.
     top_searches = models.TextField()
-    create_date = models.DateField(auto_now_add=True)
+    create_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.language + ' search report for ' + str(self.year) + '-' + str(self.month)
