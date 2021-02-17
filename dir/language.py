@@ -490,7 +490,7 @@ def IdentifyPageLanguage(url, html):
         infixlangs = GetInfixLanguage(url)
     except InvalidLanguageException as e:
         # Don't care, we're just trying to identify the page.
-        infixlangs = e.message
+        infixlangs = e.language
     # Next we extract what information we can from the HTML content.
     #langloc = html.find(u'lang=')
     #contentloc = html.find(u'content-language')

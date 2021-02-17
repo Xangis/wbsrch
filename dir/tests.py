@@ -60,10 +60,10 @@ class GetRootUrlTestCase(TestCase):
 
     def test_url_with_colon(self):
         """
-        Tests that a URL containing a colon (port 8080) gets the proper root URL with the colon.
+        Tests that a URL containing a colon (port 8080) gets the proper root URL without the colon.
         """
         url = GetRootUrl(u'https://zetacentauri.com:8080')
-        self.assertEqual(url, u'zetacentauri.com:8080')
+        self.assertEqual(url, u'zetacentauri.com')
 
     def test_url_with_colon_eighty(self):
         """
@@ -133,10 +133,10 @@ class GetRootDomainTestCase(TestCase):
 
     def test_url_with_colon(self):
         """
-        Tests that a URL containing a colon (port 8080) gets the proper root URL with the colon.
+        Tests that a URL containing a colon (port 8080) gets the proper root URL without the colon.
         """
         url = GetRootDomain(u'https://zetacentauri.com:8080')
-        self.assertEqual(url, u'zetacentauri.com:8080')
+        self.assertEqual(url, u'zetacentauri.com')
 
     def test_url_with_colon_eighty(self):
         """
@@ -511,24 +511,44 @@ class CanCrawlUrlTestCase(TestCase):
         url = 'www.croatia.hr'
         self.assertTrue(CanCrawlUrl(url))
 
-    def test_maxxed_url(self):
-        url = 'http://www.spamsite.com'
+    def test_invalid_domain(self):
+        url = 'https://localhost:443'
         self.assertFalse(CanCrawlUrl(url))
 
-    def test_maxxed_recrawl_url(self):
-        url = 'http://www.spamsite.com'
-        self.assertTrue(CanReCrawlUrl(url))
-
-    def test_maxxed_language_url(self):
-        url = 'http://www.italiansite.it/url/'
+    def test_invalid_domain2(self):
+        url = 'http://localhost'
         self.assertFalse(CanCrawlUrl(url))
 
-    def test_unmaxxed_url(self):
-        url = 'http://www.othersite.com'
+    def test_invalid_domain3(self):
+        url = 'localhost'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_valid_iplike1(self):
+        url = 'http://192.168.tacos.com'
         self.assertTrue(CanCrawlUrl(url))
 
-    def test_maxxed_short_url(self):
-        url = 'www.spamsite.com'
+    def test_valid_iplike2(self):
+        url = 'https://127.0.0.com'
+        self.assertTrue(CanCrawlUrl(url))
+
+    def test_valid_iplike3(self):
+        url = 'https://127.0.0.1.domain.com'
+        self.assertTrue(CanCrawlUrl(url))
+
+    def test_valid_iplike4(self):
+        url = '192.168.0.com'
+        self.assertTrue(CanCrawlUrl(url))
+
+    def test_invalid_ip1(self):
+        url = 'http://192.168.0.1'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_invalid_ip2(self):
+        url = '10.0.0.1'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_invalid_ip3(self):
+        url = 'https://172.16.10.5:8080'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_ftp_url(self):
