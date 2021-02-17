@@ -228,17 +228,6 @@ class Command(BaseCommand):
                 count = 0
                 updated = 0
 
-                query = "SELECT * FROM dir_domaininfo ORDER BY last_updated DESC LIMIT 1"
-                cursor.execute(query)
-                newest_date = '2010-01-01'
-                for item in dictfetchall(cursor):
-                    newest_date = item['last_updated']
-                    print('Last updated domain info: {0}'.format(newest_date))
-                last_domains = DomainInfo.objects.filter(last_updated__gt=newest_date).order_by('last_updated')
-                print('{0} domain infos are newer on the local machine'.format(last_domains.count()))
-                count = 0
-                updated = 0
-
                 for item in last_domains:
                     result = cursor.execute("SELECT count(*) FROM dir_domaininfo WHERE url = %s", [item.url])
                     existing_count = cursor.fetchone()[0]

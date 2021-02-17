@@ -430,8 +430,7 @@ def GetRootUrl(url, secure=False):
     loc = loc.lower()
     if loc.endswith('.'):
         loc = loc[:-1]
-    if loc.endswith(':80'):
-        loc = loc[:-3]
+    loc = loc.split(':')[0]
     return loc
 
 
@@ -498,10 +497,7 @@ def GetRootDomain(url):
     loc = loc.lower()
     if loc.endswith('.'):
         loc = loc[:-1]
-    if loc.endswith(':80'):
-        loc = loc[:-3]
-    if loc.endswith(':443'):
-        loc = loc[:-4]
+    loc = loc.split(':')[0]
     parts = loc.split('.')
     # Handle international equiavalents of .com.
     triple = False
@@ -1928,11 +1924,16 @@ def CanReCrawlUrl(url, verbose=False):
             print('This is not an HTML URL.')
         return False
     rooturl = GetRootUrl(url)
+    # A domain without a period is not a domain.
+    if not '.' in rooturl:
+        return False
     if IsDomainBlocked(rooturl, verbose):
         if verbose:
             print('This domain is blocked')
         return False
-    # Check "only root domain" crawl
+    # Don't consider IP addresses as crawlable.
+    if IsIPAddress(rooturl):
+        return False
     try:
         di = DomainInfo.objects.get(url=rooturl)
     except Exception:

@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
              int value = f[0].as<int>();
              cout << value << " keywords ranked for " << url  << endl;
              std::string sqlseven("UPDATE dir_domaininfo SET num_keywords_ranked = ");
-             sqlseven = sqlseven + std::to_string(value) + ", num_keywords_last_updated = current_timestamp WHERE ID = " + std::to_string(id);
+             sqlseven = sqlseven + std::to_string(value) + ", num_keywords_last_updated = current_timestamp, last_updated = current_timestamp WHERE ID = " + std::to_string(id);
              result T( N.exec( sqlseven.c_str() ));
          }
       }
