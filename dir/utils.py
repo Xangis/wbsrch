@@ -1931,8 +1931,6 @@ def CanReCrawlUrl(url, verbose=False):
         if verbose:
             print('This domain is blocked')
         return False
-    if rooturl == 'localhost':
-        return False
     # Don't consider IP addresses as crawlable.
     if IsIPAddress(rooturl):
         return False
