@@ -467,8 +467,16 @@ class CanCrawlUrlTestCase(TestCase):
         url = 'http://somesite.au'
         self.assertTrue(CanReCrawlUrl(url))
 
-    def test_bad_url(self):
+    def test_bad_url1(self):
         url = 'http://wbsrch.com/tutorial.mp3'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_bad_url2(self):
+        url = 'wbsrch'
+        self.assertFalse(CanCrawlUrl(url))
+
+    def test_bad_url3(self):
+        url = 'https://wbsrch'
         self.assertFalse(CanCrawlUrl(url))
 
     def test_another_bad_url(self):

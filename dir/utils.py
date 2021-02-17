@@ -1924,6 +1924,9 @@ def CanReCrawlUrl(url, verbose=False):
             print('This is not an HTML URL.')
         return False
     rooturl = GetRootUrl(url)
+    # A domain without a period is not a domain.
+    if not '.' in rooturl:
+        return False
     if IsDomainBlocked(rooturl, verbose):
         if verbose:
             print('This domain is blocked')
