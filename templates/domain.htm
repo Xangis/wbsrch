@@ -33,6 +33,7 @@
 {% endif %}
 
 {% if domains %}
+{% include 'adsense.inc' %}
 {% for domain in domains %}
 {% if superuser %}<p>
 <a href="/adm/dir/domaininfo/{{ domain.id }}/">View this domain in the admin.</a><br/>
@@ -52,6 +53,8 @@
 {% if domain.rank_adjustment %}<p>This domain is set to rank {{ domain.get_rank_adjustment_display }} in search results.</p>
 {% if domain.rank_reason %}<p>Reason for adjustment: {{ domain.get_rank_reason_display }}</p>{% endif %}{% endif %}
 {% if domain.robots_ip %}<p>IP Address: <a href="/ip/?q={{ domain.robots_ip }}">{{ domain.robots_ip }}</a> <em class="smallertext">(A domain may have more than one IP address. This was the IP we found when retrieving robots.txt)</em></p>{%endif %}
+{% if domain.num_urls %}<p>Number of Pages in WbSrch Index: {{ domain.num_urls }}</p>{% endif %}
+{% if domain.num_keywords_ranked %}<p>Number of Keywords Ranked in WbSrch Index: {{ domain.num_keywords_ranked }}</p>{% endif %}
 {% if domain.domains_linking_in < 2 %}<p>This domain does not have many inbound links from other domains.</p>
 {% elif domain.domains_linking_in < 5 %}<p>This domain has a few inbound links from other domains.</p>
 {% elif domain.domains_linking_in < 10 %}<p>This domain has a moderate number of inbound links from other domains.</p>
@@ -89,29 +92,6 @@
 <p>{% trans "This domain is excluded from our index" %}: {{ exclude.url }}  (<em>Reason: {{ exclude.get_reason_display }}</em>) {% if exclude.detailed_reason %}Detail: {{ exclude.detailed_reason }}<br />{% endif %}
 </p>
 {% endfor %}
-{% endif %}
-
-{% if domains %}
-<!--
-<h3 class="indented">URLs {% trans 'for' %} {% trans 'this' %} {% trans 'Domain' %}</h3>
-<p>{% trans "Here is what is in our index" %} (max. 200 URLs shown):</p>
-{% if siteinfos %}
-{% for result in siteinfos %}
-<h3 class="indented"><a href="{{ result.url }}" rel="nofollow">{{ result.pagetitle|truncatewords:15 }}</a></h3>
-<p class="site indented">{% if result.pagedescription %}{{ result.pagedescription|truncatewords:45 }}
-{% else %}<em>No page description.</em>{% if result.pagetext %}<br />{{ result.pagetext|truncatewords:45 }}{% endif %}{% endif %}<br />
-<em><a href="{{ result.url }}" rel="nofollow">{{ result.url }}</a></em><br />
-{% if superuser %}<span class="smallertext"><a href="/adminpanel/?crawlurl={{ result.url }}">[recrawl]</a>
-<a href="/adminpanel/blocksite/?reason=8&site={{ result.url }}">[block]</a>
-<a href="/adm/dir/siteinfofull/?q={{ result.rooturl }}">[view domain pages in admin]</a>
-<a href="/adm/dir/siteinfofull/{{ result.id }}/">[view this page in admin]</a></span> <br/>{% endif %}
-</p>
-{% endfor %}
-{% else %}
-<p><em>{% trans "No URLs in the index for" %} {{ domain }}</em></p>
-{% endif %}
--->
-{% include 'adsense.inc' %}
 {% endif %}
 
 <p><a href="/search/">{% trans 'Go to web search form' %}.</a></p>

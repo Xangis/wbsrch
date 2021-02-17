@@ -3285,7 +3285,7 @@ def IsBotAgent(text):
     if 'memoryBot' in text:
         return True
     # US!
-    # Mozilla/5.0 (compatible; WbSrch/1.1 +http://wbsrch.com)
+    # Mozilla/5.0 (compatible; WbSrch/1.2 +https://wbsrch.com)
     if 'WbSrch' in text:
         return True
     # ltx71 - (http://ltx71.com/)
@@ -3616,7 +3616,7 @@ def TakeScreenshot(url):
     """
     print('Screenshotting domain ' + url)
     caps = dict(DesiredCapabilities.PHANTOMJS)
-    caps["phantomjs.page.settings.userAgent"] = "Mozilla/5.0 (compatible; WbSrch/1.1 +https://wbsrch.com)"
+    caps["phantomjs.page.settings.userAgent"] = "Mozilla/5.0 (compatible; WbSrch/1.2 +https://wbsrch.com)"
     driver = webdriver.PhantomJS(executable_path="node_modules/phantomjs/bin/phantomjs", desired_capabilities=caps)
     driver.set_window_size(WIDTH, HEIGHT) # optional
     try:
