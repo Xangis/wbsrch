@@ -25,8 +25,9 @@ def ProcessDomains(filename):
     domains = set()
     f = open("{0}/{1}".format(options.directory, filename), 'rb')
     reader = codecs.getreader('utf8')(f)
+    filenumber = 0
 
-    for line in reader.readlines():
+    for line in reader:
         line = line.strip()
         pieces = line.split('\t')
         domain = (pieces[0])[0:-1]
@@ -48,7 +49,14 @@ def ProcessDomains(filename):
             #print('Domain: {0}'.format(domain))
             domains.add(domain)
             processed += 1
-    with open('out/{0}'.format(filename), 'w') as f:
+        if(processed % 1000000) == 0:
+            print('Writing 1 million domains to out/{0}{1}.txt'.format(filename, filenumber))
+            with open('out/{0}{1}.txt'.format(filename, filenumber), 'w') as f:
+                for item in domains:
+                    f.write("{0}\n".format(item))
+            filenumber += 1
+            domains = set()
+    with open('out/{0}{1}.txt'.format(filename, filenumber), 'w') as f:
         for item in domains:
             f.write("{0}\n".format(item))
     return processed
