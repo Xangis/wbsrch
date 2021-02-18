@@ -37,3 +37,4 @@ domain_update
 ensure_domaininfo
 env/
 urls/icann/out/*.txt
+*.txt_
