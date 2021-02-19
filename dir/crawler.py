@@ -283,10 +283,10 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     except RuntimeError:
         print('Received a RuntimeError getting site HTML from BeautifulSoup. This is probably an infinite recursion error.')
         sitehtml = ''
-    if len(sitehtml) < 8192:
+    if len(sitehtml) < 16384:
         siteinfo.pagecontents = sitehtml
     else:
-        siteinfo.pagecontents = sitehtml[0:8192]
+        siteinfo.pagecontents = sitehtml[0:16384]
     # Remove script and style tags for cleaner text.
     [item.extract() for item in soup.contents if isinstance(item, Doctype)]
     [s.extract() for s in soup(['script', 'style', 'head'])]
@@ -302,10 +302,10 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     text = RemoveExtraSpaces(text)
     if text:
         text = re.sub('\s+', ' ', text).strip()
-    if len(text) < 8192:
+    if len(text) < 16384:
         siteinfo.pagetext = text
     else:
-        siteinfo.pagetext = text[0:8192]
+        siteinfo.pagetext = text[0:16384]
     siteinfo.lastcrawled = timezone.now()
     return soup
 
