@@ -38,3 +38,4 @@ ensure_domaininfo
 env/
 urls/icann/out/*.txt
 *.txt_
+log/*.txt
