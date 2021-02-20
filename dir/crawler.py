@@ -288,10 +288,6 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
     except RuntimeError:
         print('Received a RuntimeError getting site HTML from BeautifulSoup. This is probably an infinite recursion error.')
         sitehtml = ''
-    if len(sitehtml) < MAX_HTML_SAVED:
-        siteinfo.pagecontents = sitehtml
-    else:
-        siteinfo.pagecontents = sitehtml[0:MAX_HTML_SAVED]
     # Remove script and style tags for cleaner text.
     [item.extract() for item in soup.contents if isinstance(item, Doctype)]
     [s.extract() for s in soup(['script', 'style', 'head'])]
@@ -462,7 +458,6 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
             if descriptive:
                 print('Updating existing URL in database: {0}'.format(realurl))
             # TODO: See if this and CopySiteData are duplicate code. They probably are.
-            previous.pagecontents = info.pagecontents
             previous.pagesize = info.pagesize
             previous.pagedescription = info.pagedescription
             previous.pagekeywords = info.pagekeywords

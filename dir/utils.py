@@ -37,6 +37,8 @@ WIDTH = 1280
 HEIGHT = 800
 SMALLWIDTH = 320
 SMALLHEIGHT = 200
+# This is how many errors (socket error, domain not found, connection error, etc) we need to have crawling a page before we delete it.
+MAX_URL_ERRORS = 3
 
 # This list is not exhaustive, nor can it be because new TLDs are being created all the time.
 top_level_domains = [
@@ -1601,7 +1603,6 @@ def CopySiteData(site, newsite):
     newsite.pagefirsth2tag = site.pagefirsth2tag
     newsite.pagefirsth3tag = site.pagefirsth3tag
     newsite.pagekeywords = site.pagekeywords
-    newsite.pagecontents = site.pagecontents
     newsite.pagetext = site.pagetext
     newsite.pagesize = site.pagesize
     newsite.lastcrawled = site.lastcrawled
@@ -2415,7 +2416,7 @@ def GetUrlCountScore(num_urls):
 
 def AddError(url, short_desc, full_desc):
     url.num_errors = url.num_errors + 1
-    if url.num_errors < 5:
+    if url.num_errors < MAX_URL_ERRORS:
         url.error_info = url.error_info + str(datetime.date.today()) + ', ' + short_desc + ', ' + full_desc + '\n'
         url.save()
     else:
