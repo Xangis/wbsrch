@@ -39,3 +39,4 @@ env/
 urls/icann/out/*.txt
 *.txt_
 log/*.txt
+zonefiles_*
