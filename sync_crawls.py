@@ -306,8 +306,6 @@ def ProcessUnmatchedPageFields(fields, existing_record, lang='site_info'):
                         existing_record['ip'] = fields['ip'][0]
                     if 'pagetitle' in fields:
                         existing_record['pagetitle'] = fields['pagetitle'][0]
-                    if 'pagecontents' in fields:
-                        existing_record['pagecontents'] = fields['pagecontents'][0]
                     if 'pagedescription' in fields:
                         existing_record['pagedescription'] = fields['pagedescription'][0]
                     if 'pagekeywords' in fields:
@@ -373,9 +371,6 @@ def ProcessUnmatchedPageFields(fields, existing_record, lang='site_info'):
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
         elif field == 'pagetitle':
-            # Don't bother comparing now, only if lastcrawled is newer.
-            pass
-        elif field == 'pagecontents':
             # Don't bother comparing now, only if lastcrawled is newer.
             pass
         elif field == 'pagedescription':
@@ -542,7 +537,7 @@ if not options.nopages:
     language_list = ['en', 'an', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
 
     # 31 columns:
-    # ['id', 'rooturl', 'url', 'pagetitle', 'pagedescription', 'pagefirstheadtag', 'pagefirsth2tag', 'pagefirsth3tag', 'pagekeywords', 'pagecontents',
+    # ['id', 'rooturl', 'url', 'pagetitle', 'pagedescription', 'pagefirstheadtag', 'pagefirsth2tag', 'pagefirsth3tag', 'pagekeywords',
     #  'pagetext', 'pagesize', 'lastcrawled', 'firstcrawled', 'ip', 'num_errors', 'error_info', 'server_header', 'content_type_header', 'num_css_files',
     #  'num_images', 'num_javascripts', 'num_iframes', 'num_audio_tags', 'num_video_tags', 'num_svg_tags', 'num_canvas_tags', 'image_alt_tags', 'image_title_tags', 'image_filenames',
     #  'simhash_value']

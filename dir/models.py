@@ -259,7 +259,6 @@ class URLInfo(models.Model):
     pagefirsth2tag = models.CharField(max_length=260, blank=True, null=True)
     pagefirsth3tag = models.CharField(max_length=260, blank=True, null=True)
     pagekeywords = models.CharField(max_length=260, blank=True, null=True)
-    pagecontents = models.TextField(blank=True, null=True)
     pagetext = models.TextField(blank=True, null=True)
     pagesize = models.IntegerField(null=True, blank=True)
     lastcrawled = models.DateTimeField(null=True, blank=True)

@@ -285,7 +285,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
         print('{0} Indexing term ({1}): {2}'.format(timezone.now().isoformat(), lang, keywords))
         if term.num_results > 0:
             print('(Reindex) Term had {0} results and {1} pages last index on {2}'.format(term.num_results, term.num_pages, term.date_indexed))
-    # We do not need pagecontents, lastcrawled, or firstcrawled. This may or may not save some effort.
+    # We do not need lastcrawled, or firstcrawled. This may or may not save some effort.
     # However, leaving out pagetext saves a *lot* of effort and computation time.
     kp = '%' + keywords + '%' # Allow us to do raw ILIKE queries without formatting problems.
     spacelesskeywords = keywords.replace(' ', '%')
