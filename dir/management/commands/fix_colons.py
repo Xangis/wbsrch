@@ -39,7 +39,7 @@ class Command(BaseCommand):
             for rank in ranks:
                 root = rank.rooturl.split(':')[0]
                 print('Changing {0} to {1}'.format(rank.rooturl, root))
-                rank.rotourl = root
+                rank.rooturl = root
                 rank.save()
                 count += 1
             print('{0} root urls fixed in {1} keyword rankings.'.format(count, language))
