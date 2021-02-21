@@ -1926,7 +1926,7 @@ def CanReCrawlUrl(url, verbose=False):
         return False
     rooturl = GetRootUrl(url)
     # A domain without a period is not a domain.
-    if not '.' in rooturl:
+    if '.' not in rooturl:
         return False
     if IsDomainBlocked(rooturl, verbose):
         if verbose:
