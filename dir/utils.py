@@ -2113,14 +2113,14 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
                 domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.domcop_rank = rank
                 domain.domcop_pagerank = pagerank
-                domain.domcop_rank_date = datetime.date.today()
+                domain.domcop_pagerank_date = datetime.date.today()
                 domain.domcop_outdated = False
                 domain.save()
             else:
                 domain = DomainInfo.objects.get(url=domain_name[4:])
                 domain.domcop_rank = rank
                 domain.domcop_pagerank = pagerank
-                domain.domcop_rank_date = datetime.date.today()
+                domain.domcop_pagerank_date = datetime.date.today()
                 domain.domcop_outdated = False
                 domain.save()
         except ObjectDoesNotExist:
@@ -2132,7 +2132,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
         domain.url = domain_name
         domain.domcop_rank = rank
         domain.domcop_pagerank = pagerank
-        domain.domcop_rank_date = datetime.date.today()
+        domain.domcop_pagerank_date = datetime.date.today()
         domain.domcop_outdated = False
         domain.save()
         try:
@@ -2142,14 +2142,14 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
                     domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.domcop_rank = rank
                     domain.domcop_pagerank = pagerank
-                    domain.domcop_rank_date = datetime.date.today()
+                    domain.domcop_pagerank_date = datetime.date.today()
                     domain.domcop_outdated = False
                     domain.save()
                 else:
                     domain = DomainInfo.objects.get(url=domain_name[4:])
                     domain.domcop_rank = rank
                     domain.domcop_pagerank = pagerank
-                    domain.domcop_rank_date = datetime.date.today()
+                    domain.domcop_pagerank_date = datetime.date.today()
                     domain.domcop_outdated = False
                     domain.save()
             except ObjectDoesNotExist:
