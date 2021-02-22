@@ -62,7 +62,6 @@
 {% if extra %}<p>We also have data available for <a href="/domain/?q={{ extra.url }}">{{ extra.url }}</a>.</p>{% endif %}
 {% if parent %}<p>We also have data available for <a href="/domain/?q={{ parent.url }}">{{ parent.url }}</a>.</p>{% endif %}
 <!--<p><a href="http://wbstats.com">For more statistics, valuation, and SEO data, visit WbStats.</a></p>-->
-<p>{% trans "We have" %} {{ num_records }} URL{{ num_records|pluralize }} {% trans "in the" %} {{ language_code|language_name_local }} {% trans "database for that domain" %}.</p>
 {% endfor %}
 {% else %}
 {% if domain %}
