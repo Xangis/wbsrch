@@ -634,6 +634,9 @@ def SavePendingUrls(pendinglinks, descriptive=False):
     numpendingadded = 0
     for url in pendinglinks:
         rooturl = GetRootUrl(url)
+        # Don't save links with a bad rooturl.
+        if '.' not in rooturl or '.' not in url:
+            continue
         lang = 'en'
         try:
             domain = DomainInfo.objects.get(url=rooturl)

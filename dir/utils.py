@@ -1909,6 +1909,8 @@ def CanCrawlUrl(url, verbose=False):
     if verbose:
         print('Testing CanCrawlURL for: ' + url)
     rooturl = GetRootUrl(url)
+    if not rooturl:
+        return False
     return True
 
 
@@ -1935,10 +1937,6 @@ def CanReCrawlUrl(url, verbose=False):
     # Don't consider IP addresses as crawlable.
     if IsIPAddress(rooturl):
         return False
-    try:
-        di = DomainInfo.objects.get(url=rooturl)
-    except Exception:
-        pass
     return True
 
 
@@ -1947,6 +1945,8 @@ def UpdateAlexaRank(domain_name, rank):
     Updates the alexa rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
+    if '.' not in domain_name:
+        return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
         domain.alexa_rank = rank
@@ -2021,6 +2021,8 @@ def UpdateQuantcastRank(domain_name, rank):
     Updates the Quantcast rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
+    if '.' not in domain_name:
+        return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
         domain.quantcast_rank = rank
@@ -2095,6 +2097,8 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
     Updates the Domcop rank and pagerank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
+    if '.' not in domain_name:
+        return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
         domain.domcop_rank = rank
@@ -3744,6 +3748,8 @@ def UpdateMajesticRank(domain_name, rank, refsubnets):
     Updates the majestic rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
+    if '.' not in domain_name:
+        return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
         domain.majestic_rank = rank
