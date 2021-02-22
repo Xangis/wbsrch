@@ -1,7 +1,7 @@
 
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from dir.models import language_list, DomainInfo, BlockedSite, PageLink, PageIFrame, PageJavaScript
+from dir.models import language_list, DomainInfo, BlockedSite, PageLink, PageIFrame, PageJavaScript, CrawlableUrl
 from dir.utils import GetSiteInfoModelFromLanguage, GetKeywordRankingModelFromLanguage
 
 
@@ -140,3 +140,15 @@ class Command(BaseCommand):
             link.save()
             count += 1
         print('{0} rooturl_destinations fixed in page javascripts.'.format(count))
+
+        # Crawlable urls (pending urls)
+        print('Processing crawlable urls.')
+        infos = CrawlableUrl.objects.filter(rooturl__icontains=':')
+        count = 0
+        for info in infos:
+            root = info.rooturl.split(':')[0]
+            print('Changing {0} to {1}'.format(info.rooturl, root))
+            info.rooturl = root
+            info.save()
+            count += 1
+        print('{0} crawlable urls fixed.'.format(count))
