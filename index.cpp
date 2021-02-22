@@ -193,7 +193,7 @@ bool BuildIndexForTerm(std::string keywords, connection C)
     {
         int id = row[0].as<int>();
         std::vector<std::string> rowdata;
-        for(pqxx::row field = row.begin(); field != row.end(); ++field)
+        for(pqxx::row::iterator field = row.begin(); field != row.end(); ++field)
         {
             rowdata.push_back(field);
         }
@@ -226,7 +226,7 @@ bool BuildIndexForTerm(std::string keywords, connection C)
         {
             encoded_rankings += ", ";
         }
-        encoded_rankings += std::string("[") + (*i).first + ", " + (*i).second + std::string("]");
+        encoded_rankings += std::string("[") + std::to_string((*i).first) + ", " + std::to_string((*i).second) + std::string("]");
         first = false;
     }
     encoded_rankings += "]";

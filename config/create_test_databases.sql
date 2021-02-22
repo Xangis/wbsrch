@@ -11,6 +11,6 @@ alter database indexes owner to indexes;
 alter database urls owner to urls;
 alter database news owner to news;
 alter user zetaweb createdb;
-alter user news createdb;
 alter user indexes createdb;
+alter user urls createdb;
 alter user news createdb;

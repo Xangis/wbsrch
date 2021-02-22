@@ -18,6 +18,11 @@ import codecs
 import re
 
 
+MAX_HTML_READ = 131072
+MAX_HTML_SAVED = 16384
+MAX_PAGETEXT_SAVED = 16384
+
+
 def html_decode(s):
     """
     Returns the ASCII decoded version of the given HTML string. This does
@@ -274,19 +279,13 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
         print('Num Scripts: {0}, Total Script Links (num_javascripts): {1}'.format(len(scripts), num_external_scripts))
 
     try:
-        sitehtml = str(soup)
         if not siteinfo.pagesize:
+            sitehtml = str(soup)
             siteinfo.pagesize = len(sitehtml)
             if descriptive:
                 print('No page size from host. Using HTML size. Will be inaccurate if page is larger than buffer.')
-        sitehtml = re.sub(">\s+<", "><", sitehtml).strip()
     except RuntimeError:
         print('Received a RuntimeError getting site HTML from BeautifulSoup. This is probably an infinite recursion error.')
-        sitehtml = ''
-    if len(sitehtml) < 16384:
-        siteinfo.pagecontents = sitehtml
-    else:
-        siteinfo.pagecontents = sitehtml[0:16384]
     # Remove script and style tags for cleaner text.
     [item.extract() for item in soup.contents if isinstance(item, Doctype)]
     [s.extract() for s in soup(['script', 'style', 'head'])]
@@ -300,12 +299,10 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
             break
     text = ' '.join(soup.findAll(text=True))
     text = RemoveExtraSpaces(text)
-    if text:
-        text = re.sub('\s+', ' ', text).strip()
-    if len(text) < 16384:
+    if len(text) < MAX_PAGETEXT_SAVED:
         siteinfo.pagetext = text
     else:
-        siteinfo.pagetext = text[0:16384]
+        siteinfo.pagetext = text[0:MAX_PAGETEXT_SAVED]
     siteinfo.lastcrawled = timezone.now()
     return soup
 
@@ -314,7 +311,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
     # By not reading the entire page we save some bandwidth, but we also truncate links at
     # the bottom of a page and fail to find them. This means that the footers of large pages
     # are effectively invisible to us. This may or may not ever be a problem.
-    html = response.read(65536)
+    html = response.read(MAX_HTML_READ)
     realurl = response.geturl()
     ipaddr = None
     print('Real URL is: {0}'.format(realurl))
@@ -457,7 +454,6 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
             if descriptive:
                 print('Updating existing URL in database: {0}'.format(realurl))
             # TODO: See if this and CopySiteData are duplicate code. They probably are.
-            previous.pagecontents = info.pagecontents
             previous.pagesize = info.pagesize
             previous.pagedescription = info.pagedescription
             previous.pagekeywords = info.pagekeywords
@@ -634,6 +630,9 @@ def SavePendingUrls(pendinglinks, descriptive=False):
     numpendingadded = 0
     for url in pendinglinks:
         rooturl = GetRootUrl(url)
+        # Don't save links with a bad rooturl.
+        if ('.' not in rooturl) or ('.' not in url) or (' ' in rooturl):
+            continue
         lang = 'en'
         try:
             domain = DomainInfo.objects.get(url=rooturl)

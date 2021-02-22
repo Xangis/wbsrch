@@ -1343,31 +1343,31 @@ class RecrawlUrlTestCase(TestCase):
         info.rooturl = 'wbsrch.com'
         info.url = 'http://wbsrch.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
         info = SiteInfo()
         info.rooturl = 'wbsrch.com'
         info.url = 'http://wbsrch.com/search/'
         info.lastcrawled = timezone.now()
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
         info = SiteInfo()
         info.rooturl = 'wbsrch.com'
         info.url = 'http://wbsrch.com/changelog/'
         info.lastcrawled = timezone.now() - timedelta(days=5)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
         info = SiteInfo()
         info.rooturl = 'wbsrch.com'
         info.url = 'http://wbsrch.com/privacy/'
         info.lastcrawled = timezone.now() - timedelta(days=3)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
         info = SiteInfo()
         info.rooturl = 'wbsrch.com'
         info.url = 'http://wbsrch.com/policy/'
         info.lastcrawled = timezone.now() - timedelta(days=9)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.save()
 
     def test_nothing(self):
@@ -1497,107 +1497,107 @@ class IndexerTestCase(TestCase):
         info.rooturl = 'wbsrch.com'
         info.url = 'http://wbsrch.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagedescription = 'wbsrch search engine'
         info.pagekeywords = 'wbsrch, search, engine'
         info.pagetitle = 'WbSrch Search Engine'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo()
         info.rooturl = 'zetacentauri.com'
         info.url = 'https://zetacentauri.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagekeywords = 'wbsrch, pants'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo()
         info.rooturl = 'zetacentauri.com'
         info.url = 'http://zetacentauri.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagekeywords = 'wbsrch'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo()
         info.rooturl = 'zetacentauri.com'
         info.url = 'http://zetacentauri.com/page.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo_de()
         info.rooturl = 'zetacentauri.com'
         info.url = 'http://zetacentauri.com/page.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zeta-cen-tau.com'
         info.url = 'http://zeta-cen-tau.com/pa-e.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zeta-centaur.com'
         info.url = 'http://zeta-centaur.com/page.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zetacentauri.com'
         info.url = 'http://zetacentauri.com/page.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zetacentauri.com'
         info.url = 'http://zetacentauri.com/page_underscore.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo_fr()
         info.rooturl = 'zetacentauri.com'
         info.url = 'http://zetacentauri.com/page_two_underscores.htm'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch Search Engine</h1></body></html>'
         info.pagedescription = 'search engine'
         info.pagekeywords = 'search, engine'
         info.pagetitle = 'WbSrch Search Engine'
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
         info = SiteInfo()
         info.rooturl = '216.151.3.15'
         info.url = 'http://216.151.3.15/xxy.z'
         info.lastcrawled = timezone.now() - timedelta(days=20)
-        info.pagecontents = ' '
+        info.pagetext = ' '
         info.pagedescription = ' '
         info.pagekeywords = ' '
         info.pagetitle = ' '
-        info.pagesize = len(info.pagecontents)
+        info.pagesize = len(info.pagetext)
         info.save()
 
     def testIndexTerm(self):
@@ -1711,7 +1711,7 @@ class SearchTestCase(TestCase):
         info.rooturl = 'wbsrch.com'
         info.url = 'http://wbsrch.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
+        info.pagetext = '<html><head><title>WbSrch</title></head><body><h1>WbSrch</h1></body></html>'
         info.pagedescription = 'wbsrch search engine'
         info.pagekeywords = 'wbsrch, search, engine'
         info.pagetitle = 'WbSrch Search Engine'
@@ -1720,7 +1720,7 @@ class SearchTestCase(TestCase):
         info.rooturl = 'horsemonkey.com'
         info.url = 'http://horsemonkey.com/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>Horse Monkey</title></head><body><h1>Horse Monkey</h1></body></html>'
+        info.pagetext = '<html><head><title>Horse Monkey</title></head><body><h1>Horse Monkey</h1></body></html>'
         info.pagedescription = 'horse monkey'
         info.pagekeywords = 'horse monkey'
         info.pagetitle = 'Horse Monkey'
@@ -1729,7 +1729,7 @@ class SearchTestCase(TestCase):
         info.rooturl = 'zimmer.de'
         info.url = 'http://zimmer.de/'
         info.lastcrawled = timezone.now() - timedelta(days=40)
-        info.pagecontents = '<html><head><title>Zimmer</title></head><body><h1>Zimmer</h1></body></html>'
+        info.pagetext = '<html><head><title>Zimmer</title></head><body><h1>Zimmer</h1></body></html>'
         info.pagedescription = 'zimmer'
         info.pagekeywords = 'zimmer'
         info.pagetitle = 'zimmer'

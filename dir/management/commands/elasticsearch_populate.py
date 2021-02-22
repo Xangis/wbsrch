@@ -17,7 +17,6 @@ def SiteInfoToJson(page, language):
     data['firsth2tag'] = page.pagefirsth2tag
     data['firsth3tag'] = page.pagefirsth3tag
     data['keywords'] = page.pagekeywords
-    data['contents'] = page.pagecontents
     data['text'] = page.pagetext
     data['page_size'] = page.pagesize
     data['last_crawled'] = page.lastcrawled

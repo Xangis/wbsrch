@@ -1,12 +1,8 @@
 from subprocess import call
 import time
 
-import os
-import sys
-sys.path.append('/var/django/wbsrch/')
-os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
-
-from dir.views import language_list, hidden_language_list
+language_list = ['en', 'an', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu',
+  'is', 'it', 'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
 
 # Index ratio controls how quickly we cycle through terms for a language.
 # Counts for languages not in the index are ignored.
@@ -14,8 +10,6 @@ lang_index_counts = {'lt': 4, 'lv': 3, 'is': 4, 'sw': 2, 'yo': 2, 'so': 2, 'wo':
 
 while True:
     for language in language_list:
-        if language == 'en' or (language in hidden_language_list):
-            continue
         # Reindex one old term for every 10 new terms being indexed.
         # We do things in larger batches than the en daemon in order to
         # take advantage of caching (which may or may not make a difference,

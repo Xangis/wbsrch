@@ -37,6 +37,8 @@ WIDTH = 1280
 HEIGHT = 800
 SMALLWIDTH = 320
 SMALLHEIGHT = 200
+# This is how many errors (socket error, domain not found, connection error, etc) we need to have crawling a page before we delete it.
+MAX_URL_ERRORS = 3
 
 # This list is not exhaustive, nor can it be because new TLDs are being created all the time.
 top_level_domains = [
@@ -1601,7 +1603,6 @@ def CopySiteData(site, newsite):
     newsite.pagefirsth2tag = site.pagefirsth2tag
     newsite.pagefirsth3tag = site.pagefirsth3tag
     newsite.pagekeywords = site.pagekeywords
-    newsite.pagecontents = site.pagecontents
     newsite.pagetext = site.pagetext
     newsite.pagesize = site.pagesize
     newsite.lastcrawled = site.lastcrawled
@@ -1908,6 +1909,8 @@ def CanCrawlUrl(url, verbose=False):
     if verbose:
         print('Testing CanCrawlURL for: ' + url)
     rooturl = GetRootUrl(url)
+    if not rooturl:
+        return False
     return True
 
 
@@ -1925,7 +1928,7 @@ def CanReCrawlUrl(url, verbose=False):
         return False
     rooturl = GetRootUrl(url)
     # A domain without a period is not a domain.
-    if not '.' in rooturl:
+    if '.' not in rooturl:
         return False
     if IsDomainBlocked(rooturl, verbose):
         if verbose:
@@ -1934,10 +1937,6 @@ def CanReCrawlUrl(url, verbose=False):
     # Don't consider IP addresses as crawlable.
     if IsIPAddress(rooturl):
         return False
-    try:
-        di = DomainInfo.objects.get(url=rooturl)
-    except Exception:
-        pass
     return True
 
 
@@ -1946,6 +1945,8 @@ def UpdateAlexaRank(domain_name, rank):
     Updates the alexa rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
+    if '.' not in domain_name or ' ' in domain_name:
+        return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
         domain.alexa_rank = rank
@@ -2020,6 +2021,8 @@ def UpdateQuantcastRank(domain_name, rank):
     Updates the Quantcast rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
+    if '.' not in domain_name or ' ' in domain_name:
+        return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
         domain.quantcast_rank = rank
@@ -2094,6 +2097,8 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
     Updates the Domcop rank and pagerank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
+    if '.' not in domain_name or ' ' in domain_name:
+        return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
         domain.domcop_rank = rank
@@ -2108,14 +2113,14 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
                 domain = DomainInfo.objects.get(url='www.' + domain_name)
                 domain.domcop_rank = rank
                 domain.domcop_pagerank = pagerank
-                domain.domcop_rank_date = datetime.date.today()
+                domain.domcop_pagerank_date = datetime.date.today()
                 domain.domcop_outdated = False
                 domain.save()
             else:
                 domain = DomainInfo.objects.get(url=domain_name[4:])
                 domain.domcop_rank = rank
                 domain.domcop_pagerank = pagerank
-                domain.domcop_rank_date = datetime.date.today()
+                domain.domcop_pagerank_date = datetime.date.today()
                 domain.domcop_outdated = False
                 domain.save()
         except ObjectDoesNotExist:
@@ -2127,7 +2132,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
         domain.url = domain_name
         domain.domcop_rank = rank
         domain.domcop_pagerank = pagerank
-        domain.domcop_rank_date = datetime.date.today()
+        domain.domcop_pagerank_date = datetime.date.today()
         domain.domcop_outdated = False
         domain.save()
         try:
@@ -2137,14 +2142,14 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
                     domain = DomainInfo.objects.get(url='www.' + domain_name)
                     domain.domcop_rank = rank
                     domain.domcop_pagerank = pagerank
-                    domain.domcop_rank_date = datetime.date.today()
+                    domain.domcop_pagerank_date = datetime.date.today()
                     domain.domcop_outdated = False
                     domain.save()
                 else:
                     domain = DomainInfo.objects.get(url=domain_name[4:])
                     domain.domcop_rank = rank
                     domain.domcop_pagerank = pagerank
-                    domain.domcop_rank_date = datetime.date.today()
+                    domain.domcop_pagerank_date = datetime.date.today()
                     domain.domcop_outdated = False
                     domain.save()
             except ObjectDoesNotExist:
@@ -2415,7 +2420,7 @@ def GetUrlCountScore(num_urls):
 
 def AddError(url, short_desc, full_desc):
     url.num_errors = url.num_errors + 1
-    if url.num_errors < 5:
+    if url.num_errors < MAX_URL_ERRORS:
         url.error_info = url.error_info + str(datetime.date.today()) + ', ' + short_desc + ', ' + full_desc + '\n'
         url.save()
     else:
@@ -3743,6 +3748,8 @@ def UpdateMajesticRank(domain_name, rank, refsubnets):
     Updates the majestic rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
+    if '.' not in domain_name or ' ' in domain_name:
+        return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
         domain.majestic_rank = rank

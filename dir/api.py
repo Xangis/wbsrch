@@ -327,7 +327,6 @@ def get_page_details(request):
     pagefirsth2tag = models.CharField(max_length=260, blank=True, null=True)
     pagefirsth3tag = models.CharField(max_length=260, blank=True, null=True)
     pagekeywords = models.CharField(max_length=260, blank=True, null=True)
-    pagecontents = models.TextField(blank=True, null=True)
     pagetext = models.TextField(blank=True, null=True)
     firstcrawled = models.DateTimeField(null=True, blank=True) # Note that this won't be accurate for pages recrawled before 2015-09-22.
     num_errors = models.IntegerField(blank=True, default=0)
