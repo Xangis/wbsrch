@@ -44,6 +44,6 @@ selenium==3.141.0
 requests==2.25.1
 zone-file==0.1.5
 tlds==2021022100
-tox==3.21.4
+tox==3.22.0
 elasticsearch==7.10.1
 gunicorn==20.0.4
