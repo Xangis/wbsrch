@@ -1142,7 +1142,9 @@ def go(request):
     click.search_id = request.GET.get('id', None)
     click.url = request.GET.get('url', None)
     click.position = request.GET.get('pos', None)
-    if 'REMOTE_ADDR' in request.META:
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        click.ip = request.META['HTTP_X_FORWARDED_FOR'].split(',')[0]
+    elif 'REMOTE_ADDR' in request.META:
         click.ip = request.META['REMOTE_ADDR']
     click.xpos = 0
     click.ypos = 0
