@@ -1945,7 +1945,7 @@ def UpdateAlexaRank(domain_name, rank):
     Updates the alexa rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
-    if '.' not in domain_name:
+    if '.' not in domain_name or ' ' in domain_name:
         return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
@@ -2021,7 +2021,7 @@ def UpdateQuantcastRank(domain_name, rank):
     Updates the Quantcast rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
-    if '.' not in domain_name:
+    if '.' not in domain_name or ' ' in domain_name:
         return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
@@ -2097,7 +2097,7 @@ def UpdateDomcopRank(domain_name, rank, pagerank):
     Updates the Domcop rank and pagerank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
-    if '.' not in domain_name:
+    if '.' not in domain_name or ' ' in domain_name:
         return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)
@@ -3748,7 +3748,7 @@ def UpdateMajesticRank(domain_name, rank, refsubnets):
     Updates the majestic rank for a site and for its www version (assuming it exists).
     Returns True if the site needs to be crawled, false otherwise.
     """
-    if '.' not in domain_name:
+    if '.' not in domain_name or ' ' in domain_name:
         return False
     try:
         domain = DomainInfo.objects.get(url=domain_name)

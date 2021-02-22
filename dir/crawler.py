@@ -279,15 +279,13 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
         print('Num Scripts: {0}, Total Script Links (num_javascripts): {1}'.format(len(scripts), num_external_scripts))
 
     try:
-        sitehtml = str(soup)
         if not siteinfo.pagesize:
+            sitehtml = str(soup)
             siteinfo.pagesize = len(sitehtml)
             if descriptive:
                 print('No page size from host. Using HTML size. Will be inaccurate if page is larger than buffer.')
-        sitehtml = re.sub(">\s+<", "><", sitehtml).strip()
     except RuntimeError:
         print('Received a RuntimeError getting site HTML from BeautifulSoup. This is probably an infinite recursion error.')
-        sitehtml = ''
     # Remove script and style tags for cleaner text.
     [item.extract() for item in soup.contents if isinstance(item, Doctype)]
     [s.extract() for s in soup(['script', 'style', 'head'])]
@@ -301,8 +299,6 @@ def PopulateSiteInfoFromHtml(siteinfo, html, descriptive=False):
             break
     text = ' '.join(soup.findAll(text=True))
     text = RemoveExtraSpaces(text)
-    if text:
-        text = re.sub('\s+', ' ', text).strip()
     if len(text) < MAX_PAGETEXT_SAVED:
         siteinfo.pagetext = text
     else:
@@ -635,7 +631,7 @@ def SavePendingUrls(pendinglinks, descriptive=False):
     for url in pendinglinks:
         rooturl = GetRootUrl(url)
         # Don't save links with a bad rooturl.
-        if '.' not in rooturl or '.' not in url:
+        if ('.' not in rooturl) or ('.' not in url) or (' ' in rooturl):
             continue
         lang = 'en'
         try:
