@@ -459,7 +459,10 @@ def domain(request):
             searchlog.referer = request.META['HTTP_REFERER']
             if len(searchlog.referer) > 255:
                 searchlog.referer = searchlog.referer[0:252] + '...'
-        if 'REMOTE_ADDR' in request.META:
+
+        if 'HTTP_X_FORWARDED_FOR' in request.META:
+            searchlog.ip = request.META['HTTP_X_FORWARDED_FOR'].split(',')[0]
+        elif 'REMOTE_ADDR' in request.META:
             searchlog.ip = request.META['REMOTE_ADDR']
         if 'HTTP_USER_AGENT' in request.META:
             searchlog.browserstring = request.META['HTTP_USER_AGENT']
@@ -537,7 +540,9 @@ def ipaddry(request):
             searchlog.referer = request.META['HTTP_REFERER']
             if len(searchlog.referer) > 255:
                 searchlog.referer = searchlog.referer[0:252] + '...'
-        if 'REMOTE_ADDR' in request.META:
+        if 'HTTP_X_FORWARDED_FOR' in request.META:
+            searchlog.ip = request.META['HTTP_X_FORWARDED_FOR'].split(',')[0]
+        elif 'REMOTE_ADDR' in request.META:
             searchlog.ip = request.META['REMOTE_ADDR']
         if 'HTTP_USER_AGENT' in request.META:
             searchlog.browserstring = request.META['HTTP_USER_AGENT']
@@ -745,7 +750,9 @@ def search(request):
                 log.referer = request.META['HTTP_REFERER']
                 if len(log.referer) > 255:
                     log.referer = log.referer[0:252] + '...'
-            if 'REMOTE_ADDR' in request.META:
+            if 'HTTP_X_FORWARDED_FOR' in request.META:
+                log.ip = request.META['HTTP_X_FORWARDED_FOR'].split(',')[0]
+            elif 'REMOTE_ADDR' in request.META:
                 log.ip = request.META['REMOTE_ADDR']
             if log.ip:
                 gi = GeoIP()
