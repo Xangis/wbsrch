@@ -381,12 +381,20 @@ class Command(BaseCommand):
                             print('Deleted {0} keyword rankings.'.format(deleted_count))
                     else:
                         print('Adding {0}'.format(item.keywords))
-                        query = ("INSERT INTO {0} (keywords, page_rankings, num_results, num_pages, index_time, "
-                                 "search_results, actively_blocked, refused, typo_for, is_language, term_weight, "
-                                 "date_indexed, show_ad, verified_english) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)").format(remote_index_model)
-                        cursor.execute(query, [item.keywords, item.page_rankings, item.num_results, item.num_pages,
-                            item.index_time, item.search_results, item.actively_blocked, item.refused, item.typo_for,
-                            item.is_language, item.term_weight, item.date_indexed, item.show_ad, item.verified_english])
+                        if language == 'en':
+                            query = ("INSERT INTO {0} (keywords, page_rankings, num_results, num_pages, index_time, "
+                                     "search_results, actively_blocked, refused, typo_for, is_language, term_weight, "
+                                     "date_indexed, show_ad, verified_english) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)").format(remote_index_model)
+                            cursor.execute(query, [item.keywords, item.page_rankings, item.num_results, item.num_pages,
+                                item.index_time, item.search_results, item.actively_blocked, item.refused, item.typo_for,
+                                item.is_language, item.term_weight, item.date_indexed, item.show_ad, item.verified_english])
+                        else:
+                            query = ("INSERT INTO {0} (keywords, page_rankings, num_results, num_pages, index_time, "
+                                     "search_results, actively_blocked, refused, typo_for, is_language, term_weight, "
+                                     "date_indexed) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)").format(remote_index_model)
+                            cursor.execute(query, [item.keywords, item.page_rankings, item.num_results, item.num_pages,
+                                item.index_time, item.search_results, item.actively_blocked, item.refused, item.typo_for,
+                                item.is_language, item.term_weight, item.date_indexed])
                         count += 1
                     keywords = keywordranking_model.objects.filter(keywords=item.keywords)
                     query = ("INSERT INTO {0} (keywords, rank, rooturl, show) VALUES (%s, %s, %s, %s)").format(remote_keywordranking_model)
