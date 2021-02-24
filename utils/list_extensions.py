@@ -27,4 +27,4 @@ for line in reader.readlines():
     if ext:
         print(ext)
     extensions.add(ext)
-print(list(extensions))
+print(sorted(list(extensions)))
