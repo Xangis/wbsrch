@@ -1,0 +1,70 @@
+(env) xangis@sirius:~/wbsrch$ time python3 sync_crawls.py "dbname=zetaweb_crawler user=zetaweb password=password" "dbname=zetaweb user=zetaweb password=password" "dbname=urls_crawler user=urls password=password" "dbname=urls user=urls password=password"
+Input: dbname=zetaweb_crawler user=zetaweb password=password
+Output: dbname=zetaweb user=zetaweb password=password
+Inputurls: dbname=urls_crawler user=urls password=password
+Outputurls: dbname=urls user=urls password=password
+In Database Version: PostgreSQL 12.5 (Ubuntu 12.5-0ubuntu0.20.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0, 64-bit
+Out Database Version: PostgreSQL 12.5 (Ubuntu 12.5-0ubuntu0.20.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0, 64-bit
+--- PROCESSING DOMAINS ---
+Number of dir_domaininfo: 1596501
+100000 domains processed
+200000 domains processed
+300000 domains processed
+400000 domains processed
+500000 domains processed
+600000 domains processed
+700000 domains processed
+800000 domains processed
+900000 domains processed
+1000000 domains processed
+1100000 domains processed
+1200000 domains processed
+1300000 domains processed
+1400000 domains processed
+1500000 domains processed
+--- END PROCESSING DOMAINS ---
+
+0 existed and were updated, 1596501 existed and were not updated, 0 were newly added
+------------------------------
+
+--- PROCESSING PAGES ---
+
+
+
+2021-02-01
+
+indexes=# select count(*) from dir_indexterm where date_indexed > '2020-01-01';
+ count
+-------
+ 34007
+(1 row)
+
+indexes=# select count(*) from dir_indexterm where date_indexed < '2020-01-01';
+ count
+--------
+ 451654
+(1 row)
+
+indexes=# select count(*) from dir_pendingindex;
+  count
+---------
+ 8365983
+(1 row)
+
+zetaweb=# select count(*) from site_info where lastcrawled > '2020-01-01';
+ count
+--------
+ 993999
+(1 row)
+
+zetaweb=# select count(*) from site_info where lastcrawled < '2020-01-01';
+  count
+----------
+ 18882981
+(1 row)
+
+zetaweb=# select count(*) from site_info where lastcrawled < '2019-01-01';
+ count
+--------
+ 198747
+(1 row)

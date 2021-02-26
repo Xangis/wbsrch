@@ -1,0 +1,151 @@
+Algorithm tests for indexing "pumpkin pie"
+
+{'verbosity': 1, 'settings': None, 'pythonpath': None, 'traceback': False, 'no_color': False, 'abbreviated': False, 'days': -1, 'verbose': False, 'pending': False, 'info': False, 'language': 'en', 'reindex': False, 'maxindexes': 5, 'quickness': -1, 'sleep': 2, 'offset': 0, 'file': None, 'justthisterm': 'pumpkin pie', 'type': 'fourthrootandlog', 'random': False}
+We need to apply multiword algorithm fourthrootandlog to our data.
+Merge factor for term pumpkin is 0.43569809014013133 with 1580 results
+Merge factor for term pie is 0.37403081914427233 with 8130 results
+Merging existing index terms took 3.465716 seconds.
+Index Time for 'pumpkin pie': 15.391799 seconds, Jsonify Time: 10.122758 seconds (includes ranking update), 1258 pages, 200 results.
+Indexed 1 terms. 1 were saved and 0 were not saved. 0 terms were removed from the pending term database.
+
+We need to apply multiword algorithm loghalf to our data.
+Merge factor for term pumpkin is 0.1089201600881231 with 1580 results
+Merge factor for term pie is 0.06651896144763036 with 8130 results
+
+We need to apply multiword algorithm cuberoot to our data.
+Merge factor for term pumpkin is 99.88352867154883 with 1580 results
+Merge factor for term pie is 99.79892248231387 with 8130 results
+
+We need to apply multiword algorithm cuberootb to our data.
+Merge factor for term pumpkin is 100.88352867154883 with 1580 results
+Merge factor for term pie is 100.79892248231387 with 8130 results
+
+We need to apply multiword algorithm fourthroot to our data.
+Merge factor for term pumpkin is 0.8107590672386508 with 1580 results
+Merge factor for term pie is 0.715031852662115 with 8130 results
+
+We need to apply multiword algorithm fourthrootb to our data.
+Merge factor for term pumpkin is 0.7708590672386508 with 1580 results
+Merge factor for term pie is 0.6751318526621151 with 8130 results
+
+We need to apply multiword algorithm logdivide to our data.
+Merge factor for term pumpkin is 0.23817139130201492 with 1580 results
+Merge factor for term pie is 0.20366223203303693 with 8130 results
+
+We need to apply multiword algorithm squareroot1200 to our data.
+Merge factor for term pumpkin is 0.966875655142747 with 1580 results
+Merge factor for term pie is 0.9248612394743344 with 8130 results
+
+We need to apply multiword algorithm squareroot1000 to our data.
+Merge factor for term pumpkin is 0.9602507861712964 with 1580 results
+Merge factor for term pie is 0.9098334873692012 with 8130 results
+
+        if type == 'full':
+            factor = 1.0
+        elif type == 'half':
+            factor = 0.5
+        elif type == 'loghalf':
+            # =1/POWER(2, (LOG(B2, 10)))
+            factor = 1 / math.pow(2, (math.log(word.num_results, 10)))
+        elif type == 'cuberoot':
+            # =100 - POWER(B2, 1/3)
+            factor = 100.0 - math.pow(word.num_results, (1.0 / 3.0)) / 100.0
+        elif type == 'cuberootb':
+            # =101 - POWER(B2, 1/3)
+            factor = 101.0 - math.pow(word.num_results, (1.0 / 3.0)) / 100.0
+        elif type == 'fourthroot':
+            # =(33.333 - POWER(B2, 1/4)) * 3
+            factor = ((33.33 - math.pow(word.num_results, (1.0 / 4.0))) * 3) / 100.0
+        elif type == 'fourthrootb':
+            # =(32.0 - POWER(B2, 1/4)) * 3
+            factor = ((32.0 - math.pow(word.num_results, (1.0 / 4.0))) * 3) / 100.0
+        elif type == 'logdivide':
+            # =1 / (LOG(B2, 10)+1)
+            factor = 1.0 / (math.log(word.num_results, 10) + 1.0)
+        elif type == 'fourthrootandlog':
+            # Takes the average of the fourthrootb and the logdivide calculations, but with slightly different
+            # max/scaling factors.
+            factora = ((29 - math.pow(word.num_results, (1.0 / 4.0))) * 3) / 100.0
+            factorb = 0.80 / (math.log(word.num_results, 10) + 1.0)
+            factor = (factora + factorb) / 2.0
+        elif type == 'squareroot1200':
+            # =(1200 - SQRT(B2)) / 1200
+            factor = (1200.0 - math.sqrt(word.num_results)) / 1200.0
+        elif type == 'squareroot1100':
+            # =(1100 - SQRT(B2)) / 1100
+            factor = (1100.0 - math.sqrt(word.num_results)) / 1100.0
+        elif type == 'squareroot1050':
+            # =(1050 - SQRT(B2)) / 1050
+            factor = (1050.0 - math.sqrt(word.num_results)) / 1050.0
+        elif type == 'squareroot1025':
+            # =(1025 - SQRT(B2)) / 1025
+            factor = (1025.0 - math.sqrt(word.num_results)) / 1025.0
+        elif type == 'squareroot1000':
+            # =(1000 - SQRT(B2)) / 1000
+            factor = (1000.0 - math.sqrt(word.num_results)) / 1000.0
+
+
+Fourthrootandlog:
+  It feels like if any term can get above 50% it dominates pretty hard after the #1 result in spite of not being specific at all -- just from a domain with a good pedigree and very specific to the individual word.
+
+
+6 Keywords loaded from indexes.txt.
+We need to apply multiword algorithm fourthrootandlog to our data.
+Merge factor for term oolong is 0.5245490839178288 with 89 results
+Merge factor for term tea is 0.4997652539055535 with 200 results
+Merging existing index terms took 2.236594 seconds.
+Index Time for 'oolong tea': 91.758387 seconds, Jsonify Time: 9.853715 seconds (includes ranking update), 866 pages, 200 results.
+We need to apply multiword algorithm fourthrootandlog to our data.
+Merge factor for term north is 0.3516757159993422 with 13387 results
+Merge factor for term river is 0.31466593908252133 with 27862 results
+Merging existing index terms took 9.482976 seconds.
+Index Time for 'north river': 189.693791 seconds, Jsonify Time: 9.61059 seconds (includes ranking update), 942 pages, 200 results.
+We need to apply multiword algorithm fourthrootandlog to our data.
+Merge factor for term photo is 0.20912231174253573 with 141474 results
+Merge factor for term gallery is 0.26088551487355144 with 68489 results
+Merging existing index terms took 28.805795 seconds.
+Index Time for 'photo gallery': 1235.532207 seconds, Jsonify Time: 11.221004 seconds (includes ranking update), 170933 pages, 200 results.
+We need to apply multiword algorithm fourthrootandlog to our data.
+Merge factor for term internet is 0.3406231769825223 with 16853 results
+Merge factor for term explorer is 0.45445900290422225 with 887 results
+Merging existing index terms took 15.043198 seconds.
+Index Time for 'internet explorer': 252.451578 seconds, Jsonify Time: 11.494343 seconds (includes ranking update), 32626 pages, 200 results.
+We need to apply multiword algorithm fourthrootandlog to our data.
+Merge factor for term new is 0.4997652539055535 with 200 results
+Merge factor for term hampshire is 0.40927935905396284 with 3350 results
+Merging existing index terms took 21.600688 seconds.
+Index Time for 'new hampshire': 312.522313 seconds, Jsonify Time: 12.106474 seconds (includes ranking update), 41025 pages, 200 results.
+Indexed 5 terms. 5 were saved and 0 were not saved. 0 terms were removed from the pending term database.
+
+Logdivide:
+6 Keywords loaded from indexes.txt.
+We need to apply multiword algorithm logdivide to our data.
+Merge factor for term oolong is 0.33905315938109964 with 89 results
+Merge factor for term tea is 0.30293575075462364 with 200 results
+Merging existing index terms took 2.743882 seconds.
+Index Time for 'oolong tea': 100.234203 seconds, Jsonify Time: 12.194913 seconds (includes ranking update), 866 pages, 200 results.
+We need to apply multiword algorithm logdivide to our data.
+Merge factor for term north is 0.19505788608814648 with 13387 results
+Merge factor for term river is 0.18365431465130555 with 27862 results
+Merging existing index terms took 11.228875 seconds.
+Index Time for 'north river': 205.000787 seconds, Jsonify Time: 11.147265 seconds (includes ranking update), 942 pages, 200 results.
+We need to apply multiword algorithm logdivide to our data.
+Merge factor for term photo is 0.162583738293366 with 141474 results
+Merge factor for term gallery is 0.1713613735296866 with 68489 results
+Merging existing index terms took 25.398082 seconds.
+Index Time for 'photo gallery': 1256.961717 seconds, Jsonify Time: 10.790186 seconds (includes ranking update), 170933 pages, 200 results.
+We need to apply multiword algorithm logdivide to our data.
+Merge factor for term internet is 0.1913261442706604 with 16853 results
+Merge factor for term explorer is 0.2532977069203339 with 887 results
+Merging existing index terms took 3.075767 seconds.
+Index Time for 'internet explorer': 9.325326 seconds, Jsonify Time: 9.186481 seconds (includes ranking update), 942 pages, 200 results.
+We need to apply multiword algorithm logdivide to our data.
+Merge factor for term new is 0.30293575075462364 with 200 results
+Merge factor for term hampshire is 0.22099228684872066 with 3350 results
+Merging existing index terms took 8.785519 seconds.
+Index Time for 'new hampshire': 28.619189 seconds, Jsonify Time: 9.172588 seconds (includes ranking update), 2991 pages, 200 results.
+Indexed 5 terms. 5 were saved and 0 were not saved. 0 terms were removed from the pending term database.
+
+Since things have been skewing more in the individual-term arena, we can do more to discount them. Think, something merged by individual terms will look out for itself pretty well already. Specifics matter.
+
+So far it seems like logdivide will play out better in the real world.

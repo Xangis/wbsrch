@@ -1,0 +1,89 @@
+before import of pages from crawler:
+Loading pending indexes from file: index.txt
+67 Keywords loaded from index.txt.
+Index Time for 'demagoguery': 1.155904 seconds, Jsonify Time: 0.467465 seconds (includes ranking update), 71 pages, 70 results.
+Index Time for 'demagogue': 2.416827 seconds, Jsonify Time: 1.841978 seconds (includes ranking update), 277 pages, 200 results.
+Index Time for 'wallstreetbets': 1.439403 seconds, Jsonify Time: 0.161748 seconds (includes ranking update), 23 pages, 22 results.
+Index Time for 'cnbc': 26.308054 seconds, Jsonify Time: 7.868458 seconds (includes ranking update), 4028 pages, 200 results.
+Index Time for 'resignation': 91.968831 seconds, Jsonify Time: 5.503875 seconds (includes ranking update), 3520 pages, 200 results.
+Index Time for 'wfaa': 2.918048 seconds, Jsonify Time: 1.520896 seconds (includes ranking update), 406 pages, 200 results.
+Index Time for 'newsweek': 13.146571 seconds, Jsonify Time: 3.967671 seconds (includes ranking update), 1899 pages, 200 results.
+Index Time for 'fascist': 31.221443 seconds, Jsonify Time: 5.701768 seconds (includes ranking update), 2963 pages, 200 results.
+Index Time for 'pro-trump': 17.559404 seconds, Jsonify Time: 0.786397 seconds (includes ranking update), 128 pages, 120 results.
+Index Time for 'riot': 441.253056 seconds, Jsonify Time: 10.150638 seconds (includes ranking update), 62043 pages, 200 results.
+Index Time for 'gamestop': 77.995012 seconds, Jsonify Time: 2.216209 seconds (includes ranking update), 758 pages, 200 results.
+Index Time for 'qanon': 1.532588 seconds, Jsonify Time: 1.009616 seconds (includes ranking update), 155 pages, 147 results.
+Index Time for 'kxan': 1.338086 seconds, Jsonify Time: 1.023217 seconds (includes ranking update), 158 pages, 149 results.
+Index Time for 'reddit': 348.784327 seconds, Jsonify Time: 11.14871 seconds (includes ranking update), 44545 pages, 200 results.
+Index Time for 'sedition': 445.328033 seconds, Jsonify Time: 1.984661 seconds (includes ranking update), 502 pages, 200 results.
+Index Time for 'insurrection': 109.745535 seconds, Jsonify Time: 2.577058 seconds (includes ranking update), 923 pages, 200 results.
+Index Time for 'traitor': 69.894711 seconds, Jsonify Time: 3.892517 seconds (includes ranking update), 1792 pages, 200 results.
+Index Time for 'capitol': 13.834018 seconds, Jsonify Time: 4.275437 seconds (includes ranking update), 2412 pages, 200 results.
+Index Time for 'aoc': 100.186319 seconds, Jsonify Time: 8.795057 seconds (includes ranking update), 15723 pages, 200 results.
+Index Time for 'o'rourke': 33.962658 seconds, Jsonify Time: 2.265028 seconds (includes ranking update), 870 pages, 200 results.
+Index Time for 'ocasio-cortez': 12.210735 seconds, Jsonify Time: 2.319659 seconds (includes ranking update), 849 pages, 200 results.
+Index Time for 'fucking fascist': 8.055432 seconds, Jsonify Time: 10.952991 seconds (includes ranking update), 1 pages, 200 results.
+Index Time for 'wall street': 18.445274 seconds, Jsonify Time: 14.465283 seconds (includes ranking update), 1562 pages, 200 results.
+Index Time for 'wall street bets': 71.639983 seconds, Jsonify Time: 9.474974 seconds (includes ranking update), 4 pages, 200 results.
+Index Time for 'hatch act': 264.040479 seconds, Jsonify Time: 9.691487 seconds (includes ranking update), 57 pages, 200 results.
+Index Time for 'kellyanne conway': 3.115975 seconds, Jsonify Time: 2.27384 seconds (includes ranking update), 119 pages, 200 results.
+Index Time for 'daily mail': 113.481083 seconds, Jsonify Time: 8.252762 seconds (includes ranking update), 2433 pages, 200 results.
+Index Time for 'steve cohen': 6.206635 seconds, Jsonify Time: 8.824852 seconds (includes ranking update), 123 pages, 200 results.
+Index Time for 'american people': 173.081523 seconds, Jsonify Time: 9.915899 seconds (includes ranking update), 2221 pages, 200 results.
+Index Time for 'confederate flag': 6.846715 seconds, Jsonify Time: 8.971629 seconds (includes ranking update), 306 pages, 200 results.
+Index Time for 'electoral college': 34.531918 seconds, Jsonify Time: 8.852535 seconds (includes ranking update), 629 pages, 200 results.
+Index Time for 'new republic': 62.928872 seconds, Jsonify Time: 8.867491 seconds (includes ranking update), 616 pages, 200 results.
+Index Time for 'bill barr': 95.947762 seconds, Jsonify Time: 9.400369 seconds (includes ranking update), 199 pages, 200 results.
+Index Time for 'william barr': 21.031254 seconds, Jsonify Time: 8.688167 seconds (includes ranking update), 536 pages, 200 results.
+Index Time for 'attorney general': 70.546181 seconds, Jsonify Time: 8.837747 seconds (includes ranking update), 5477 pages, 200 results.
+Index Time for 'george conway': 3.749348 seconds, Jsonify Time: 5.364813 seconds (includes ranking update), 31 pages, 200 results.
+Index Time for 'american independent': 78.609215 seconds, Jsonify Time: 10.061209 seconds (includes ranking update), 167 pages, 200 results.
+Index Time for 'ny post': 862.499851 seconds, Jsonify Time: 12.685796 seconds (includes ranking update), 7403 pages, 200 results.
+Index Time for 'new york post': 113.451947 seconds, Jsonify Time: 10.616621 seconds (includes ranking update), 1236 pages, 200 results.
+Index Time for 'buzzfeed news': 5.130474 seconds, Jsonify Time: 11.100591 seconds (includes ranking update), 160 pages, 200 results.
+Index Time for 'now this': 1420.122896 seconds, Jsonify Time: 16.473785 seconds (includes ranking update), 22510 pages, 200 results.
+Index Time for 'the lincoln project': 24.218239 seconds, Jsonify Time: 17.709536 seconds (includes ranking update), 4 pages, 200 results.
+Index Time for 'lincoln project': 7.014765 seconds, Jsonify Time: 12.40722 seconds (includes ranking update), 13 pages, 200 results.
+Index Time for 'dallas observer': 9.217405 seconds, Jsonify Time: 11.640541 seconds (includes ranking update), 132 pages, 200 results.
+Index Time for 'san antonio current': 34.268484 seconds, Jsonify Time: 17.47208 seconds (includes ranking update), 31 pages, 200 results.
+Index Time for 'san antonio': 304.691294 seconds, Jsonify Time: 11.63612 seconds (includes ranking update), 28628 pages, 200 results.
+Index Time for 'the hill': 813.697887 seconds, Jsonify Time: 11.078179 seconds (includes ranking update), 25006 pages, 200 results.
+Index Time for 'abc 13': 12.749824 seconds, Jsonify Time: 10.220783 seconds (includes ranking update), 82 pages, 200 results.
+Index Time for 'cbs austin': 4.754876 seconds, Jsonify Time: 11.015745 seconds (includes ranking update), 9 pages, 200 results.
+Index Time for 'texas monthly': 26.143986 seconds, Jsonify Time: 17.581037 seconds (includes ranking update), 406 pages, 200 results.
+Index Time for 'dallas news': 55.632045 seconds, Jsonify Time: 10.088152 seconds (includes ranking update), 154 pages, 200 results.
+Index Time for 'washington post': 95.51709 seconds, Jsonify Time: 8.773737 seconds (includes ranking update), 6827 pages, 200 results.
+Index Time for 'kamala harris': 8.738089 seconds, Jsonify Time: 8.792781 seconds (includes ranking update), 565 pages, 200 results.
+Index Time for 'joe biden': 10.941638 seconds, Jsonify Time: 5.639473 seconds (includes ranking update), 1388 pages, 200 results.
+Index Time for 'ben sasse': 21.764732 seconds, Jsonify Time: 9.338851 seconds (includes ranking update), 55 pages, 200 results.
+Index Time for 'marjorie taylor greene': 4.845039 seconds, Jsonify Time: 9.687017 seconds (includes ranking update), 8 pages, 200 results.
+Index Time for 'ted cruz': 23.275071 seconds, Jsonify Time: 9.671632 seconds (includes ranking update), 560 pages, 200 results.
+Index Time for 'alexandria ocasio-cortez': 10.079031 seconds, Jsonify Time: 10.096265 seconds (includes ranking update), 614 pages, 200 results.
+Index Time for 'alexandria ocasio cortez': 4.808325 seconds, Jsonify Time: 7.749029 seconds (includes ranking update), 34 pages, 200 results.
+Index Time for 'beto o'rourke': 3.480205 seconds, Jsonify Time: 3.627931 seconds (includes ranking update), 121 pages, 200 results.
+Index Time for 'beto orourke': 1.779251 seconds, Jsonify Time: 3.312593 seconds (includes ranking update), 6 pages, 200 results.
+Index Time for 'seth rogen': 28.699631 seconds, Jsonify Time: 5.68473 seconds (includes ranking update), 294 pages, 200 results.
+Index Time for 'mary trump': 30.584587 seconds, Jsonify Time: 9.553731 seconds (includes ranking update), 6 pages, 200 results.
+Index Time for 'kansas city star': 26.704259 seconds, Jsonify Time: 9.946756 seconds (includes ranking update), 268 pages, 200 results.
+Index Time for 'business insider': 180.364216 seconds, Jsonify Time: 11.040783 seconds (includes ranking update), 1761 pages, 200 results.
+Index Time for 'election 2020': 30.273439 seconds, Jsonify Time: 10.227214 seconds (includes ranking update), 200 pages, 200 results.
+Index Time for 'chicago tribune': 19.282781 seconds, Jsonify Time: 10.063207 seconds (includes ranking update), 1809 pages, 200 results.
+Index Time for 'nbc news': 18.969916 seconds, Jsonify Time: 10.359095 seconds (includes ranking update), 1459 pages, 200 results.
+Index Time for 'riverfront times': 8.221319 seconds, Jsonify Time: 10.867284 seconds (includes ranking update), 53 pages, 200 results.
+Index Time: 127 minutes.
+
+
+after:
+
+
+
+
+Next Indexer Improvements:
+- Most common titles
+- Most common h1, h2, h3 tags, keywords, descriptions
+- Get list of radio and television call signs and index those
+
+Also:
+- Examine which sites have the most URLs crawled and why. Block if necessary, or remove url parameters.
+- Do a round of porn blocking. (select manually from database titles, etc?)
+
