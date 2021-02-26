@@ -267,6 +267,9 @@ def ProcessUnmatchedDomainFields(fields, existing_record):
         elif field == 'robots_txt':
             # Handled by robots_last_updated.
             pass
+        elif field == 'last_updated':
+            # Don't bother copying this, it auto-populates.
+            pass
         else:
             raise ValueError(field)
     # print('ProcessUnmatchedDomainFields: Save = {0}'.format(needs_save))
