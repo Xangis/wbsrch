@@ -339,6 +339,13 @@ def index_stats(request, realtime=False):
     return render_to_response('indexstats.htm', {'language_code': language_code, 'stats': stats})
 
 
+def languages(request):
+    language_code = request.LANGUAGE_CODE
+    if language_code == 'en-us':
+        language_code = 'en'
+    return render_to_response('languages.htm', {'language_code': language_code, 'language_list': language_list})
+
+
 def tld_stats(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
