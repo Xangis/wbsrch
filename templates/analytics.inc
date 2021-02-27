@@ -7,3 +7,11 @@
 
   gtag('config', 'G-H47FMBKLZM');
 </script>
+<script>
+function ping(id) {
+  var req = new XMLHttpRequest();
+  req.open("GET", "https://analytics.wbsrch.com/ping/" + id + "/", true);
+  req.send();
+}
+ping(11186);
+</script>
