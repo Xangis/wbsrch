@@ -35,63 +35,63 @@ class GetRootUrlTestCase(TestCase):
         Tests that a URL with a period at the end has the period stripped.
         """
         url = GetRootUrl(u'http://zetacentauri.com.')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_period_and_suffix(self):
         """
         Tests that a URL with a period at the end has the period stripped when there is data after the period.
         """
         url = GetRootUrl(u'http://zetacentauri.com./software/')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_case(self):
         """
         Tests that a URL with mixed cases gets a lowercase root URL.
         """
         url = GetRootUrl(u'http://ZetaCenTaUri.coM')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_https(self):
         """
         Tests that a URL with https gets a proper root URL.
         """
         url = GetRootUrl(u'https://zetacentauri.com')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_colon(self):
         """
         Tests that a URL containing a colon (port 8080) gets the proper root URL without the colon.
         """
         url = GetRootUrl(u'https://zetacentauri.com:8080')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_colon_eighty(self):
         """
         Tests that a URL containing a colon (port 80) gets the proper root URL without the colon.
         """
         url = GetRootUrl(u'https://zetacentauri.com:80')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_subdomain(self):
         """
         Tests that a URL with a subdomain works.
         """
         url = GetRootUrl(u'https://www.zetacentauri.com:80')
-        self.assertEqual(url, u'www.zetacentauri.com')
+        self.assertEqual(url, 'www.zetacentauri.com')
 
     def test_url_with_subdomain2(self):
         """
         Tests that a URL with a subdomain works.
         """
         url = GetRootUrl(u'://www.zetacentauri.com')
-        self.assertEqual(url, u'www.zetacentauri.com')
+        self.assertEqual(url, 'www.zetacentauri.com')
 
     def test_url_with_subdomain3(self):
         """
         Tests that a URL with a subdomain works (2).
         """
         url = GetRootUrl(u'https://another.subdomain.zetacentauri.com')
-        self.assertEqual(url, u'another.subdomain.zetacentauri.com')
+        self.assertEqual(url, 'another.subdomain.zetacentauri.com')
 
 class GetRootDomainTestCase(TestCase):
 
@@ -100,71 +100,71 @@ class GetRootDomainTestCase(TestCase):
         Tests that a URL with a period at the end has the period stripped.
         """
         url = GetRootDomain(u'http://zetacentauri.com.')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_period_and_suffix(self):
         """
         Tests that a URL with a period at the end has the period stripped when there is data after the period.
         """
         url = GetRootDomain(u'http://zetacentauri.com./software/')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_case(self):
         """
         Tests that a URL with mixed cases gets a lowercase root URL.
         """
         url = GetRootDomain(u'http://ZetaCenTaUri.coM')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_ip_case(self):
         url = GetRootDomain(u'http://192.168.0.1')
-        self.assertEqual(url, u'192.168.0.1')
+        self.assertEqual(url, '192.168.0.1')
 
     def test_ip_folder_case(self):
         url = GetRootDomain(u'http://216.151.3.15/index-stats/index.htm')
-        self.assertEqual(url, u'216.151.3.15')
+        self.assertEqual(url, '216.151.3.15')
 
     def test_url_with_https(self):
         """
         Tests that a URL with https gets a proper root URL.
         """
         url = GetRootDomain(u'https://zetacentauri.com')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_colon(self):
         """
         Tests that a URL containing a colon (port 8080) gets the proper root URL without the colon.
         """
         url = GetRootDomain(u'https://zetacentauri.com:8080')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_colon_eighty(self):
         """
         Tests that a URL containing a colon (port 80) gets the proper root URL without the colon.
         """
         url = GetRootDomain(u'https://zetacentauri.com:80')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_subdomain(self):
         """
         Tests that a URL with a subdomain works.
         """
         url = GetRootDomain(u'https://www.zetacentauri.com:80')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_subdomain2(self):
         """
         Tests that a URL with a subdomain works (2).
         """
         url = GetRootDomain(u'https://another.subdomain.zetacentauri.com')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
     def test_url_with_subdomain3(self):
         """
         Tests that a URL with a subdomain works (2).
         """
         url = GetRootDomain(u'https://another.subdomain.zetacentauri.com/software/whatever/something.htm')
-        self.assertEqual(url, u'zetacentauri.com')
+        self.assertEqual(url, 'zetacentauri.com')
 
 class IsValidHtmlUrlTestCase(TestCase):
     def test_mp3_url(self):
@@ -590,462 +590,262 @@ class CanCrawlUrlTestCase(TestCase):
 class NormalizeUrlTestCase(TestCase):
     def test_normal_url(self):
         url = 'http://wbsrch.com/tutorial.htm'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial.htm')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/tutorial.htm')
 
     def test_normal_url2(self):
         url = 'http://wbsrch.com'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com')
 
     def test_normal_url3(self):
         url = 'http://wbsrch.com/'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/')
 
     def test_jsession_url(self):
         url = 'http://farm.myswitzerland.com/on-the-farm/Airolojsessionid=94AFB92FD66F248EC3EF279B7A6732EF'
-        self.assertEqual(NormalizeUrl(url), u'http://farm.myswitzerland.com/on-the-farm/Airolo')
+        self.assertEqual(NormalizeUrl(url), 'http://farm.myswitzerland.com/on-the-farm/Airolo')
 
     def test_jsession_url2(self):
         url = 'https://secure2.convio.net/fmnh/site/SPageServer/jsessionid=F1C5BEC5FD279BA9953C87FD37D5F89D.app274b?donate=now&pagename=api_donate'
-        self.assertEqual(NormalizeUrl(url), u'https://secure2.convio.net/fmnh/site/SPageServer/?donate=now&pagename=api_donate')
+        self.assertEqual(NormalizeUrl(url), 'https://secure2.convio.net/fmnh/site/SPageServer/?donate=now&pagename=api_donate')
 
     def test_jsession_url3(self):
         url = 'https://www.psiservice.com/psiweb/index.jsp;jsessionid=450B52BF0268B30DE854C552309E3E6A'
-        self.assertEqual(NormalizeUrl(url), u'https://www.psiservice.com/psiweb/index.jsp')
+        self.assertEqual(NormalizeUrl(url), 'https://www.psiservice.com/psiweb/index.jsp')
 
     def test_jsession_url4(self):
         url = 'http://sage-ereference.com/publicstart;jsessionid=169E7071B011936163BDD68A0C95BD32?authRejection=true'
-        self.assertEqual(NormalizeUrl(url), u'http://sage-ereference.com/publicstart?authRejection=true')
+        self.assertEqual(NormalizeUrl(url), 'http://sage-ereference.com/publicstart?authRejection=true')
 
     def test_doubleslash_url(self):
         url = '//wbsrch.com/tutorial.htm'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial.htm')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/tutorial.htm')
 
     def test_another_normal_url(self):
         url = 'http://wbsrch.com/tutorial/'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial/')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/tutorial/')
 
     def test_third_normal_url(self):
         url = 'http://wbsrch.com/tutorial'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/tutorial')
 
     def test_query_url(self):
         url = 'http://wbsrch.com/search/?q=term&r=termtwo'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/search/?q=term&r=termtwo')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/search/?q=term&r=termtwo')
 
     def test_another_query_url(self):
         url = 'http://wbsrch.com/index.php?q=term&r=termtwo'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_sessionid_url(self):
         url = 'http://wbsrch.com/index.php?q=term&r=termtwo&PHPSESSID=1234567abc'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_utm_url(self):
         url = 'http://wbsrch.com/index.php?q=term&r=termtwo&utm_source=abc&utm_medium=def&utm_campaign=456&utm_term=789&utm_content=123'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/index.php?q=term&r=termtwo')
+
+    def test_sub1_url(self):
+        url = 'http://ww16.skateboarder.fashion/?sub1=20210212-1625-0541-b345-64c8e2e71c44'
+        self.assertEqual(NormalizeUrl(url), 'http://ww16.skateboarder.fashion/')
 
     def test_sessionid_lower_url(self):
         url = 'http://wbsrch.com/index.php?q=term&r=termtwo&jsessionid=1234567abc'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_justsessionid_url(self):
         url = 'http://wbsrch.com/index.php?zenid=1234567abc'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/index.php')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/index.php')
 
     def test_fragment_url(self):
         url = 'http://wbsrch.com/tutorial.htm#fragment'
-        self.assertEqual(NormalizeUrl(url), u'http://wbsrch.com/tutorial.htm')
+        self.assertEqual(NormalizeUrl(url), 'http://wbsrch.com/tutorial.htm')
 
     def test_https_subdomain_url(self):
         url = 'https://el.wbsrch.com/tutorial.htm'
-        self.assertEqual(NormalizeUrl(url), u'https://el.wbsrch.com/tutorial.htm')
+        self.assertEqual(NormalizeUrl(url), 'https://el.wbsrch.com/tutorial.htm')
 
     def test_port_url(self):
         url = 'https://wbsrch.com:8080/tutorial.htm'
-        self.assertEqual(NormalizeUrl(url), u'https://wbsrch.com:8080/tutorial.htm')
+        self.assertEqual(NormalizeUrl(url), 'https://wbsrch.com:8080/tutorial.htm')
 
     def test_capital_url(self):
         url = 'https://DE.WBSRCH.COM/tutorial.htm'
 
-        self.assertEqual(NormalizeUrl(url), u'https://de.wbsrch.com/tutorial.htm')
+        self.assertEqual(NormalizeUrl(url), 'https://de.wbsrch.com/tutorial.htm')
 
     def test_capital_after_url(self):
         url = 'https://es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM'
-        self.assertEqual(NormalizeUrl(url), u'https://es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM')
+        self.assertEqual(NormalizeUrl(url), 'https://es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM')
 
     def test_mixed_capital_url(self):
         url = 'https://fr.WBSRCH.com/TUTORIAL_and_WHATNOT.htm'
-        self.assertEqual(NormalizeUrl(url), u'https://fr.wbsrch.com/TUTORIAL_and_WHATNOT.htm')
+        self.assertEqual(NormalizeUrl(url), 'https://fr.wbsrch.com/TUTORIAL_and_WHATNOT.htm')
 
 class MakeRealUrlTestCase(TestCase):
     def test_doubleslash_domain_url(self):
         url = '//wbsrch.com/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url), 'http://wbsrch.com/tutorial.htm')
 
     def test_slash_url(self):
         url = '/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial.htm')
 
     def test_slash_url2(self):
         url = '/tutorial.html'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.html')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial.html')
 
     def test_slash_url3(self):
         url = '/tutorial.php'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.php')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial.php')
 
     def test_colonslash_url6(self):
         url = '://tutorial.site/tutorial.php'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://tutorial.site/tutorial.php')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://tutorial.site/tutorial.php')
 
     def test_colonslash_url7(self):
         url = '//tutorial.site/tutorial/'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://tutorial.site/tutorial/')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://tutorial.site/tutorial/')
 
     def test_slash_url5(self):
         url = '/tutorial/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial/tutorial.htm')
 
     def test_doubleslash_domainurl(self):
         url = '//wbsrch.com/tutorial/'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial/')
 
     def test_justdomain_nohttp(self):
         # Pass in domain to make it work.
         url = 'wbsrch.com/tutorial/'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial/')
 
     def test_justdomain_nohttp2(self):
         url = 'wbsrch.com/tutorial/'
-        self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial/')
+        self.assertEqual(MakeRealUrl(url), 'http://wbsrch.com/tutorial/')
 
     def test_justdomain_nohttp3(self):
         url = 'browser.wbsrch.com/tutorial/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url), u'http://browser.wbsrch.com/tutorial/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url), 'http://browser.wbsrch.com/tutorial/tutorial.htm')
 
     def test_doubleslash_domainurl2(self):
         url = '//wbsrch.com'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com')
 
     def test_nakeddomain(self):
         url = 'wbsrch.com'
-        self.assertEqual(MakeRealUrl(url, None), u'http://wbsrch.com')
+        self.assertEqual(MakeRealUrl(url, None), 'http://wbsrch.com')
 
     def test_nakeddomain2(self):
         url = 'browser.wbsrch.com'
-        self.assertEqual(MakeRealUrl(url), u'http://browser.wbsrch.com')
+        self.assertEqual(MakeRealUrl(url), 'http://browser.wbsrch.com')
 
     def test_doubleslash_domainurl3(self):
         url = '//wbsrch.com/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial.htm')
 
     def test_colondoubleslash_domainurl(self):
         url = '://wbsrch.com/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial.htm')
 
     def test_doubleslash_domainurl4(self):
         url = '//wbsrch.com/'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/')
 
     def test_doubleslash_domainurl5(self):
         url = '//wbsrch.com/tutorial/cheese/crackers/'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial/cheese/crackers/')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial/cheese/crackers/')
 
     def test_doubleslash_domainurl6(self):
         url = '//someothersite.com'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://someothersite.com')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://someothersite.com')
 
     def test_doubleslash_domainurl7(self):
         url = '//someothersite.com/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://someothersite.com/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://someothersite.com/tutorial.htm')
 
     def test_doubleslash_domainurl8(self):
         url = '//someothersite.com?name=me'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://someothersite.com?name=me')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://someothersite.com?name=me')
 
     def test_noslash_domainurl1(self):
         url = 'tutorial.htm'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial.htm')
 
     def test_noslash_domainurl2(self):
         url = 'tutorial?name=me'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/tutorial?name=me')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/tutorial?name=me')
 
     def test_noslash_domainurl3(self):
         url = 'pages/tutorial?name=me'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/pages/tutorial?name=me')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/pages/tutorial?name=me')
 
     def test_noslash_domainurl4(self):
         url = 'tutorial?name=me'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', secure=True), u'https://wbsrch.com/tutorial?name=me')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com', secure=True), 'https://wbsrch.com/tutorial?name=me')
 
     def test_noslash_domainurl5(self):
         url = 'pages/tutorial?name=me'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', True), u'https://wbsrch.com/pages/tutorial?name=me')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com', True), 'https://wbsrch.com/pages/tutorial?name=me')
 
     def test_slash_domainurl_b(self):
         url = '/pages/tutorial?name=me'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com', True), u'https://wbsrch.com/pages/tutorial?name=me')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com', True), 'https://wbsrch.com/pages/tutorial?name=me')
 
     def test_normal_url(self):
         url = 'http://wbsrch.com/tutorial'
-        self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial')
+        self.assertEqual(MakeRealUrl(url), 'http://wbsrch.com/tutorial')
 
     def test_query_url(self):
         url = 'http://wbsrch.com/search/?q=term&r=termtwo'
-        self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/search/?q=term&r=termtwo')
+        self.assertEqual(MakeRealUrl(url), 'http://wbsrch.com/search/?q=term&r=termtwo')
 
     def test_doubleslash_query_url(self):
         url = '//wbsrch.com/index.php?q=term&r=termtwo'
-        self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
+        self.assertEqual(MakeRealUrl(url), 'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_sessionid_url(self):
         url = 'wbsrch.com/index.php?q=term&r=termtwo&PHPSESSID=1234567abc'
-        self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/index.php?q=term&r=termtwo')
+        self.assertEqual(MakeRealUrl(url), 'http://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_secure_utm_url(self):
         url = 'https://wbsrch.com/index.php?q=term&r=termtwo&utm_source=abc&utm_medium=def&utm_campaign=456&utm_term=789&utm_content=123'
-        self.assertEqual(MakeRealUrl(url), u'https://wbsrch.com/index.php?q=term&r=termtwo')
+        self.assertEqual(MakeRealUrl(url), 'https://wbsrch.com/index.php?q=term&r=termtwo')
 
     def test_javascript_url(self):
         url = 'javascript:void(0)'
-        self.assertEqual(MakeRealUrl(url), u'javascript:void(0)')
+        self.assertEqual(MakeRealUrl(url), 'javascript:void(0)')
 
     def test_mailto_url(self):
         url = 'mailto:bob@bob.com'
-        self.assertEqual(MakeRealUrl(url), u'mailto:bob@bob.com')
+        self.assertEqual(MakeRealUrl(url), 'mailto:bob@bob.com')
 
     def test_fileurlwithsessionid_url(self):
         url = 'index.php?zenid=1234567abc'
-        self.assertEqual(MakeRealUrl(url, u'wbsrch.com'), u'http://wbsrch.com/index.php')
+        self.assertEqual(MakeRealUrl(url, 'wbsrch.com'), 'http://wbsrch.com/index.php')
 
     def test_fragment_url(self):
         url = 'wbsrch.com/tutorial.htm#fragment'
-        self.assertEqual(MakeRealUrl(url), u'http://wbsrch.com/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url), 'http://wbsrch.com/tutorial.htm')
 
     def test_https_subdomain_url(self):
         url = 'https://el.wbsrch.com/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url), u'https://el.wbsrch.com/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url), 'https://el.wbsrch.com/tutorial.htm')
 
     def test_port_url(self):
         url = 'https://wbsrch.com:8080/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url), u'https://wbsrch.com:8080/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url), 'https://wbsrch.com:8080/tutorial.htm')
 
     def test_capital_url(self):
         url = 'https://DE.WBSRCH.COM/tutorial.htm'
-        self.assertEqual(MakeRealUrl(url), u'https://de.wbsrch.com/tutorial.htm')
+        self.assertEqual(MakeRealUrl(url), 'https://de.wbsrch.com/tutorial.htm')
 
     def test_capital_after_url(self):
         url = '//es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM'
-        self.assertEqual(MakeRealUrl(url), u'http://es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM')
+        self.assertEqual(MakeRealUrl(url), 'http://es.wbsrch.com/TUTORIAL_AND_WHATNOT.HTM')
 
     def test_mixed_capital_url(self):
         url = 'fr.WBSRCH.com/TUTORIAL_and_WHATNOT.htm'
-        self.assertEqual(MakeRealUrl(url), u'http://fr.wbsrch.com/TUTORIAL_and_WHATNOT.htm')
-
-class InfixLanguageTestCase(TestCase):
-    def test_english_infix(self):
-        url = 'https://www.wbsrch.com/en/welcome.htm'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_no_infix(self):
-        url = 'https://wbsrch.com/'
-        self.assertIsNone(GetInfixLanguage(url))
-
-    def test_swahili_infix(self):
-        url = 'https://wbsrch.com/swahili/web/site/'
-        self.assertEqual('sw', GetInfixLanguage(url))
-
-    def test_danish_infix(self):
-        url = 'http://www.sbs.com.au/yourlanguage/danish/'
-        self.assertEqual('da', GetInfixLanguage(url))
-
-    def test_german_infix(self):
-        url = 'http://www.sbs.com.au/yourlanguage/german/'
-        self.assertEqual('de', GetInfixLanguage(url))
-
-    def test_de_de_infix(self):
-        url = 'http://www.example.com/de-de/index/'
-        self.assertEqual('de', GetInfixLanguage(url))
-
-    def test_fr_fr_infix(self):
-        url = 'http://www.example.com/fr-fr/'
-        self.assertEqual('fr', GetInfixLanguage(url))
-
-    def test_fr_fr_uppercaseinfix(self):
-        url = 'http://www.example.com/fr-FR/'
-        self.assertEqual('fr', GetInfixLanguage(url))
-
-    def test_fr_fr_uppercaseunderscoreinfix(self):
-        url = 'http://www.example.com/fr_FR/'
-        self.assertEqual('fr', GetInfixLanguage(url))
-
-    def test_fr_fr_underscoreinfix(self):
-        url = 'http://www.example.com/fr_fr/'
-        self.assertEqual('fr', GetInfixLanguage(url))
-
-    def test_sv_se_infix(self):
-        url = 'http://www.example.com/sv-se/'
-        self.assertEqual('sv', GetInfixLanguage(url))
-
-    def test_sv_se_underscoreinfix(self):
-        url = 'http://www.example.com/sv_se/'
-        self.assertEqual('sv', GetInfixLanguage(url))
-
-    def test_fr_ch_infix(self):
-        url = 'http://www.example.com/fr-ch/index.htm'
-        self.assertEqual('fr', GetInfixLanguage(url))
-
-    def test_en_za_infix(self):
-        url = 'http://www.example.com/en-za/site/index/'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_es_es_infix(self):
-        url = 'http://www.example.com/es-es/index.htm'
-        self.assertEqual('es', GetInfixLanguage(url))
-
-    def test_uppercase_infix(self):
-        url = 'http://www.example.com/SW/index.htm'
-        self.assertEqual('sw', GetInfixLanguage(url))
-
-    def test_it_it_infix(self):
-        url = 'http://www.example.com/it-it/index/page.htm'
-        self.assertEqual('it', GetInfixLanguage(url))
-
-    def test_langname_infix(self):
-        url = 'http://www.example.com/italian/index/page.htm'
-        self.assertEqual('it', GetInfixLanguage(url))
-
-    def test_shortlangname_infix(self):
-        url = 'http://www.example.com/por/index/page.htm'
-        self.assertEqual('pt', GetInfixLanguage(url))
-
-    def test_ru_infix(self):
-        url = 'http://www.example.com/ru/index/page.htm'
-        try:
-            GetInfixLanguage(url)
-        except InvalidLanguageException as e:
-            self.assertEqual(e.language, u'ru')
-
-    def test_zh_cn_infix(self):
-        url = 'http://www.example.com/zh-cn/index/page.htm'
-        try:
-            GetInfixLanguage(url)
-        except InvalidLanguageException as e:
-            self.assertEqual(e.language, u'zh')
-
-    def test_uk_uk_infix(self):
-        url = 'http://www.example.com/uk-UA/index/page.htm'
-        try:
-            GetInfixLanguage(url)
-        except InvalidLanguageException as e:
-            self.assertEqual(e.language, u'uk')
-
-    def test_somali_infix(self):
-        url = 'http://www.bbc.co.uk/somali/topics/video'
-        self.assertEqual('so', GetInfixLanguage(url))
-
-    def test_somali_infix_again(self):
-        url = 'http://www.bbc.co.uk/somali'
-        self.assertEqual('so', GetInfixLanguage(url))
-
-    def test_hausa_infix(self):
-        url = 'https://wbsrch.com/hausa'
-        self.assertEqual('ha', GetInfixLanguage(url))
-
-    def test_turkce__infix(self):
-        url = 'https://wbsrch.com/turkce/index.htm'
-        self.assertEqual('tr', GetInfixLanguage(url))
-
-    def test_portuguese_infix(self):
-        url = 'https://wbsrch.com/portuguese'
-        self.assertEqual('pt', GetInfixLanguage(url))
-
-    def test_invalid_infix(self):
-        url = 'https://wbsrch.com/de-ca/welcome.htm'
-        self.assertIsNone(GetInfixLanguage(url))
-
-    def test_no_infix_with_prefix(self):
-        url = 'https://de.wbsrch.com/welcome.htm'
-        self.assertIsNone(GetInfixLanguage(url))
-
-    def test_french_infix(self):
-        url = 'https://www.wbsrch.com/fr/welcome/index.php'
-        self.assertEqual('fr', GetInfixLanguage(url))
-
-    # These are specific use cases that have failed in production in the past.
-
-    def test_tough_infix1(self):
-        url = 'http://www.myswitzerland.com/de-ch/empfehlungen/sommerferien.html'
-        self.assertEqual('de', GetInfixLanguage(url))
-
-    def test_tough_infix2(self):
-        url = 'https://www.xing.com/company/haufe-gruppe'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_tough_infix3(self):
-        url = 'http://www.bloglovin.com/wolfj'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_tough_infix4(self):
-        url = 'http://www.dell.com/co/empresas/p/latitude-laptops.aspx?s=bsd&c=co&%7Eck=mn&l=es'
-        self.assertEqual('es', GetUrlParameterLanguage(url))
-
-    def test_tough_infix5(self):
-        url = 'http://studybible.info/Hungarian/1%20Corinthians'
-        self.assertEqual('hu', GetInfixLanguage(url))
-
-    def test_tough_infix6(self):
-        url = 'http://studybible.info/Croatian/1%20Corinthians'
-        self.assertEqual('hr', GetInfixLanguage(url))
-
-    def test_tough_infix7(self):
-        url = 'http://studybible.info/Estonian/1%20Corinthians'
-        self.assertEqual('et', GetInfixLanguage(url))
-
-    def test_tough_infix8(self):
-        url = 'http://studybible.info/Danish/1%20Corinthians'
-        self.assertEqual('da', GetInfixLanguage(url))
-
-    def test_tough_infix9(self):
-        url = 'http://www.zomato.com/london/kings-cross-restaurants'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_tough_infix10(self):
-        url = 'http://www.rhonealpesjob.com/wolseleyfrance'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_tough_infix11(self):
-        url = 'http://subtitlesbank.com/cs/subtitles/language/fr/'
-        self.assertEqual('cs', GetInfixLanguage(url))
-
-    def test_tough_infix12(self):
-        url = 'http://subtitlesbank.com/el/subtitles/language/fr/'
-        self.assertEqual('el', GetInfixLanguage(url))
-
-    def test_tough_infix13(self):
-        url = 'http://www.bloglovin.com/littlecoltposts'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_tough_infix14(self):
-        url = 'https://www.fedex.com/lite/lite-ship.html?locale=en_gb&cntry_code=gb'
-        self.assertEqual('en', GetUrlParameterLanguage(url))
-
-    def test_tough_infix15(self):
-        url = 'http://www.gmx.net/magazine/wirtschaft/haushalt-strom-sparen-18916260'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_tough_infix16(self):
-        url = 'http://newpressrelease.com/finance/71851-how-to-choose-an-unsecured-line-of-credit'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_tough_infix17(self):
-        url = 'http://www.adtech.com/products/lite.html'
-        self.assertEqual('en', GetInfixLanguage(url))
-
-    def test_tough_infix18(self):
-        url = 'http://www.directorioforuns.com/pt/tag/mundo/az'
-        self.assertEqual('pt', GetInfixLanguage(url))
+        self.assertEqual(MakeRealUrl(url), 'http://fr.wbsrch.com/TUTORIAL_and_WHATNOT.htm')
 
 
 class PageLanguageTestCase(TestCase):
@@ -2129,7 +1929,7 @@ class IndexUtilsTestCase(TestCase):
         self.assertEqual(found, 0)
 
     def removeFromGreekPendingTestCase(self):
-        RemoveFromPending('zeus', u'el')
+        RemoveFromPending('zeus', 'el')
         found = PendingIndex_el.objects.filter(keywords='zeus').count()
         self.assertEqual(found, 0)
 
@@ -2679,19 +2479,19 @@ class WhoisTestCase(TestCase):
 
 class ReverseWWWTestCase(TestCase):
     def testroot(self):
-        self.assertEqual(ReverseWWW(u'example.com'), u'www.example.com')
+        self.assertEqual(ReverseWWW(u'example.com'), 'www.example.com')
 
     def testwww(self):
-        self.assertEqual(ReverseWWW(u'example.com'), u'www.example.com')
+        self.assertEqual(ReverseWWW(u'example.com'), 'www.example.com')
 
     def testrootonlytld(self):
-        self.assertEqual(ReverseWWW(u'example.com', True), u'www.example.com')
+        self.assertEqual(ReverseWWW(u'example.com', True), 'www.example.com')
 
     def testrootonlywwwtld(self):
-        self.assertEqual(ReverseWWW(u'www.example.com', True), u'example.com')
+        self.assertEqual(ReverseWWW(u'www.example.com', True), 'example.com')
 
     def testrootonlysecondleveltld(self):
-        self.assertEqual(ReverseWWW(u'example.co.uk', True), u'www.example.co.uk')
+        self.assertEqual(ReverseWWW(u'example.co.uk', True), 'www.example.co.uk')
 
     def testrootonlysecondlevel(self):
         self.assertEqual(ReverseWWW(u'my.example.com', True), None)
