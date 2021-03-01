@@ -2016,7 +2016,7 @@ class ViewsTestCase(TestCase):
         response = self.client.get('/search/?q=cheese')
         self.assertEqual(response.status_code, 200)
         logs = SearchLog.objects.all().count()
-        self.assertEqual(logs, 2)
+        self.assertEqual(logs, 1)
 
     def testSearchCheese2(self):
         response = self.client.get('/search/?q=cheese&domain=cheese.com')
