@@ -1864,6 +1864,8 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
             del queryparams['utm_term']
         if 'utm_content' in queryparams:
             del queryparams['utm_content']
+        if 'sub1' in queryparams:
+            del queryparams['sub1']
         if 's' in queryparams:
             param = queryparams['s']
             if len(param) == 32:
