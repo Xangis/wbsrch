@@ -3846,7 +3846,11 @@ def GetPagesAverageAge(language):
     imodel = GetSiteInfoModelFromLanguage(language)
     now = timezone.now()
     for item in imodel.objects.values_list('lastcrawled', flat=True):
-        total_ages += now - item
+        try:
+            total_ages += now - item
+        except OverflowError:
+            print('Overflow Error: we have added up too much time for {0} pages.'.format(language))
+            return total_ages / total_items
         total_items += 1
     if total_items > 0:
         return total_ages / total_items
