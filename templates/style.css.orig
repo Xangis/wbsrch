@@ -491,6 +491,7 @@ margin-left: auto;
 margin-right: auto;
 margin-top: 4px;
 margin-bottom: 6px;
+text-align: center;
 width: 778px;
 background-color: #F9F9F9;
 padding: 2px;

@@ -9,15 +9,13 @@
 <title>{% trans "Top-Level Domain (ccTLD and TLD)" %} {% trans "Statistics" %} | WbSrch {% trans "Web Search" %}</title>
 {% include 'style.inc' %}
 {% include 'analytics.inc' %}
-<script type="text/javascript">
-    window._mNHandle = window._mNHandle || {};
-    window._mNHandle.queue = window._mNHandle.queue || [];
-    medianet_versionId = "3121199";
-</script>
 </head>
 <body>
 <div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch {% trans "Web Search" %} {% trans "Top-Level Domain" %} {% trans "Statistics" %}</h1></div>
 
+<div class="centerad" style="width: 782px; text-align: center; margin-left: auto; margin-right: auto;">
+{% include 'adsense.inc' %}
+</div>
 <table class="centered">
 <tr><td colspan="5">We know about {{ count }} top-level domains.<br/></td></tr>
 <tr><th>{% trans "Extension" %}</th><th>{% trans "Known Domains" %}</th><th>{% trans "Crawled Domains" %}</th><th>{% trans "Excluded Domains" %}</th><th>{% trans "Exclude/Crawl Ratio (%)" %}</tr>
@@ -26,11 +24,8 @@
 {% endfor %}
 <tr><td colspan="5"><br/>The number of known domains includes domains that may have expired since discovery.</td></tr>
 <tr><td colspan="5" class="centered"><br/>For index stats, please see the <a href="/index-stats/">index stats page</a></td><tr>
-<tr><td colspan="5" class="centered"><br/>If you would like a full list of the domains included in the WbSrch search index, please visit the <a href="https://wbsrch.onfastspring.com/">WbSrc data shop</a>.</td><tr>
+<tr><td colspan="5" class="centered"><br/>If you would like a full list of the domains included in the WbSrch search index, please visit the <a href="https://wbsrch.onfastspring.com/">WbSrch data shop</a>.</td><tr>
 </table>
-<div class="centerad">
-{% include 'adsense.inc' %}
-</div>
 <br /><p class="centered"><a href="/search/">{% trans "Back to search form" %}.</a></p><br />
 {% include 'footer.inc' %}
 </body>

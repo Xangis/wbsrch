@@ -27,11 +27,11 @@
 
 <p>There are also no third-party services that are authorized to submit URLs. If someone claims that they add URLs to WbSrch, they are lying. Do not do business with them.</p>
 
-<p>It is, however, possible to submit your site for inclusion on <a href="https://stats.wbsrch.com">stats.wbsrch.com</a>.</p>
+<p>It is, however, possible to submit your site for inclusion on <a href="https://stats.wbsrch.com">stats.wbsrch.com</a>. This might be the fastest way to have a site included because we occasionally import data from there.</p>
 
 <p><strong>How much information are you gathering from my searches?</strong></p>
 
-<p>We don't keep track of who you are, and frankly don't care. We're not trying to build a dossier of information about you like some other providers. We do currently use Google Analytics to keep track of general site metrics. The data we store when you search looks like this:</p>
+<p>We don't keep track of who you are and don't really think it's useful to do so. We're not trying to build a dossier of information about you like some other providers. We do currently use both <a href="https://analytics.wbsrch.com">WbSrch Analytics</a> and Google Analytics to keep track of general site metrics. The data we store when you search looks like this:</p>
 
 <table class="inline">
 <tr><th>Keywords</th><th>Result count</th><th>Search time</th><th>Date</th><th>IP</th><th>Indexed</th><th>Referer</th><th>Browser</th></tr>
@@ -42,13 +42,15 @@
 
 <p>There is no such thing as a WbSrch user account, so search history is not connected with a specific person. We do not keep a machine fingerprint or use cookies to link search activity history to a specific machine or person.</p>
 
-<p>We also don't store any personally-identifiable information in cookies. You can disable cookies on this site without any loss of functionality. We do use Google Analytics for visitor tracking, so Google may place an ID for that in a cookie. You can disable that if you want with plugins like Ghostery, and we have no way to link that ID to search history.</p>
+<p>We also don't store any personally-identifiable information in cookies. You can disable cookies on this site without any loss of functionality.</p>
 
 <p>So, in short, we do track some things, but we don't track <em>YOU</em>.</p>
 
+<p>We also reserve the right to sell any data that we gather. This would most likely be in the form of a keyword analysis tool or other SEO-related data.</p>
+
 <p><strong>What if I look up my domain and find that my site was wrongly excluded from the index?</strong></p>
 
-<p>Most often that's an unintentional language classification issue -- perhaps you have some Russian pages on your site but the whole thing isn't in Russian. If it's something that's OK by our <a href="/policy/">inclusion policy</a> we would be willing to unblock it if we had a support team. We don't have any support people.</p>
+<p>Most often that's an unintentional language classification issue -- perhaps you have some Russian pages on your site but the whole thing isn't in Russian. If it's something that's OK by our <a href="/policy/">inclusion policy</a> we would be willing to unblock it if we had a support team. We don't have any dedicated support people yet.</p>
 
 <p><strong>What if there's a site is in the search results that shouldn't be (i.e. porn, torrent, or Chinese language sites)?</strong></p>
 
@@ -74,9 +76,9 @@
 
 <p><strong>You say you don't have investors. Does that mean that this will go away when you run out of money?</strong></p>
 
-<p>Yes. WbSrch was shut down in mid-2016 and was offline until early 2018 because we were broke.</p>
+<p>Yes. WbSrch was shut down in mid-2016 and was offline until early 2018 and from mid-2019 until late 2020 because we were broke.</p>
 
-<p>It's currently back in a much smaller form as just a hobby open source project.</p>
+<p>Since it's basically a hobby project that we'd like to turn into a business, there's no guarantee we'll be around tomorrow. Of course, if you want to hand us money, we'd be glad to take it.</p>
 
 <p id="removal"><strong>What if I don't want to have my website indexed in your search engine?</strong></p>
 
@@ -84,7 +86,7 @@
 
 <p>People who don't understand SEO sometimes ask not to be linked to, incorrectly believing that it will somehow negatively impact their rankings in other search engines. We do not honor or respond to these requests and it is a waste of time to ask because all we do is mark your email as spam. We have no legal obligation to remove links to other websites, nor does a site have the right to decide who links to them.</p>
 
-<p>We support robots.txt and obey rules for the Google user agent. We don't look for own user agent because a statistically significant number of websites have not added rules specifically for WbSrch. We don't expect that they ever will.</p>
+<p>We support robots.txt and obey rules for the Google user agent. We don't look for own user agent because a statistically significant number of websites have not added rules specifically for WbSrch. We don't expect that they ever will, but if we notice that enough have, we'll likely switch to looking for our own user agent in robots.txt.</p>
 
 <p><strong>How does the recent EU "right to be forgotten" ruling affect WbSrch?</strong></p>
 
@@ -94,7 +96,7 @@
 
 <p>We believe that these autocorrect, while somewhat useful, is disrepectful to our users. We are not going to presume to know what you intended to type, but we may <em>suggest</em> a spelling correction once in a while.</p>
 
-<p>For autocomplete, we don't yet have enough data to do it well.</p>
+<p>For autocomplete, we don't yet have enough data to do it well, but we at leas try. It will gradually improve as people search for more things.</p>
 
 <p>There's also a problem with recommendation engines and suggestion-based systems: They're dehumanizing. They influence your decisions in subtle ways that cause you to conform ever so slightly to their algorithms. Over time, this causes everyone to be trained to become a little bit more like the algorithm expects them to be. You're better than that. Be a real person, and take responsibility for your typos.</p>
 
@@ -108,11 +110,11 @@
 
 <p><strong>How do you feel about the new generic top-level domain extensions?</strong></p>
 
-<p>We think they're generally a bad idea and a waste of money. We'll tend to rank them lower than more reputable extensions, such as .com, generally depending on the reputation of the extension.</p>
+<p>We think they're generally a bad idea and a waste of money. We'll tend to rank them lower than more reputable extensions, such as .com, generally depending on the reputation of the extension. For the most part we don't adjust a site's rankings based on TLD unless it appears to be a spam haven.</p>
 
 <p><strong>What technologies was WbSrch built with?</strong></p>
 
-<p>WbSrch was built entirely with open source tools, including <a href="http://www.ubuntu.com">Ubuntu Linux</a>, <a href="http://www.python.org">Python</a>, <a href="http://www.postgresql.org">PostgreSQL</a>, <a href="http://djangoproject.com">Django</a>, and <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a>.</p>
+<p>WbSrch was built entirely with open source tools, including <a href="http://www.ubuntu.com">Ubuntu Linux</a>, <a href="http://www.python.org">Python</a>, <a href="http://www.postgresql.org">PostgreSQL</a>, <a href="http://djangoproject.com">Django</a>, and <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a>. We're also developing prototypes with ElasticSearch.</p>
 
 <p><strong>How do you feel about link directories? Does adding my site to one affect my rankings?</strong></p>
 
@@ -122,21 +124,21 @@
 
 <p>We think guest blogging is great. It's a good way for readers of blogs with similar topics to find new reading material. We're not so afraid of people finding other sites without going through us that we'll demote sites that use guest bloggers. It won't affect your ranking in any way, so go for it.</strong></p>
 
-<p><strong>Can I follow you on Twitbook, Friendoogle, Face+, or other social sites?</strong></p>
+<p><strong>Can I follow you on social media?</strong></p>
 
-<p>We are <a href="https://twitter.com/WbSrchDotCom">@WbSrchDotCom</a> on Twitter and have a Facebook page. They're both linked to at the bottom of the English-language front page. We're not a fan of social media and don't spend much time there.</p>
+<p>We are <a href="https://twitter.com/WbSrchDotCom">@WbSrchDotCom</a> on Twitter and <a href="https://www.facebook.com/wbsrch">have a Facebook page</a>. They're both linked to at the bottom of the English-language front page. We're not a fan of social media because we think that social media sites make the world a worse place, so we don't spend much time there.</p>
 
-<p><strong>Why do I only see 250 results for a common search when you've crawled millions of pages?</strong></p>
+<p><strong>Why do I only see 100 results for a common search when you've crawled millions of pages?</strong></p>
 
-<p>We only show the top 250 results (or combine 250 results per word for not-fully-indexed searches) and don't show multiple pages of results.</p>
+<p>We only show the top 100 results and don't show multiple pages of results.</p>
 
-<p>If you can't find something in the first 250 items, which is page 25 on most other search engines, chances are low that you'll find it at all. Try being more specific or rephrasing your query if you don't see what you hoped for.</p>
+<p>If you can't find something in the first 100 items, which is page 10 on most other search engines, chances are low that you'll find it at all. Try being more specific or rephrasing your query if you don't see what you hoped for.</p>
 
 <p>It's possible we've just not found it yet. We're still pretty new.</p>
 
 <p><strong>Do I need JavaScript to use WbSrch?</strong></p>
 
-<p>Nope. You don't need JavaScript, Flash, Silverlight, Adobe Air, Java, or anything other than a working browser. Disabling JavaScript won't cause any problems.</p>
+<p>No. You don't need JavaScript, Flash, Silverlight, Adobe Air, Java, or anything other than a working browser. Disabling JavaScript won't cause any problems.</p>
 
 <p><strong>Does WbSrch work with text-only browsers like w3m and Lynx?</strong></p>
 

@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^index-stats/$', views.index_stats, name='index-stats'),
     url(r'^tld-stats/$', views.tld_stats, name='tld-stats'),
     url(r'^most-linked-to-domains/$', views.most_linked_domains, name='most-linked-domains'),
+    url(r'^languages/$', views.languages, name='languages'),
     # url(r'^feedback/$', views.feedback, name='feedback'),
     url(r'^criteria/$', views.criteria, name='criteria'),
     url(r'^terms/$', views.terms, name='terms'),

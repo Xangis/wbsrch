@@ -167,8 +167,8 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
                 print('Index term (unprintable) not found, cannot use for calculations.')
             continue
         # No point in adding up a word with no results, and this way we don't have to worry about divide by zero.
-        if word.num_pages == 0:
-            print('Index term {0} has zero results, nothing to calculate.')
+        if not word.num_pages or word.num_pages == 0:
+            print('Index term {0} has zero results, nothing to calculate.'.format(word.keywords))
             continue
         # All formula comments are spreadsheet formulas (assuming number of results for word in cell B2)
         # These formulas were calculated based on 8.8 million URLs in the English index and the index page

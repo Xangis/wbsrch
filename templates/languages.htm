@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n %}{% load extratags %}
 <!DOCTYPE html>
 <html lang="{{ language_code }}"><head>
 <meta name="keywords" content="wbsrch, web, {% trans "search" %}, {% trans "independent" %}, {% trans "index" %}, {% trans "statistics" %}, urls, counts, {% trans "directory" %}, {% trans "search engine" %}">
@@ -13,19 +13,11 @@
 <body>
 <div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch {% trans "Web Search" %} {% trans "Index" %} {% trans "Statistics" %}</h1></div>
 
-<div class="centerad" style="width: 782px; text-align: center; margin-left: auto; margin-right: auto;">
-{% include 'adsense.inc' %}
-</div>
 <table class="centered">
-<tr><th>{% trans "Language" %}</th><th>{% trans "# of" %} {% trans "URLs" %} {% trans "Crawled" %}</th><th>{% trans "# of" %} {% trans "Terms" %} {% trans "Indexed" %}</th><th>{% trans "Pending" %} {% trans "Indexes" %}</th></tr>
-{% for language in stats.langs %}
-{% if not language.hidden %}
-<tr><td><a href="https://{% if language.prefix != 'en' %}{{ language.prefix }}.{% endif %}wbsrch.com">{% trans language.lang %}</a></td><td id="{{ language.lang }}pages">{{ language.count }}</td><td>{{ language.indexes }}</td><td>{{ language.pending_indexes }}</td></tr>
-{% endif %}
+<tr><th>{% trans "Choose" %} a {% trans "Language" %}</th><th></tr>
+{% for language in language_list %}
+<tr><td><a href="https://{% if language != 'en' %}{{ language }}.{% endif %}wbsrch.com">{{ language|language_name_local|capfirst }}</a> ({{ language|language_name_safe }})</td></tr>
 {% endfor %}
-<tr><td>{% trans "Total" %}</td><td>{{ stats.total_urls }}</td><td>{{ stats.total_indexes }}</td><td>{{ stats.total_pendingindexes }}</td></tr>
-<tr><td colspan="4" class="centered">{% trans "Excluded" %} {% trans "Domains" %}: {{ stats.num_excluded }}</td><tr>
-<tr><td colspan="4" class="centered"><br/>For top-level domain stats, please see the <a href="/tld-stats/">TLD stats page</a></td><tr>
 </table>
 <br /><p class="centered"><a href="/search/">{% trans "Back to search form" %}.</a></p><br />
 {% include 'footer.inc' %}
