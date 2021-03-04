@@ -338,8 +338,8 @@ class Command(BaseCommand):
                         pi.keywords = keywords
                         pi.date_added = item['date_added']
                         pi.reason = item['reason']
-                        if priority in item:
-                            pi.priority = priority
+                        if 'priority' in item:
+                            pi.priority = item['priority']
                         else:
                             pi.priority = 2
                         pi.save()
