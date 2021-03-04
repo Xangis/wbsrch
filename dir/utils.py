@@ -1658,7 +1658,7 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
                     print("MoveSiteTo: Keywords '{0}' added to {1} pending index.".format(keyword.keywords, existlang))
                 except Exception:
                     print("MoveSiteTo: Keywords added to {0} pending index.".format(existlang))
-            AddPendingTerm(keyword.keywords, existlang, 'Site {0} moved to {1} and it ranks {2} for {3}'.format(site, language, keyword.rank, keyword.keywords))
+            AddPendingTerm(keyword.keywords, existlang, 'Site {0} moved to {1} and it ranks {2} for {3}'.format(site, language, keyword.rank, keyword.keywords, priority=3))
         # Set the domain's language. If we're moving a URL parameter or langid page, this is a noop.
         SetDomainLanguage(site.rooturl, language)
     elif tag_as_subdir:
@@ -2435,7 +2435,7 @@ def ClearErrors(url):
     url.save()
 
 
-def AddPendingTerm(item, language_code='en', reason=None):
+def AddPendingTerm(item, language_code='en', reason=None, priority=2):
     if BannedSearchString(item):
         return
     pending_model = GetPendingIndexModelFromLanguage(language_code)
@@ -2456,6 +2456,7 @@ def AddPendingTerm(item, language_code='en', reason=None):
     except ObjectDoesNotExist:
         new_index = pending_model()
         new_index.keywords = item
+        new_index.priority = priority
         if reason and len(reason) > 239:
             reason = reason[0:240]
         new_index.reason = reason
@@ -2543,7 +2544,7 @@ def TrySearchTerm(text, language_code):
         term = term_model.objects.get(keywords=lowerterm)
         return term
     except ObjectDoesNotExist:
-        AddPendingTerm(lowerterm, language_code, 'Search {0} not indexed yet.'.format(text))
+        AddPendingTerm(lowerterm, language_code, 'Search {0} not indexed yet.'.format(text), priority=1)
         return None
 
 
@@ -2594,7 +2595,7 @@ def CreatePlaceholderIndexTerm(text, language_code):
             term = term_model.objects.get(keywords=text)
         term = JsonifyIndexTerm(term, language_code)
     # Add this to pending so we get a non-half-assed version.
-    AddPendingTerm(text, language_code, 'Search {0} not indexed yet.'.format(text))
+    AddPendingTerm(text, language_code, 'Search {0} not indexed yet.'.format(text), priority=1)
     return term
 
 

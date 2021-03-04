@@ -709,7 +709,7 @@ def search(request):
         term = TrySearchTerm(result.searchterm, result.language_code)
         if term:
             if term.date_indexed < (timezone.now() - timedelta(days=INDEX_TERM_STALE_DAYS)) and not term.actively_blocked and not term.refused and (len(term.keywords) > 2):
-                AddPendingTerm(term.keywords, result.language_code, 'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
+                AddPendingTerm(term.keywords, result.language_code, 'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS), priority=4)
             result = MergeSearchResult(result, term)
         else:
             create_placeholders = False
@@ -725,7 +725,7 @@ def search(request):
                 try:
                     term = term_model.objects.get(keywords=item)
                     if term.date_indexed < (timezone.now() - timedelta(days=INDEX_TERM_STALE_DAYS)) and not term.actively_blocked and not term.refused and (len(term.keywords) > 2):
-                        AddPendingTerm(term.keywords, result.language_code, 'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS))
+                        AddPendingTerm(term.keywords, result.language_code, 'Searched for term older than {0} days'.format(INDEX_TERM_STALE_DAYS), priority=4)
                     result = MergeSearchResult(result, term, bonus_existing=True)
                 except ObjectDoesNotExist:
                     if create_placeholders:

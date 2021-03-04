@@ -201,6 +201,15 @@ RANK_ADJUSTMENTS = (
     (2, 'Much Higher'),
 )
 
+PRIORITY_CHOICES = (
+    (0, 'Highest'),
+    (1, 'High'),
+    (2, 'Medium'),
+    (3, 'Low'),
+    (4, 'Lowest')
+)
+
+
 class BlockedSite(models.Model):
     url = models.TextField(blank=False, unique=True, db_index=True)
     reason = models.IntegerField(null=True, blank=True, choices=EXCLUDED_SITE_REASONS)
@@ -650,6 +659,7 @@ class PendingIndexBase(models.Model):
     keywords = models.CharField(max_length=240, unique=True)
     date_added = models.DateTimeField(auto_now_add=True)
     reason = models.CharField(max_length=240, blank=True, null=True)
+    priority = models.IntegerField(choices=PRIORITY_CHOICES, blank=True, default=2, db_index=True)
 
     class Meta:
         in_db = 'indexes'

@@ -87,7 +87,7 @@ def GetPendingIndexes(max, offset=0, language='en', verbose=False, random=False)
     if random:
         pending = index_model.objects.all().order_by('?')[offset:max + offset]
     else:
-        pending = index_model.objects.all().order_by('date_added')[offset:max + offset]
+        pending = index_model.objects.all().order_by('priority', 'date_added')[offset:max + offset]
     print('Loading pending indexes from {0} database: '.format(language))
     for item in pending:
         pendingindexes.append(item.keywords)
