@@ -19,11 +19,13 @@ class Command(BaseCommand):
     Two-way sync with master indexes server.
     """
     def add_arguments(self, parser):
-        parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Comma-separated languages to use for pending indexes, "all" for everything (default=en).')
+        parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Comma-separated languages to use for pending indexes, "all" for everything, "allbuteng" for all but English (default=en).')
         parser.add_argument('-n', '--nodomains', default='en', action='store_true', dest='nodomains', help='Do not sync DomainInfo (default=False).')
 
     def handle(self, *args, **options):
-        if options['language'] != 'all':
+        if options['language'] == 'allbuteng':
+            languages = language_list[1:]
+        elif options['language'] != 'all':
             languages = options['language'].split(',')
         else:
             languages = language_list
@@ -336,6 +338,10 @@ class Command(BaseCommand):
                         pi.keywords = keywords
                         pi.date_added = item['date_added']
                         pi.reason = item['reason']
+                        if priority in item:
+                            pi.priority = priority
+                        else:
+                            pi.priority = 2
                         pi.save()
                         pendingindex_model.objects.filter(pk=pi.pk).update(date_added=item['date_added'])
                         count += 1
