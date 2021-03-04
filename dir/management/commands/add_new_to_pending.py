@@ -2,8 +2,7 @@
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from dir.models import DomainInfo
-from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl
-from dir.views import CleanSearchTerm
+from dir.utils import AddPendingTerm, GetIndexModelFromLanguage, GetRootUrl, CleanSearchText
 import codecs
 
 
@@ -77,7 +76,7 @@ class Command(BaseCommand):
                                     except Exception:
                                         pass
                                 try:
-                                    print('{0}.'.format(word))
+                                    print('{0}'.format(word))
                                 except Exception:
                                     pass
                                 numadded = numadded + 1
