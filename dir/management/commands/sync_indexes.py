@@ -21,6 +21,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Comma-separated languages to use for pending indexes, "all" for everything, "allbuteng" for all but English (default=en).')
         parser.add_argument('-n', '--nodomains', default='en', action='store_true', dest='nodomains', help='Do not sync DomainInfo (default=False).')
+        parser.add_argument('-j', '--justlogs', default='en', action='store_true', dest='justlogs', help='Only download search logs and pending indexes, do not upload any data, overrides every other setting. (default=False).')
 
     def handle(self, *args, **options):
         if options['language'] == 'allbuteng':
@@ -29,6 +30,9 @@ class Command(BaseCommand):
             languages = options['language'].split(',')
         else:
             languages = language_list
+        justlogs = False
+        if 'justlogs' in options:
+            justlogs = True
         print('Syncing indexes for languages: {0}'.format(languages))
         with connections['live_indexes'].cursor() as cursor:
             #
@@ -137,43 +141,45 @@ class Command(BaseCommand):
             print('Added {0} new IPSearchLog entries'.format(count))
 
             # Blocked sites
-            query = "SELECT * FROM dir_blockedsite ORDER BY date_added DESC LIMIT 1"
-            cursor.execute(query)
-            newest_date = '2010-01-01'
-            for item in dictfetchall(cursor):
-                newest_date = item['date_added']
-                print('Last blocked site: {0}'.format(newest_date))
-            last_blockedsites = BlockedSite.objects.filter(date_added__gt=newest_date).order_by('date_added')
-            print('Newer blocked sites:')
-            count = 0
-            for item in last_blockedsites:
-                print(item.__dict__)
-                query = "INSERT INTO dir_blockedsite (url, reason, detailedreason, exclude_subdomains, date_added) VALUES (%s, %s, %s, %s, %s)"
-                cursor.execute(query, [item.url, item.reason, item.detailedreason, item.exclude_subdomains, item.date_added])
-                count += 1
-            print('Added {0} new BlockedSite entries'.format(count))
+            if not justlogs:
+                query = "SELECT * FROM dir_blockedsite ORDER BY date_added DESC LIMIT 1"
+                cursor.execute(query)
+                newest_date = '2010-01-01'
+                for item in dictfetchall(cursor):
+                    newest_date = item['date_added']
+                    print('Last blocked site: {0}'.format(newest_date))
+                last_blockedsites = BlockedSite.objects.filter(date_added__gt=newest_date).order_by('date_added')
+                print('Newer blocked sites:')
+                count = 0
+                for item in last_blockedsites:
+                    print(item.__dict__)
+                    query = "INSERT INTO dir_blockedsite (url, reason, detailedreason, exclude_subdomains, date_added) VALUES (%s, %s, %s, %s, %s)"
+                    cursor.execute(query, [item.url, item.reason, item.detailedreason, item.exclude_subdomains, item.date_added])
+                    count += 1
+                print('Added {0} new BlockedSite entries'.format(count))
 
             # Index stats
-            query = "SELECT * FROM dir_indexstats ORDER BY create_date DESC LIMIT 1"
-            cursor.execute(query)
-            newest_date = '2010-01-01'
-            for item in dictfetchall(cursor):
-                newest_date = item['create_date']
-                print('Last index stats: {0}'.format(newest_date))
-            last_indexstats = IndexStats.objects.filter(create_date__gt=newest_date).order_by('create_date')
-            print('Newer index stats:')
-            count = 0
-            for item in last_indexstats:
-                print(item.__dict__)
-                query = "INSERT INTO dir_indexstats (num_excluded, langs, total_urls, total_indexes, total_pendingindexes, create_date, most_linked_to_domains, last_most_linked_to, generation_time) VALUES ({0}, '{1}', {2}, {3}, {4}, '{5}', '{6}', '{7}', {8})".format(
-                    item.num_excluded, item.langs, item.total_urls, item.total_indexes, item.total_pendingindexes, item.create_date, item.most_linked_to_domains, item.last_most_linked_to, item.generation_time)
-                print(query)
+            if not justlogs:
+                query = "SELECT * FROM dir_indexstats ORDER BY create_date DESC LIMIT 1"
                 cursor.execute(query)
-                count += 1
-            print('Added {0} new IndexStats entries'.format(count))
+                newest_date = '2010-01-01'
+                for item in dictfetchall(cursor):
+                    newest_date = item['create_date']
+                    print('Last index stats: {0}'.format(newest_date))
+                last_indexstats = IndexStats.objects.filter(create_date__gt=newest_date).order_by('create_date')
+                print('Newer index stats:')
+                count = 0
+                for item in last_indexstats:
+                    print(item.__dict__)
+                    query = "INSERT INTO dir_indexstats (num_excluded, langs, total_urls, total_indexes, total_pendingindexes, create_date, most_linked_to_domains, last_most_linked_to, generation_time) VALUES ({0}, '{1}', {2}, {3}, {4}, '{5}', '{6}', '{7}', {8})".format(
+                        item.num_excluded, item.langs, item.total_urls, item.total_indexes, item.total_pendingindexes, item.create_date, item.most_linked_to_domains, item.last_most_linked_to, item.generation_time)
+                    print(query)
+                    cursor.execute(query)
+                    count += 1
+                print('Added {0} new IndexStats entries'.format(count))
 
             # Domain info
-            if not options['nodomains']:
+            if not options['nodomains'] and not justlogs:
                 query = "SELECT * FROM dir_domaininfo ORDER BY last_updated DESC LIMIT 1"
                 cursor.execute(query)
                 newest_date = '2010-01-01'
@@ -247,17 +253,18 @@ class Command(BaseCommand):
                 print('Skipping DomainInfo sync because nodomains = True')
 
             # Domain suffixes
-            last_domainsuffix = DomainSuffix.objects.all().order_by('-last_updated').first()
-            if last_domainsuffix:
-                newest_date = last_domainsuffix.last_updated
-            else:
-                newest_date = '2010-01-01'
-            print('Last domain suffix: {0}'.format(newest_date))
-            query = "SELECT * FROM dir_domainsuffix WHERE last_updated > %s ORDER BY last_updated"
-            cursor.execute(query, [newest_date])
-            print('Newer domain suffixes:')
-            for item in dictfetchall(cursor):
-                print(item)
+            if not justlogs:
+                last_domainsuffix = DomainSuffix.objects.all().order_by('-last_updated').first()
+                if last_domainsuffix:
+                    newest_date = last_domainsuffix.last_updated
+                else:
+                    newest_date = '2010-01-01'
+                print('Last domain suffix: {0}'.format(newest_date))
+                query = "SELECT * FROM dir_domainsuffix WHERE last_updated > %s ORDER BY last_updated"
+                cursor.execute(query, [newest_date])
+                print('Newer domain suffixes:')
+                for item in dictfetchall(cursor):
+                    print(item)
             #
             # End of non-language-specific syncs.
             #
@@ -349,71 +356,72 @@ class Command(BaseCommand):
                 print('Added {0} new {1} entries.'.format(count, remote_pendingindex_model))
 
                 # Indexes
-                query = "SELECT * FROM {0} ORDER BY date_indexed DESC LIMIT 1".format(remote_index_model)
-                cursor.execute(query)
-                newest_date = '2010-01-01'
-                for item in dictfetchall(cursor):
-                    newest_date = item['date_indexed']
-                    print('Last index term: {0}'.format(newest_date))
-                last_terms = index_model.objects.filter(date_indexed__gt=newest_date).order_by('date_indexed')
-                print('{0} {1} index terms are newer on the local machine'.format(last_terms.count(), language))
-                count = 0
-                updated = 0
-                for item in last_terms:
-                    query = "SELECT count(*) FROM {0} WHERE keywords = %s".format(remote_index_model)
-                    cursor.execute(query, [item.keywords])
-                    existing_count = cursor.fetchone()[0]
-                    if existing_count > 0:
-                        print('Updating {0}'.format(item.keywords))
-                        # show_ad and verified_english only exist in the English-language index
-                        if language == 'en':
-                            query = ("UPDATE {0} SET page_rankings = %s, num_results = %s, num_pages = %s, "
-                                     "index_time = %s, search_results = %s, actively_blocked = %s, refused = %s, "
-                                     "typo_for = %s, is_language = %s, term_weight = %s, date_indexed = %s, show_ad = %s, "
-                                     "verified_english = %s WHERE keywords = %s").format(remote_index_model)
-                            cursor.execute(query, [item.page_rankings, item.num_results, item.num_pages, item.index_time,
-                                item.search_results, item.actively_blocked, item.refused, item.typo_for, item.is_language,
-                                item.term_weight, item.date_indexed, item.show_ad, item.verified_english, item.keywords])
-                        else:
-                            query = ("UPDATE {0} SET page_rankings = %s, num_results = %s, num_pages = %s, "
-                                     "index_time = %s, search_results = %s, actively_blocked = %s, refused = %s, "
-                                     "typo_for = %s, is_language = %s, term_weight = %s, date_indexed = %s "
-                                     "WHERE keywords = %s").format(remote_index_model)
-                            cursor.execute(query, [item.page_rankings, item.num_results, item.num_pages, item.index_time,
-                                item.search_results, item.actively_blocked, item.refused, item.typo_for, item.is_language,
-                                item.term_weight, item.date_indexed, item.keywords])
-                        updated += 1
-                        # Now delete keyword ranking info so we can replace it later.
-                        query = 'DELETE FROM {0} WHERE keywords = %s'.format(remote_keywordranking_model)
+                if not justlogs:
+                    query = "SELECT * FROM {0} ORDER BY date_indexed DESC LIMIT 1".format(remote_index_model)
+                    cursor.execute(query)
+                    newest_date = '2010-01-01'
+                    for item in dictfetchall(cursor):
+                        newest_date = item['date_indexed']
+                        print('Last index term: {0}'.format(newest_date))
+                    last_terms = index_model.objects.filter(date_indexed__gt=newest_date).order_by('date_indexed')
+                    print('{0} {1} index terms are newer on the local machine'.format(last_terms.count(), language))
+                    count = 0
+                    updated = 0
+                    for item in last_terms:
+                        query = "SELECT count(*) FROM {0} WHERE keywords = %s".format(remote_index_model)
                         cursor.execute(query, [item.keywords])
-                        deleted_count = cursor.rowcount
-                        if deleted_count > 0:
-                            print('Deleted {0} keyword rankings.'.format(deleted_count))
-                    else:
-                        print('Adding {0}'.format(item.keywords))
-                        if language == 'en':
-                            query = ("INSERT INTO {0} (keywords, page_rankings, num_results, num_pages, index_time, "
-                                     "search_results, actively_blocked, refused, typo_for, is_language, term_weight, "
-                                     "date_indexed, show_ad, verified_english) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)").format(remote_index_model)
-                            cursor.execute(query, [item.keywords, item.page_rankings, item.num_results, item.num_pages,
-                                item.index_time, item.search_results, item.actively_blocked, item.refused, item.typo_for,
-                                item.is_language, item.term_weight, item.date_indexed, item.show_ad, item.verified_english])
+                        existing_count = cursor.fetchone()[0]
+                        if existing_count > 0:
+                            print('Updating {0}'.format(item.keywords))
+                            # show_ad and verified_english only exist in the English-language index
+                            if language == 'en':
+                                query = ("UPDATE {0} SET page_rankings = %s, num_results = %s, num_pages = %s, "
+                                         "index_time = %s, search_results = %s, actively_blocked = %s, refused = %s, "
+                                         "typo_for = %s, is_language = %s, term_weight = %s, date_indexed = %s, show_ad = %s, "
+                                         "verified_english = %s WHERE keywords = %s").format(remote_index_model)
+                                cursor.execute(query, [item.page_rankings, item.num_results, item.num_pages, item.index_time,
+                                    item.search_results, item.actively_blocked, item.refused, item.typo_for, item.is_language,
+                                    item.term_weight, item.date_indexed, item.show_ad, item.verified_english, item.keywords])
+                            else:
+                                query = ("UPDATE {0} SET page_rankings = %s, num_results = %s, num_pages = %s, "
+                                         "index_time = %s, search_results = %s, actively_blocked = %s, refused = %s, "
+                                         "typo_for = %s, is_language = %s, term_weight = %s, date_indexed = %s "
+                                         "WHERE keywords = %s").format(remote_index_model)
+                                cursor.execute(query, [item.page_rankings, item.num_results, item.num_pages, item.index_time,
+                                    item.search_results, item.actively_blocked, item.refused, item.typo_for, item.is_language,
+                                    item.term_weight, item.date_indexed, item.keywords])
+                            updated += 1
+                            # Now delete keyword ranking info so we can replace it later.
+                            query = 'DELETE FROM {0} WHERE keywords = %s'.format(remote_keywordranking_model)
+                            cursor.execute(query, [item.keywords])
+                            deleted_count = cursor.rowcount
+                            if deleted_count > 0:
+                                print('Deleted {0} keyword rankings.'.format(deleted_count))
                         else:
-                            query = ("INSERT INTO {0} (keywords, page_rankings, num_results, num_pages, index_time, "
-                                     "search_results, actively_blocked, refused, typo_for, is_language, term_weight, "
-                                     "date_indexed) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)").format(remote_index_model)
-                            cursor.execute(query, [item.keywords, item.page_rankings, item.num_results, item.num_pages,
-                                item.index_time, item.search_results, item.actively_blocked, item.refused, item.typo_for,
-                                item.is_language, item.term_weight, item.date_indexed])
-                        count += 1
-                    keywords = keywordranking_model.objects.filter(keywords=item.keywords)
-                    query = ("INSERT INTO {0} (keywords, rank, rooturl, show) VALUES (%s, %s, %s, %s)").format(remote_keywordranking_model)
-                    num_rankings = 0
-                    for keyword in keywords:
-                        cursor.execute(query, [keyword.keywords, keyword.rank, keyword.rooturl, keyword.show])
-                        num_rankings += 1
-                    print('Added {0} keyword rankings'.format(num_rankings))
-                print('Added {0} new {2} entries and updated {1} existing {2} entries.'.format(count, updated, remote_index_model))
+                            print('Adding {0}'.format(item.keywords))
+                            if language == 'en':
+                                query = ("INSERT INTO {0} (keywords, page_rankings, num_results, num_pages, index_time, "
+                                         "search_results, actively_blocked, refused, typo_for, is_language, term_weight, "
+                                         "date_indexed, show_ad, verified_english) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)").format(remote_index_model)
+                                cursor.execute(query, [item.keywords, item.page_rankings, item.num_results, item.num_pages,
+                                    item.index_time, item.search_results, item.actively_blocked, item.refused, item.typo_for,
+                                    item.is_language, item.term_weight, item.date_indexed, item.show_ad, item.verified_english])
+                            else:
+                                query = ("INSERT INTO {0} (keywords, page_rankings, num_results, num_pages, index_time, "
+                                         "search_results, actively_blocked, refused, typo_for, is_language, term_weight, "
+                                         "date_indexed) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)").format(remote_index_model)
+                                cursor.execute(query, [item.keywords, item.page_rankings, item.num_results, item.num_pages,
+                                    item.index_time, item.search_results, item.actively_blocked, item.refused, item.typo_for,
+                                    item.is_language, item.term_weight, item.date_indexed])
+                            count += 1
+                        keywords = keywordranking_model.objects.filter(keywords=item.keywords)
+                        query = ("INSERT INTO {0} (keywords, rank, rooturl, show) VALUES (%s, %s, %s, %s)").format(remote_keywordranking_model)
+                        num_rankings = 0
+                        for keyword in keywords:
+                            cursor.execute(query, [keyword.keywords, keyword.rank, keyword.rooturl, keyword.show])
+                            num_rankings += 1
+                        print('Added {0} keyword rankings'.format(num_rankings))
+                    print('Added {0} new {2} entries and updated {1} existing {2} entries.'.format(count, updated, remote_index_model))
 
                 # Result clicks.
                 last_resultclick = resultclick_model.objects.all().order_by('-click_time').first()
