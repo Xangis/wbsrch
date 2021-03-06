@@ -1,0 +1,93 @@
+{% extends 'base.htm' %}{% spaceless %}
+{% block title %}WbSrch API{% endblock %}
+{% block content %}
+<h2>WbSrch API</h2>
+<p>WbSrch has an API available for retrieving search results or domain and keyword details. It can be used to build your own search (or metasearch) engine, or to use the data as part of an SEO or keyword tool.</p>
+<p><em>Please note that our policy does not allow using WbSrch results in a meta-search engine unless you retieve them via the API.</em></p>
+
+<h3>Pricing</h3>
+
+<p>Pricing is $2 per 1000 query credits. Bulk pricing is available for high-volume users.</p>
+
+<h3>Terms</h3>
+
+<p>All API usage shall be pre-paid unless otherwise arranged. There is a minimum initial deposit of $10.</p>
+
+<p>You may cache the results of a query and may store any non-search results indefinitely.</p>
+
+<p>You may cache search results for up to 30 days. After that time, the data must be discarded unless it is being used for research. You may not display search results older than 30 days to end-users.</p>
+
+<p>You may combine our API results with results from any other source. Use in a meta search engine is not only allowed, but encouraged.</p>
+
+<h3>Usage</h3>
+
+<p>All API requests must contain 'Authorization: Token &lt;yourtoken%gt;' in the header.</p>
+
+<h3>Endpoints</h3>
+
+<h4>Domain Link Rank</h4>
+
+<p>Cost: 1 credit</p>
+
+<pre>
+curl -X GET https://wbsrch.com/api/domain_link_rank/?domain=example.com -H 'Authorization: Token &lt;yourtoken&gt;'
+</pre>
+
+<p>Requires</p>
+
+<ul>
+<li>domain: (String) The domain being queried.</li>
+</ul>
+
+<p>Returns</p>
+
+<pre>
+{"domain":"example.com","wbrank":4,"excluded":false,"domains_linking_in":245,"excluded_reason":null}
+</pre>
+
+<p>Fields</p>
+
+<ul>
+<li>domain: (String) The domain being queried.</li>
+<li>wbrank: (Integer) The WbSrch WbRank (link rank) for that domain.</li>
+<li>excluded: (Boolean) Whether the domain is excluded from the WbSrch index.</li>
+<li>domains_linking_in: (Integer) The number of domains linking to the requested domain according to the WbSrch index.</li>
+<li>excluded_reason: (String) The reason the domain has been excluded from the WbSrch index, if any.</li>
+</ul>
+
+echo IP To Country
+curl -X GET https://wbsrch.com/api/ip_to_country/?ip=216.151.17.10 -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+echo Domain Pages In Index
+curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=xangis.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=bloodlessmushroom.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=youtube.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=instagram.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=pinterest.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=kickstarter.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+echo Domain Keywords Ranked
+curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=sashaandthechildren.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=rainwithoutend.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=indiegogo.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=facebook.com -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET "https://wbsrch.com/api/domain_keywords_ranked/?domain=bild.de&lang=de" -H 'Authorization: Token &lt;yourtoken&gt;'
+echo
+curl -X GET "https://wbsrch.com/api/domain_keywords_ranked/?domain=free.fr&lang=fr" -H 'Authorization: Token &lt;yourtoken&gt;'
+
+def get_page_details(request):
+def get_ranks(request):
+def get_whois_info(request):
+def get_robots_info(request):
+
+
+{% endblock %}

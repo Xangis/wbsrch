@@ -1,0 +1,32 @@
+{% load i18n %}<!DOCTYPE html>
+<html lang="{{ language_code }}"><head><!-- Cached Query: {{ cached }} -->
+<meta name="keywords" content="{% trans "search engine" %}, wbsrch, {% trans "independent" %}, web, {% trans "directory" %}, {% trans "search" %}, {% trans "engine" %}, {% trans "domain" %}" lang="{{ language_code }}">
+<meta name="description" content="{% block description %}WbSrch Web {% trans "Search" %}, {% trans "home" %} of {% trans "The Independent Search Engine" %}.{% endblock %}" lang="{{ language_code }}">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta property="og:image" content="https://wbsrch.com/images/WbSrchLogo.png">
+<meta property="og:locale" content="{{ language_code }}" />
+<meta name=”twitter:creator” content=”@WbSrchDotCom“>
+{% if language_code == 'en' %}<link rel="search" href="https://wbsrch.com/opensearchdescription.xml" type="application/opensearchdescription+xml" title="WbSrch" />{% endif %}
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="canonical" href="https://{% if language_code != "en" %}{{ language_code }}.{% endif %}wbsrch.com" />
+<title>{% block title %}WbSrch Web {% trans "Search" %} ({{ language_code|language_name_local }}) | {% trans "The Independent Search Engine" %}{% endblock %}</title>
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
+<script src="/wbsrch.js" type="text/javascript"></script>
+{% block extrahead %}
+{% endblock %}
+</head>
+<body>
+<div class="clear head">
+<h1><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch Web {% trans "Search" %}" />&nbsp;WbSrch Web {% trans "Search" %}</h1>
+<h2>{% trans "The Independent Search Engine" %}</h2>
+</div>
+<br/><br/>
+{% block content %}
+{% endblock %}
+{% include 'footerwithoutcopyright.inc' %}
+{% include 'copyright.inc' %}
+</div>
+</body>
+</html>

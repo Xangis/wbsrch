@@ -190,6 +190,14 @@ def index(request):
     return render(request, 'index.htm', {'language_code': language_code, 'superuser': superuser, 'cached': cached})
 
 
+def api(request):
+    language_code = request.LANGUAGE_CODE
+    if language_code == 'en-us':
+        language_code = 'en'
+
+    return render(request, 'api.htm', {'language_code': language_code})
+
+
 def ads(request):
     return HttpResponsePermanentRedirect('https://ads.wbsrch.com')
 
