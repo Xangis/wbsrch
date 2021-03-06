@@ -15,7 +15,6 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 import socket
 import codecs
-import re
 
 
 MAX_HTML_READ = 131072

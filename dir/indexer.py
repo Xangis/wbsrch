@@ -229,19 +229,19 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
             print('Merge factor for term (unprintable) is {0} with {1} results'.format(factor, word.num_pages))
         page_rankings = ujson.loads(word.page_rankings)
         for item in page_rankings:
-            #print 'Checking {0} in page_rankings.'.format(item)
+            # print 'Checking {0} in page_rankings.'.format(item)
             points = item[1] * factor
-            #print u'Item {0} is worth {1} points using factor {2}'.format(item, points, factor)
+            # print u'Item {0} is worth {1} points using factor {2}'.format(item, points, factor)
             found = False
             # TODO: Do this right.
             for i, existing in enumerate(ratings):
                 if item[0] == existing[0]:
-                    #print u'Adding {0} points to {1}'.format(points, ratings[i])
+                    # print u'Adding {0} points to {1}'.format(points, ratings[i])
                     ratings[i][1] = existing[1] + points
                     found = True
                     break
             if not found:
-                #print u'Adding [ {0} , {1} ]'.format(item[0], points)
+                # print u'Adding [ {0} , {1} ]'.format(item[0], points)
                 ratings.append([item[0], points])
     ratings.sort(key=lambda tup: tup[1], reverse=True)
     end_delta = timezone.now() - start

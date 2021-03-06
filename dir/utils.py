@@ -1658,7 +1658,7 @@ def MoveSiteTo(site, language, whole_domain=True, tag_as_subdir=False, verbose=F
                     print("MoveSiteTo: Keywords '{0}' added to {1} pending index.".format(keyword.keywords, existlang))
                 except Exception:
                     print("MoveSiteTo: Keywords added to {0} pending index.".format(existlang))
-            AddPendingTerm(keyword.keywords, existlang, 'Site {0} moved to {1} and it ranks {2} for {3}'.format(site, language, keyword.rank, keyword.keywords, priority=3))
+            AddPendingTerm(keyword.keywords, existlang, 'Site {0} moved to {1} and it ranks {2} for {3}'.format(site, language, keyword.rank, keyword.keywords), priority=3)
         # Set the domain's language. If we're moving a URL parameter or langid page, this is a noop.
         SetDomainLanguage(site.rooturl, language)
     elif tag_as_subdir:
