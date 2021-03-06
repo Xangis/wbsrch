@@ -551,7 +551,7 @@ if not options.nopages:
     lang = 'site_info'
 
     # Simhash value is generated on save.
-    ignored_columns = ['id', 'simhash_value']
+    ignored_columns = ['id', 'simhash_value', 'pagecontents']
 
     updated = 0
     notupdated = 0
