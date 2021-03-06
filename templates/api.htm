@@ -57,31 +57,15 @@ curl -X GET https://wbsrch.com/api/domain_link_rank/?domain=example.com -H 'Auth
 
 echo IP To Country
 curl -X GET https://wbsrch.com/api/ip_to_country/?ip=216.151.17.10 -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
 echo Domain Pages In Index
 curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=xangis.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
-curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=bloodlessmushroom.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
 curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=youtube.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
-curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=instagram.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
-curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=pinterest.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
-curl -X GET https://wbsrch.com/api/domain_pages_in_index/?domain=kickstarter.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
 echo Domain Keywords Ranked
 curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=sashaandthechildren.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
 curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=rainwithoutend.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
 curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=indiegogo.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
 curl -X GET https://wbsrch.com/api/domain_keywords_ranked/?domain=facebook.com -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
 curl -X GET "https://wbsrch.com/api/domain_keywords_ranked/?domain=bild.de&lang=de" -H 'Authorization: Token &lt;yourtoken&gt;'
-echo
 curl -X GET "https://wbsrch.com/api/domain_keywords_ranked/?domain=free.fr&lang=fr" -H 'Authorization: Token &lt;yourtoken&gt;'
 
 def get_page_details(request):
@@ -91,3 +75,4 @@ def get_robots_info(request):
 
 
 {% endblock %}
+{% endspaceless %}
