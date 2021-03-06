@@ -1,6 +1,7 @@
 Wikipedia Article Research and Links
 
-StartupRanking Profile https://www.startupranking.com/wbsrch   (founded date, location
+StartupRanking Profile https://www.startupranking.com/wbsrch   (founded date, location)
+https://www.startupranking.com/tag/search-engines
 
 MusicSrch acquisition:
 https://www.prweb.com/releases/2016/03/prweb13295857.htm
@@ -45,5 +46,29 @@ https://networkcultures.org/query/resources/engines/
 How to use WbSrch video:
 https://vimeo.com/151201836
 
+
+Indie Web Camp 2014
+https://indieweb.org/2014-review
+
+A random mention in a search engine research page:
+https://mekineer.com/information-technology/2019-search-engines
+
+
+Search engine list(s):
+https://www.sycosure.com/blog/list-of-all-search-engines/
+https://l-lists.com/en/lists/qukoen.html
+
+
+Portland startup community list:
+https://portland-startups.readthedocs.io/en/latest/
+
+Jasmine Directory Listing:
+https://www.jasminedirectory.com/internet-online-marketing/search-engines/
+
+StartupNext:
+https://startupnext.io/startup/wbsrch
+
+Startup Inspire:
+https://www.startupinspire.com/startup/wbsrch
 
 
