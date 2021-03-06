@@ -612,7 +612,7 @@ if not options.nopages:
             print('The url {0} is new.'.format(url))
             record = {}
             for index in range(len(row)):
-                if colnames[index] != 'id':
+                if colnames[index] not in ignored_columns:
                     record[colnames[index]] = row[index]
             new += 1
             SavePage(record, update=False, lang=lang)
