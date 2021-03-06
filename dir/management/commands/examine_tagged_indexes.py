@@ -13,6 +13,7 @@ class Command(BaseCommand):
     in the results for them. It uses this data to generate a score, with high scores meaning that a domain is
     probably in that language, i.e. a score of 900 for DE means that domain is probably in German.
     """
+
     def add_arguments(self, parser):
         parser.add_argument('-l', '--language', default=None, action='store', dest='language', help='Language to use for pending indexes (required).')
         parser.add_argument('-b', '--blocked', default=False, action='store_true', dest='blocked', help='Analyze blocked domains only. (default=No)')

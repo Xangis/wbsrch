@@ -18,6 +18,7 @@ class Command(BaseCommand):
     help = """
     Two-way sync with master indexes server.
     """
+
     def add_arguments(self, parser):
         parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Comma-separated languages to use for pending indexes, "all" for everything, "allbuteng" for all but English (default=en).')
         parser.add_argument('-n', '--nodomains', default=False, action='store_true', dest='nodomains', help='Do not sync DomainInfo (default=False).')

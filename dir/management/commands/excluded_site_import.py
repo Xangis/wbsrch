@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from dir.models import *
-from dir.utils import *
+from django.core.exceptions import ObjectDoesNotExist
+from dir.models import BlockedSite
 import csv
 
 

@@ -13,6 +13,7 @@ class Command(BaseCommand):
     language. Works based on the idea that if a word shows up a lot in a known-other-language, that word might
     be in that language.
     """
+
     def add_arguments(self, parser):
         parser.add_argument('-s', '--startafter', default=None, action='store', dest='startafter', help='Start after <string>. Only useful for resuming an afterz or beforezero categorize.')
         parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Language to use for index keywords (default=en).')

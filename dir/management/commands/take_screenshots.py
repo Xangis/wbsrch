@@ -6,6 +6,7 @@ import time
 import codecs
 from dir.utils import TakeScreenshot
 
+
 class Command(BaseCommand):
     help = "This command takes screenshots of home pages for domains."
 

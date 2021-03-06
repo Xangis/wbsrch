@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from dir.models import *
-from dir.utils import *
+from django.core.exceptions import ObjectDoesNotExist
+from dir.models import SearchLog, DomainSearchLog, BlockedSite, DomainInfo
+from dir.utils import IsIPAddress, HasNumber
 
 
 def is_ascii(s):
@@ -11,6 +12,7 @@ def is_ascii(s):
 class Command(BaseCommand):
     help = """Checks search results for domain names and prints a list of domains that need to be crawled. However, this command is
               not particularly useful because most domain name searches are spam domains."""
+
     def add_arguments(self, parser):
         parser.add_argument('-w', '--websearches', default=False, action='store_true', dest='websearches', help='Check web searches for domains instead of checking domain searches.')
 

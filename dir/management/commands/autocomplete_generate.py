@@ -11,6 +11,7 @@ class Command(BaseCommand):
     Generates autocomplete data based on search popularity in the search logs for all languages. This takes a long time, and autocomplete
     will be broken for the currently running languages because it deletes all existing autocompletes first.
     """
+
     def add_arguments(self, parser):
         pass
 

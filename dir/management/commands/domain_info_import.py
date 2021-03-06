@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from dir.models import DomainInfo
-from dir.utils import *
+from django.core.exceptions import ObjectDoesNotExist
+from dir.models import DomainInfo, SiteInfo
+from dir.utils import MoveSiteTo
 import csv
 
 

@@ -13,6 +13,7 @@ class Command(BaseCommand):
     Now that the root url parser doesn't keep : suffixes, this may never need
     to be run again.
     """
+
     def add_arguments(self, parser):
         pass
 

@@ -8,7 +8,6 @@ from django.core.management.base import BaseCommand
 
 import os
 import sys
-#sys.path.append(settings.APP_DIRECTORY)
 sys.path.append('/var/django/wbsrch/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
@@ -18,11 +17,10 @@ import wget
 import zipfile
 django.setup()
 
-#import optparse
-from dir.models import *
-from dir.utils import *
+from dir.utils import GetRootDomain, UpdateAlexaRank, CanCrawlUrl
 from django.db import connection
 import csv
+
 
 def LoadAlexaFile(filename, skip):
     crawl_needed = []
@@ -44,7 +42,7 @@ def LoadAlexaFile(filename, skip):
                 print('Domain ' + row[1] + ' ranks ' + row[0])
                 GetRootDomain(row[1])
                 # No longer skipping subdomains. Fill 'em in.
-                #if root != row[1]:
+                # if root != row[1]:
                 #    print('Domain {0} does not match {1}. Skipping'.format(root, row[1]))
                 #    skipped.append(row[1])
                 #    # Just because we didn't update the Alexa rank for a domain, doesn't mean we shouldn't

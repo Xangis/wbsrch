@@ -29,6 +29,7 @@ class Command(BaseCommand):
 
     It is not necessary otherwise, since the logger automatically flags searches as bots as they are done.
     """
+
     def add_arguments(self, parser):
         parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Language to use for search logs (default=en).')
         parser.add_argument('-e', '--everything', default=False, action='store_true', dest='everything', help='Process everything, all languages.')

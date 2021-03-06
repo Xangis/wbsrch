@@ -11,6 +11,7 @@ class Command(BaseCommand):
     Domains with a language tag could have made it into the main site_info table
     from a sync_crawls import or some other way. The puts things where they belong.
     """
+
     def add_arguments(self, parser):
         pass
 

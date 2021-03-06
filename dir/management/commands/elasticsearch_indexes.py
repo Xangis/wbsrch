@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from django.db import connection
 from dir.utils import GetIndexModelFromLanguage
-import os
-import sys
-import json
 from elasticsearch import Elasticsearch
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 

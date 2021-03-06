@@ -17,8 +17,7 @@ import wget
 import zipfile
 django.setup()
 
-from dir.models import *
-from dir.utils import *
+from dir.utils import GetRootDomain, UpdateDomcopRank, CanCrawlUrl
 from django.db import connection
 import csv
 

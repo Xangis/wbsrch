@@ -16,6 +16,7 @@ class Command(BaseCommand):
     You should use the C++ version of ensure_domaininfo if you're just updating based on site_info
     entries because it's FAR faster and uses an order of magnitude less memory.
     """
+
     def add_arguments(self, parser):
         # parser.add_argument('-a', '--abbreviated', default=False, action='store_true', dest='abbreviated', help='Run in abbreviated mode, which does not scan page text.'),
         # parser.add_argument('-d', '--detailed', default=False, action='store_true', dest='verbose', help='Run in verbose mode.'),

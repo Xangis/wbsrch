@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
-from dir.models import QueryParameter, DomainInfo, PageLink, SiteInfo
+from dir.models import DomainInfo, PageLink, SiteInfo
 from dir.utils import GetSiteInfoModelFromLanguage, NormalizeUrl
 from pytz.exceptions import AmbiguousTimeError
 import time
@@ -20,7 +20,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print(options)
         domain = options.get('domain', None)
-        force = options.get('domain', None)
         offset = options.get('offset', None)
         maxurls = options['urls']
         numurls = 0
@@ -95,4 +94,3 @@ class Command(BaseCommand):
             if numurls > maxurls:
                 break
         time.sleep(options['sleep'])
-

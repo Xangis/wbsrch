@@ -12,6 +12,7 @@ class Command(BaseCommand):
 
     If you get an error saying that levenshtein does not exist, you need to CREATE EXTENSION fuzzystrmatch; on the indexes database.
     """
+
     def add_arguments(self, parser):
         parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Language to use for pending indexes (default=en).')
         parser.add_argument('-d', '--distance', default=1, action='store', type=int, dest='distance', help='Levenshtein distance to check. (default=1)')

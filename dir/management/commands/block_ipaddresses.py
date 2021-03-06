@@ -11,6 +11,7 @@ class Command(BaseCommand):
     IP address. Now that the crawler rejects those, it may never be necessary to run this
     function. It was created as a cleanup utilty when the crawler was changed to exclude those.
     """
+
     def add_arguments(self, parser):
         pass
 

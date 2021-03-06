@@ -12,6 +12,7 @@ class Command(BaseCommand):
     including importing of data, and this goes through and makes sure we don't
     have any pages that we shouldn't.
     """
+
     def add_arguments(self, parser):
         pass
 

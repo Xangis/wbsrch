@@ -11,6 +11,7 @@ class Command(BaseCommand):
     This command processes a file containing a list of words. If those words are not already indexed for the specified
     language, it adds them to the pending index list so that the indexer will build an index term for them.
     """
+
     def add_arguments(self, parser):
         parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Language to use for pending indexes (default=en).')
         parser.add_argument('-d', '--domains', default=False, action='store_true', dest='domains', help='Process file as a domain list and print the domains that need to be crawled. Redundant with -p since it only prints (default=no).')
@@ -43,7 +44,7 @@ class Command(BaseCommand):
                 try:
                     line = GetRootUrl(line.strip().lower())
                 except Exception:
-                    line = CleanSearchTerm(line.strip().lower())
+                    line = CleanSearchText(line.strip().lower())
                 # Do not queue anything less than 2 characters long.
                 if len(line) < 2:
                     continue

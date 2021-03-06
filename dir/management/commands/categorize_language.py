@@ -22,6 +22,7 @@ def TrimDomain(domain):
         domain = domain[8:]
     return domain
 
+
 class Command(BaseCommand):
     # This is so we can display newlines in the help text.
     def create_parser(self, *args, **kwargs):
@@ -55,6 +56,7 @@ class Command(BaseCommand):
 
         python manage.py categorize_language -l rw -u airfoto.frl -x
 """
+
     def add_arguments(self, parser):
         parser.add_argument('-a', '--autotag', default=None, action='store', dest='autotag', help='Automatically tag this comma-seperated list of language codes, only works with -c.')
         parser.add_argument('-b', '--autoblock', default=None, action='store', dest='autoblock', help='Automatically block this comma-seperated list of language codes, only works with -c.')
@@ -200,7 +202,7 @@ class Command(BaseCommand):
             else:
                 query = 'SELECT count(*) AS count_total, rooturl FROM {0} GROUP BY rooturl HAVING count(*) <= {1} ORDER BY count_total DESC,RANDOM() LIMIT {2};'.format(
                     site_model_name, maxurls, maxitems)
-            #cursor.execute('SELECT count(*), rooturl FROM site_info GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(maxitems))
+            # cursor.execute('SELECT count(*), rooturl FROM site_info GROUP BY rooturl ORDER BY count(*) DESC LIMIT ' + str(maxitems))
             if justdomain:
                 domain_counts = []
             else:

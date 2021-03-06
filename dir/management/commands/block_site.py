@@ -25,6 +25,7 @@ class Command(BaseCommand):
     Unlike the admin command, this is domain-language-aware, so pages from domains tagged as a specific language or
     as an infix or url parameter language will only be moved if they fit those rules.
     """
+
     def add_arguments(self, parser):
         parser.add_argument('-s', '--site', action='store', dest='site', help='Site to block.'),
         parser.add_argument('-r', '--reason', default=8, action='store', type=int, dest='reason', help='Reason (4=porn, 5=pills, 8=unindexed language, 20=arabic, 21=chinese, 25=japanese, 28=russian)'),

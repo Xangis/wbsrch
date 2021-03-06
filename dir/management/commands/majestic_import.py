@@ -16,10 +16,10 @@ import django
 import wget
 django.setup()
 
-from dir.models import *
-from dir.utils import *
+from dir.utils import GetRootDomain, UpdateMajesticRank, CanCrawlUrl
 from django.db import connection
 import csv
+
 
 def LoadAlexaFile(filename, skip):
     crawl_needed = []

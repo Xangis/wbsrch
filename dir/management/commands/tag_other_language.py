@@ -13,6 +13,7 @@ class Command(BaseCommand):
     language. Works based on the idea that if a word shows up a lot in a known-other-language, that word might
     be in that language.
     """
+
     def add_arguments(self, parser):
         parser.add_argument('-l', '--language', default=None, action='store', tydest='language', help='Language to use for pending indexes (required).')
         parser.add_argument('-b', '--bruteforce', default=False, action='store_true', dest='bruteforce', help='Brute force mode, overrides language, wordlength, and threshold. (default=No)')

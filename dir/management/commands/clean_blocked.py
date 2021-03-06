@@ -11,6 +11,7 @@ class Command(BaseCommand):
     Due to redirects and other things, domains don't always have a DomainInfo record when they have URLs
     in the database. This is used to fix that by creating DomainInfo records where they're missing.
     """
+
     def add_arguments(self, parser):
         parser.add_argument('-s', '--sleep', default=0, action='store', type=int, dest='sleep', help='Time to sleep between domain queries. (default=0)'),
 

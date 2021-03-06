@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from dir.models import *
-from dir.utils import *
+from dir.models import DomainInfo
+from dir.utils import GetSiteInfoModelFromLanguage
 from dir.robots import GetRobotsFile
 import robotexclusionrulesparser
 
@@ -32,7 +32,7 @@ class Command(BaseCommand):
         lang = options['language']
         onlyfromdomain = options.get('justthisdomain', None)
         site_model = GetSiteInfoModelFromLanguage(lang)
-        if maxurls in options:
+        if 'maxurls' in options:
             max = int(options['maxurls'])
         if options['detailed']:
             verbose = True

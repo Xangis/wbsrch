@@ -5,8 +5,10 @@ import time
 import codecs
 from dir.domain import UpdateDomainWhois
 
+
 class Command(BaseCommand):
     help = "This command updates domain whois-related information such as expiration, registrar, etc."
+
     def add_arguments(self, parser):
         # parser.add_argument('-a', '--abbreviated', default=False, action='store_true', dest='abbreviated', help='Run in abbreviated mode, which does not scan page text.')
         parser.add_argument('-d', '--detailed', default=False, action='store_true', dest='detailed', help='Run in verbose mode.')
