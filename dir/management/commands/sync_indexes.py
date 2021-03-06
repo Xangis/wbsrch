@@ -20,8 +20,8 @@ class Command(BaseCommand):
     """
     def add_arguments(self, parser):
         parser.add_argument('-l', '--language', default='en', action='store', dest='language', help='Comma-separated languages to use for pending indexes, "all" for everything, "allbuteng" for all but English (default=en).')
-        parser.add_argument('-n', '--nodomains', default='en', action='store_true', dest='nodomains', help='Do not sync DomainInfo (default=False).')
-        parser.add_argument('-j', '--justlogs', default='en', action='store_true', dest='justlogs', help='Only download search logs and pending indexes, do not upload any data, overrides every other setting. (default=False).')
+        parser.add_argument('-n', '--nodomains', default=False, action='store_true', dest='nodomains', help='Do not sync DomainInfo (default=False).')
+        parser.add_argument('-j', '--justlogs', default=False, action='store_true', dest='justlogs', help='Only download search logs and pending indexes, do not upload any data, overrides every other setting. (default=False).')
 
     def handle(self, *args, **options):
         if options['language'] == 'allbuteng':
@@ -31,7 +31,7 @@ class Command(BaseCommand):
         else:
             languages = language_list
         justlogs = False
-        if 'justlogs' in options:
+        if 'justlogs' in options and options['justlogs'] is True:
             justlogs = True
         print('Syncing indexes for languages: {0}'.format(languages))
         with connections['live_indexes'].cursor() as cursor:
