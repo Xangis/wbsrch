@@ -49,7 +49,7 @@ class Command(BaseCommand):
         added = 0
         site_model = GetSiteInfoModelFromLanguage('en')
         for page in site_model.objects.all():
-            es.index(index='pages', doc_type='page', id=page.url, body=SiteInfoToJson(page, 'sw'))
+            es.index(index='pages', doc_type='page', body=SiteInfoToJson(page, 'en'))
             processed += 1
             added += 1
         print('Processed {0} pages and added {1} to elasticsearch'.format(processed, added))
