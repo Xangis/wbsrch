@@ -971,6 +971,191 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True, verbose
         return -0.5
 
 
+def GetDomainExtensionRankAdjustment(domain, language, rulematches, verbose=False):
+    extension = domain.split('.')[-1]
+
+    # Language-specific extension adjustments.
+    language_adjustments = {
+        'es': {'casa': -1, 'es': 1},
+        'fr': {'dz': -1},
+        'el': {'mk': -3}
+    }
+
+    # Domain points. Lose points for generally spammy domains, add for common top-level domains,
+    # gain for very reputable domains, and no adjustment for common things that are used for any purpose.
+    domain_adjustments = {
+        'ac': -4,
+        'adult': -10,
+        'ae': -2,
+        'af': -2,
+        'al': -2,
+        'am': -2,
+        'app': -2,
+        'au': 1,
+        'az': -4,
+        'bd': -2,
+        'best': -6,
+        'bet': -6,
+        'bg': -4,
+        'biz': -6,
+        'blue': -4,
+        'bn': -2,
+        'bt': -2,
+        'by': -2,
+        'ca': 1,
+        'cafe': -2,
+        'cam': -6,
+        'casa': -3,
+        'cc': -4,
+        'cd': -4,
+        'club': -4,
+        'cm': -4,
+        'cn': -6,
+        'com': 3,
+        'country': -8,
+        'cricket': -8,
+        'cyou': -4,
+        'download': -2,
+        'dz': -3,
+        'edu': 3,
+        'eg': -2,
+        'fan': -2,
+        'fun': -8,
+        'ge': -2,
+        'gov': 3,
+        'gq': -8,
+        'gratis': -4,
+        'guru': -4,
+        'hk': -4,
+        'icu': -6,
+        'id': -2,
+        'il': -1,
+        'in': -2,
+        'info': -6,
+        'io': -1,
+        'iq': -4,
+        'ir': -4,
+        'jo': -2,
+        'jp': -4,
+        'kg': -6,
+        'kh': -6,
+        'kim': -8,
+        'kr': -4,
+        'kw': -2,
+        'kz': -6,
+        'la': -2,
+        'lb': -2,
+        'link': -8,
+        'live': -2,
+        'lk': -2,
+        'md': -4,
+        'media': -1,
+        'mil': 1,
+        'mk': -5,
+        'mn': -2,
+        'mobi': -6,
+        'monster': -4,
+        'my': -2,
+        'name': -4,
+        'net': 1,
+        'ng': -2,
+        'ninja': -4,
+        'np': -2,
+        'nr': -1,
+        'om': -2,
+        'one': -2,
+        'ooo': -4,
+        'org': 1,
+        'page': -2,
+        'party': -8,
+        'ph': -2,
+        'photo': -4,
+        'pics': -10,
+        'pictures': -10,
+        'pink': -4,
+        'plus': -4,
+        'pn': -1,
+        'poker': -6,
+        'porn': -50,
+        'pro': -4,
+        'promo': -4,
+        'ps': -2,
+        'pw': -6,
+        'qa': -2,
+        'review': -8,
+        'rs': -2,
+        'ru': -6,
+        'sa': -2,
+        'sc': -1,
+        'science': -8,
+        'sd': -2,
+        'sex': -10,
+        'sexy': -10,
+        'sg': -2,
+        'sh': -1,
+        'site': -2,
+        'su': -6,
+        'sy': -2,
+        'tc': -1,
+        'th': -2,
+        'tj': -6,
+        'tk': -1,
+        'tl': -1,
+        'tm': -6,
+        'to': -1,
+        'today': -2,
+        'top': -6,
+        'tube': -6,
+        'tv': -1,
+        'tw': -2,
+        'ua': -4,
+        'us': -1,
+        'uz': -6,
+        'vg': -1,
+        'vi': -1,
+        'video': -2,
+        'vip': -4,
+        'vn': -4,
+        'vu': -1,
+        'win': -4,
+        'work': -8,
+        'ws': -2,
+        '.xn--3e0b707e': -6,
+        '.xn--6frz82g': -6,
+        '.xn--80adxhks': -6,
+        '.xn--80asehdb': -6,
+        '.xn--80aswg': -6,
+        '.xn--90ais': -6,
+        '.xn--c1avg': -6,
+        '.xn--d1acj3b': -6,
+        '.xn--fiqs8s': -6,
+        '.xn--hxt814e': -6,
+        '.xn--j1amh': -6,
+        '.xn--mgbab2bd': -6,
+        '.xn--p1acf': -6,
+        '.xn--p1ai': -6,
+        '.xn--q9jyb4c': -6,
+        '.xn--tckwe': -6,
+        'xxx': -50,
+        'xyz': -8,
+        'yandex': -6,
+        'ye': -2,
+    }
+
+    if language in language_adjustments:
+        if verbose:
+            rulematches.append('Score {0} for domain extension {1} with language {2}.'.format(domain_adjustments[extension], extension, language))
+        if extension in language_adjustments[language]:
+            return language_adjustments[language][extension]
+
+    if extension in domain_adjustments:
+        if verbose:
+            rulematches.append('Score {0} for domain extension {1}.'.format(domain_adjustments[extension], extension))
+        return domain_adjustments[extension]
+
+    return 0
+
+
 def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=False):
     """
     Gets the page score for a term based on its contents and metadata.
@@ -1196,111 +1381,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         value += 1
         if verbose:
             rulematches.append('1 point for keywords in the query.')
-    # Domain points. Lose points for generally spammy domains, add for common top-level domains,
-    # and no adjustment for things like .us or .co.uk.
-    if item.rooturl.endswith('.xxx') or item.rooturl.endswith('.porn'):
-        # Rank these last in almost all cases.
-        value -= 50
-        if verbose:
-            rulematches.append('-50 points for root domain .xxx/.porn.')
-    elif (item.rooturl.endswith('.pics') or item.rooturl.endswith('.sexy') or item.rooturl.endswith('.adult') or item.rooturl.endswith('.pictures') or
-         item.rooturl.endswith('.sex')):
-        value -= 10
-        if verbose:
-            rulematches.append('-10 points for root domain .pics/.sexy/.adult/.pictures.')
-    # These new TLDs are pretty much always spam and malware.
-    elif (item.rooturl.endswith('.xyz') or item.rooturl.endswith('.kim') or item.rooturl.endswith('.review') or item.rooturl.endswith('.cricket') or
-         item.rooturl.endswith('.science') or item.rooturl.endswith('.country') or item.rooturl.endswith('.party') or item.rooturl.endswith('.work') or
-         item.rooturl.endswith('.link') or item.rooturl.endswith('.gq') or item.rooturl.endswith('.fun')):
-        value -= 8
-        if verbose:
-            rulematches.append('-8 points for root domain .xyz/.kim/.review/.cricket/.link/.science/.work/.gq/.party/.country/.fun')
-    elif (item.rooturl.endswith('.info') or item.rooturl.endswith('.cn') or item.rooturl.endswith('.ru') or item.rooturl.endswith('.su') or
-         item.rooturl.endswith('.biz') or item.rooturl.endswith('.mobi') or item.rooturl.endswith('.icu') or item.rooturl.endswith('.best') or
-         item.rooturl.endswith('.bet') or item.rooturl.endswith('.cam') or item.rooturl.endswith('.fun') or item.rooturl.endswith('.kg') or
-         item.rooturl.endswith('.kh') or item.rooturl.endswith('.kz') or item.rooturl.endswith('.link') or item.rooturl.endswith('.poker') or
-         item.rooturl.endswith('.pw') or item.rooturl.endswith('.tj') or item.rooturl.endswith('.tm') or item.rooturl.endswith('.top') or
-         item.rooturl.endswith('.tube') or item.rooturl.endswith('.uz') or item.rooturl.endswith('.xn--3e0b707e') or
-         item.rooturl.endswith('.xn--80adxhks') or item.rooturl.endswith('.xn--6frz82g') or item.rooturl.endswith('.xn--80asehdb') or
-         item.rooturl.endswith('.xn--80aswg') or item.rooturl.endswith('.xn--90ais') or item.rooturl.endswith('.xn--c1avg') or
-         item.rooturl.endswith('.xn--fiqs8s') or item.rooturl.endswith('.xn--j1amh') or item.rooturl.endswith('.xn--mgbab2bd') or
-         item.rooturl.endswith('.xn--p1acf') or item.rooturl.endswith('.xn--p1ai') or item.rooturl.endswith('.xn--q9jyb4c') or
-         item.rooturl.endswith('.xn--tckwe') or item.rooturl.endswith('.xn--hxt814e') or item.rooturl.endswith('.xn--d1acj3b') or
-         item.rooturl.endswith('.yandex')):
-        value -= 6
-        if verbose:
-            rulematches.append('-6 points for root domain .info/.cn/.ru/.su./.biz/.mobi/.icu/.best/.bet/.cam/.fun/.kg/.kh/.kz/.link/.poker/.pw/.tj/.tm/.top/.tube or internationalized')
-    # Differing scores for language-centric top-level domains.
-    elif item.rooturl.endswith('.casa'):
-        if lang == 'es':
-            value -= 1
-            if verbose:
-                rulematches.append('-1 point for .casa and language es.')
-        else:
-            value -= 3
-            if verbose:
-                rulematches.append('-3 points for .casa and not language es.')
-    elif item.rooturl.endswith('.dz'):
-        if lang == 'fr':
-            value -= 1
-            if verbose:
-                rulematches.append('-1 point for .dz and language fr.')
-        else:
-            value -= 3
-            if verbose:
-                rulematches.append('-3 points for .dz and not language fr.')
-    elif item.rooturl.endswith('.mk'):
-        if lang == 'el':
-            value -= 3
-            if verbose:
-                rulematches.append('-3 points for .mk and language el.')
-        else:
-            value -= 5
-            if verbose:
-                rulematches.append('-5 points for .mk and not language el.')
-    # Lose moderate points for some new TLDs and CCTLDs.
-    elif (item.rooturl.endswith('.club') or item.rooturl.endswith('.guru') or item.rooturl.endswith('.ninja') or item.rooturl.endswith('.kr') or
-         item.rooturl.endswith('.jp') or item.rooturl.endswith('.az') or item.rooturl.endswith('.iq') or item.rooturl.endswith('.ir') or
-         item.rooturl.endswith('.name') or item.rooturl.endswith('.pro') or item.rooturl.endswith('.gratis') or item.rooturl.endswith('.win') or
-         item.rooturl.endswith('.ooo') or item.rooturl.endswith('.plus') or item.rooturl.endswith('blue') or item.rooturl.endswith('.party') or
-         item.rooturl.endswith('.vip') or item.rooturl.endswith('.ac') or item.rooturl.endswith('.bg') or item.rooturl.endswith('.cc') or
-         item.rooturl.endswith('.cm') or item.rooturl.endswith('.cd') or item.rooturl.endswith('.cyou') or item.rooturl.endswith('.md') or
-         item.rooturl.endswith('.hk') or item.rooturl.endswith('.monster') or item.rooturl.endswith('.pink') or item.rooturl.endswith('.photo') or
-         item.rooturl.endswith('.promo') or item.rooturl.endswith('.ua') or item.rooturl.endswith('.vn')):
-        value -= 4
-        if verbose:
-            rulematches.append('-4 points for domain .club/.guru/.ninja/.kr/.jp./.az/.iq/.ir/.name/.pro/.gratis/.win/.ooo/.plus/.party/.blue/.vip/.ac/.bg/.cc/.cm/.cd/.cyou/.hk/.md/.monster/.pink/.photo/.promo/.ua')
-    elif (item.rooturl.endswith('.in') or item.rooturl.endswith('.sg') or item.rooturl.endswith('.tw') or item.rooturl.endswith('.ng') or
-         item.rooturl.endswith('.my') or item.rooturl.endswith('.id') or item.rooturl.endswith('.ph') or item.rooturl.endswith('.lk') or
-         item.rooturl.endswith('.ae') or item.rooturl.endswith('.ws') or item.rooturl.endswith('.om') or item.rooturl.endswith('.kw') or
-         item.rooturl.endswith('.th') or item.rooturl.endswith('.bn') or item.rooturl.endswith('.am') or item.rooturl.endswith('.ge') or
-         item.rooturl.endswith('.mn') or item.rooturl.endswith('.jo') or item.rooturl.endswith('.by') or item.rooturl.endswith('.la') or
-         item.rooturl.endswith('.bt') or item.rooturl.endswith('.ae') or item.rooturl.endswith('.win') or item.rooturl.endswith('.site') or
-         item.rooturl.endswith('.cafe') or item.rooturl.endswith('.download') or item.rooturl.endswith('.live') or item.rooturl.endswith('.today') or
-         item.rooturl.endswith('.af') or item.rooturl.endswith('.al') or item.rooturl.endswith('.app') or item.rooturl.endswith('.bd') or
-         item.rooturl.endswith('.eg') or item.rooturl.endswith('.fan') or item.rooturl.endswith('.lb') or item.rooturl.endswith('.mm') or
-         item.rooturl.endswith('.np') or item.rooturl.endswith('.one') or item.rooturl.endswith('.page') or item.rooturl.endswith('.ps') or
-         item.rooturl.endswith('.qa') or item.rooturl.endswith('.rs') or item.rooturl.endswith('.sa') or item.rooturl.endswith('.sd') or
-         item.rooturl.endswith('.sy') or item.rooturl.endswith('.video') or item.rooturl.endswith('.ye')):
-        value -= 2
-        if verbose:
-            rulematches.append('-2 points for domain .in/.sg/.tw/.mobi/.biz/.ng/.my/.id/.ph/.tw/.sg/.in/.lk/.ae/.ws/.om/.kw/.th/.bn/.am/.ge/.mn/.jo/.by/.la/.bt/.ae/.site/.cafe/.download/.live/.today/.af/.app/.bd/.eg/.fan/.mm/.np/.qa/.rs/.sa/.sd/.sy/.video/.ye')
-    elif (item.rooturl.endswith('.tv') or item.rooturl.endswith('.vi') or item.rooturl.endswith('.vg') or item.rooturl.endswith('.sc') or
-         item.rooturl.endswith('.vu') or item.rooturl.endswith('.to') or item.rooturl.endswith('.tl') or item.rooturl.endswith('.nr') or
-         item.rooturl.endswith('.sh') or item.rooturl.endswith('.pn') or item.rooturl.endswith('.tk') or item.rooturl.endswith('.tc') or
-         item.rooturl.endswith('.us') or item.rooturl.endswith('.il') or item.rooturl.endswith('.io') or item.rooturl.endswith('.media')):
-        value -= 1
-        if verbose:
-            rulematches.append('-1 points for domain .tv/.vi/.vg/.sc/.vu/.to/.tl/.nr/.sh/.pn/.tk/.tc/.us/.il/.io')
-    elif (item.rooturl.endswith('.net') or item.rooturl.endswith('.org') or item.rooturl.endswith('.ca') or item.rooturl.endswith('.mil') or
-         item.rooturl.endswith('.au') or item.rooturl.endswith('.uk')):
-        value += 1
-        if verbose:
-            rulematches.append('1 point for domain .net/.org/.ca/.mil/.au/.uk.')
-    elif item.rooturl.endswith('.com') or item.rooturl.endswith('.edu') or item.rooturl.endswith('.gov'):
-        value += 3
-        if verbose:
-            rulematches.append('3 points for domain .com/.edu/.gov.')
+    value += GetDomainExtensionRankAdjustment(item.rooturl, lang, rulematches, verbose)
     # URL Length modifications: <= 28 chars: +2, <= 42 chars: +1, <= 65 chars: NC, <= 98 chars: -1, <= 142 chars: -2, >142 chars: -3
     url_len = len(item.url)
     if url_len <= 28:
@@ -1509,6 +1590,9 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             value -= 20
             if verbose:
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
+        #
+        # TODO: value *= GetTitleAdjustment(item.pagetitle), adjustments below factored in.
+        #
         # Parked domains. Certain text is considered a "park" and those domains get demoted.
         if (item.pagetext.startswith('Buy this domain.') or
             ('This website is for sale' in item.pagetitle) or

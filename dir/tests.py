@@ -2503,3 +2503,26 @@ class ReverseWWWTestCase(TestCase):
 
     def testrootonlysecondlevel(self):
         self.assertEqual(ReverseWWW(u'my.example.com', True), None)
+
+
+class GetDomainExtensionAdjustmentTextCase(TestCase):
+    def testcom(self):
+        self.assertEqual(GetDomainExtensionRankAdjustment('.com', '3'))
+
+    def testcom2(self):
+        self.assertEqual(GetDomainExtensionRankAdjustment('example.com', '3'))
+
+    def testcom3(self):
+        self.assertEqual(GetDomainExtensionRankAdjustment('website.example.com', '3'))
+
+    def testcn(self):
+        self.assertEqual(GetDomainExtensionRankAdjustment('.cn', '-6'))
+
+    def testru(self):
+        self.assertEqual(GetDomainExtensionRankAdjustment('ru', '-6'))
+
+    def testxxx(self):
+        self.assertEqual(GetDomainExtensionRankAdjustment('ru', '-50'))
+
+    def testunknown(self):
+        self.assertEqual(GetDomainExtensionRankAdjustment('example.unknowndomainextension', '-6'))
