@@ -20,6 +20,7 @@
 
 import codecs
 
+
 def SplitDomains(filename):
     processed = 0
     domain_files = {}
@@ -41,6 +42,6 @@ def SplitDomains(filename):
 
 
 SplitDomains('commoncrawl_domainnames_ycombinator10367342_new')
-#SplitDomains('_all.txt')
-#SplitDomains('top-1m.csv')
-#SplitDomains('top500.domains.03.16.csv')
+# SplitDomains('_all.txt')
+# SplitDomains('top-1m.csv')
+# SplitDomains('top500.domains.03.16.csv')

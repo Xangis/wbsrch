@@ -18,6 +18,7 @@ import zipfile
 
 domains = []
 
+
 def ProcessCSVFile(filename):
     num_domains = 0
     print('Opening {0}'.format(filename))
@@ -27,7 +28,7 @@ def ProcessCSVFile(filename):
         for row in reader:
             if len(row) >= 2:
                 # This makes things get progressively slower to add domains.
-                #if(row[0] not in domains):
+                # if(row[0] not in domains):
                 domains.append(row[1])
                 num_domains = num_domains + 1
                 if num_domains % 100000 == 0:

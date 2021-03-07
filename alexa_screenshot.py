@@ -13,7 +13,7 @@
 
 import os
 import sys
-#sys.path.append(settings.APP_DIRECTORY)
+# sys.path.append(settings.APP_DIRECTORY)
 sys.path.append('/var/django/wbsrch/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
@@ -31,6 +31,7 @@ HEIGHT = 800
 SMALLWIDTH = 320
 SMALLHEIGHT = 200
 
+
 def LoadAlexaFile(filename):
     screenshot_failed = []
     screenshot_succeeded = []
@@ -43,7 +44,7 @@ def LoadAlexaFile(filename):
             if rows > 1000:
                 break
             if len(row) == 2:
-                #root = GetRootDomain(row[1])
+                # root = GetRootDomain(row[1])
                 if not TakeScreenshot(row[1]):
                     print('Row {0}: Error screenshotting {1}'.format(rows, row[1]))
                     screenshot_failed.append(row[1])
@@ -60,27 +61,27 @@ def LoadAlexaFile(filename):
     print('Captured {0} domain screenshots. {1} failed to capture.'.format(len(screenshot_succeeded), len(screenshot_failed)))
 
 
-#TakeScreenshot('analytics.wbsrch.com')
-#TakeScreenshot('bloodlessmushroom.com')
-#TakeScreenshot('sashaandthechildren.com')
-#TakeScreenshot('rainwithoutend.com')
-#TakeScreenshot('emergencybrunch.com')
-#TakeScreenshot('orcfucker.com')
-#TakeScreenshot('toiletduckhunt.com')
-#TakeScreenshot('zetacentauri.com')
-#TakeScreenshot('xangis.com')
-#TakeScreenshot('stampscoinsnotes.com')
-#TakeScreenshot('freewavesamples.com')
-#TakeScreenshot('soundprogramming.net')
-#TakeScreenshot('silica-gel.org')
-#TakeScreenshot('bassguitarpro.com')
-#TakeScreenshot('guitarl.com')
-#TakeScreenshot('stats.wbsrch.com')
-#TakeScreenshot('maps.wbsrch.com')
-#TakeScreenshot('browser.wbsrch.com')
-#TakeScreenshot('wbsrch.com')
-#TakeScreenshot('news.wbsrch.com')
-#exit(0)
+# TakeScreenshot('analytics.wbsrch.com')
+# TakeScreenshot('bloodlessmushroom.com')
+# TakeScreenshot('sashaandthechildren.com')
+# TakeScreenshot('rainwithoutend.com')
+# TakeScreenshot('emergencybrunch.com')
+# TakeScreenshot('orcfucker.com')
+# TakeScreenshot('toiletduckhunt.com')
+# TakeScreenshot('zetacentauri.com')
+# TakeScreenshot('xangis.com')
+# TakeScreenshot('stampscoinsnotes.com')
+# TakeScreenshot('freewavesamples.com')
+# TakeScreenshot('soundprogramming.net')
+# TakeScreenshot('silica-gel.org')
+# TakeScreenshot('bassguitarpro.com')
+# TakeScreenshot('guitarl.com')
+# TakeScreenshot('stats.wbsrch.com')
+# TakeScreenshot('maps.wbsrch.com')
+# TakeScreenshot('browser.wbsrch.com')
+# TakeScreenshot('wbsrch.com')
+# TakeScreenshot('news.wbsrch.com')
+# exit(0)
 
 if not os.path.isfile('top-1m.csv'):
     print('File top-1m.csv does not exist. Retrieving.')

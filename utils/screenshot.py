@@ -20,7 +20,7 @@ SMALLHEIGHT = 200
 URL = 'analytics.wbsrch.com'
 
 driver = webdriver.PhantomJS(executable_path="node_modules/phantomjs/bin/phantomjs")
-driver.set_window_size(WIDTH, HEIGHT) # optional
+driver.set_window_size(WIDTH, HEIGHT)  # optional
 driver.get('https://{0}'.format(URL))
 driver.save_screenshot('{0}.png'.format(URL))
 

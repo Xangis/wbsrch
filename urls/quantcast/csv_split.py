@@ -6,6 +6,7 @@
 
 import csv
 
+
 def ProcessCSVFile(filename):
     num_domains = 0
     domains = []

@@ -7,7 +7,6 @@
 
 import os
 import sys
-#sys.path.append(settings.APP_DIRECTORY)
 sys.path.append('/var/django/wbsrch/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
@@ -17,11 +16,10 @@ import wget
 import zipfile
 django.setup()
 
-#import optparse
-from dir.models import *
-from dir.utils import *
 from django.db import connection
 import csv
+from dir.utils import CanCrawlUrl, GetRootDomain, UpdateQuantcastRank
+
 
 def LoadQuantcastFile(filename):
     crawl_needed = []
@@ -40,7 +38,7 @@ def LoadQuantcastFile(filename):
                 continue
             if len(row) == 2:
                 print('Domain ' + row[1] + ' ranks ' + row[0])
-                root = GetRootDomain(row[1])
+                GetRootDomain(row[1])
                 if UpdateQuantcastRank(row[1], row[0]):
                     if not CanCrawlUrl(row[1]):
                         print('Domain {0} cannot be crawled, not adding to crawl needed'.format(row[1]))

@@ -3,7 +3,7 @@
 import psycopg2
 from psycopg2.extensions import AsIs
 import argparse
-#from dateutil.parser import parse
+# from dateutil.parser import parse
 
 parser = argparse.ArgumentParser(description="Sync data between databases")
 parser.add_argument('input', action='store', type=str, help='Input db, example: "dbname=zetaweb_crawl user=postgres password=postgres"')

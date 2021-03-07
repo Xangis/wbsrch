@@ -11,6 +11,7 @@ import socket
 import cgi
 import robotexclusionrulesparser
 
+
 def GetIPAddress(url, descriptive=False):
     try:
         ip = socket.gethostbyname(url)
@@ -37,7 +38,7 @@ def AllowedByRobots(url, domaininfo, use_google_agent=True):
         return rerp.is_allowed('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', url)
     else:
         return rerp.is_allowed('*', url)
-        #return rerp.is_allowed('Mozilla/5.0 (compatible; WbSrch/1.2; +https://wbsrch.com)', url):
+        # return rerp.is_allowed('Mozilla/5.0 (compatible; WbSrch/1.2; +https://wbsrch.com)', url):
 
 
 def CheckUrlAgainstRobotsFile(url):

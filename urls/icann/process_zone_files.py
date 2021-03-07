@@ -20,6 +20,7 @@ nameserver_list = ['ns1', 'ns2', 'ns3', 'ns4', 'ns5', 'ns6', 'ns7', 'ns8', 'ns9'
                    'ns40', 'ns41', 'ns42', 'ns43', 'ns44', 'ns45', 'ns46', 'ns47', 'ns48', 'ns49',
                    'ns50', 'ns51', 'ns52', 'ns53', 'ns54', 'ns55', 'ns56', 'ns57', 'ns58', 'ns59']
 
+
 def ProcessDomains(filename):
     processed = 0
     domains = set()
@@ -46,7 +47,7 @@ def ProcessDomains(filename):
                 if pieces[0] in nameserver_list:
                     continue
         if domain not in domains:
-            #print('Domain: {0}'.format(domain))
+            # print('Domain: {0}'.format(domain))
             domains.add(domain)
             processed += 1
         if(processed % 1000000) == 0:

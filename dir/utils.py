@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import truncatewords
+from django.http import Http404
 from django.db.models import Count
 from django.apps import apps
 from django.db.utils import DatabaseError
@@ -14,8 +15,8 @@ from PIL import Image
 import signal
 import ujson
 from bs4 import BeautifulSoup
-from .models import *
-from .exceptions import InvalidLanguageException
+from dir.models import hidden_language_list, language_list, language_names, BadQuery, AutoComplete, BlockedSite, CrawlableUrl, DomainInfo, DomainSuffix, Favicon, IndexTerm, IndexStats, IPAddress, KeywordRanking, MonthlySearchReport, PageLink, PageIFrame, PageJavaScript, PendingIndex, QueryParameter, ResultClick, Screenshot, SearchLog, SiteInfo
+from dir.exceptions import InvalidLanguageException
 from datetime import timedelta
 import os
 import requests
@@ -123,131 +124,132 @@ second_level_domains = [
 '.com.ro', '.info.ro', '.nom.ro', '.org.ro', '.arts.ro', '.firm.ro', '.nt.ro', '.rec.ro', '.store.ro', '.tm.ro', '.www.ro',  # Romania
 '.ac.be',  # Belgium
 '.com.gr', '.edu.gr', '.gov.gr', '.mil.gr', '.mod.gr', '.net.gr', '.org.gr', '.sch.gr',  # Greece
-'.kommune.no', '.priv.no', '.stat.no', '.dep.no', '.fhs.no', 'mil.no', # Norway
-'.com.hr', '.iz.hr', # Croatia
-'.com.mt', '.org.mt', '.net.mt', '.edu.mt', '.gov.mt', # Malta
-'.co.ba', '.com.ba', '.edu.ba', '.gov.ba', '.net.ba', # Bosnia and Herzegovina
-'.ac.cy', '.com.cy', '.gov.cy', '.net.cy', '.org.cy', # Cyprus
-'.asn.lv', '.conf.lv', '.com.lv', '.edu.lv', '.gov.lv', '.id.lv', '.mil.lv', '.net.lv', '.org.lv', # Latvia
-'.com.ee', '.edu.ee', '.fie.ee', '.med.ee', '.pri.ee', '.lib.ee', '.org.ee', # Estonia
-'.com.al', '.edu.al', '.gov.al', '.net.al', '.org.al', # Albania
-'.com.az', '.edu.az', '.gov.az', '.info.az', '.int.az', '.mil.az', '.net.az', '.org.az', '.pp.az', # Azerbaijan
-'.com.am', '.net.am', '.org.am', # Armenia
-'.com.ge', '.edu.ge', '.gov.ge', 'mil.ge', '.net.ge', '.org.ge', '.pvt.ge', # Georgia
-'.com.by', '.edu.by', '.gov.by', '.mil.by', '.org.by', # Belarus
-'.org.kg', '.net.kg', '.com.kg', '.edu.kg', '.gov.kg', '.mil.kg', # Kyrgyzstan
-'.ac.tj', '.co.tj', '.com.tj', '.edu.tj', '.mil.tj', '.net.tj', '.org.tj', # Tajikistan
-'.co.uz', '.edu.uz', '.gov.uz', # Uzbekistan
-'.com.mx', '.edu.mx', '.gob.mx', '.net.mx', '.org.mx', # Mexico
-'.ac.th', '.co.th', '.go.th', '.in.th', '.mi.th', '.net.th', '.or.th', # Thailand
-'.ac.cn', '.bj.cn', '.com.cn', '.cq.cn', '.edu.cn', '.gd.cn', '.ha.cn', '.hk.cn', '.hl.cn', '.hn.cn', '.gov.cn', '.jl.cn', '.js.cn', '.mil.cn', '.net.cn', '.nx.cn', '.org.cn', '.sc.cn', '.sd.cn', '.sh.cn', '.tj.cn', '.xj.cn', '.zj.cn', # China
-'.ac.ru', '.com.ru', '.edu.ru', '.gov.ru', '.int.ru', '.kamchatka.ru', '.karelia.ru', '.mil.ru', '.msk.ru', '.net.ru', '.nnov.ru', '.omsk.ru', '.org.ru', '.pp.ru', '.spb.ru', '.tomsk.ru', # Russia
-'.club.tw', '.com.tw', '.ebiz.tw', '.edu.tw', '.game.tw', '.gov.tw', '.idv.tw', '.mil.tw', '.net.tw', '.org.tw', # Taiwan
-'.com.hk', '.edu.hk', '.gov.hk', '.net.hk', '.org.hk', # Hong Kong
-'.com.sg', '.edu.sg', '.gov.sg', '.org.sg', # Singapore
-'.com.mo', '.edu.mo', '.gov.mo', '.net.mo', '.org.mo', # Macau
-'.ac.ir', '.co.ir', '.gov.ir', '.id.ir', '.net.ir', '.org.ir', '.sch.ir', # Iran
-'.com.iq', '.edu.iq', '.gov.iq', '.mil.iq', '.net.iq', '.org.iq', # Iraq
-'.ac.kr', '.co.kr', '.go.kr', '.hs.kr', '.kg.kr', '.ms.kr', '.ne.kr', '.or.kr', '.pe.kr', '.re.kr', # Korea
-'.com.kp', '.edu.kp', # North Korea
-'.at.ua', '.ck.ua', '.cn.ua', '.com.ua', '.crimea.ua', '.dn.ua', '.donetsk.ua', '.dp.ua', '.edu.ua', '.gov.ua', '.if.ua', '.kh.ua', '.in.ua', '.km.ua', '.kr.ua', '.ks.ua', '.lg.ua', '.mk.ua', '.net.ua', '.od.ua', '.pl.ua', '.pp.ua', '.org.ua', '.rv.ua', '.te.ua', '.uz.ua', '.vn.ua', '.zp.ua', '.kiev.ua', '.lviv.ua', '.kharkov.ua', '.lugansk.ua', '.lutsk.ua', '.kherson.ua', '.odessa.ua', '.poltava.ua', '.rovno.ua', '.sumy.ua', # Ukraine
-'.ac.nz', '.co.nz', '.cri.nz', '.govt.nz', '.health.nz', '.mil.nz', '.net.nz', '.org.nz', # New Zealand
-'.ac.za', '.co.za', '.edu.za', '.gov.za', '.mil.za', '.net.za', '.org.za', '.web.za', # South Africa
-'.com.pk', '.edu.pk', '.gov.pk', '.org.pk', '.net.pk', '.fam.pk', '.biz.pk', '.web.pk', '.gok.pk', '.gob.pk', '.gkp.pk', '.gop.pk', '.gos.pk', '.gog.pk', # Pakistan
-'.com.sa', '.edu.sa', '.gov.sa', '.med.sa', '.net.sa', '.org.sa', '.pub.sa', '.sch.sa', # Saudi Arabia
-'.ac.il', '.co.il', '.gov.il', '.idf.il', '.k12.il', '.muni.il', '.net.il', '.org.il', # Israel
-'.com.ly', '.edu.ly', '.gov.ly', # Libya
-'.com.tn', '.fin.tn', '.gov.tn', '.net.tn', '.org.tn', '.info.tn', '.edunet.tn', '.nat.tn', '.rnu.tn', # Tunisia
-'.com.eg', '.edu.eg', '.eun.eg', '.gov.eg', '.info.eg', '.mil.eg', '.name.eg', '.net.eg', '.org.eg', '.sci.eg', '.tv.eg', # Egypt
-'.com.lb', '.edu.lb', '.gov.lb', '.net.lb', '.org.lb', # Lebanon
-'.art.dz', '.asso.dz', '.com.dz', '.edu.dz', '.gov.dz', '.net.dz', '.org.dz', '.pol.dz', # Algeria
-'.com.sy', '.edu.sy', '.gov.sy', '.mil.sy', '.net.sy', '.news.sy', '.org.sy', # Syria
-'.com.qa', '.edu.qa', '.gov.qa', '.mil.qa', '.net.qa', '.org.qa', # Qatar
-'.com.ps', '.edu.ps', '.gov.ps', '.net.ps', '.org.ps', '.plo.ps', '.sec.ps', # Palestine
-'.com.kw', '.edu.kw', '.gov.kw', '.net.kw', '.org.kw', # Kuwait
-'.com.bh', '.edu.bh', '.gov.bh', # Bahrain
-'.com.bn', '.edu.bn', '.gov.bn', # Brunei
-'.com.om', '.gov.om', '.edu.om', '.co.om', '.pro.om', '.museum.om', '.net.om', '.med.om', # Oman
-'.com.jo', '.edu.jo', '.gov.jo', '.mil.jo', '.name.jo', '.net.jo', '.org.jo', # Jordan
-'.co.ye', '.com.ye', '.edu.ye', '.gov.ye', '.ltd.ye', '.me.ye', '.net.ye', '.org.ye', '.plc.ye', # Yemen
-'.ac.ae', '.co.ae', '.net.ae', '.edu.ae', '.gov.ae', # United Arab Emirates
-'.com.af', '.edu.af', '.gov.af', '.org.af', # Afghanistan
-'.ac.ma', '.co.ma', '.gov.ma', '.net.ma', '.org.ma', # Morocco
-'.ac.rs', '.co.rs', '.edu.rs', '.gov.rs', '.in.rs', '.org.rs', # Serbia
-'.ac.me', '.co.me', '.gov.me', '.net.me', '.org.me', '.edu.me', '.its.me', '.priv.me', # Montenegro
-'.com.ar', '.edu.ar', '.gob.ar', '.gov.ar', '.int.ar', '.mil.ar', '.net.ar', '.org.ar', '.tur.ar', # Argentina
-'.com.co', '.edu.co', '.gov.co', '.mil.co', '.net.co', '.nom.co', '.org.co', # Colombia
-'.arts.ve', '.co.ve', '.com.ve', '.edu.ve', '.gob.ve', '.gov.ve', '.info.ve', '.int.ve', '.mil.ve', '.net.ve', '.org.ve', '.radio.ve', '.tec.ve', '.web.ve', # Venezuela
-'.com.bo', '.edu.bo', '.org.bo', # Bolivia
-'.ac.ni', '.co.ni', '.com.ni', '.edu.ni', '.gob.ni', '.mil.ni', '.nom.ni', '.net.ni', '.org.ni', # Nicaragua
-'.com.pe', '.edu.pe', '.gob.pe', '.mil.pe', '.net.pe', '.ngo.pe', '.nom.pe', '.org.pe', '.sld.pe', # Peru
-'.com.ec', '.edu.ec', '.fin.ec', '.gob.ec', '.gov.ec', '.info.ec', '.mil.ec', '.org.ec', # Ecuador
-'.com.gt', '.edu.gt', '.gob.gt', '.ind.gt', '.mil.gt', '.net.gt', '.org.gt', # Guatemala
-'.com.uy', '.edu.uy', '.gub.uy', '.net.uy', '.org.uy', '.mil.uy', # Uruguay
-'.com.py', '.edu.py', '.gov.py', '.net.py', '.coop.py', '.mil.py', '.org.py', '.una.py', # Paraguay
-'.co.gy', '.com.gy', '.org.gy', '.net.gy', '.edu.gy', '.gov.gy', # Guyana
-'.com.pa', '.edu.pa', '.ac.pa', '.gob.pa', '.sld.pa', '.net.pa', '.org.pa', '.abo.pa', '.ing.pa', '.med.pa', '.nom.pa', # Panama
-'.com.hn', '.net,hn', '.edu.hn', '.gob.hn', '.org.hn', # Honduras
-'.ac.cr', '.co.cr', '.ed.cr', '.fi.cr', '.go.cr', '.or.cr', '.sa.cr', # Costa Rica
-'.com.sv', '.edu.sv', '.gob.sv', '.org.sv', '.red.sv', # El Salvador
-'.art.do', '.com.do', '.edu.do', '.gob.do', '.gov.do', '.mil.do', '.net.do', '.org.do', '.sld.do', # Dominican Republic
-'.ac.pr', '.biz.pr', '.com.pr', '.edu.pr', '.est.pr', '.gov.pr', '.info.pr', '.isla.pr', '.name.pr', '.net.pr', '.org.pr', '.pro.pr', '.prof.pr', # Puerto Rico
-'.com.cu', '.edu.cu', '.gov.cu', '.inf.cu', '.net.cu', '.org.cu', # Cuba
-'.com.bz', '.gov.bz', '.net.bz', # Belize
-'.com.my', '.edu.my', '.gov.my', '.mil.my', '.net.my', '.org.my', # Malaysia
-'.com.mk', '.edu.mk', '.gov.mk', '.inf.mk', '.name.mk', '.net.mk', '.org.mk', # Macedonia
-'.com.ng', '.edu.ng', '.gov.ng', '.org.ng', '.mil.ng', '.net.ng', '.sch.ng', '.name.ng', '.mobi.ng', # Nigeria
-'.ac.tz', '.co.tz', '.go.tz', '.or.tz', '.mil.tz', '.sc.tz', '.ne.tz', # Tanzania
-'.co.na', '.com.na', '.gov.na', '.cc.na', '.org.na', # Namibia
-'.ac.ke', '.co.ke', '.ne.ke', '.or.ke', '.go.ke', '.sc.jke', '.me.ke', '.mobi.ke', '.info.ke', # Kenya
-'.ac.ug', '.co.ug', '.com.ug', '.ne.ug', '.or.ug', '.org.ug', '.go.ug', '.sc.ug', # Uganda
-'.ac.rw', '.co.rw', '.coop.rw', '.gov.rw', '.ltd.rw', '.mil.rw', '.net.rw', '.org.rw', # Rwanda
-'.gov.bi', # Burundi
-'.com.gh', '.edu.gh', '.gov.gh', '.mil.gh', '.net.gh', '.org.gh', # Ghana
-'.adv.mz', '.ac.mz', '.co.mz', '.edu.mz', '.gov.mz', '.org.mz', # Mozambique
-'.co.ao', '.ed.ao', '.gv.ao', '.it.ao', # Angola
-'.com.cm', '.gov.cm', # Cameroon
-'.gov.bf', # Burkina Faso
-'.co.bw', '.gov.bw', # Botswana
-'.com.sd', '.net.sd', '.org.sd', '.edu.sd', '.med.sd', '.tv.sd', '.gov.sd', '.info.sd', # Sudan
-'.net.ml', '.org.ml', '.edu.ml', '.gov.ml', '.presse.ml', # Mali
-'.com.mu', '.net.mu', '.org.mu', '.ac.mu', '.co.mu', '.or.mu', '.gov.mu', # Mauritius
-'.biz.et', '.com.et', '.edu.et', '.gov.et', '.info.et', '.name.et', '.net.et', '.org.et', # Ethiopia
-'.ac.zm', '.co.zm', '.com.zm', '.edu.zm', '.gov.zm', '.net.zm', '.org.zm', '.sch.zm', # Zambia
-'.ac.zw', '.co.zw', '.org.zw', '.gov.zw', # Zimbabwe
-'.com.sl', '.net.sl', '.org.sl', '.edu.sl', '.gov.sl', # Sierra Leone
-'.ac.sz', '.co.sz', '.org.sz', # Swaziland
-'.ac.vn', '.biz.vn', '.com.vn', '.edu.vn', '.gov.vn', '.health.vn', '.info.vn', '.name.vn', '.net.vn', '.org.vn', '.pro.vn', # Vietnam
-'.com.ph', '.edu.ph', '.gov.ph', '.net.ph', '.org.ph', # Philippines
-'.com.pg', '.net.pg', '.ac.pg', '.gov.pg', '.mil.pg', '.org.pg', # Papua New Guinea
-'.com.mm', '.gov.mm', # Burma / Myanmar
-'.ac.bd', '.com.bd', '.edu.bd', '.gov.bd', '.mil.bd', '.net.bd', '.org.bd', # Bangladesh
-'.edu.mn', '.gov.mn', '.org.mn', # Mongolia
-'.com.kh', '.edu.kh', '.gov.kh', '.mil.kh', '.net.kh', '.org.kh', '.per.kh', # Cambodia
-'.com.np', '.gov.np', '.edu.np', '.net.np', '.org.np', # Nepal
-'.com.bt', '.edu.bt', '.gov.bt', '.org.bt', # Bhutan
-'.ac.lk', '.com.lk', '.gov.lk', '.org.lk', # Sri Lanka
-'.com.la', '.gov.la', '.net.la', '.org.la', # Laos
-'.com.jm', '.edu.jm', '.gov.jm', '.org.jm', # Jamaica
-'.com.ag', '.net.ag', # Antigua and Barbuda
-'.com.ai', # Anguilla
-'.gov.bb', # Barbados
-'.gov.bm', # Bermuda
-'.com.bs', '.edu.bs', '.gov.bs', '.net.bs', '.org.bs', '.we.bs', # Bahamas
-'.gov.cx', # Christmas Island
-'.ac.fj', '.biz.fj', '.com.fj', '.gov.fj', '.info.fj', '.mil.fj', '.name.fj', '.net.fj', '.org.fj', '.pro.fj', # Fiji
-'.co.gg', '.net.gg', '.gov.gg', # Guernsey
-'.com.gi', '.ltd.gi', '.gov.gi', '.mod.gi', '.edu.gi', '.org.gi', # Gibraltar
-'.co.im', '.gov.im', # Isle of Man
-'.co.je', '.net.je', '.org.je', # Jersey
-'.gov.ki', # Kiribati
-'.biz.mv', '.com.mv', '.gov.mv', '.edu.mv', '.net.mv', '.org.mv', '.info.mv', # Maldives
-'.com.nr', '.edu.nr', '.gov.nr', '.biz.nr', '.org.nr', '.net.nr', '.info.nr', # Nauru
-'.com.sb', '.edu.sb', '.net.sb', '.gov.sb', '.org.sb', # Solomon Islands
-'.com.sc', '.edu.sc', '.net.sc', '.gov.sc', '.org.sc', # Seychelles
-'.co.tt', '.com.tt', '.edu.tt', '.gov.tt', '.mil.tt', '.org.tt', '.net.tt', '.biz.tt', '.info.tt', '.pro.tt', '.int.tt', '.coop.tt', '.jobs.tt', '.mobi.tt', '.travel.tt', '.museum.tt', '.aero.tt', '.cat.tt', '.tel.tt', '.name.tt', # Trinidad and Tobago
-'.com.vc', # Saint Vincent and the Grenadines
+'.kommune.no', '.priv.no', '.stat.no', '.dep.no', '.fhs.no', 'mil.no',  # Norway
+'.com.hr', '.iz.hr',  # Croatia
+'.com.mt', '.org.mt', '.net.mt', '.edu.mt', '.gov.mt',  # Malta
+'.co.ba', '.com.ba', '.edu.ba', '.gov.ba', '.net.ba',  # Bosnia and Herzegovina
+'.ac.cy', '.com.cy', '.gov.cy', '.net.cy', '.org.cy',  # Cyprus
+'.asn.lv', '.conf.lv', '.com.lv', '.edu.lv', '.gov.lv', '.id.lv', '.mil.lv', '.net.lv', '.org.lv',  # Latvia
+'.com.ee', '.edu.ee', '.fie.ee', '.med.ee', '.pri.ee', '.lib.ee', '.org.ee',  # Estonia
+'.com.al', '.edu.al', '.gov.al', '.net.al', '.org.al',  # Albania
+'.com.az', '.edu.az', '.gov.az', '.info.az', '.int.az', '.mil.az', '.net.az', '.org.az', '.pp.az',  # Azerbaijan
+'.com.am', '.net.am', '.org.am',  # Armenia
+'.com.ge', '.edu.ge', '.gov.ge', 'mil.ge', '.net.ge', '.org.ge', '.pvt.ge',  # Georgia
+'.com.by', '.edu.by', '.gov.by', '.mil.by', '.org.by',  # Belarus
+'.org.kg', '.net.kg', '.com.kg', '.edu.kg', '.gov.kg', '.mil.kg',  # Kyrgyzstan
+'.ac.tj', '.co.tj', '.com.tj', '.edu.tj', '.mil.tj', '.net.tj', '.org.tj',  # Tajikistan
+'.co.uz', '.edu.uz', '.gov.uz',  # Uzbekistan
+'.com.mx', '.edu.mx', '.gob.mx', '.net.mx', '.org.mx',  # Mexico
+'.ac.th', '.co.th', '.go.th', '.in.th', '.mi.th', '.net.th', '.or.th',  # Thailand
+'.ac.cn', '.bj.cn', '.com.cn', '.cq.cn', '.edu.cn', '.gd.cn', '.ha.cn', '.hk.cn', '.hl.cn', '.hn.cn', '.gov.cn', '.jl.cn', '.js.cn', '.mil.cn', '.net.cn', '.nx.cn', '.org.cn', '.sc.cn', '.sd.cn', '.sh.cn', '.tj.cn', '.xj.cn', '.zj.cn',  # China
+'.ac.ru', '.com.ru', '.edu.ru', '.gov.ru', '.int.ru', '.kamchatka.ru', '.karelia.ru', '.mil.ru', '.msk.ru', '.net.ru', '.nnov.ru', '.omsk.ru', '.org.ru', '.pp.ru', '.spb.ru', '.tomsk.ru',  # Russia
+'.club.tw', '.com.tw', '.ebiz.tw', '.edu.tw', '.game.tw', '.gov.tw', '.idv.tw', '.mil.tw', '.net.tw', '.org.tw',  # Taiwan
+'.com.hk', '.edu.hk', '.gov.hk', '.net.hk', '.org.hk',  # Hong Kong
+'.com.sg', '.edu.sg', '.gov.sg', '.org.sg',  # Singapore
+'.com.mo', '.edu.mo', '.gov.mo', '.net.mo', '.org.mo',  # Macau
+'.ac.ir', '.co.ir', '.gov.ir', '.id.ir', '.net.ir', '.org.ir', '.sch.ir',  # Iran
+'.com.iq', '.edu.iq', '.gov.iq', '.mil.iq', '.net.iq', '.org.iq',  # Iraq
+'.ac.kr', '.co.kr', '.go.kr', '.hs.kr', '.kg.kr', '.ms.kr', '.ne.kr', '.or.kr', '.pe.kr', '.re.kr',  # Korea
+'.com.kp', '.edu.kp',  # North Korea
+'.at.ua', '.ck.ua', '.cn.ua', '.com.ua', '.crimea.ua', '.dn.ua', '.donetsk.ua', '.dp.ua', '.edu.ua', '.gov.ua', '.if.ua', '.kh.ua', '.in.ua', '.km.ua', '.kr.ua', '.ks.ua', '.lg.ua', '.mk.ua', '.net.ua', '.od.ua', '.pl.ua', '.pp.ua', '.org.ua', '.rv.ua', '.te.ua', '.uz.ua', '.vn.ua', '.zp.ua', '.kiev.ua', '.lviv.ua', '.kharkov.ua', '.lugansk.ua', '.lutsk.ua', '.kherson.ua', '.odessa.ua', '.poltava.ua', '.rovno.ua', '.sumy.ua',  # Ukraine
+'.ac.nz', '.co.nz', '.cri.nz', '.govt.nz', '.health.nz', '.mil.nz', '.net.nz', '.org.nz',  # New Zealand
+'.ac.za', '.co.za', '.edu.za', '.gov.za', '.mil.za', '.net.za', '.org.za', '.web.za',  # South Africa
+'.com.pk', '.edu.pk', '.gov.pk', '.org.pk', '.net.pk', '.fam.pk', '.biz.pk', '.web.pk', '.gok.pk', '.gob.pk', '.gkp.pk', '.gop.pk', '.gos.pk', '.gog.pk',  # Pakistan
+'.com.sa', '.edu.sa', '.gov.sa', '.med.sa', '.net.sa', '.org.sa', '.pub.sa', '.sch.sa',  # Saudi Arabia
+'.ac.il', '.co.il', '.gov.il', '.idf.il', '.k12.il', '.muni.il', '.net.il', '.org.il',  # Israel
+'.com.ly', '.edu.ly', '.gov.ly',  # Libya
+'.com.tn', '.fin.tn', '.gov.tn', '.net.tn', '.org.tn', '.info.tn', '.edunet.tn', '.nat.tn', '.rnu.tn',  # Tunisia
+'.com.eg', '.edu.eg', '.eun.eg', '.gov.eg', '.info.eg', '.mil.eg', '.name.eg', '.net.eg', '.org.eg', '.sci.eg', '.tv.eg',  # Egypt
+'.com.lb', '.edu.lb', '.gov.lb', '.net.lb', '.org.lb',  # Lebanon
+'.art.dz', '.asso.dz', '.com.dz', '.edu.dz', '.gov.dz', '.net.dz', '.org.dz', '.pol.dz',  # Algeria
+'.com.sy', '.edu.sy', '.gov.sy', '.mil.sy', '.net.sy', '.news.sy', '.org.sy',  # Syria
+'.com.qa', '.edu.qa', '.gov.qa', '.mil.qa', '.net.qa', '.org.qa',  # Qatar
+'.com.ps', '.edu.ps', '.gov.ps', '.net.ps', '.org.ps', '.plo.ps', '.sec.ps',  # Palestine
+'.com.kw', '.edu.kw', '.gov.kw', '.net.kw', '.org.kw',  # Kuwait
+'.com.bh', '.edu.bh', '.gov.bh',  # Bahrain
+'.com.bn', '.edu.bn', '.gov.bn',  # Brunei
+'.com.om', '.gov.om', '.edu.om', '.co.om', '.pro.om', '.museum.om', '.net.om', '.med.om',  # Oman
+'.com.jo', '.edu.jo', '.gov.jo', '.mil.jo', '.name.jo', '.net.jo', '.org.jo',  # Jordan
+'.co.ye', '.com.ye', '.edu.ye', '.gov.ye', '.ltd.ye', '.me.ye', '.net.ye', '.org.ye', '.plc.ye',  # Yemen
+'.ac.ae', '.co.ae', '.net.ae', '.edu.ae', '.gov.ae',  # United Arab Emirates
+'.com.af', '.edu.af', '.gov.af', '.org.af',  # Afghanistan
+'.ac.ma', '.co.ma', '.gov.ma', '.net.ma', '.org.ma',  # Morocco
+'.ac.rs', '.co.rs', '.edu.rs', '.gov.rs', '.in.rs', '.org.rs',  # Serbia
+'.ac.me', '.co.me', '.gov.me', '.net.me', '.org.me', '.edu.me', '.its.me', '.priv.me',  # Montenegro
+'.com.ar', '.edu.ar', '.gob.ar', '.gov.ar', '.int.ar', '.mil.ar', '.net.ar', '.org.ar', '.tur.ar',  # Argentina
+'.com.co', '.edu.co', '.gov.co', '.mil.co', '.net.co', '.nom.co', '.org.co',  # Colombia
+'.arts.ve', '.co.ve', '.com.ve', '.edu.ve', '.gob.ve', '.gov.ve', '.info.ve', '.int.ve', '.mil.ve', '.net.ve', '.org.ve', '.radio.ve', '.tec.ve', '.web.ve',  # Venezuela
+'.com.bo', '.edu.bo', '.org.bo',  # Bolivia
+'.ac.ni', '.co.ni', '.com.ni', '.edu.ni', '.gob.ni', '.mil.ni', '.nom.ni', '.net.ni', '.org.ni',  # Nicaragua
+'.com.pe', '.edu.pe', '.gob.pe', '.mil.pe', '.net.pe', '.ngo.pe', '.nom.pe', '.org.pe', '.sld.pe',  # Peru
+'.com.ec', '.edu.ec', '.fin.ec', '.gob.ec', '.gov.ec', '.info.ec', '.mil.ec', '.org.ec',  # Ecuador
+'.com.gt', '.edu.gt', '.gob.gt', '.ind.gt', '.mil.gt', '.net.gt', '.org.gt',  # Guatemala
+'.com.uy', '.edu.uy', '.gub.uy', '.net.uy', '.org.uy', '.mil.uy',  # Uruguay
+'.com.py', '.edu.py', '.gov.py', '.net.py', '.coop.py', '.mil.py', '.org.py', '.una.py',  # Paraguay
+'.co.gy', '.com.gy', '.org.gy', '.net.gy', '.edu.gy', '.gov.gy',  # Guyana
+'.com.pa', '.edu.pa', '.ac.pa', '.gob.pa', '.sld.pa', '.net.pa', '.org.pa', '.abo.pa', '.ing.pa', '.med.pa', '.nom.pa',  # Panama
+'.com.hn', '.net,hn', '.edu.hn', '.gob.hn', '.org.hn',  # Honduras
+'.ac.cr', '.co.cr', '.ed.cr', '.fi.cr', '.go.cr', '.or.cr', '.sa.cr',  # Costa Rica
+'.com.sv', '.edu.sv', '.gob.sv', '.org.sv', '.red.sv',  # El Salvador
+'.art.do', '.com.do', '.edu.do', '.gob.do', '.gov.do', '.mil.do', '.net.do', '.org.do', '.sld.do',  # Dominican Republic
+'.ac.pr', '.biz.pr', '.com.pr', '.edu.pr', '.est.pr', '.gov.pr', '.info.pr', '.isla.pr', '.name.pr', '.net.pr', '.org.pr', '.pro.pr', '.prof.pr',  # Puerto Rico
+'.com.cu', '.edu.cu', '.gov.cu', '.inf.cu', '.net.cu', '.org.cu',  # Cuba
+'.com.bz', '.gov.bz', '.net.bz',  # Belize
+'.com.my', '.edu.my', '.gov.my', '.mil.my', '.net.my', '.org.my',  # Malaysia
+'.com.mk', '.edu.mk', '.gov.mk', '.inf.mk', '.name.mk', '.net.mk', '.org.mk',  # Macedonia
+'.com.ng', '.edu.ng', '.gov.ng', '.org.ng', '.mil.ng', '.net.ng', '.sch.ng', '.name.ng', '.mobi.ng',  # Nigeria
+'.ac.tz', '.co.tz', '.go.tz', '.or.tz', '.mil.tz', '.sc.tz', '.ne.tz',  # Tanzania
+'.co.na', '.com.na', '.gov.na', '.cc.na', '.org.na',  # Namibia
+'.ac.ke', '.co.ke', '.ne.ke', '.or.ke', '.go.ke', '.sc.jke', '.me.ke', '.mobi.ke', '.info.ke',  # Kenya
+'.ac.ug', '.co.ug', '.com.ug', '.ne.ug', '.or.ug', '.org.ug', '.go.ug', '.sc.ug',  # Uganda
+'.ac.rw', '.co.rw', '.coop.rw', '.gov.rw', '.ltd.rw', '.mil.rw', '.net.rw', '.org.rw',  # Rwanda
+'.gov.bi',  # Burundi
+'.com.gh', '.edu.gh', '.gov.gh', '.mil.gh', '.net.gh', '.org.gh',  # Ghana
+'.adv.mz', '.ac.mz', '.co.mz', '.edu.mz', '.gov.mz', '.org.mz',  # Mozambique
+'.co.ao', '.ed.ao', '.gv.ao', '.it.ao',  # Angola
+'.com.cm', '.gov.cm',  # Cameroon
+'.gov.bf',  # Burkina Faso
+'.co.bw', '.gov.bw',  # Botswana
+'.com.sd', '.net.sd', '.org.sd', '.edu.sd', '.med.sd', '.tv.sd', '.gov.sd', '.info.sd',  # Sudan
+'.net.ml', '.org.ml', '.edu.ml', '.gov.ml', '.presse.ml',  # Mali
+'.com.mu', '.net.mu', '.org.mu', '.ac.mu', '.co.mu', '.or.mu', '.gov.mu',  # Mauritius
+'.biz.et', '.com.et', '.edu.et', '.gov.et', '.info.et', '.name.et', '.net.et', '.org.et',  # Ethiopia
+'.ac.zm', '.co.zm', '.com.zm', '.edu.zm', '.gov.zm', '.net.zm', '.org.zm', '.sch.zm',  # Zambia
+'.ac.zw', '.co.zw', '.org.zw', '.gov.zw',  # Zimbabwe
+'.com.sl', '.net.sl', '.org.sl', '.edu.sl', '.gov.sl',  # Sierra Leone
+'.ac.sz', '.co.sz', '.org.sz',  # Swaziland
+'.ac.vn', '.biz.vn', '.com.vn', '.edu.vn', '.gov.vn', '.health.vn', '.info.vn', '.name.vn', '.net.vn', '.org.vn', '.pro.vn',  # Vietnam
+'.com.ph', '.edu.ph', '.gov.ph', '.net.ph', '.org.ph',  # Philippines
+'.com.pg', '.net.pg', '.ac.pg', '.gov.pg', '.mil.pg', '.org.pg',  # Papua New Guinea
+'.com.mm', '.gov.mm',  # Burma / Myanmar
+'.ac.bd', '.com.bd', '.edu.bd', '.gov.bd', '.mil.bd', '.net.bd', '.org.bd',  # Bangladesh
+'.edu.mn', '.gov.mn', '.org.mn',  # Mongolia
+'.com.kh', '.edu.kh', '.gov.kh', '.mil.kh', '.net.kh', '.org.kh', '.per.kh',  # Cambodia
+'.com.np', '.gov.np', '.edu.np', '.net.np', '.org.np',  # Nepal
+'.com.bt', '.edu.bt', '.gov.bt', '.org.bt',  # Bhutan
+'.ac.lk', '.com.lk', '.gov.lk', '.org.lk',  # Sri Lanka
+'.com.la', '.gov.la', '.net.la', '.org.la',  # Laos
+'.com.jm', '.edu.jm', '.gov.jm', '.org.jm',  # Jamaica
+'.com.ag', '.net.ag',  # Antigua and Barbuda
+'.com.ai',  # Anguilla
+'.gov.bb',  # Barbados
+'.gov.bm',  # Bermuda
+'.com.bs', '.edu.bs', '.gov.bs', '.net.bs', '.org.bs', '.we.bs',  # Bahamas
+'.gov.cx',  # Christmas Island
+'.ac.fj', '.biz.fj', '.com.fj', '.gov.fj', '.info.fj', '.mil.fj', '.name.fj', '.net.fj', '.org.fj', '.pro.fj',  # Fiji
+'.co.gg', '.net.gg', '.gov.gg',  # Guernsey
+'.com.gi', '.ltd.gi', '.gov.gi', '.mod.gi', '.edu.gi', '.org.gi',  # Gibraltar
+'.co.im', '.gov.im',  # Isle of Man
+'.co.je', '.net.je', '.org.je',  # Jersey
+'.gov.ki',  # Kiribati
+'.biz.mv', '.com.mv', '.gov.mv', '.edu.mv', '.net.mv', '.org.mv', '.info.mv',  # Maldives
+'.com.nr', '.edu.nr', '.gov.nr', '.biz.nr', '.org.nr', '.net.nr', '.info.nr',  # Nauru
+'.com.sb', '.edu.sb', '.net.sb', '.gov.sb', '.org.sb',  # Solomon Islands
+'.com.sc', '.edu.sc', '.net.sc', '.gov.sc', '.org.sc',  # Seychelles
+'.co.tt', '.com.tt', '.edu.tt', '.gov.tt', '.mil.tt', '.org.tt', '.net.tt', '.biz.tt', '.info.tt', '.pro.tt', '.int.tt', '.coop.tt', '.jobs.tt', '.mobi.tt', '.travel.tt', '.museum.tt', '.aero.tt', '.cat.tt', '.tel.tt', '.name.tt',  # Trinidad and Tobago
+'.com.vc',  # Saint Vincent and the Grenadines
 ]
+
 
 def IsValidDomainExtension(text):
     """
@@ -786,7 +788,7 @@ def IsBadMimeType(mimetype):
     return False
 
 
-def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True):
+def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True, verbose=False):
     if not mimetype:
         return 0.0
     # Bonus point for being UTF-8.
@@ -1275,7 +1277,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         value -= 4
         if verbose:
             rulematches.append('-4 points for url 221 chars or more.')
-    #if item.pagetitle and keywords in item.pagetitle.lower():
+    # if item.pagetitle and keywords in item.pagetitle.lower():
     if item.pagetitle and keywords in GetTerms(item.pagetitle):
         value += 10
         if verbose:
@@ -1326,7 +1328,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         value -= 2
         if verbose:
             rulematches.append('-2 points for all lowercase page title.')
-    #if item.pagedescription and keywords in item.pagedescription.lower():
+    # if item.pagedescription and keywords in item.pagedescription.lower():
     if item.pagedescription and keywords in GetTerms(item.pagedescription):
         value += 3
         if verbose:
@@ -1373,7 +1375,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         value += 1
         if verbose:
             rulematches.append('1 points for spaceless page keyword match.')
-    #if item.pagefirstheadtag and keywords in item.pagefirstheadtag.lower():
+    # if item.pagefirstheadtag and keywords in item.pagefirstheadtag.lower():
     if item.pagefirstheadtag and keywords in GetTerms(item.pagefirstheadtag):
         value += 8
         if verbose:
@@ -1573,7 +1575,7 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         if verbose:
             rulematches.append('1 point for page size over 4000.')
     if item.content_type_header:
-        pts = GetMimeTypeModifier(item.content_type_header, lang, verbose)
+        pts = GetMimeTypeModifier(item.content_type_header, lang, verbose=verbose)
         value += pts
         if verbose:
             rulematches.append('{0} points for content type {1}.'.format(pts, item.content_type_header))
@@ -2534,6 +2536,7 @@ def CleanSearchText(text):
     if text.endswith('\\'):
         text = text[0:-1]
     return text
+
 
 # Try to search for a specific search term or phrase. If found, return
 # it. Otherwise, add it to the pending terms and return None.
@@ -3626,7 +3629,7 @@ def TakeScreenshot(url):
     caps = dict(DesiredCapabilities.PHANTOMJS)
     caps["phantomjs.page.settings.userAgent"] = "Mozilla/5.0 (compatible; WbSrch/1.2 +https://wbsrch.com)"
     driver = webdriver.PhantomJS(executable_path="node_modules/phantomjs/bin/phantomjs", desired_capabilities=caps)
-    driver.set_window_size(WIDTH, HEIGHT) # optional
+    driver.set_window_size(WIDTH, HEIGHT)  # optional
     try:
         driver.get('https://{0}'.format(url))
     except Exception:

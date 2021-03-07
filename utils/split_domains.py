@@ -60,5 +60,5 @@ def SplitDomains(filename):
 
 
 SplitDomains('domains.txt')
-#SplitDomains('top-1m.csv')
-#SplitDomains('top500.domains.03.16.csv')
+# SplitDomains('top-1m.csv')
+# SplitDomains('top500.domains.03.16.csv')

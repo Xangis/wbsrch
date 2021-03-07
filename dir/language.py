@@ -52,6 +52,7 @@ language_name_reverse = {
 'basque': 'eu',
 }
 
+
 def GetInfixLanguage(url, descriptive=False):
     # Remove query parameters from the URL before testing.
     parsedurl = urlparse(url)
@@ -232,6 +233,7 @@ def GetInfixLanguage(url, descriptive=False):
         print('No infix language found. Returning None.')
     return None
 
+
 def GetUrlParameterLanguage(url):
     lang = None
     parsedurl = urlparse(url)
@@ -319,7 +321,7 @@ language_blocks = {
              'id': ['.id'],
              'he': ['.il'],
              'il': ['.il'],
-             'jp': ['.jp'], # Mistagged pages are somewhat common.
+             'jp': ['.jp'],  # Mistagged pages are somewhat common.
              'ja': ['.jp'],
              'ka': ['.ge'],
              'ko': ['.kp', '.ko', '.asia'],
@@ -329,7 +331,7 @@ language_blocks = {
              'tg': ['.ph'],
              'th': ['.th'],
              'uk': ['.ua', '.md'],
-             'vn': ['.vn'], # Mistagged pages are somewhat common.
+             'vn': ['.vn'],  # Mistagged pages are somewhat common.
              'vi': ['.vn'],
              'zh': ['.cn', '.sg', '.hk', '.mo', '.asia'],
             }
@@ -391,7 +393,7 @@ locales = [
            ['sk', 'sk-sk', '.sk'],
            ['sl', 'sl-si', '.si'],
            ['sv', 'sv-se', '.se'],
-           ['sv', 'sw-se', '.se'], # Wrong, but some Swedish sites incorrectly use the "sw" code.
+           ['sv', 'sw-se', '.se'],  # Wrong, but some Swedish sites incorrectly use the "sw" code.
            ['sv', 'sw', '.se'],
            ['sw', 'sw-ug', '.ug'],
            ['sw', 'sw-tz', '.tz'],
@@ -436,7 +438,7 @@ blocked_locales = [
            ['mn', 'mn-mn', '.mn'],
            ['my', 'my-my', '.my'],
            ['jp', 'jp-ja', '.jp'],
-           ['jp', 'jp-jp', '.jp'], # Mistagged pages are somewhat common.
+           ['jp', 'jp-jp', '.jp'],  # Mistagged pages are somewhat common.
            ['ka', 'ka-ge', '.ge'],
            ['ko', 'ko-ko', '.ko'],
            ['ko', 'ko-kp', '.kp'],
@@ -453,12 +455,13 @@ blocked_locales = [
            ['uk', 'uk-ua', '.ua'],
            ['uk', 'uk-md', '.md'],
            ['vi', 'vn-vi', '.vn'],
-           ['vi', 'vn-vn', '.vn'], # Mistagged pages are somewhat common.
+           ['vi', 'vn-vn', '.vn'],  # Mistagged pages are somewhat common.
            ['zh', 'zh-cn', '.cn'],
            ['zh', 'zh-hk', '.hk'],
            ['zh', 'zh-sg', '.sg'],
 
 ]
+
 
 def IdentifyPageLanguage(url, html):
     url = url.lower()
@@ -492,8 +495,8 @@ def IdentifyPageLanguage(url, html):
         # Don't care, we're just trying to identify the page.
         infixlangs = e.language
     # Next we extract what information we can from the HTML content.
-    #langloc = html.find(u'lang=')
-    #contentloc = html.find(u'content-language')
+    # langloc = html.find(u'lang=')
+    # contentloc = html.find(u'content-language')
     soup = BeautifulSoup(html, features="html.parser")
     html_lang = None
     content_lang = None
@@ -514,7 +517,7 @@ def IdentifyPageLanguage(url, html):
             print('Content Lang: {0} - {1}'.format(cl, content_lang))
         except Exception:
             pass
-    #print(u'Infix langs: {0}, Suffix Langs: {1}, Prefix Lang: {2}, HTML Lang: {3}, Content Lang: {4}'.format(
+    # print(u'Infix langs: {0}, Suffix Langs: {1}, Prefix Lang: {2}, HTML Lang: {3}, Content Lang: {4}'.format(
     #    infixlangs, suffixlangs, prefix, html_lang, content_lang))
     if html_lang:
         return [html_lang]
@@ -528,6 +531,7 @@ def IdentifyPageLanguage(url, html):
         return [prefix]
     return []
 
+
 def GetLanguageFromDomainExtension(rooturl):
     try:
         suffix = GetDomainExtension(rooturl)
@@ -539,6 +543,7 @@ def GetLanguageFromDomainExtension(rooturl):
     except ObjectDoesNotExist:
         pass
     return None
+
 
 # To get corpus, and others.
 # import nltk
@@ -565,6 +570,7 @@ def NLTKLanguageDetect(text):
     most_rated_language = max(languages_ratios, key=languages_ratios.get)
     # print most_rated_language
     return most_rated_language
+
 
 def IdentifyLanguage(text):
     return identifier.classify(text)

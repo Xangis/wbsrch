@@ -1818,12 +1818,14 @@ class SiteInfoEndingInLVAdmin(SiteInfoAdmin):
 
 class SiteInfoEndingInMAAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
+
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.ma')
 
 
 class SiteInfoEndingInMCAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
+
     def get_queryset(self, request):
         return self.model.objects.filter(rooturl__endswith='.mc')
 
@@ -2733,18 +2735,21 @@ class SiteInfoAfterZEndingInKWAdmin(SiteInfoAdmin):
 
 class SiteInfoAfterZEndingInKZAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
+
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.kz')
 
 
 class SiteInfoAfterZEndingInLAAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
+
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.la')
 
 
 class SiteInfoAfterZEndingInLBAdmin(SiteInfoAdmin):
     list_display = ('rooturl', 'url', 'pagetitle', 'pagefirstheadtag', 'pagefirsth2tag')
+
     def get_queryset(self, request):
         return self.model.objects.filter(pagetitle__gt='ZZZZ', rooturl__endswith='.lb')
 

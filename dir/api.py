@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.utils import timezone
-from dir.models import *
-from dir.utils import *
-from dir.exceptions import *
+from django.core.exceptions import ObjectDoesNotExist
+from dir.models import APISubscription, APIUsage, APIUser, APIToken, BlockedSite, DomainInfo, SiteInfo, EXCLUDED_SITE_REASONS
+from dir.utils import GetLinkRank, ReverseWWW
 from dir.domain import UpdateDomainWhois
 from urllib.parse import urlparse
 from django.contrib.gis.geoip import GeoIP
@@ -14,6 +14,7 @@ from rest_framework.authentication import get_authorization_header
 import hashlib
 import uuid
 import binascii
+
 
 # Note: In order to use the API, the user must have both a valid token AND
 # a valid subscription entered in the admin.
@@ -228,11 +229,11 @@ def domain_pages_in_index(request):
         print('{0} urls for altdomain {1}'.format(altdomaininfo.num_urls, altdomain))
 
     # TODO: Make the num_pages_in_index calculation take language association into account.
-    #if domaininfo and not (domaininfo.language_association or (domaininfo.language_association == 'en')):
+    # if domaininfo and not (domaininfo.language_association or (domaininfo.language_association == 'en')):
     #    return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages}, status=200)
-    #elif domaininfo:
+    # elif domaininfo:
     #    return Response({'domain': domain, 'total_pages_crawled': pages, domaininfo.language_association: pages}, status=200)
-    #else:
+    # else:
     return Response({'domain': domain, 'total_pages_crawled': pages, 'en': pages}, status=200)
 
 
@@ -243,7 +244,7 @@ def domain_keywords_ranked(request):
     if not IncrementAPICallCount(token.user):
         return HttpResponse('Account exceeded API call limit or does not have active subscription.', status=403)
     domain = request.GET.get('domain', None)
-    #language = request.GET.get('lang', 'en')
+    # language = request.GET.get('lang', 'en')
     if not domain:
         return Response({'error': 'Domain query parameter is required.'}, status=400)
     domain = NormalizeDomain(domain)
@@ -272,7 +273,7 @@ def domain_keywords_ranked(request):
         print('{0} keywords for altdomain {1}'.format(altdomaininfo.num_keywords_ranked, altdomain))
 
     # TODO: Make the calculations language-aware.
-    #return Response({'domain': domain, '{0}_ranked'.format(language): keywords}, status=200)
+    # return Response({'domain': domain, '{0}_ranked'.format(language): keywords}, status=200)
     return Response({'domain': domain, 'en_ranked': keywords}, status=200)
 
 

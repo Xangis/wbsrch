@@ -10,11 +10,13 @@
 import time
 from django.db import connection
 from django.utils import timezone
-from dir.models import *
-from dir.utils import *
+from django.core.exceptions import ObjectDoesNotExist
+# from dir.models import
+from dir.utils import GetPendingIndexModelFromLanguage, GetIndexModelFromLanguage, GetSiteInfoModelFromLanguage, CalculateTermValue, JsonifyIndexTerm, LogQueries
 import datetime
 import codecs
 import math
+import ujson
 from unidecode import unidecode
 
 
@@ -154,7 +156,7 @@ def AddIndividualWords(ratings, keywords, type, lang='en'):
     singlewords = keywords.split(' ')
     term_model = GetIndexModelFromLanguage(lang)
     for singleword in singlewords:
-        #print u'Getting index for {0} to add to index for {1}.'.format(singleword, keywords)
+        # print u'Getting index for {0} to add to index for {1}.'.format(singleword, keywords)
         try:
             word = term_model.objects.get(keywords=singleword)
         except ObjectDoesNotExist:
@@ -287,7 +289,7 @@ def BuildIndexForTerm(keywords, lang='en', verbose=False, abbreviated=False, typ
             print('(Reindex) Term had {0} results and {1} pages last index on {2}'.format(term.num_results, term.num_pages, term.date_indexed))
     # We do not need lastcrawled, or firstcrawled. This may or may not save some effort.
     # However, leaving out pagetext saves a *lot* of effort and computation time.
-    kp = '%' + keywords + '%' # Allow us to do raw ILIKE queries without formatting problems.
+    kp = '%' + keywords + '%'  # Allow us to do raw ILIKE queries without formatting problems.
     spacelesskeywords = keywords.replace(' ', '%')
     asciikeywords = unidecode(spacelesskeywords)
     if spacelesskeywords != asciikeywords:

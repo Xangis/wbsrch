@@ -3,16 +3,19 @@ from bs4.element import ProcessingInstruction
 import urllib.request
 import urllib.error
 import urllib.parse
+from urllib.parse import urlparse
 import http.client
 import time
-from dir.models import *
-from dir.utils import *
+from dir.models import CrawlableUrl, DomainInfo, PageIFrame, PageJavaScript, PageLink, RandomValue, SiteInfo
+from dir.utils import AddError, CanCrawlUrl, CanReCrawlUrl, ClearErrors, GetInfixLanguage, GetLanguageFromDomainExtension, GetRootUrl, GetSiteInfoModelFromLanguage, GetUrlParameterLanguage, IsHtmlExtension, IsHtmlUrl, LogQueries, MakeRealUrl, NormalizeUrl, RemoveExtraSpaces
 from dir.robots import GetRobotsFile, AllowedByRobots
-from dir.language import *
+from dir.exceptions import InvalidLanguageException
+# from dir.language import *
 from django.db.utils import DatabaseError, DataError
 from django.db import connection
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+
 import socket
 import codecs
 
@@ -513,7 +516,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
         hr = link.get('href')
         if hr:
             if IsHtmlUrl(hr):
-                #prehr = hr
+                # prehr = hr
                 if realurl.startswith('https:'):
                     hr = MakeRealUrl(hr, rooturl, secure=True)
                 else:

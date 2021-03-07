@@ -28,6 +28,7 @@ from dir.domain import *
 from zetaweb.settings import *
 from datetime import timedelta
 
+
 class GetRootUrlTestCase(TestCase):
 
     def test_url_with_period(self):
@@ -92,6 +93,7 @@ class GetRootUrlTestCase(TestCase):
         """
         url = GetRootUrl(u'https://another.subdomain.zetacentauri.com')
         self.assertEqual(url, 'another.subdomain.zetacentauri.com')
+
 
 class GetRootDomainTestCase(TestCase):
 
@@ -165,6 +167,7 @@ class GetRootDomainTestCase(TestCase):
         """
         url = GetRootDomain(u'https://another.subdomain.zetacentauri.com/software/whatever/something.htm')
         self.assertEqual(url, 'zetacentauri.com')
+
 
 class IsValidHtmlUrlTestCase(TestCase):
     def test_mp3_url(self):
@@ -360,6 +363,7 @@ class IsValidHtmlUrlTestCase(TestCase):
         url = "https://wbsrch.com/site/images/tutorial.jpeg"
         self.assertFalse(IsHtmlUrl(url))
 
+
 class BlockedDomainTestCase(TestCase):
     def setUp(self):
         site = BlockedSite()
@@ -400,6 +404,7 @@ class BlockedDomainTestCase(TestCase):
     def tearDown(self):
         site = BlockedSite.objects.get(url=u'www.yandex.ru')
         site.delete()
+
 
 # Tests conditions for crawling and recrawling a url.
 class CanCrawlUrlTestCase(TestCase):
@@ -587,6 +592,7 @@ class CanCrawlUrlTestCase(TestCase):
         url = SiteInfo.objects.get(url=u'http://www.spamsite.com/2/')
         url.delete()
 
+
 class NormalizeUrlTestCase(TestCase):
     def test_normal_url(self):
         url = 'http://wbsrch.com/tutorial.htm'
@@ -680,6 +686,7 @@ class NormalizeUrlTestCase(TestCase):
     def test_mixed_capital_url(self):
         url = 'https://fr.WBSRCH.com/TUTORIAL_and_WHATNOT.htm'
         self.assertEqual(NormalizeUrl(url), 'https://fr.wbsrch.com/TUTORIAL_and_WHATNOT.htm')
+
 
 class MakeRealUrlTestCase(TestCase):
     def test_doubleslash_domain_url(self):
@@ -2047,10 +2054,10 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     # Still need to test:
-    #def domainrank(request):
-    #def adminpanel_doctype(request):
+    # def domainrank(request):
+    # def adminpanel_doctype(request):
     # Popular searches with an actual search history month/year combo:
-    #def popular_searches(request, year=None, month=None):
+    # def popular_searches(request, year=None, month=None):
 
     def tearDown(self):
         for item in SearchLog.objects.all():
@@ -2469,6 +2476,7 @@ class PornBlockTestCase(TestCase):
             info.delete()
         for info in DomainInfo.objects.all():
             info.delete()
+
 
 class WhoisTestCase(TestCase):
     def testDomainAge(self):

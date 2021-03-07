@@ -426,11 +426,11 @@ def domain(request):
 
         # Get pages for site, but only if it's not blocked.
         # siteinfos = []
-        #if not blocked:
+        # if not blocked:
         #    siteinfos = site_model.objects.filter(rooturl=rawdomain).values('id', 'url', 'pagetitle', 'pagedescription', 'pagetext', 'rooturl')[:MAX_SEARCH_RESULTS]
 
-        #num_records = len(siteinfos)
-        #if num_records >= 200:
+        # num_records = len(siteinfos)
+        # if num_records >= 200:
         #    num_records = "at least 200"
 
         # Get cached keyword rankings if available, otherwise query and cache.
@@ -450,7 +450,7 @@ def domain(request):
         searchlog.keywords = domain
         searchlog.result_count = domains.count()
         # Enforce domain info if it doesn't exist and we have pages.
-        #if searchlog.result_count < 1 and (len(rankings) > 0 or len(siteinfos) > 0):
+        # if searchlog.result_count < 1 and (len(rankings) > 0 or len(siteinfos) > 0):
         #    dominfo = DomainInfo()
         #    dominfo.url = rawdomain
         #    try:
@@ -532,17 +532,17 @@ def ipaddry(request):
                     raise Http404
         except ValueError:
             raise Http404
-        #site_model = GetSiteInfoModelFromLanguage(language_code)
+        # site_model = GetSiteInfoModelFromLanguage(language_code)
         domains = DomainInfo.objects.filter(robots_ip=ip).values('url', 'language_association')
         siteinfos = None
 
         # TODO: Calculate this with IP address info.
-        #num_siteinfos_cache = cache.get('pages_at_ip_' + ip)
-        #if not num_siteinfos_cache:
+        # num_siteinfos_cache = cache.get('pages_at_ip_' + ip)
+        # if not num_siteinfos_cache:
         #    num_siteinfos = site_model.objects.filter(ip=ip).count()
         # Cache for up to 1 week
         #    cache.set('pages_at_ip_' + ip, num_siteinfos, 604800)
-        #else:
+        # else:
         #    cached = True
         #    num_siteinfos = int(num_siteinfos_cache)
 
@@ -579,7 +579,7 @@ def ipaddry(request):
             print('Cannot save log entry. Redis server may not be running.')
 
         return render(request, 'ip.htm', {'domains': domains, 'siteinfos': siteinfos, 'ip': ip, 'language_code': language_code, 'superuser': superuser,
-                #'num_siteinfos': num_siteinfos,
+                # 'num_siteinfos': num_siteinfos,
                 'cached': cached})
     # except:
     #    pass

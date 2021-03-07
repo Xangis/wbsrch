@@ -11,6 +11,7 @@ from socket import gaierror, timeout
 
 BAD_DATE_STRINGS = ('b', ':', 'N', 'None', '0', '2', 'B')
 
+
 # Accepts a DomainInfo object and updates its whois information.
 def UpdateDomainWhois(domain, detailed=False):
     print('Updating {0}'.format(domain.url))
@@ -133,6 +134,7 @@ def UpdateDomainWhois(domain, detailed=False):
         domain.domain_updated = None
         domain.save()
 
+
 def GetDomainAge(domain):
     """
     Gets the creation and expiration date for a domain as a tuple.
@@ -169,6 +171,7 @@ def GetDomainAge(domain):
         expiration_date = dateutil.parser.parse(expiration_date)
     print('Domain "{0}" Created: {1}, Expires: {2}'.format(domain, creation_date, expiration_date))
     return (creation_date, expiration_date)
+
 
 def GetDomainInfo(domain):
     """

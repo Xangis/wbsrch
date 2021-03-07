@@ -1,6 +1,7 @@
 from dir.models import language_list
 from django.utils import translation
 
+
 class LanguageFromDomain(object):
     def process_request(self, request):
         prefix = None

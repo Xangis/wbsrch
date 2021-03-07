@@ -7,7 +7,7 @@ import sys
 sys.path.append('/var/django/wbsrch/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'zetaweb.settings'
 
-from dir.models import *
+from dir.models import DomainInfo, SiteInfo
 from dir.utils import MoveSiteTo
 from dir.language import GetInfixLanguage, InvalidLanguageException, GetUrlParameterLanguage
 
@@ -23,6 +23,7 @@ isroot = 0
 moved = {}
 deleted = {}
 notmatched = []
+
 
 def ProcessParametersForDomain(domain):
     global totalurls
@@ -44,10 +45,10 @@ def ProcessParametersForDomain(domain):
         try:
             if domain.uses_language_subdirs:
                 result = GetInfixLanguage(url.url)
-                #print u'Infix language for {0} is: {1}'.format(url.url, result)
+                # print u'Infix language for {0} is: {1}'.format(url.url, result)
             elif domain.uses_language_query_parameter:
                 result = GetUrlParameterLanguage(url.url)
-                #print u'URL Parameter language for {0} is: {1}'.format(url.url, result)
+                # print u'URL Parameter language for {0} is: {1}'.format(url.url, result)
             if result and result != u'en':
                 # Move to the new language, but don't tag the domain as that language or
                 # as uses language infix because they domain is already set properly.
