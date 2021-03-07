@@ -7,10 +7,10 @@ from urllib.parse import urlparse
 import http.client
 import time
 from dir.models import CrawlableUrl, DomainInfo, PageIFrame, PageJavaScript, PageLink, RandomValue, SiteInfo
-from dir.utils import AddError, CanCrawlUrl, CanReCrawlUrl, ClearErrors, GetInfixLanguage, GetLanguageFromDomainExtension, GetRootUrl, GetSiteInfoModelFromLanguage, GetUrlParameterLanguage, IsHtmlExtension, IsHtmlUrl, LogQueries, MakeRealUrl, NormalizeUrl, RemoveExtraSpaces
+from dir.utils import AddError, CanCrawlUrl, CanReCrawlUrl, ClearErrors, GetRootUrl, GetSiteInfoModelFromLanguage, IsHtmlExtension, IsHtmlUrl, LogQueries, MakeRealUrl, NormalizeUrl, RemoveExtraSpaces
 from dir.robots import GetRobotsFile, AllowedByRobots
 from dir.exceptions import InvalidLanguageException
-# from dir.language import *
+from dir.language import GetInfixLanguage, GetLanguageFromDomainExtension, GetUrlParameterLanguage
 from django.db.utils import DatabaseError, DataError
 from django.db import connection
 from django.utils import timezone
