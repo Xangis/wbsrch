@@ -1,0 +1,15 @@
+Portland, Oregon
+
+The WbSrch search engine has released new data offerings.
+
+Two new domain lists are available for purchase. The first is a list of all of the internet domains with pages in the WbSrch search engine index.
+
+The second is a list of all adult-content domains that have been excluded from the search engine.
+
+In addition to these, WbSrch also sells a list of the top 1 million most-linked-to domains based on its link index.
+
+This data will be a useful tool for data scientists, SEO specialists, and for entrepreneurs who want to build domain-information-based product offerings. Founder Jason Champion had this to say about the project launch:
+
+"When I started this search engine, there was a terrible shortage of good data sources for getting started with organizing the web. With this release we hope to make it easier to start web-data-driven projects."
+
+These new files are available in the WbSrch data shop at https://wbsrch.onfastspring.com/ priced at $39.99 and $4.99, respectively.
