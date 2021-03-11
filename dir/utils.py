@@ -8,6 +8,7 @@ from django.db.utils import DatabaseError
 from django.db import IntegrityError, connection
 from django.utils.timezone import utc
 from django.utils import timezone
+from django.utils.timezone import make_aware
 import io
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -29,8 +30,10 @@ import datetime
 import time
 import re
 import ipaddr
+import pytz
 from nltk.corpus import stopwords
 from unidecode import unidecode
+from zetaweb.settings import TIME_ZONE
 
 DOMAIN_PAGE_COUNT_MAX_AGE = 45
 DOMAIN_KEYWORDS_COUNT_MAX_AGE = 60
@@ -2809,20 +2812,20 @@ def GenerateIndexStats(save=False, verbose=False, nolinks=False):
 # if no month or year is specified.
 def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
     # Set date range.
-    d = datetime.date.today()
+    d = timezone.now().date()
     if not month and not year:
-        first = datetime.date(d.year, d.month, 1)
-        last = datetime.date(d.year, d.month + 1, 1)
+        first = pytz.timezone(TIME_ZONE).localize(datetime.datetime(d.year, d.month, 1), is_dst=None)
+        last = pytz.timezone(TIME_ZONE).localize(datetime.datetime(d.year, d.month + 1, 1), is_dst=None)
     else:
         yea = int(year)
         mon = int(month)
         if yea > d.year or (yea == d.year and mon > d.month):
             raise Http404
-        first = datetime.date(yea, mon, 1)
+        first = pytz.timezone(TIME_ZONE).localize(datetime.datetime(yea, mon, 1), is_dst=None)
         if mon == 12:
             mon = 0
             yea += 1
-        last = datetime.date(yea, mon + 1, 1)
+        last = pytz.timezone(TIME_ZONE).localize(datetime.datetime(yea, mon + 1, 1), is_dst=None)
 
     try:
         report = MonthlySearchReport.objects.get(month=month, year=year, language=lang)
@@ -2835,11 +2838,14 @@ def GenerateSearchReport(save=False, month=None, year=None, lang='en'):
     searchlog_model = GetSearchLogModelFromLanguage(lang)
     searches = searchlog_model.objects.filter(last_search__gte=first, last_search__lt=last)
     report.total_searches = searches.count()
+    resultclick_model = GetResultClickModelFromLanguage(lang)
+    clicks = resultclick_model.objects.filter(click_time__gte=first, click_time__lt=last)
+    report.total_result_clicks = clicks.count()
     searches = searches.values('keywords').annotate(Count('keywords')).order_by('-keywords__count')[0:200]
     report.top_searches = ujson.dumps(list(searches))
     if save:
         report.save()
-    print(str(report.total_searches) + ' searches in ' + report.language + ' in ' + str(report.year) + '-' + str(report.month))
+    print('{0} searches and {1} result clicks in {2} in {3}-{4}'.format(report.total_searches, report.total_result_clicks, report.language, report.year, report.month))
     return report
 
 

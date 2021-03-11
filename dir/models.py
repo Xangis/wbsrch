@@ -963,6 +963,7 @@ class IndexStats(models.Model):
 class MonthlySearchReport(models.Model):
     language = models.CharField(max_length=3)
     total_searches = models.IntegerField()
+    total_result_clicks = models.IntegerField(null=True, blank=True)
     month = models.IntegerField()
     year = models.IntegerField()
     # JSON data for the search term and number of times found.
