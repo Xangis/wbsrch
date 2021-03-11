@@ -2617,7 +2617,7 @@ def RemoveExtraSpaces(text):
     text = text.replace('\r', '')
     text = text.replace('\t', '')
     text = re.sub(' +', ' ', text)
-    return text
+    return text.strip()
 
 
 def CleanSearchText(text):
