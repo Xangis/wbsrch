@@ -2526,3 +2526,29 @@ class GetDomainExtensionAdjustmentTextCase(TestCase):
 
     def testunknown(self):
         self.assertEqual(GetDomainExtensionRankAdjustment('example.unknowndomainextension', '-6'))
+
+
+class RemoveExtraSpaces(TestCase):
+   def spacetest1(self):
+       self.assertEqual(RemoveExtraSpaces('test'), 'test')
+
+   def spacetest2(self):
+       self.assertEqual(RemoveExtraSpaces(' test '), 'test')
+
+   def spacetest3(self):
+       self.assertEqual(RemoveExtraSpaces('te   st'), 'te st')
+
+   def spacetest4(self):
+       self.assertEqual(RemoveExtraSpaces('\ttest\n'), 'test')
+
+   def spacetest5(self):
+       self.assertEqual(RemoveExtraSpaces('te \n st'), 'te st')
+
+   def spacetest6(self):
+       self.assertEqual(RemoveExtraSpaces('t  e  s \n\r\n\r   t'), 't e s t')
+
+   def spacetest7(self):
+       self.assertEqual(RemoveExtraSpaces('\n\n\n\n\ntest'), 'test')
+
+   def spacetest8(self):
+       self.assertEqual(RemoveExtraSpaces('test       \n\n\n\n\t\r\n\t\r'), 'test')
