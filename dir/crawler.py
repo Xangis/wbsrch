@@ -535,7 +535,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
                         try:
                             title = link.contents[0]
                             if title:
-                                ulink.anchor_text = str(title)[0:255]
+                                ulink.anchor_text = RemoveExtraSpaces(str(title))[0:255]
                         except IndexError:
                             pass
                         try:
