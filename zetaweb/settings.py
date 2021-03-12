@@ -36,10 +36,14 @@ INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'password')
 LIVE_INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'jf89mvk9.3r9jn.8fjf')
 # LIVE_INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'password')
 NEWS_PASSWORD = os.getenv('NEWS_PASSWORD', 'password')
+LANGUAGE_PAGES_PASSWORD = os.getenv('LANGUAGE_PAGES_PASSWORD', 'lfnmb.88urklh,e3gtg')
+LANGUAGE_INDEXES_PASSWORD = os.getenv('LANGUAGE_PAGES_PASSWORD', '948kl,39l3yfok3t')
 ZETAWEB_HOST = os.getenv('ZETAWEB_HOST', '127.0.0.1')
 URLS_HOST = os.getenv('URLS_HOST', '127.0.0.1')
 INDEXES_HOST = os.getenv('INDEXES_HOST', '127.0.0.1')
 LIVE_INDEXES_HOST = os.getenv('INDEXES_HOST', 'wbsrch.com')
+LANGUAGE_PAGES_HOST = os.getenv('LANGUAGE_PAGES_HOST', '127.0.0.1')
+LANGUAGE_INDEXES_HOST = os.getenv('LANGUAGE_INDEXES_HOST', '127.0.0.1')
 # LIVE_INDEXES_HOST = os.getenv('INDEXES_HOST', '10.0.0.29')
 NEWS_HOST = os.getenv('NEWS_HOST', '127.0.0.1')
 LIVE_INDEXES_DATABASE = os.getenv('LIVE_INDEXES_DATABASE', 'indexes')
@@ -86,6 +90,22 @@ if DEBUG:
             'PASSWORD': NEWS_PASSWORD,
             'HOST': NEWS_HOST,
             'PORT': '',
+        },
+        'language_pages': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'language_pages',
+            'USER': 'language_pages',
+            'PASSWORD': LANGUAGE_PAGES_PASSWORD,
+            'HOST': LANGUAGE_PAGES_HOST,
+            'PORT': '',
+        },
+        'language_indexes': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'language_indexes',
+            'USER': 'language_indexes',
+            'PASSWORD': LANGUAGE_INDEXES_PASSWORD,
+            'HOST': LANGUAGE_INDEXES_HOST,
+            'PORT': '',
         }
     }
 else:
@@ -100,6 +120,14 @@ else:
             'PORT': '',
         },
         'indexes': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'indexes',
+            'USER': 'indexes',
+            'PASSWORD': LIVE_INDEXES_PASSWORD,
+            'HOST': INDEXES_HOST,
+            'PORT': '',
+        },
+        'language_indexes': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'indexes',
             'USER': 'indexes',
