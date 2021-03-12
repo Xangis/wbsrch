@@ -8,7 +8,6 @@ from django.db.utils import DatabaseError
 from django.db import IntegrityError, connection
 from django.utils.timezone import utc
 from django.utils import timezone
-from django.utils.timezone import make_aware
 import io
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
