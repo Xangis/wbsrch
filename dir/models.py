@@ -2355,6 +2355,9 @@ if 'so' in language_list:
         def __str__(self):
             return self.keywords
 
+        class Meta:
+            in_db = 'language_indexes'
+
     class KeywordRanking_so(KeywordRank):
         class Meta:
             in_db = 'language_indexes'
