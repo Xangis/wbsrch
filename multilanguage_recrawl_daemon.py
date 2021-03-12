@@ -17,4 +17,4 @@ while True:
             if language == 'en':
                 continue
             lang_crawl_count = lang_crawl_counts.get(language, 1)
-            call(['python', 'manage.py', 'crawl', '-r', '-m', str(lang_crawl_count), '-s', '30', '-o', str(x * lang_crawl_count), '-l', language])
+            call(['python', 'manage.py', 'crawl', '-r', '-m', str(lang_crawl_count), '-s', '5', '-o', str(x * lang_crawl_count), '-l', language])

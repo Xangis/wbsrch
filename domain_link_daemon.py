@@ -1,7 +1,7 @@
 from subprocess import call
 import time
 
-SLEEP_TIME = 5
+SLEEP_TIME = 3600
 
 while True:
     # Update new domains first, then old.
