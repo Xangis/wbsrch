@@ -498,12 +498,17 @@ def domain(request):
         except Exception:
             print('Cannot save log entry. Redis server may not be running.')
 
+        status_code = 200
+        if len(domains) < 1:
+            status_code = 404
+
         return render(request, 'domain.htm', {'domains': domains, 'excluded': excluded,
             # 'siteinfos': siteinfos,
             'domain': domain,
             # 'num_records': num_records,
             'language_code': language_code, 'rankings': rankings, 'superuser': superuser, 'extra': extra,
-            'excluded': excluded, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain, 'notdomain': notdomain}
+            'excluded': excluded, 'parent': parent, 'cached': cached, 'rawdomain': rawdomain,
+            'notdomain': notdomain}, status=status_code
             )
     return render(request, 'domain.htm', {'language_code': language_code})
 
