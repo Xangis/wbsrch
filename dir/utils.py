@@ -973,7 +973,7 @@ def GetMimeTypeModifier(mimetype, language='en', show_unrecognized=True, verbose
         return -0.5
 
 
-def GetDomainExtensionRankAdjustment(domain, language, rulematches, verbose=False):
+def GetDomainExtensionRankAdjustment(domain, language, rulematches=None, verbose=False):
     extension = domain.split('.')[-1]
 
     # Language-specific extension adjustments.
@@ -1145,17 +1145,103 @@ def GetDomainExtensionRankAdjustment(domain, language, rulematches, verbose=Fals
     }
 
     if language in language_adjustments:
-        if verbose:
+        if verbose and rulematches:
             rulematches.append('Score {0} for domain extension {1} with language {2}.'.format(domain_adjustments[extension], extension, language))
         if extension in language_adjustments[language]:
             return language_adjustments[language][extension]
 
     if extension in domain_adjustments:
-        if verbose:
+        if verbose and rulematches:
             rulematches.append('Score {0} for domain extension {1}.'.format(domain_adjustments[extension], extension))
         return domain_adjustments[extension]
 
-    return 0
+    # Unknown domain extensions get a flat -3 because they're probably shady.
+    return -3
+
+
+def IsDomainParked(item):
+    """
+    Returns True if the page is parked. This could be a placeholder page
+    from a web hosting company, a domain reseller, or other text
+    indicating that the domain has no content and has no intent of
+    ever having content, or has expired.
+    """
+    # Don't let empty values prevent us from checking other values.
+    pagetext = item.pagetext
+    if not pagetext:
+        pagetext = ''
+    pagetitle = item.pagetitle
+    if not pagetitle:
+        pagetitle = ''
+    if (pagetext.startswith('Buy this domain.') or
+        ('This website is for sale' in pagetitle) or
+        ('This website is for sale' in pagetext) or
+        ('The Sponsored Listings displayed above are served automatically by a third party.' in pagetext) or
+        (' is for sale' in pagetext) or
+        ('This domain name is parked' in pagetitle) or
+        ('Registered at Namecheap.com' in pagetitle) or
+        (pagetitle == 'Suspended Domain') or
+        ('is registered by NetNames' in pagetitle) or
+        (pagetitle == 'Domain Registered at Safenames') or
+        (pagetitle == 'STRATO - Domain reserved') or
+        (pagetitle == 'WEBSITE.WS - Your Internet Address For Life™') or
+        (pagetitle == 'Want your own website? | 123 Reg') or
+        (pagetitle == 'HugeDomains.com - Shop for over 300,000 Premium Domains') or
+        (pagetitle == 'Hosted By One.com | Webhosting made simple') or
+        (pagetitle == 'Domain hosted by DanDomain - Domæner, hjemmeside, email, it-hosting, webshop') or
+        (pagetitle == 'Expired - domain expired') or
+        (pagetitle == 'Domain parked by Instra') or
+        (pagetitle == 'RealNames | A more meaningful email address') or
+        (pagetitle == 'Domain Registered at Safenames') or
+        (pagetitle == 'Domein Gereserveerd - Mijndomein.nl') or
+        (pagetitle == 'Hostnet: De grootste domeinnaam- en hostingprovider van Nederland.') or
+        (pagetitle == 'Domain Profile - Afternic') or
+        (pagetitle == 'TransIP - Reserved domain') or
+        (pagetitle == 'Deze domeinnaam is geregistreerd door een klant van Yourhosting.nl') or
+        (pagetitle == 'Hello, this domain has been purchased at Hostpoint') or
+        (pagetitle == 'The domain name is registered') or
+        (pagetitle == 'Web Hosting, Reseller Hosting & Domain Names from Heart Internet') or
+        (pagetitle == 'New Web Hosting Account!') or
+        (pagetitle == 'Web hosting, domain name registration and web services by 1&1 Internet') or
+        (pagetitle == 'This domain was registered by Youdot.io') or
+        (pagetitle == 'GoDaddy Domain Name Search') or
+        (pagetitle == 'Domain is Parked')
+    ):
+        return True
+    return False
+
+
+def HasNoContent(item):
+    """
+    Returns True if the page has no content. That could be a placeholder page
+    from a server or web hosting company, or a coming soon page. At some point
+    the domain may have content, but it doesn't now.
+    """
+    if not item.pagetitle:
+        # We already dock points for no page title elsewhere, and a lack of a
+        # title does not necessarily mean there's no content.
+        return False
+    if ((item.pagetitle == 'Account Suspended') or
+        (item.pagetitle == 'Domain Default page') or
+        (item.pagetitle == "Web Server's Default Page") or
+        (item.pagetitle == 'IIS7') or
+        (item.pagetitle == 'IIS Windows Server') or
+        (item.pagetitle == 'Coming Soon') or
+        (item.pagetitle == 'Welcome to nginx!') or
+        (item.pagetitle == '502 Bad Gateway') or
+        (item.pagetitle == 'Default Parallels Plesk Panel Page') or
+        (item.pagetitle == 'Default Parallels Plesk Page') or
+        (item.pagetitle == 'Apache2 Ubuntu Default Page: It works') or
+        (item.pagetitle == 'Apache2 Debian Default Page: It works') or
+        (item.pagetitle == 'Welcome to your new website') or
+        (item.pagetitle == 'Registered & Protected by MarkMonitor') or
+        (item.pagetitle == 'Coming Soon - Future home of something quite cool') or
+        (item.pagetitle == 'Coming Soon...') or
+        (item.pagetitle == 'Coming Soon page') or
+        (item.pagetitle == 'Parallels Operations Automation Default Page')
+    ):
+        return True
+    return False
 
 
 def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=False):
@@ -1592,50 +1678,15 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
             value -= 20
             if verbose:
                 rulematches.append('{0} points for {1} keywords in page text.'.format(-20, '21+'))
-        #
-        # TODO: value *= GetTitleAdjustment(item.pagetitle), adjustments below factored in.
-        #
-        # Parked domains. Certain text is considered a "park" and those domains get demoted.
-        if (item.pagetext.startswith('Buy this domain.') or
-            ('This website is for sale' in item.pagetitle) or
-            ('This website is for sale' in item.pagetext) or
-            ('The Sponsored Listings displayed above are served automatically by a third party.' in item.pagetext) or
-            (' is for sale' in item.pagetext) or
-            ('This domain name is parked' in item.pagetitle) or
-            ('Registered at Namecheap.com' in item.pagetitle) or
-            (item.pagetitle == 'Suspended Domain') or
-            ('is registered by NetNames' in item.pagetitle) or
-            (item.pagetitle == 'Domain Registered at Safenames') or
-            (item.pagetitle == 'STRATO - Domain reserved') or
-            (item.pagetitle == 'WEBSITE.WS - Your Internet Address For Life™') or
-            (item.pagetitle == 'Want your own website? | 123 Reg') or
-            (item.pagetitle == 'HugeDomains.com - Shop for over 300,000 Premium Domains') or
-            (item.pagetitle == 'Hosted By One.com | Webhosting made simple') or
-            (item.pagetitle == 'Domain hosted by DanDomain - Domæner, hjemmeside, email, it-hosting, webshop') or
-            (item.pagetitle == 'Expired - domain expired') or
-            (item.pagetitle == 'Domain parked by Instra') or
-            (item.pagetitle == 'RealNames | A more meaningful email address') or
-            (item.pagetitle == 'Domain Registered at Safenames') or
-            (item.pagetitle == 'Domein Gereserveerd - Mijndomein.nl') or
-            (item.pagetitle == 'Hostnet: De grootste domeinnaam- en hostingprovider van Nederland.') or
-            (item.pagetitle == 'Domain Profile - Afternic') or
-            (item.pagetitle == 'TransIP - Reserved domain') or
-            (item.pagetitle == 'Deze domeinnaam is geregistreerd door een klant van Yourhosting.nl') or
-            (item.pagetitle == 'Hello, this domain has been purchased at Hostpoint') or
-            (item.pagetitle == 'The domain name is registered') or
-            (item.pagetitle == 'Web Hosting, Reseller Hosting & Domain Names from Heart Internet') or
-            (item.pagetitle == 'New Web Hosting Account!') or
-            (item.pagetitle == 'Web hosting, domain name registration and web services by 1&1 Internet') or
-            (item.pagetitle == 'This domain was registered by Youdot.io') or
-            (item.pagetitle == 'GoDaddy Domain Name Search') or
-            (item.pagetitle == 'Domain is Parked')
-        ):
-            if verbose:
-                rulematches.append('Lose two thirds of points for parked domain.')
-            value /= 3
-        # These phrases mean that a site is possibly parked, but almost definitely garbage.
-        if ('Resources and Information.' in item.pagetitle) or ('For search results please CLICK HERE' in item.pagetext):
-            value -= 8
+    # Parked domains. Certain text is considered a "park" and those domains get demoted.
+    if IsDomainParked(item):
+        if verbose:
+            rulematches.append('Lose two thirds of points for parked domain.')
+        value /= 3
+    # These phrases mean that a site is possibly parked, but almost definitely garbage.
+    if (item.pagetitle and 'Resources and Information.' in item.pagetitle) or (item.pagetext and 'For search results please CLICK HERE' in item.pagetext):
+        value -= 10
+    # Directory listing pages are often broken sites, but could be legit download pages.
     if item.pagetitle == 'Index of /':
         value *= 0.75
         if verbose:
@@ -1645,25 +1696,9 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
     # above parked pages, but barely.
     # We may in the future want to treat suspended accounts differently from accounts that
     # never had any content.
-    if ((item.pagetitle == 'Account Suspended') or
-        (item.pagetitle == 'Domain Default page') or
-        (item.pagetitle == "Web Server's Default Page") or
-        (item.pagetitle == 'IIS7') or
-        (item.pagetitle == 'IIS Windows Server') or
-        (item.pagetitle == 'Coming Soon') or
-        (item.pagetitle == 'Welcome to nginx!') or
-        (item.pagetitle == '502 Bad Gateway') or
-        (item.pagetitle == 'Default Parallels Plesk Panel Page') or
-        (item.pagetitle == 'Default Parallels Plesk Page') or
-        (item.pagetitle == 'Apache2 Ubuntu Default Page: It works') or
-        (item.pagetitle == 'Apache2 Debian Default Page: It works') or
-        (item.pagetitle == 'Welcome to your new website') or
-        (item.pagetitle == 'Registered & Protected by MarkMonitor') or
-        (item.pagetitle == 'Coming Soon - Future home of something quite cool') or
-        (item.pagetitle == 'Coming Soon...') or
-        (item.pagetitle == 'Coming Soon page') or
-        (item.pagetitle == 'Parallels Operations Automation Default Page')
-    ):
+    if HasNoContent(item):
+        if verbose:
+            rulematches.append('Lose 60% for a page with no content (suspended/web server init page)')
         value *= 0.4
     # If there is no page text, the page is worthless.
     if not item.pagetext or (len(item.pagetext) < 3):
