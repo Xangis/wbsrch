@@ -71,4 +71,5 @@ https://startupnext.io/startup/wbsrch
 Startup Inspire:
 https://www.startupinspire.com/startup/wbsrch
 
-
+Search engines with their own indexes:
+https://seirdy.one/2021/03/10/search-engines-with-own-indexes.html
