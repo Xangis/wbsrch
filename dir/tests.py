@@ -402,8 +402,7 @@ class BlockedDomainTestCase(TestCase):
         self.assertEqual(blocked_domain.count(), 0)
 
     def tearDown(self):
-        site = BlockedSite.objects.get(url=u'www.yandex.ru')
-        site.delete()
+        BlockedSite.objects.all().delete()
 
 
 # Tests conditions for crawling and recrawling a url.
@@ -581,16 +580,11 @@ class CanCrawlUrlTestCase(TestCase):
         self.assertFalse(CanCrawlUrl(url))
 
     def tearDown(self):
-        for site in BlockedSite.objects.all():
-            site.delete()
-        for suffix in DomainSuffix.objects.all():
-            suffix.delete()
-        domain = DomainInfo.objects.get(url=u'www.spamsite.com')
-        domain.delete()
-        url = SiteInfo.objects.get(url=u'http://www.spamsite.com/1/')
-        url.delete()
-        url = SiteInfo.objects.get(url=u'http://www.spamsite.com/2/')
-        url.delete()
+        BlockedSite.objects.all().delete()
+        DomainSuffix.objects.all().delete()
+        DomainInfo.objects.all().delete()
+        SiteInfo.objects.all().delete()
+        SiteInfo_it.objects.all().delete()
 
 
 class NormalizeUrlTestCase(TestCase):
@@ -1291,7 +1285,7 @@ class CrawlerTestCase(TestCase):
         self.assertEqual(info.pagefirsth3tag, 'This Is The First H3 Tag')
         self.assertEqual(info.pagekeywords, 'content, keywords')
         self.assertEqual(info.pagetext, 'This Is The First Head Tag This Is Not The First Head Tag This Is The First H2 Tag This Is Not The First Head Tag This Is The First H3 Tag This Is Not The First Head Tag This is the page content.')
-        self.assertEqual(info.pagesize, 1062)
+        self.assertEqual(info.pagesize, 1061)
 
     def tearDown(self):
         pass
@@ -1472,20 +1466,19 @@ class IndexerTestCase(TestCase):
         self.assertEqual(term.num_results, 2)
 
     def tearDown(self):
-        for item in SiteInfo.objects.all():
-            item.delete()
-        for item in SiteInfo_de.objects.all():
-            item.delete()
-        for item in IndexTerm.objects.all():
-            item.delete()
-        for item in IndexTerm_de.objects.all():
-            item.delete()
+        SiteInfo.objects.all().delete()
+        SiteInfo_de.objects.all().delete()
+        SiteInfo_fr.objects.all().delete()
+        IndexTerm.objects.all().delete()
+        IndexTerm_de.objects.all().delete()
 
 
 # This tests not only searching for indexed and non-indexed terms, but also the correct
 # behavior of partially-indexed phrases and queueing terms for indexing.
 class SearchTestCase(TestCase):
     def setUp(self):
+        # Dumb stopgap fix.
+        IndexTerm.objects.all().delete()
         term = IndexTerm()
         term.keywords = "pants"
         term.page_rankings = '{}'
@@ -1727,18 +1720,12 @@ class SearchTestCase(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def tearDown(self):
-        for item in PendingIndex.objects.all():
-            item.delete()
-        for item in PendingIndex_de.objects.all():
-            item.delete()
-        for item in IndexTerm.objects.all():
-            item.delete()
-        for item in IndexTerm_de.objects.all():
-            item.delete()
-        for item in SiteInfo.objects.all():
-            item.delete()
-        for item in BadQuery.objects.all():
-            item.delete()
+        PendingIndex.objects.all().delete()
+        PendingIndex_de.objects.all().delete()
+        IndexTerm.objects.all().delete()
+        IndexTerm_de.objects.all().delete()
+        SiteInfo.objects.all().delete()
+        BadQuery.objects.all().delete()
 
 
 class CleanSearchTextTestCase(TestCase):
@@ -1958,6 +1945,9 @@ class ViewsTestCase(TestCase):
         log.result_count = 6
         log.search_time = 0.03
         log.save()
+        dom = DomainInfo()
+        dom.url = 'zetacentauri.com'
+        dom.save()
 
     def testIndex(self):
         response = self.client.get('/')
@@ -2038,8 +2028,9 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def testPopularSearches(self):
+        # Popular searches page has been removed.
         response = self.client.get('/popular-searches/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
 
     def testPopularSearches2(self):
         response = self.client.get('/popular-searches/2011/03/')
@@ -2053,6 +2044,10 @@ class ViewsTestCase(TestCase):
         response = self.client.get('/domain/?q=zetacentauri.com')
         self.assertEqual(response.status_code, 200)
 
+    def testSearchNoDomain(self):
+        response = self.client.get('/domain/?q=asdfkasasdfjasdflaksdf.net')
+        self.assertEqual(response.status_code, 404)
+
     # Still need to test:
     # def domainrank(request):
     # def adminpanel_doctype(request):
@@ -2060,8 +2055,8 @@ class ViewsTestCase(TestCase):
     # def popular_searches(request, year=None, month=None):
 
     def tearDown(self):
-        for item in SearchLog.objects.all():
-            item.delete()
+        SearchLog.objects.all().delete()
+        DomainInfo.objects.all().delete()
 
 
 class BlockedSiteTestCase(TestCase):
@@ -2430,7 +2425,7 @@ class PornBlockTestCase(TestCase):
         PornBlock(site)
         assurls = SiteInfo.objects.filter(rooturl=u'ass.pornsite2.com').count()
         pornurls = SiteInfo.objects.filter(rooturl=u'pornsite2.com').count()
-        assexclusion = BlockedSite.objects.get(url=u'ass.pornsite2.com')
+        assexclusion = BlockedSite.objects.filter(url=u'ass.pornsite2.com')
         pornexclusion = BlockedSite.objects.filter(url=u'pornsite2.com')
         self.assertEqual(assurls, 1)
         self.assertEqual(pornurls, 0)
@@ -2507,28 +2502,34 @@ class ReverseWWWTestCase(TestCase):
 
 class GetDomainExtensionAdjustmentTextCase(TestCase):
     def testcom(self):
-        self.assertEqual(GetDomainExtensionRankAdjustment('.com', '3'))
+        self.assertEqual(GetDomainExtensionRankAdjustment('.com', 'en'), 3)
 
     def testcom2(self):
-        self.assertEqual(GetDomainExtensionRankAdjustment('example.com', '3'))
+        self.assertEqual(GetDomainExtensionRankAdjustment('example.com', None), 3)
 
     def testcom3(self):
-        self.assertEqual(GetDomainExtensionRankAdjustment('website.example.com', '3'))
+        self.assertEqual(GetDomainExtensionRankAdjustment('website.example.com', 'en'), 3)
 
     def testcn(self):
-        self.assertEqual(GetDomainExtensionRankAdjustment('.cn', '-6'))
+        self.assertEqual(GetDomainExtensionRankAdjustment('.cn', 'en'), -6)
 
     def testru(self):
-        self.assertEqual(GetDomainExtensionRankAdjustment('ru', '-6'))
+        self.assertEqual(GetDomainExtensionRankAdjustment('ru', 'en'), -6)
 
     def testxxx(self):
-        self.assertEqual(GetDomainExtensionRankAdjustment('ru', '-50'))
+        self.assertEqual(GetDomainExtensionRankAdjustment('xxx', 'en'), -50)
 
     def testunknown(self):
-        self.assertEqual(GetDomainExtensionRankAdjustment('example.unknowndomainextension', '-6'))
+        self.assertEqual(GetDomainExtensionRankAdjustment('example.unknowndomainextension', 'en'), -3)
+
+    def testcasaen(self):
+        self.assertEqual(GetDomainExtensionRankAdjustment('mi.casa', 'en'), -1)
+
+    def testcasaes(self):
+        self.assertEqual(GetDomainExtensionRankAdjustment('mi.casa', 'es'), 1)
 
 
-class RemoveExtraSpaces(TestCase):
+class RemoveExtraSpacesTestCase(TestCase):
     def spacetest1(self):
         self.assertEqual(RemoveExtraSpaces('test'), 'test')
 
@@ -2552,3 +2553,137 @@ class RemoveExtraSpaces(TestCase):
 
     def spacetest8(self):
         self.assertEqual(RemoveExtraSpaces('test       \n\n\n\n\t\r\n\t\r'), 'test')
+
+
+class IsDomainParkedTestCase(TestCase):
+    def setUp(self):
+        site1 = SiteInfo()
+        site1.rooturl = 'example.com'
+        site1.pagetitle = 'This website is for sale'
+        site1.pagetext = 'ya wanna buy it?'
+        site1.url = 'http://example.com/1/'
+        site1.save()
+        site2 = SiteInfo()
+        site2.rooturl = 'example.com'
+        site2.pagetitle = ''
+        site2.pagetext = 'The Sponsored Listings displayed above are served automatically by a third party.'
+        site2.url = 'http://example.com/2/'
+        site2.save()
+        site3 = SiteInfo()
+        site3.rooturl = 'example.com'
+        site3.pagetitle = 'Free pants'
+        site3.pagetext = 'just click here for free pants'
+        site3.url = 'http://example.com/3/'
+        site3.save()
+        site4 = SiteInfo()
+        site4.rooturl = 'example.com'
+        site4.pagetitle = 'This domain is not for sale'
+        site4.pagetext = 'Do not click here to buy it'
+        site4.url = 'http://example.com/4/'
+        site4.save()
+        site5 = SiteInfo()
+        site5.rooturl = 'example.com'
+        site5.pagetitle = ''
+        site5.pagetext = ''
+        site5.url = 'https://example.com/5/'
+        site5.save()
+        site6 = SiteInfo()
+        site6.rooturl = 'example.com'
+        site6.pagetitle = 'Expired - domain expired'
+        site6.pagetext = ''
+        site6.url = 'https://example.com/6/'
+        site6.save()
+
+    def parktest1(self):
+        site = SiteInfo.objects.get(url='http://example.com/1/')
+        self.assertEqual(IsDomainParked(site), True)
+
+    def parktest2(self):
+        site = SiteInfo.objects.get(url='http://example.com/2/')
+        self.assertEqual(IsDomainParked(site), True)
+
+    def parktest3(self):
+        site = SiteInfo.objects.get(url='http://example.com/3/')
+        self.assertEqual(IsDomainParked(site), False)
+
+    def parktest4(self):
+        site = SiteInfo.objects.get(url='http://example.com/4/')
+        self.assertEqual(IsDomainParked(site), False)
+
+    def parktest5(self):
+        site = SiteInfo.objects.get(url='https://example.com/5/')
+        self.assertEqual(IsDomainParked(site), False)
+
+    def parktest6(self):
+        site = SiteInfo.objects.get(url='https://example.com/6/')
+        self.assertEqual(IsDomainParked(site), True)
+
+    def tearDown(self):
+        SiteInfo.objects.all().delete()
+
+
+class HasNoContentTestCase(TestCase):
+    def setUp(self):
+        site1 = SiteInfo()
+        site1.rooturl = 'example.com'
+        site1.pagetitle = 'Account Suspended'
+        site1.pagetext = 'Please contact support to reactivate your account.'
+        site1.url = 'http://example.com/1/'
+        site1.save()
+        site2 = SiteInfo()
+        site2.rooturl = 'example.com'
+        site2.pagetitle = 'Coming Soon'
+        site2.pagetext = 'Coming Soon'
+        site2.url = 'http://example.com/2/'
+        site2.save()
+        site3 = SiteInfo()
+        site3.rooturl = 'example.com'
+        site3.pagetitle = 'Free pants'
+        site3.pagetext = 'just click here for free pants'
+        site3.url = 'http://example.com/3/'
+        site3.save()
+        site4 = SiteInfo()
+        site4.rooturl = 'example.com'
+        site4.pagetitle = 'This domain is not for sale'
+        site4.pagetext = 'Do not click here to buy it'
+        site4.url = 'http://example.com/4/'
+        site4.save()
+        site5 = SiteInfo()
+        site5.rooturl = 'example.com'
+        site5.pagetitle = ''
+        site5.pagetext = ''
+        site5.url = 'https://example.com/5/'
+        site5.save()
+        site6 = SiteInfo()
+        site6.rooturl = 'example.com'
+        site6.pagetitle = '502 Bad Gateway'
+        site6.pagetext = ''
+        site6.url = 'https://example.com/6/'
+        site6.save()
+
+    def parktest1(self):
+        site = SiteInfo.objects.get(url='http://example.com/1/')
+        self.assertEqual(IsDomainParked(site), True)
+
+    def parktest2(self):
+        site = SiteInfo.objects.get(url='http://example.com/2/')
+        self.assertEqual(IsDomainParked(site), True)
+
+    def parktest3(self):
+        site = SiteInfo.objects.get(url='http://example.com/3/')
+        self.assertEqual(IsDomainParked(site), False)
+
+    def parktest4(self):
+        site = SiteInfo.objects.get(url='http://example.com/4/')
+        self.assertEqual(IsDomainParked(site), False)
+
+    def parktest5(self):
+        site = SiteInfo.objects.get(url='https://example.com/5/')
+        self.assertEqual(IsDomainParked(site), False)
+
+    def parktest6(self):
+        site = SiteInfo.objects.get(url='https://example.com/6/')
+        self.assertEqual(IsDomainParked(site), True)
+
+    def tearDown(self):
+        SiteInfo.objects.all().delete()
