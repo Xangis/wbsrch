@@ -2593,6 +2593,12 @@ class IsDomainParkedTestCase(TestCase):
         site6.pagetext = ''
         site6.url = 'https://example.com/6/'
         site6.save()
+        site7 = SiteInfo()
+        site7.rooturl = 'example.com'
+        site7.pagetitle = 'Nothing Here'
+        site7.pagefirstheadtag = 'Parked on the Bun!'
+        site7.url = 'https://example.com/7/'
+        site7.save()
 
     def parktest1(self):
         site = SiteInfo.objects.get(url='http://example.com/1/')
@@ -2616,6 +2622,10 @@ class IsDomainParkedTestCase(TestCase):
 
     def parktest6(self):
         site = SiteInfo.objects.get(url='https://example.com/6/')
+        self.assertEqual(IsDomainParked(site), True)
+
+    def parktest7(self):
+        site = SiteInfo.objects.get(url='https://example.com/7/')
         self.assertEqual(IsDomainParked(site), True)
 
     def tearDown(self):
@@ -2660,30 +2670,40 @@ class HasNoContentTestCase(TestCase):
         site6.pagetext = ''
         site6.url = 'https://example.com/6/'
         site6.save()
+        site7 = SiteInfo()
+        site7.rooturl = 'example.com'
+        site7.pagetitle = '502 Bad Gateway'
+        site7.pagefirstheadtag = 'It works!'
+        site7.url = 'https://example.com/7/'
+        site7.save()
 
     def parktest1(self):
         site = SiteInfo.objects.get(url='http://example.com/1/')
-        self.assertEqual(IsDomainParked(site), True)
+        self.assertEqual(HasNoContent(site), True)
 
     def parktest2(self):
         site = SiteInfo.objects.get(url='http://example.com/2/')
-        self.assertEqual(IsDomainParked(site), True)
+        self.assertEqual(HasNoContent(site), True)
 
     def parktest3(self):
         site = SiteInfo.objects.get(url='http://example.com/3/')
-        self.assertEqual(IsDomainParked(site), False)
+        self.assertEqual(HasNoContent(site), False)
 
     def parktest4(self):
         site = SiteInfo.objects.get(url='http://example.com/4/')
-        self.assertEqual(IsDomainParked(site), False)
+        self.assertEqual(HasNoContent(site), False)
 
     def parktest5(self):
         site = SiteInfo.objects.get(url='https://example.com/5/')
-        self.assertEqual(IsDomainParked(site), False)
+        self.assertEqual(HasNoContent(site), False)
 
     def parktest6(self):
         site = SiteInfo.objects.get(url='https://example.com/6/')
-        self.assertEqual(IsDomainParked(site), True)
+        self.assertEqual(HasNoContent(site), True)
+
+    def parktest7(self):
+        site = SiteInfo.objects.get(url='https://example.com/7/')
+        self.assertEqual(HasNoContent(site), True)
 
     def tearDown(self):
         SiteInfo.objects.all().delete()

@@ -8,22 +8,22 @@ zetaweb=# select count(*), pagefirstheadtag from site_info group by pagefirsthea
    940606 | 
    149832 | Index of /
    110264 | Home
-    62820 | This domain name has been registered with Gandi.net
+#    62820 | This domain name has been registered with Gandi.net
     38736 | Welcome
     35073 | Affordable, ReliableWeb Hosting Solutions
-    25789 | Welcome to nginx!
-    20069 | Web Server's Default Page
-    19217 | Future home of something quite cool.
+#    25789 | Welcome to nginx!
+#    20069 | Web Server's Default Page
+#    19217 | Future home of something quite cool.
     18032 | 502 Bad Gateway
-    17034 | It works!
-    16715 | Parallels Plesk Panel
+#    17034 | It works!
+#    16715 | Parallels Plesk Panel
     16368 | See, that’s what the app is perfect for.
-    15356 | Parked at Loopia
-    14809 | This Site Is Under Construction and Coming Soon.
+#    15356 | Parked at Loopia
+#    14809 | This Site Is Under Construction and Coming Soon.
     14320 | About Us
-    14001 | This site is under development
-    13929 | Parked on the Bun!
-    11933 | 404 Not Found
+#    14001 | This site is under development
+#    13929 | Parked on the Bun!
+#    11933 | 404 Not Found
     10415 | Menu
     10253 | Take advantage of this blank space.
      9962 | One more step
