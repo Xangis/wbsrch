@@ -1173,6 +1173,9 @@ def IsDomainParked(item):
     pagetitle = item.pagetitle
     if not pagetitle:
         pagetitle = ''
+    firstheadtag = item.pagefirstheadtag
+    if not firstheadtag:
+        firstheadtag = ''
     if (pagetext.startswith('Buy this domain.') or
         ('This website is for sale' in pagetitle) or
         ('This website is for sale' in pagetext) or
@@ -1237,7 +1240,12 @@ def IsDomainParked(item):
         (pagetitle == 'RealNames | A more meaningful email address') or
         (pagetitle == 'Domain parked by OnlyDomains') or
         (pagetitle == 'Parked Domain name on Hostinger DNS system') or
-        (pagetitle == 'Register.be Parkpage')
+        (pagetitle == 'Register.be Parkpage') or
+        (firstheadtag == 'This domain name has been registered with Gandi.net') or
+        (firstheadtag == 'Welcome to nginx!') or
+        (firstheadtag == '404 Not Found') or
+        (firstheadtag == 'Parked at Loopia') or
+        (firstheadtag == 'Parked on the Bun!')
     ):
         return True
     return False
@@ -1253,6 +1261,9 @@ def HasNoContent(item):
         # We already dock points for no page title elsewhere, and a lack of a
         # title does not necessarily mean there's no content.
         return False
+    firstheadtag = item.pagefirstheadtag
+    if not firstheadtag:
+        firstheadtag = ''
     if ((item.pagetitle == 'Account Suspended') or
         (item.pagetitle == 'Domain Default page') or
         (item.pagetitle == "Web Server's Default Page") or
@@ -1296,7 +1307,13 @@ def HasNoContent(item):
         (item.pagetitle == 'default.secureserver.net') or
         (item.pagetitle == 'Parallels Operations Automation Default Page') or
         (item.pagetitle == 'TM Webhosting Default Page') or
-        (item.pagetitle == 'Site Under Construction')
+        (item.pagetitle == 'Site Under Construction') or
+        (firstheadtag == "Web Server's Default Page") or
+        (firstheadtag == 'Future home of something quite cool.') or
+        (firstheadtag == 'It works!') or
+        (firstheadtag == 'This site is under development') or
+        (firstheadtag == 'This Site Is Under Construction and Coming Soon.') or
+        (firstheadtag == 'Parallels Plesk Panel')
     ):
         return True
     return False
