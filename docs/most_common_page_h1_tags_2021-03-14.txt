@@ -1,0 +1,526 @@
+Most common page first head tags
+
+
+zetaweb=# select count(*), pagefirstheadtag from site_info group by pagefirstheadtag order by count(*) desc limit 500;
+  count   |                                        pagefirstheadtag                                         
+----------+-------------------------------------------------------------------------------------------------
+ 13619336 | 
+   940606 | 
+   149832 | Index of /
+   110264 | Home
+    62820 | This domain name has been registered with Gandi.net
+    38736 | Welcome
+    35073 | Affordable, ReliableWeb Hosting Solutions
+    25789 | Welcome to nginx!
+    20069 | Web Server's Default Page
+    19217 | Future home of something quite cool.
+    18032 | 502 Bad Gateway
+    17034 | It works!
+    16715 | Parallels Plesk Panel
+    16368 | See, that’s what the app is perfect for.
+    15356 | Parked at Loopia
+    14809 | This Site Is Under Construction and Coming Soon.
+    14320 | About Us
+    14001 | This site is under development
+    13929 | Parked on the Bun!
+    11933 | 404 Not Found
+    10415 | Menu
+    10253 | Take advantage of this blank space.
+     9962 | One more step
+     9555 | Find yourself a more meaningful email address.
+     9110 | Welcome!
+     8784 | 자동등록방지를 위해 보안절차를 거치고 있습니다.
+     8779 | Reserved for
+     8664 | My Site
+     8328 | return to home                                                                                 +
+          |                                                                                                +
+          |                                                                                                +
+          | About Afternic                                                                                 +
+          | Partners                                                                                       +
+          | Blog                                                                                           +
+          | Careers                                                                                        +
+          | Privacy Policy                                                                                 +
+          | Contact Us                                                                                     +
+          | Legal
+     7961 | Welcome to Parallels!
+     7296 | About
+     6715 | [Your Business Name]
+     6710 | This domain is registered and protectedby MarkMonitor
+     6223 | Facebook
+     6172 | Future home of something quite cool
+     5972 | Welcome to your website!
+     5971 | Home Page
+     5875 | Please turn JavaScript on and reload the page.
+     5734 | My Blog
+     5699 | Contact Us
+     5684 | Sorry, we're doing some work on the site
+     5589 | Web Hosting from Just Host
+     5492 | HOME
+     5433 | Sorry, the page you requested was not found.
+     5359 | A New WordPress Site
+     5073 | Under Construction
+     4951 | Our Services
+     4901 | Coming Soon
+     4900 | This page has been reserved for future use
+     4683 | This domain has been suspended due to non-completion of an ICANN-mandated contact verification.
+     4656 | News
+     4534 | How does the World’s No. 1 Brand Engage with Millennials & GenZ in Latin America?
+     4450 | You have reached a domain that is pending ICANN verification.
+     4394 | TM \r                                                                                          +
+          |         Webhosting
+     4243 | Sorry, this page doesn't exist.Please check the URL or go back a page.
+     4186 | 紧急通知
+     4063 | Blog
+     3997 | THIS DOMAIN NAME HAS JUST BEEN REGISTERED FOR ONE OF OUR CUSTOMERS!
+     3859 | Services
+     3851 | WELCOME
+     3608 | Website Coming Soon
+     3602 | Welcome to
+     3589 | Homepage
+     3581 | ABOUT US
+     3549 | Diese neue Domain wurde im Kundenauftrag registriert.
+     3528 | Domænet er hosted af ScanNet
+     3340 | About us
+     3190 | Félicitations !
+     3173 | Site Not Found
+     3152 | THIS CLICK IS BLOCKED
+     3063 | Login
+     3017 | Parallels Operations Automation
+     2803 | Latest News
+     2785 | Main Page
+     2776 | Featured Products
+     2691 | Private Site
+     2668 | You're almost done!
+     2644 | Get Ready... Something Really Cool Is Coming Soon
+     2585 | Main menu
+     2550 | Shop
+     2532 | Welcome to JOKER.COM
+     2523 | Are you missing something?
+     2521 | Protected Blog
+     2460 | Oops
+     2458 | Who We Are
+     2421 | Accueil
+     2418 | Our Mission
+     2348 | Roundcube Webmail Login
+     2336 | Login to SmarterMail
+     2321 | 403 Forbidden
+     2294 | Privacy Policy
+     2285 | Contact
+     2221 | Congratulations!
+     2207 | Not Found
+     2138 | What We Do
+     2094 | Work
+     2078 | Bienvenidos a
+     2043 | home
+     2027 | Welcome to nginx on Fedora!
+     1998 | Find Jobs You'll Love Near You
+     1958 | Products
+     1862 | We’ll be back soon!
+     1838 | Inicio
+     1833 | Bezet!
+     1823 | Webhotellet er klar
+     1820 | WordPress.com
+     1804 | Twitter
+     1796 | My blog
+     1760 | This Site is Under Construction and Coming Soon
+     1727 | Server Default Page
+     1709 | .
+     1708 | Unknown address
+     1690 | Posterous Spaces
+     1683 | afrihost - pure internet joy
+     1681 | Domæne og billig webhosting hos One.com
+     1645 | This video is unavailable.
+     1621 | Sign In
+     1620 | Site en construction
+     1619 | HTTP Test Pagepowered by CWP | CentOS-WebPanel.com
+     1584 | Search
+     1544 | Welcome to Your New Hosting Package
+     1533 | This domain is parked courtesy of Sav.com
+     1533 | Coming Soon!
+     1511 | Introduction
+     1504 | Hello!
+     1478 | This domain name is parked FREE, courtesy of Hostinger.
+     1469 | Upcoming Events
+     1463 | Portfolio
+     1459 | COMING SOON
+     1450 | Your website is ready to go!
+     1447 | DIESE SEITEBEFINDET SICHIM AUFBAU.
+     1445 | Operations Automation
+     1413 | Village Shop
+     1404 | Recent Posts
+     1358 | This site is temporarily unavailable
+     1336 | It's better than Tinder!
+     1322 | About Company
+     1294 | Our Products
+     1293 | Who we are
+     1272 | Testimonials
+     1268 | Welcome to nginx on Debian!
+     1261 | Powered by WordPress
+     1260 | Welcome to HostPapa!
+     1257 | Nothing Found
+     1249 | This page uses frames, please update your browser
+     1225 | Account Suspended
+     1220 | No Start Page
+     1218 | ABOUT
+     1215 | This domain is currently parked at gkg.net
+     1204 | WHO WE ARE
+     1201 | OUR SERVICES
+     1153 | Please Enable Cookies
+     1147 | What we do
+     1142 | seks-vod.info
+     1140 | Latest Posts
+     1136 | This Website is Under Construction.                                                            +
+          |       Come Back Soon.
+     1133 | Hello
+     1115 | Primary Menu
+     1114 | This domain is expired.
+     1112 | Domain Holding Page
+     1107 | Hello world!
+     1103 | dominios@premium.mx
+     1101 | Site Title
+     1093 | Úvod
+     1091 | WHAT WE DO
+     1090 | Website Unavailable
+     1079 | Your account has been created!
+     1077 | O nás
+     1073 | Discover Your Dream Home
+     1072 | About Me
+     1066 | This domain has been registered by a LeaseWeb customer
+     1059 | Website Disabled
+     1041 | Just another WordPress site
+     1033 | This Domain isPARKED.
+     1027 | Oops, looks like the page is lost.
+     1015 | 404
+      999 | No website is currently present on this hostname
+      997 | Index of locally available sites:
+      995 | Events
+      992 | This domain is hosted by UnoEuro Webhosting
+      988 | Design Your Very Own Website While
+      988 | Featured
+      977 | Welcome to our STIHL site
+      977 | NEWS
+      975 | Welcome to SellOff.US                                                                          +
+          | Selling Top Level Domain Names World Wide
+      972 | Este sitio web ya no está disponible.
+      972 | Sorry, the site you requested has been disabled
+      961 | ドメインが無効な状態です。
+      945 | iPage
+      940 | SYSE
+      938 | UNDER CONSTRUCTION
+      937 | SERVICES
+      933 | Page Not Found :(
+      932 | An awesome website is coming soon to this address!
+      927 | Search for your own amazing domain name today!
+      922 | CE NOM DE DOMAINE VIENT D'ÊTRE ENREGISTRÉ POUR L'UN DE NOS CLIENTS
+      922 | Forbidden
+      920 | My WordPress Website
+      916 | My CMS
+      913 | Social Psychology Network
+      912 | welcome
+      907 | Contact us
+      883 | Domain Default Page
+      873 | Welcome to our Website
+      871 | This is the Plesk™ default page
+      862 | Domain Suspension
+      859 | Overview
+      858 | Hier entsteht \r                                                                               +
+          |   eine neue Homepage.
+      852 | このドメインは お名前.com から取得されました。
+      851 | Projects
+      851 | StackPath
+      849 | Navigation
+      843 | Zimbra
+      843 | Neue Website
+      837 | Coming soon
+      833 | Website unavailable
+      831 | Posts
+      826 | Gallery
+      823 | Home page
+      817 | Directory listing for /
+      817 | This domain is temporarily unavailable
+      814 | Our Story
+      812 | Categories
+      810 | Company Profile
+      805 | You have successfully set up your website!
+      781 | Dit domein is gereserveerd door een klant van Antagonist
+      765 | Netfirms
+      751 | Mail & Web Series Sample Start Page
+      748 | This domain is for sale
+      743 | Your hosting package is now ready to use!
+      733 | Forums
+      727 | about us
+      725 | Sign in
+      719 | Log in
+      711 | CONTACT US
+      710 | Diese Homepage wird\r                                                                          +
+          | zur Zeit überarbeitet.
+      709 | No Results Found
+      704 | (mt) Media Temple,Inc. - Web Hosting Built to Scale.
+      702 | JavaScript is not available.
+      696 | This Page
+      694 | Page Not Found
+      692 | Retorne em alguns dias
+      684 | Herzlich Willkommen
+      681 | Willkommen
+      680 | Welcome to phpMyAdmin
+      678 | WELCOME TO
+      677 | Welcome Home
+      674 | Nextcloud
+      674 | PCextreme B.V.
+      667 | //<![CDATA[\r                                                                                  +
+          |             document.write(location.hostname);\r                                               +
+          |           //]]>
+      663 | 123-reg, the cheapest and easiest way to get a domain name
+      657 | Parkování
+      657 | Our site is coming soon
+      652 | This domain is for sale.
+      652 | WELCOME!
+      649 | JavaScript required
+      648 | Default Page
+      645 | All
+      643 | Your Internet Address for Life
+      635 | More stuff
+      632 | This Site is Brand New
+      632 | Mission Statement
+      627 | The website you were trying to reach is temporarily unavailable.
+      626 | Oops!
+      626 | Dit domein is geregistreerd, maar heeft geen website.
+      625 | Hosted by enavn.dk
+      620 | Mission
+      598 | Maintenance Mode
+      597 | Website Manager
+      583 | One.com Webhosting
+      581 | FUTURE HOME OF A DOTSTER-HOSTED WEBSITE
+      578 | Notoriety: Neutral
+      573 | Warning: Suspected Phishing Site Ahead!
+      571 | Domain Name Search
+      569 | Loading...
+      568 | OUR MISSION
+      565 | Firebase Hosting Setup Complete
+      564 | Sample Page
+      555 | Today.com
+      542 | Quick Links
+      538 | Welcome.
+      537 | Domaininformation
+      536 | Welcome to Our Practice
+      535 | Awesome Site in The Making
+      533 | Share
+      531 | Welcome To
+      527 | Log In
+      523 | Sign Up Now! 100% Free
+      518 | Shopping Cart
+      516 | Tumblr
+      508 | Nič tu nie je, zatiaľ...
+      508 | Welcome to our website
+      507 | Startseite
+      506 | Welcome to nginx on EPEL!
+      500 | Ici prochainement...
+      500 | This domain is just sitting here...
+      493 | Quick Search
+      492 | Magento Commerce
+      490 | WordPress
+      490 | Under construction
+      486 | A WordPress Site
+      485 | This web site has just been created from WebsitePanel  and it is still under construction.
+      485 | Domain Does Not Exist
+      483 | Features
+      479 | Verification of Contact Information
+      476 | H-SPHERE
+      475 | Bienvenue
+      475 | this is a mail-in-a-box
+      475 | 网站改版中
+      472 | ownCloud
+      471 | Websites are FREE at                                                                           +
+          |                                                                                                +
+          | vistaprint.com/digital-marketing/web
+      466 | Hello.
+      463 | Site under construction
+      462 | .site-header__logo-image { height: 60px; }
+      461 | Bienvenidos
+      459 | Our Vision
+      458 | New .COMs $13.99*
+      451 | Welcome...
+      451 | IceWarp WebClient
+      447 | Domain.com
+      446 | iran.sc
+      446 | Resources
+      445 | This domain name has been suspended
+      443 | News & Events
+      443 | About me
+      442 | FUTURE HOME OF ANOTHER AMAZING WEBSITE POWERED BY EXABYTES
+      438 | Careers
+      435 | Parkert
+      434 | Our Blog
+      434 | SUSPENDED
+      433 | Post navigation
+      431 | Select a default language
+      430 | Error 404
+      425 | IPOWER
+      423 | Page Search
+      420 | What's New
+      417 | Front Page
+      417 | Switch to G Suite by Google
+      416 | Open Source Content Management
+      416 | Error: 503 - Service Unavailable
+      412 | Our services
+      411 | PRODUCTS
+      410 | about
+      409 | Something isn't quite right here ...
+      406 | HTTP Test Pagepowered by CentOS-WebPanel.com
+      405 | 会员登录
+      404 | Kontakt
+      403 | Company
+      402 | Mon premier blog
+      399 | Apache 2 Test Pagepowered by CentOS
+      397 | Our Team
+      396 | Announcements
+      395 | 抱歉！该站点已经被管理员停止运行，请联系管理员了解详情！
+      395 | LATEST NEWS
+      394 | Announcement
+      394 | Hello World
+      391 | Popular categories
+      390 | Our Company
+      389 | Coming soon!
+      388 | Our Work
+      387 | Latest news
+      386 | 403 Error
+      383 | This page is currently unavailable
+      382 | The project does not exist
+      381 | Welcome to your new campaign!
+      380 | Domain Unavailable!
+      380 | Why Choose Us?
+      379 | หน้าแรก
+      377 | 驿家域名
+      377 | Sidebar
+      376 | Launching Soon
+      373 | Ever feel you're in the wrong place
+      373 | Archives
+      372 | Recent News
+      372 | Our Clients
+      371 | Web Hosting Account
+      368 | History
+      367 | 无法访问此网站
+      363 | slideshow
+      363 | Your hosting space is ready...
+      363 | Account Login
+      362 | Who are we?
+      362 | Biography
+      362 | 1
+      361 | steersearch.com
+      358 | Apache Friends
+      357 | Video Conferencing
+      357 | Built For Designers & Developers
+      356 | Sorry we still under construction...
+      355 | Website Under Construction
+      353 | What We Offer
+      353 | 公司简介
+      351 | logo
+      351 | Solutions
+      350 | coming soon
+      350 | Coming Soon...
+      349 | mozdev.org
+      349 | Refund for purchases
+      349 | Aktuality
+      346 | My Lists
+      343 | Site Offline
+      341 | Newsletter
+      340 | Очаквайте скоро!
+      339 | My Website
+      338 | Fedora
+      338 | Financeflick.com
+      337 | Welcome to CentOS
+      337 | Welcome to our website.
+      336 | Locations
+      336 | Untitled
+      334 | Please enter the code below to continue to the content
+      334 | Featured Listings
+      333 | Get in touch
+      331 | Coming soon...
+      328 | Frequently Asked Questions
+      327 | Пусть домен работает
+      327 | CONTACT
+      326 | Hello World!
+      325 | #1 The world's unlimited books & audiobook service. No limits. All in one your book library
+      325 | Unavailable
+      325 | Title
+      325 | WellnessZap.com
+      325 | Member Login
+      322 | Main
+      322 | Index
+      322 | Logo
+      321 | Dotster
+      320 | Error establishing a database connection
+      319 | Parallels Plesk Automation
+      317 | OUR PRODUCTS
+      316 | Welkom
+      316 | Videos
+      316 | Links
+      315 | This domain is for sale!
+      315 | Our Partners
+      315 | My Library
+      315 | Sitemap
+      314 | Featured Properties
+      314 | MENU
+      313 | Calendar
+      313 | Get In Touch
+      313 | Herzlich willkommen
+      312 | Bienvenido
+      312 | We're sorry
+      311 | My WordPress
+      310 | It's missing!
+      310 | DomainVIP – Premium Domain Store
+      309 | Website is Under Construction
+      309 | admin homepage
+      306 | Página em construção
+      306 | Welcome to Wufoo!
+      304 | Articles
+      304 | How can we help you?
+      302 | Design
+      302 | HUGE SALE
+      301 | Why Choose Us
+      301 | ...
+      301 | GitLab Community Edition
+      300 | Novinky
+      299 | Servicios
+      299 | Главная
+      299 | Disclaimer
+      298 | Live Sex Chat - Amateur Cams and Pornstars
+      298 | ​
+      298 | MAG Dashboard Login
+      296 | This Site Has Been Disabled
+      295 | Ooops..
+      295 | Vitajte
+      293 | FAQ
+      293 | 关于我们
+      293 | Domain for sale.
+      293 | Please select your page
+      292 | Powered by Juicer
+      292 | Popular Products
+      291 | Email Protection
+      291 | test
+      290 | This website is under construction
+      287 | OUR STORY
+      285 | This web hosting account has been suspended
+      284 | The Blog
+      284 | ASP.NET
+      283 | Location
+      283 | Error
+      283 | Domov
+      282 | WOW0821240209BLCLJLLLML
+      281 | FEATURED PRODUCTS
+      280 | Start
+      278 | Education
+      278 | We're sorry...
+      278 | Din webside - alltid tilgjengelig
+      277 | Domain For Sale!
+      275 | This site is currently unavailable
+      274 | Discount Domain Name Services
+      273 | Photo Gallery
+      271 | New Website Coming Soon
+      271 | Posts navigation
+      271 | Create and share your forms.
+      271 | Welcome to our website!
+      269 | Find your perfect .co.uk domain now First year FREE
+      269 | Welcome to Our Website
+(500 rows)
+

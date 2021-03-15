@@ -1,0 +1,520 @@
+Most common page first h2 tags.
+
+zetaweb=# select count(*), pagefirsth2tag from site_info group by pagefirsth2tag order by count(*) desc limit 500;
+  count   |                                                                                                                         pagefirsth2tag                                                                                                                          
+----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 15045203 | 
+   329760 | 
+    63800 | Buy this domain
+    59511 | Please prove you're not a robot
+    49428 | Home
+    46244 | About Us
+    43458 | Posts
+    34180 | is a totally awesome idea still being worked on.
+    31321 | Pages
+    29816 | Welcome
+    27698 | New to Parallels?
+    24938 | Hello world!
+    23700 | Traffic stats
+    22947 | What Are the Advantages of a Super Premium .Com Domain?
+    21070 | Search form
+    18727 | Our Services
+    18059 | Popular domains from this seller
+    17991 | About
+    15815 | Recent Posts
+    15360 | Register domains at Loopia
+    14942 | Services
+    14804 | Contact Us
+    13572 | Páginas
+    13447 | This Domain Is Registered with Network Solutions
+    13275 | Posts navigation
+    12361 | Latest News
+    11884 | News
+    11785 | Your browser does not support frames.  We recommend upgrading your browser.
+    11295 | Featured Products
+    10466 | Web Server's Default Page
+    10202 | Categories
+    10176 | Domain Parked by Instra
+    10082 | Menu
+     9994 | Main navigation
+     9941 | Welcome!
+     9720 | Related Searches
+     9709 | Why has this domain been suspended?
+     8819 | Coming Soon!
+     8454 | Main menu
+     8402 | About us
+     8302 | Search
+     7993 | Who We Are
+     7834 | ABOUT US
+     7794 | What We Do
+     7744 | Domain names for less with UK2
+     7634 | Products
+     7255 | Main Content
+     7165 | Our Mission
+     7133 | Business Overview
+     7002 | is available for sale!
+     6793 | Just added to your cart
+     6635 | Nothing here yet
+     6408 | Get inspired
+     6351 | Welcome to
+     6350 | About Me
+     6239 | Upcoming Events
+     6037 | This is the default index page of your website.
+     5990 | This domain is for sale!
+     5962 | Navigation
+     5466 | Contact
+     5453 | Welcome to Parallels!
+     5439 | What are you looking for?
+     5302 | Testimonials
+     5277 | Login
+     5273 | We couldn't process your inquiry at this time.
+     4937 | Contact us
+     4917 | What we do
+     4907 | .Jobs helps you find jobs, career advice and more
+     4376 | Our Products
+     4357 | Subscribe
+     4331 | Your browser does not support frames. We recommend upgrading your browser.
+     4243 | 404 Error. Page Not Found.
+     4166 | Just another WordPress site
+     4157 | Why this domain has been suspended
+     4131 | We make things easy.\r                                                                                                                                                                                                                                         +
+          |             We're just a phone call or email away, seven days a week.
+     4007 | Do you need affordable web hosting or a domain name?
+     3999 | Learn more about this seller
+     3985 | Cart
+     3963 | Recent Game Medals
+     3924 | Popular Games Free
+     3835 | 本站仅支持UC浏览器访问！
+     3764 | Site Navigation
+     3686 | Who we are
+     3682 | sito in costruzione
+     3632 | With RealNames, your email address is your name. You get email without ads that works with your favorite email program, in your web browser, and on your mobile phone or tablet.
+     3559 | Why purchase this domain with Epik?
+     3545 | OUR SERVICES
+     3528 | Tlf. (+45) 75 53 35 00 - scannet hos scannet dot dk
+     3525 | Quick Links
+     3458 | WordPress Themes
+     3420 | Sidebar
+     3349 | Introduction
+     3263 | WELCOME
+     3200 | Coming Soon
+     3189 | Hébergement Web
+     3107 | Sign Up
+     3092 | Page Not Found
+     3065 | Recent Comments
+     3045 | Seller's notes about this domain
+     3038 | Questions? We can help: 1-303-893-0552
+     2994 | Website Administrator
+     2968 | Soon to be the new home of...
+     2967 | Site Navigation[Skip]
+     2963 | Blog
+     2960 | If you are a member of the general public:
+     2939 | Main Menu
+     2829 | Overview
+     2816 | SERVICES
+     2807 | Enter store using password
+     2794 | HOME
+     2788 | Latest Posts
+     2780 | Have a Question?
+     2767 | Primary Navigation
+     2730 | Actions and Detail Panel
+     2727 | WHO WE ARE
+     2659 | Events
+     2619 | Nav view search
+     2617 | Features
+     2566 | New Products
+     2550 | ABOUT
+     2549 | Shop For
+     2523 | Domain Parked by OnlyDomains
+     2460 | YOUR CART
+     2439 | Opening Soon
+     2439 | Skip links
+     2431 | Contents
+     2423 | WHAT WE DO
+     2393 | Popular Categories
+     2385 | Featured
+     2385 | Portfolio
+     2289 | ...but it could be yours!
+     2235 | Our Story
+     2232 | Web Site's Default Page
+     2228 | Main Navigation
+     2210 | is for sale!
+     2205 | Email Address\r                                                                                                                                                                                                                                                +
+          |         \r                                                                                                                                                                                                                                                     +
+          |             (e.g., user@example.com)
+     2162 | Entradas
+     2113 | NEWS
+     2068 | Projects
+     2056 | 6000+ Online-Billboards Available
+     2045 | Is dat een goed idee?
+     2042 | Newsletter
+     2040 | Mission
+     2036 | Post navigation
+     2034 | Primary Menu
+     2029 | Click here to edit subtitle
+     2016 | New Arrivals
+     2005 | You're Almost There...
+     1990 | Your message has been sent
+     1981 | Photo Gallery
+     1957 | Featured collection
+     1924 | Collections
+     1914 | Footer
+     1911 | Having naming issues? You are not alone.
+     1908 | Maintenance mode is on
+     1908 | Sponsored Listings
+     1901 | The Domain Name
+     1900 | Recent News
+     1892 | Subscribe to our mailing list
+     1891 | Make an Offer
+     1891 | Location
+     1891 | Loading...
+     1854 | A really cool domain parked on park.io
+     1816 | Direct aan de slag met je domein?
+     1783 | 本域名正在出售！
+     1780 | .
+     1760 | This Domain is Registered With Network Solutions.
+     1758 | Archives
+     1753 | Gallery
+     1745 | Links
+     1713 | Frequently Asked Questions
+     1713 | Updates
+     1696 | Powerful Web Hosting and Domain Names for Home and Business
+     1693 | Latest news
+     1688 | Mission Statement
+     1681 | Webhosting og domæne fra One.com - billige webhosting- og domæneløsninger hos One.com. Byg din egen hjemmeside med Hjemmesideprogram eller installer en blog med 1 klik. Uanset hvad du vælger, er One.com dedikeret til vores kunders tilfredshed med chatsupp
+     1669 | Schauen Sie doch mal wieder vorbei!
+     1666 | Contact Information
+     1640 | You are here
+     1639 | Required Cookies & Technologies
+     1629 | CONTACT US
+     1581 | This is your index.html page
+     1574 | Our services
+     1550 | How can we help you?
+     1533 | Featured KnowledgeBase Articles
+     1526 | Announcements
+     1522 | Sign in to your account
+     1518 | Getting Started
+     1480 | Product successfully added to your shopping cart
+     1469 | Create Your Etsy Account
+     1463 | Follow Us
+     1462 | Search This Blog
+     1462 | Home Page
+     1451 | Working...
+     1446 | 域名简介：
+     1445 | Our Clients
+     1440 | This Domain is Under Construction
+     1421 | About me
+     1419 | Our Vision
+     1419 | Share a link with your followers
+     1418 | has expired.
+     1409 | A great domain makes all the difference.  Own this domain today.Flexible payment plans available.  Contact us for details.
+     1409 | News & Events
+     1399 | 产品中心
+     1370 | Social
+     1363 | Featured Properties
+     1358 | EXPIRED AUCTIONS
+     1351 | Why Choose Us?
+     1340 | Translate
+     1338 | Vyberte si ten správny webhosting!
+     1316 | User account menu
+     1313 | Shop by Category
+     1313 | HTTP 错误 401.1 - 未经授权：访问由于凭据无效被拒绝。Internet 信息服务 (IIS)
+     1311 | Our Work
+     1297 | Featured Listings
+     1294 | What's New
+     1289 | Contact Info
+     1287 | O nás
+     1261 | Were you expecting to see your website?
+     1257 | This Domain Is Registered with NameSecure®
+     1253 | Description
+     1244 | Log in
+     1238 | Navigation menu
+     1234 | New Products For May
+     1229 | MENU
+     1228 | Nom de domaine réservé via Viaduc®
+     1226 | 关于我们
+     1225 | Information
+     1221 | New Products For April
+     1220 | Labels
+     1215 | The Journey Begins
+     1214 | You see this page because you have set \r                                                                                                                                                                                                                      +
+          |                 up your Web server for serving a new site, but have not uploaded \r                                                                                                                                                                            +
+          |                 the site content yet.
+     1213 | Sign In
+     1212 | The website you are trying to access is unknown in the system.
+     1209 | How it works
+     1204 | Followers
+     1202 | OUR MISSION
+     1198 | Just another WordPress.com site
+     1195 | Blog Archive
+     1184 | Popular Products
+     1182 | Laman
+     1181 | Best Sellers
+     1170 | What We Offer
+     1165 | Kontakt
+     1165 | LATEST NEWS
+     1163 | Máte o doménu zájem?
+     1162 | Our Team
+     1158 | Get in touch
+     1156 | SAVED VEHICLES
+     1155 | This domain is registered for one of our customers.
+     1148 | about us
+     1147 | Solutions
+     1145 | Who are we?
+     1144 | The real estate marketing platform for simplicity & possibility.
+     1136 | Is this your domain?
+     1135 | Shop by category
+     1130 | Why Choose Us
+     1116 | Company
+     1114 | Publisher's Description:
+     1104 | Domain Parked with Europe Registry
+     1104 | Web Hosting
+     1101 | PRODUCTS
+     1098 | Highlights
+     1089 | Featured Services
+     1082 | Seguidores
+     1074 | Latest stories
+     1068 | Articles
+     1062 | Log into your account
+     1061 | Servicios
+     1061 | Popular Posts
+     1050 | This page uses frames, but your browser doesn't support them.
+     1045 | Dealer Recommended Products
+     1044 | Checking your browser before accessing the website.
+     1042 | User login
+     1031 | How It Works
+     1031 | スポンサーサイト
+     1026 | Quick Search
+     1023 | Company Profile
+     1019 | Artworks                                                                                                                                                                                                                                                       +
+          | Favorites                                                                                                                                                                                                                                                      +
+          | Profile
+     1018 | Avez-vous besoin, vous aussi, d'une VRAIE solution d'hébergement VRAIMENT accessible ?
+     1006 | See, that’s what the app is perfect for.
+      998 | With a DIY Website Builder So Easy Anyone Can Do it - Literally Anywhere!
+      996 | Our Company
+      995 | Your website is ready.
+      986 | Halaman
+      984 | Facebook
+      983 | Enter your keyword
+      981 | Get in Touch
+      979 | FANDOM
+      978 | Accessibility links
+      975 | Vyhľadávanie
+      973 | Primary Sidebar
+      973 | Instagram
+      972 | Under Construction
+      972 | home
+      971 | This domain name is available for sale or lease
+      970 | 今日更新
+      969 | This site is under construction or otherwise unavailable. Please check back later.                                                                                                                                                                             +
+          | \r                                                                                                                                                                                                                                                             +
+          |                         Hosting is provided by AT&T Web SolutionsSM
+      969 | Find Us
+      968 | Reviews
+      967 | Hovedmeny
+      965 | The Blog
+      964 | *
+      961 | Contact Details
+      957 | Experience
+      951 | Featured Projects
+      948 | Latest
+      947 | 404 - This is not the page you are looking for
+      946 | CONTACT
+      944 | Buy Expired Domains With Great Backlinks
+      939 | bcmath
+      927 | Pagine
+      921 | Resources
+      916 | The site you are trying to reach could be suspended, deleted or DNS could be incorrect
+      913 | Maintained by Scott Plous, Wesleyan University
+      911 | This Account Has Been Suspended
+      910 | Latest Favorite Movies
+      910 | Design
+      907 | Inicio
+      907 | Please complete the security check to access 123Movies
+      902 | Vision
+      900 | Plan Correo
+      887 | The web hosting service for this web page is provided by SiteGround.com. Our client is still working on their website, but nice of you to come by. Check back again!
+      885 | Get In Touch
+      884 | Videos
+      881 | Novinky
+      881 | Please enable cookies
+      880 | Featured products
+      878 | Web Utilities:
+      875 | about
+      875 | 最新电影   在线视频播放-无需安装播放器,仅支持平板,电脑设备播放:host = window.location.host;document.write(host)
+      874 | Sign in
+      869 | Phone:
+      863 | Registrant Information Verification Failure
+      860 | RENEW NOW
+      858 | Calendar
+      858 | WELCOME TO
+      851 | Articles that might be of interest to you:
+      851 | History
+      849 | FEATURED PRODUCTS
+      849 | Privacy Policy
+      849 | Practice Areas
+      848 | This domain is currently available
+      832 | Website Links
+      830 | Tips
+      829 | 公司简介
+      829 | Collection list
+      828 | Account Options
+      827 | Our Partners
+      819 | Profile
+      817 | Homepage
+      816 | Accueil
+      813 | Product Categories
+      813 | OUR PRODUCTS
+      812 | Languages
+      811 | We Proudly Offer:
+      810 | Produit ajouté au panier avec succès
+      809 | Options
+      807 | Recent Projects
+      807 | Môžete si zaregistrovať ďalšiu doménu
+      802 | Subtitle
+      797 | ​
+      794 | News:
+      787 | 팝업레이어 알림
+      787 | Featured Collections
+      782 | Residential
+      782 | Postagens
+      782 | お知らせ
+      781 | Web Design
+      778 | title
+      775 | Education
+      770 | Postingan
+      766 | Work
+      764 | welcome
+      763 | Why use Efty
+      763 | Call To Action
+      761 | Log In
+      756 | Gallery comments
+      756 | Site Offline
+      751 | About US
+      751 | Address
+      751 | Search                                                                                                                                                                                                                                                         +
+          | for                                                                                                                                                                                                                                                            +
+          | Homes
+      748 | Latest Entries »
+      748 | Make a bold statement
+      748 | Connect With Us
+      746 | Home page
+      745 | TESTIMONIALS
+      743 | Producto añadido correctamente a su carrito de la compra
+      739 | Mengenai Saya
+      736 | Latest Products
+      734 | Useful Links
+      734 | Residential and Commercial Restoration and Cleaning Services
+      730 | 網站維運中...
+      728 | Offering Top Level Domains that improve image and marketability. Call +1.858.454.1400 to acquire this domain before it's taken!
+      724 | Discover
+      722 | Hours
+      720 | How does it work?
+      719 | Our Brands
+      718 | Featured Items
+      716 | Menu:
+      714 | Explore
+      709 | request offer
+      706 | Nosotros
+      704 | Create Your Website in Minutes
+      701 | Our Solutions
+      701 | Header Right
+      693 | Locations
+      692 | Página em construção...
+      689 | 产品展示
+      689 | Woops
+      688 | Follow by Email
+      684 | Latest Updates
+      684 | Welcome To
+      682 | Contact Seller
+      680 | Sorry, this domain is no longer available.
+      678 | Make an offer
+      676 | Web hosting
+      675 | Shop
+      674 | Registered domain / Geregistreerd domein
+      673 | Domain Parked with Asia Registry
+      672 | If you're seeing this, you've successfully installed Tomcat. Congratulations!
+      672 | Hello!
+      671 | FIRST TIME FOR SALE
+      667 | Σελίδες
+      667 | //<![CDATA[\r                                                                                                                                                                                                                                                  +
+          |             document.write('<a href="http://' + (location.hostname.indexOf(':')>=0?'['+location.hostname+']':location.hostname) + '" target="_blank">' + location.hostname + '</a>');\r                                                                        +
+          |           //]]>
+      661 | Latest Post
+      658 | Research
+      657 | Redirecting
+      657 | UPCOMING EVENTS
+      652 | New to this group?
+      652 | Accommodation
+      652 | Having naming issues?
+      651 | Blogs
+      650 | What we offer
+      650 | Виртуальный хостинг
+      645 | Recent Entries
+      643 | No disponible en español
+      642 | Actualités
+      641 | Uploading your website via FTP
+      640 | Tweets
+      640 | Please check back soon.
+      637 | This website uses cookies
+      637 | Why choose us?
+      635 | Clients
+      632 | Folders
+      632 | Member Login
+      631 | First blog post
+      631 | Latest Articles
+      629 | Register Your Own .WS Domain
+      628 | Your Local Real Estate Connection
+      625 | This page seems to be inactive. If you think this is a mistake please contact us.
+      620 | Bienvenidos
+      618 | Call Us Today
+      618 | is for sale
+      616 | Top Stories
+      614 | We make things easy. We're just a phone call or email away, seven days a week.
+      614 | Hello
+      613 | Recent Articles
+      612 | 1
+      610 | Popüler Sonuçlar
+      610 | Weddings
+      607 | WELCOME!
+      607 | Recent Work
+      606 | Shopping Cart
+      604 | Domain Info
+      603 | Strony
+      603 | We've got what you need!
+      601 | Partners
+      600 | Seiten
+      600 | Our Location
+      597 | 新着情報
+      597 | Bestsellers
+      595 | Commercial
+      592 | Our Programs
+      592 | Domain Name For Sale
+      590 | Search for a Home
+      589 | Additional menu
+      588 | Nuestros Servicios
+      586 | Your Cart
+      584 | Social Media
+      583 | HİZMETLERİMİZ
+      582 | Hakkımızda
+      582 | Our Projects
+      581 | Subscribe to our Newsletter
+      581 | Begin the search for your perfect domain name...
+      581 | Contact Us Today!
+      581 | Úvod
+      580 | This link has been flagged as phishing. We suggest you avoid it.
+      579 | Hours of Operation
+      576 | Etiquetas
+      576 | Subscribe to our newsletter
+      573 | Our Philosophy
+      567 | Here are some domains you might like that can be registered now:
+      565 | One.com is an innovative supplier of Web hosting services. We offer domain, homepage and unlimited e-mail accounts at some of the best prices on the market without compromising on quality and security. Prices from 0.90£.
+      564 | Latest Comments
+      563 | Video
+      559 | Your browser does not support frames. Please click here to enter the site.
+      556 | Special Offers
+      555 | All Categories
+      555 | Welcome to our website
+(500 rows)
+

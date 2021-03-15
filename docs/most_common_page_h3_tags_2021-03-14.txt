@@ -1,0 +1,513 @@
+Most common page first h3 tags.
+
+zetaweb=# select count(*), pagefirsth3tag from site_info group by pagefirsth3tag order by count(*) desc limit 500;
+  count   |                                                         pagefirsth3tag                                                         
+----------+--------------------------------------------------------------------------------------------------------------------------------
+ 16375291 | 
+   192884 | 
+    71970 | Buy domain
+    57469 | Make an offer
+    39772 | Get a price in less than 24 hours
+    39308 | Recent Posts
+    38840 | Menu
+    37890 | Share this:
+    30324 | Main menu
+    27713 | Parallels® Desktop for Mac
+    24836 | Categories
+    24547 | Home
+    23468 | Domain for Sale
+    22720 | About Us
+    20476 | Contact Us
+    18156 | Navigation
+    15547 | Error. Page cannot be displayed. Please contact your service provider for more details.  (32)
+    15534 | Error. Page cannot be displayed. Please contact your service provider for more details.  (15)
+    15400 | You can find a name just like this, maybe even better!
+    15360 | Get full control of your domains with LoopiaDNS
+    15207 | Error. Page cannot be displayed. Please contact your service provider for more details.  (16)
+    15044 | Error. Page cannot be displayed. Please contact your service provider for more details.  (18)
+    14914 | Error. Page cannot be displayed. Please contact your service provider for more details.  (25)
+    14896 | Error. Page cannot be displayed. Please contact your service provider for more details.  (31)
+    14874 | Error. Page cannot be displayed. Please contact your service provider for more details.  (17)
+    14855 | Error. Page cannot be displayed. Please contact your service provider for more details.  (24)
+    14787 | Error. Page cannot be displayed. Please contact your service provider for more details.  (12)
+    14748 | Error. Page cannot be displayed. Please contact your service provider for more details.  (20)
+    14636 | Error. Page cannot be displayed. Please contact your service provider for more details.  (30)
+    14558 | Error. Page cannot be displayed. Please contact your service provider for more details.  (26)
+    14550 | Error. Page cannot be displayed. Please contact your service provider for more details.  (19)
+    14537 | Error. Page cannot be displayed. Please contact your service provider for more details.  (13)
+    14498 | Search
+    14117 | Error. Page cannot be displayed. Please contact your service provider for more details.  (14)
+    13607 | Error. Page cannot be displayed. Please contact your service provider for more details.  (10)
+    13563 | Error. Page cannot be displayed. Please contact your service provider for more details.  (11)
+    13543 | Error. Page cannot be displayed. Please contact your service provider for more details.  (9)
+    13475 | Error. Page cannot be displayed. Please contact your service provider for more details.  (7)
+    13341 | Error. Page cannot be displayed. Please contact your service provider for more details.  (1)
+    13217 | Domain Suspension
+    13108 | Error. Page cannot be displayed. Please contact your service provider for more details.  (8)
+    13047 | Hello world!
+    12949 | Error. Page cannot be displayed. Please contact your service provider for more details.  (5)
+    12702 | Error. Page cannot be displayed. Please contact your service provider for more details.  (6)
+    12646 | New to Parallels?
+    11297 | How the tragedy unfolded at Grenfell Tower
+    11038 | Latest News
+    10698 | This name was just registered on Uniregistry.com
+     9800 | Welcome
+     9370 | About
+     9288 | Hurry - once it's sold this opportunity will be gone!
+     9205 | Our Services
+     9163 | Login
+     9089 | Services
+     9009 | Leave a Reply Cancel reply
+     8503 | Main Menu
+     8470 | News
+     8044 | Quick Links
+     7985 | Domains
+     7973 | Contact
+     7390 | Business Hours
+     7177 | Main Navigation
+     7175 | Search This Blog
+     6765 | Join the #1 webhosting on market
+     6200 | Saved searches
+     6172 | No Limits Web Hosting
+     6138 | If you're the site owner, log in to launch this site.
+     6088 | Pages
+     6053 | Best of YouTube
+     5949 | Upcoming Events
+     5942 | Web Hosting
+     5829 | Buy or Lease with peace of mind
+     5409 | Information
+     5304 | Archives
+     5254 | is a Branded Short Domain
+     5235 | About us
+     5162 | Domain Facts
+     5139 | Make your offer
+     5086 | Products
+     4937 | READY FOR DEVELOPMENT
+     4885 | Why You Should Invest In Domain Names
+     4836 | Error. Page cannot be displayed. Please contact your service provider for more details. (28)
+     4796 | Find the domain name that will define your brand
+     4791 | Error. Page cannot be displayed. Please contact your service provider for more details. (25)
+     4787 | Error. Page cannot be displayed. Please contact your service provider for more details. (26)
+     4766 | Error. Page cannot be displayed. Please contact your service provider for more details. (27)
+     4753 | ABOUT US
+     4739 | What We Do
+     4737 | Error. Page cannot be displayed. Please contact your service provider for more details. (21)
+     4734 | Error. Page cannot be displayed. Please contact your service provider for more details. (24)
+     4711 | Error. Page cannot be displayed. Please contact your service provider for more details. (19)
+     4617 | Error. Page cannot be displayed. Please contact your service provider for more details. (29)
+     4586 | Error. Page cannot be displayed. Please contact your service provider for more details. (18)
+     4534 | This domain is available.
+     4278 | Who We Are
+     4193 | Testimonials
+     4139 | Follow Us
+     4135 | Links
+     4102 | Post navigation
+     4089 | Our Mission
+     4087 | Pin It on Pinterest
+     4008 | 1&1 Internet is trusted by millions. Find out why.
+     3968 | Subscribe
+     3949 | Contact us for any business inquiries
+     3906 | Contact us
+     3625 | Featured Products
+     3589 | Hey there, this is a Custom Domain from Bitly
+     3576 | This premium domain name is available for purchase!
+     3514 | Featured
+     3426 | Latest
+     3342 | Just visiting?
+     3223 | Follow Us x
+     3076 | About Me
+     3017 | Address
+     2991 | — view —
+     2990 | Why we chose
+     2974 | Welcome!
+     2951 | Error. Page cannot be displayed. Please contact your service provider for more details. (17)
+     2927 | Other Parallels Solutions
+     2733 | Why am I seeing this page?
+     2729 | CONTACT US
+     2662 | Date and Time
+     2636 | Newsletter
+     2578 | Elite Affiliate Club
+     2577 | My Cart
+     2576 | Location
+     2557 | Share
+     2556 | Recent Comments
+     2448 | Finance
+     2423 | Rent To Buy Fix-Up Homes (Central Indiana)
+     2385 | Test Pages
+     2381 | Slide title
+     2369 | Our Products
+     2293 | Primary menu
+     2289 | ...Or check if another .ME domain name is available:
+     2284 | Who we are
+     2284 | Login to Manage Domains / hosting
+     2283 | MENU
+     2255 | Follow My Blog
+     2228 | Contact Information
+     2195 | Site Temporarily Closed
+     2134 | Login to your account
+     2106 | Return to Home Page
+     2084 | Welcome to
+     2077 | What we do
+     2074 | Recent News
+     2056 | Each Online-Billboard comes with a PREMIUM URL
+     2045 | Website Maker Lite
+     2028 | Sidebar[Skip]
+     2022 | Events
+     2007 | What is Squarespace?
+     2000 | Get in touch
+     1977 | Facebook
+     1967 | Coming Soon
+     1942 | 最近の投稿
+     1903 | Blog
+     1887 | WHO WE ARE
+     1869 | 首页
+     1849 | HOME
+     1828 | Introduction
+     1815 | 域名交易方式：
+     1780 | Announcements
+     1780 | Error. Page cannot be displayed. Please contact your service provider for more details.  (28)
+     1779 | 淘宝网 安全购买本域名
+     1756 | Personal tools
+     1731 | Social
+     1713 | Privacy Settings
+     1703 | Error. Page cannot be displayed. Please contact your service provider for more details.  (29)
+     1686 | Error. Page cannot be displayed. Please contact your service provider for more details.  (27)
+     1670 | Mission
+     1652 | Follow us
+     1651 | Our Vision
+     1639 | Latest Posts
+     1639 | Your best offer
+     1634 | WELCOME
+     1633 | SERVICES
+     1619 | Contact Info
+     1617 | Like this:
+     1603 | Buscar este blog
+     1583 | ➤ LOCATION
+     1582 | Company
+     1579 | INQUIRY FORM
+     1573 | Design
+     1563 | Sign up for Newsletter
+     1553 | Overview
+     1553 | Popular Posts
+     1528 | Shopping Cart
+     1518 | Features with your Domain Name
+     1516 | OUR SERVICES
+     1509 | Registration
+     1503 | Structure My Deal Recent Activity
+     1489 | SIGN IN YOUR ACCOUNT TO HAVE ACCESS TO DIFFERENT FEATURES
+     1474 | Tags
+     1470 | NEWS
+     1469 | ABOUT
+     1459 | Featured Properties
+     1450 | Office Hours
+     1446 | Login  •  Register
+     1433 | Quick links
+     1427 | CONTACT
+     1418 | Sign in
+     1418 | Postcards
+     1409 | Don't have an account with us?
+     1406 | Projects
+     1403 | Sign In
+     1395 | Our services
+     1387 | Features
+     1376 | Contact Details
+     1375 | Instagram
+     1372 | Shop
+     1370 | Need a price instantly? Contact us now.
+     1367 | home
+     1359 | Product / Service #1
+     1358 | Choose Domain Only, Web Packages, or Other Services
+     1340 | Cart
+     1338 | Doména bola registrovaná pre nášho zákazníka.
+     1315 | Web Design
+     1301 | Kontakt
+     1298 | Product Categories
+     1294 | Quality Service
+     1290 | Latest news
+     1284 | Privacy Preference Center
+     1281 | You can do the following:
+     1275 | Residential
+     1271 | Shopping cart
+     1252 | 随机推荐
+     1240 | Login Form
+     1239 | Our Location
+     1230 | Contact                                                                                                                       +
+          |  Review
+     1229 | 关于我们
+     1211 | Vision
+     1210 | Resources
+     1205 | Category
+     1205 | Our Story
+     1198 | Connect
+     1194 | Need help?
+     1184 | Calendar
+     1173 | Mission Statement
+     1167 | Rate this:
+     1163 | News & Events
+     1156 | Connect With Us
+     1144 | It's better to see it in action.
+     1134 | Our Partners
+     1131 | Get In Touch
+     1128 | Company Profile
+     1111 | Get your website online today
+     1104 | contact
+     1099 | WHAT WE DO
+     1092 | Hours
+     1087 | Find Us
+     1071 | Toggle menu
+     1065 | contact us
+     1063 | Social Media
+     1056 | Experience
+     1044 | Stay Connected
+     1036 | Your Control Panel:
+     1033 | Is this your domain name?
+     1032 | Meta
+     1029 | Web Development
+     1027 | This Domain is NOT Suspended Anymore
+     1025 | Our Clients
+     1022 | LATEST NEWS
+     1012 | Entradas recientes
+     1004 | General
+     1003 | Shop by Category
+     1002 | Why Choose Us?
+      995 | Phone
+      995 | 最新热播
+      994 | PRODUCTS
+      987 | Has been registered on behalf of a client.
+      987 | Learn More
+      986 | Gallery
+      975 | 0
+      970 | Comments
+      966 | *
+      964 | Simple Buying Process. Guaranteed Delivery
+      960 | Consulting
+      955 | Portfolio
+      950 | Cookies
+      945 | Education
+      944 | Visitors by country
+      938 | Get in Touch
+      937 | This domain name may be for sale
+      934 | Twitter
+      927 | This amazing domain was registered by domains.co.za on behalf of our client.
+      927 | Another successful domain registration from Hosting Ireland.
+      926 | Useful Links
+      916 | Institution
+      915 | Follow Blog via Email
+      908 | Please check back again soon
+      905 | Solutions
+      898 | Why Choose Us
+      897 | Report Summary
+      894 | Strategy
+      885 | Accolades
+      880 | OUR MISSION
+      879 | Client Types
+      879 | 网站首页
+      874 | We're sorry. Your inquiry could not be completed at this time. Please contact our support department to complete your request.+
+          |                         +1-949-276-3456
+      863 | .
+      858 | Register
+      851 | Commercial
+      850 | Explore
+      848 | Updating...
+      843 | Opening Hours
+      843 | 近期文章
+      842 | cPanel
+      838 | Privacy Overview
+      833 | What is a Content Management System?
+      827 | Cookie Categories
+      819 | Menú principal
+      815 | Website Design
+      811 | Desired domain not available? Why not search for an alternative.
+      809 | Ďalšie služby:
+      809 | Our Team
+      807 | What's New
+      806 | Latest Articles
+      805 | Primary Menu
+      805 | 友情链接
+      802 | Your Cart
+      788 | Request a Quote
+      786 | Join our mailing list for the latest news
+      782 | Menu principal
+      782 | Our Mission:
+      780 | 产品中心
+      779 | Locations
+      773 | Log in
+      768 | Cari Blog Ini
+      766 | No middleman
+      765 | Subscribe to this blog
+      760 | History
+      759 | Community
+      758 | Quick Search
+      758 | Our History
+      757 | Top Menu
+      757 | Follow Us!
+      755 | Who are we?
+      753 | Contacts
+      748 | 公司简介
+      737 | LOCATION
+      735 | Sitemap
+      734 | Member Login
+      733 | Pesquisar este blog
+      731 | Our Company
+      730 | Customer Service
+      726 | Quality
+      719 | Menú
+      718 | about us
+      717 | Photo Gallery
+      717 | Practice Areas
+      717 | Profile
+      715 | WELCOME TO
+      715 | 您访问的域名可以出售 the domain is for sale.
+      714 | 1
+      707 | Research
+      706 | Branding
+      705 | Navigate
+      703 | New Arrivals
+      703 | Blogroll
+      701 | Domain For Sale
+      701 | Click to find out more
+      698 | Recent Projects
+      695 | Categorías
+      686 | Jobs
+      685 | My Account
+      684 | Available for sale
+      679 | Featured Item
+      678 | About me
+      678 | Recommended Reading:
+      677 | Clients
+      671 | ☰ Navigation
+      671 | Connect with us
+      667 | Quick Contact
+      667 | Please visit Free Domains\r                                                                                                   +
+          | and submit a request\r                                                                                                        +
+          | if you would like to use the domain\r                                                                                         +
+          | and/or take part in\r                                                                                                         +
+          | the development of the website.
+      662 | +1 910 500 6677
+      661 | Log In
+      655 | 30-day moneyback guarantee
+      652 | Categorie
+      647 | Partners
+      646 | Brands
+      640 | Hold tight, we're taking you to the right website
+      639 | Donate
+      639 | Technology
+      637 | Our services include:
+      634 | Weddings
+      634 | Compártelo:
+      633 | Catégories
+      633 | Explore properties
+      633 | Support
+      630 | Servicios
+      630 | Sponsors
+      626 | Contact Us Today
+      622 | GET IN TOUCH
+      621 | Error. Page cannot be displayed. Please contact your service provider for more details.
+      617 | New Products
+      615 | Call Us
+      615 | Tracks:
+      613 | Subscribe to our newsletter
+      613 | QUICK LINKS
+      612 | ² Navigation
+      609 | Latest Tweets
+      604 | Join Our Mailing List
+      602 | Site Map
+      600 | What We Offer
+      600 | Random Posts
+      598 | Advertisement
+      595 | 产品分类
+      590 | Deutsch
+      588 | Videos
+      586 | Reviews
+      584 | Training
+      584 | Choose your language:
+      579 | domain name for sale
+      578 | Contact Us:
+      578 | Powered by
+      577 | Email
+      575 | This Premium Domain Is Available For Sale
+      574 | Frequently Asked Questions
+      570 | Contacto
+      570 | Featured Projects
+      569 | Step 1
+      569 | Disclaimer
+      569 | Testimonial
+      569 | Join GitHub today
+      565 | or
+      565 | Hosting Solutions
+      565 | More
+      563 | Related Posts
+      558 | Create your own GitHub profile
+      556 | 导航
+      555 | Articles
+      553 | Subscribe to our Newsletter
+      550 | Timezone
+      549 | Featured News
+      548 | Hauptmenü
+      548 | Business
+      545 | Articles récents
+      545 | Recent Work
+      545 | Expertise
+      539 | 01
+      539 | menu
+      538 | Recent Articles
+      537 | Thanks for visiting!
+      536 | This web page is parked by Sibername.com
+      536 | Trending
+      531 | 最近更新
+      531 | Our Work
+      530 | Membership
+      527 | Breaking News
+      524 | Get Connected
+      522 | Special Offers
+      521 | Click here...
+      514 | Buscar
+      514 | Slide Title
+      512 | Accommodation
+      510 | Best Sellers
+      508 | Our Credentials
+      506 | Most Popular
+      506 | Contact Form
+      505 | Log in or Sign up
+      504 | Hours of Operation
+      502 |  Boxes & Notes
+      499 | Search Site
+      493 | Highlights
+      492 | Newsletter Signup
+      491 | Software Development
+      490 | Following
+      484 | FOLLOW US
+      482 | Share:
+      482 | Video
+      481 | Domain Names
+      478 | 最新发布
+      478 | Sales
+      477 | [PR] Recommended information
+      476 | SEARCH
+      476 | Programs
+      475 | User Tools
+      474 | Home Page
+      473 | Language
+      472 | Description
+      471 | Topics
+      469 | 0,50$’dan başlayan fiyatlarla yeni bir domain kaydedin!
+      469 | 访问本页面，您的浏览器需要支持JavaScript
+      466 | Service
+      466 | Son Yazılar
+      466 | メニュー
+      465 | O nás
+      465 | Welcome To
+      464 | Latest Updates
+      462 | Featured Posts
+      462 | This domain is registered through EarthLink®
+      462 | Related
+      461 | Security Check
+      459 | Site Menu
+      458 | Telephone Number 1
+      456 | Our Philosophy
+      456 | Discover
+      455 | Contact Seller
+      455 | Stay in touch
+      454 | Menü
+(500 rows)
+
