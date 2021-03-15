@@ -2,135 +2,137 @@ Most Common Page Titles
 
 It may be worth looking at the URLs that go along with these to see if we can exclude some 
 
-  257602 | HugeDomains.com - Shop for over 300,000 Premium Domains
-  190387 | Home
-  150384 | Index of /
-  105555 | WEBSITE.WS - Your Internet Address For Life™
+# = Dealt with and adjusted if necessary.
+
+#  257602 | HugeDomains.com - Shop for over 300,000 Premium Domains
+#  190387 | Home
+#  150384 | Index of /
+#  105555 | WEBSITE.WS - Your Internet Address For Life™
   100108 | zipcode.us
-   80716 | 
-   62600 | Want your own website? | 123 Reg
-   59506 | HugeDomains.com
-   59482 | Account Suspended
-   55593 | Loading...
-   54336 | Reserved from Registration
-   47158 | STRATO - Domain reserved
-   43126 | Domain Default page
-   28874 | Coming Soon
-   27451 | Web Server's Default Page
-   25962 | Welcome to nginx!
-   24043 | IIS Windows Server
-   23604 | IIS7
-   20478 | Untitled Document
+#   80716 | 
+#   62600 | Want your own website? | 123 Reg
+#   59506 | HugeDomains.com
+#   59482 | Account Suspended
+#   55593 | Loading...
+#   54336 | Reserved from Registration
+#   47158 | STRATO - Domain reserved
+#   43126 | Domain Default page
+#   28874 | Coming Soon
+#   27451 | Web Server's Default Page
+#   25962 | Welcome to nginx!
+#   24043 | IIS Windows Server
+#   23604 | IIS7
+#   20478 | Untitled Document
    19996 | Under Construction
-   19224 | Home Page
-   17861 | 502 Bad Gateway
-   17459 | Default Parallels Plesk Panel Page
+#   19224 | Home Page
+#   17861 | 502 Bad Gateway
+#   17459 | Default Parallels Plesk Panel Page
    16173 | Web Page Under Construction
-   15358 | Parked at Loopia
+#   15358 | Parked at Loopia
    14483 | index
-   14172 | Apache2 Ubuntu Default Page: It works
+#   14172 | Apache2 Ubuntu Default Page: It works
    14005 | -
-   13920 | porkbun.com | parked domain
+#   13920 | porkbun.com | parked domain
    13551 | 域名售卖
-   13252 | Domain hosted by DanDomain - Domæner, hjemmeside, email, it-hosting, webshop
-   13213 | Expired - domain expired
-   12744 | Default Parallels Plesk Page
+#   13252 | Domain hosted by DanDomain - Domæner, hjemmeside, email, it-hosting, webshop
+#   13213 | Expired - domain expired
+#   12744 | Default Parallels Plesk Page
    12231 | Welcome
    11778 | HOME
    11644 | This site is under development
-   10731 | 404 Not Found
-   10185 | Domain Registered at Safenames
-   10166 | Domain parked by Instra
+#   10731 | 404 Not Found
+#   10185 | Domain Registered at Safenames
+#   10166 | Domain parked by Instra
     9953 | Attention Required! | Cloudflare
     9555 | RealNames | A more meaningful email address
     9198 | Welcome!
     8609 | My Site
     8409 | Redireccion
-    8317 | Domain Profile - Afternic
-    8261 | Deze domeinnaam is geregistreerd door een klant van Yourhosting.nl
-    7962 | Apache2 Debian Default Page: It works
+#    8317 | Domain Profile - Afternic
+#    8261 | Deze domeinnaam is geregistreerd door een klant van Yourhosting.nl
+#    7962 | Apache2 Debian Default Page: It works
     7904 | Confixx
-    7830 | Welcome to your new website
+#    7830 | Welcome to your new website
     7461 | Registrant WHOIS contact information verification | Namecheap.com
     7086 | UNDER CONSTRUCTION
-    6710 | Registered & Protected by MarkMonitor
-    6644 | Suspended Domain
-    6634 | Hello, this domain has been purchased at Hostpoint
+#    6710 | Registered & Protected by MarkMonitor
+#    6644 | Suspended Domain
+#    6634 | Hello, this domain has been purchased at Hostpoint
     6536 | Contact Support
     6217 | Loading
-    6166 | Coming Soon - Future home of something quite cool
+#    6166 | Coming Soon - Future home of something quite cool
     5963 | Tumblr
     5800 | Just a moment...
-    5700 | The domain name is registered
+#    5700 | The domain name is registered
     5655 | My Blog – My WordPress Blog
     5650 | Login
-    5527 | Web Hosting, Reseller Hosting & Domain Names from Heart Internet
+#    5527 | Web Hosting, Reseller Hosting & Domain Names from Heart Internet
     5514 | Sie sehen hier eine soeben freigeschaltete Homepage
     5432 | Yahoo!
     5365 | STRATO
     5255 | Rebrandly
-    5251 | Domain is Parked
+#    5251 | Domain is Parked
     5044 | Sign in - Google Accounts
     4914 | Untitled
-    4863 | Coming Soon...
+#    4863 | Coming Soon...
     4778 | 没有找到站点
     4770 | Page Redirection
     4764 | Inicio
     4624 | home
     4415 | Contact Verification Suspension Page
-    4405 | TM Webhosting Default Page
-    4342 | 404 Error
+#    4405 | TM Webhosting Default Page
+#    4342 | 404 Error
     4289 | Registrant WHOIS contact information verification
-    4211 | Web hosting, domain name registration and web services by 1&1 Internet
-    4129 | New Web Hosting Account!
-    3883 | This domain was registered by Youdot.io
-    3834 | Coming Soon page
+#    4211 | Web hosting, domain name registration and web services by 1&1 Internet
+#    4129 | New Web Hosting Account!
+#    3883 | This domain was registered by Youdot.io
+#    3834 | Coming Soon page
     3826 | Domain pending ICANN verification.
     3696 | Terra
-    3673 | GoDaddy Domain Name Search
+#    3673 | GoDaddy Domain Name Search
     3631 | Index
-    3621 | geregistreerd via Argeweb
+#    3621 | geregistreerd via Argeweb
     3606 | Home page
-    3592 | Page Not Found
+#    3592 | Page Not Found
     3588 | Error
     3588 | Custom Domain by Bitly
-    3528 | Domænet er hosted af ScanNet - Tlf. 75 53 35 00
+#    3528 | Domænet er hosted af ScanNet - Tlf. 75 53 35 00
     3490 | 準備中
-    3430 | Combell.com Parkpage
+#    3430 | Combell.com Parkpage
     3405 | Log into Facebook
     3353 | �щ�遺�� 諛⑸Ц������⑸���
-    3255 | Hosted By One.com | Webhosting made simple
+#    3255 | Hosted By One.com | Webhosting made simple
     3188 | Félicitations ! Votre domaine a bien été créé chez OVH !
-    3171 | Site Under Construction
+#    3171 | Site Under Construction
     3153 | BLOCKED
     3145 | Homepage
     3145 | トップページ
-    3112 | Domain Parked With VentraIP Australia
-    3106 | Site not found · DreamHost
-    3104 | Parked Domain
-    3073 | Register.be Parkpage
-    3043 | Parallels Operations Automation Default Page
-    2946 | Domain Registered
+#    3112 | Domain Parked With VentraIP Australia
+#    3106 | Site not found · DreamHost
+#    3104 | Parked Domain
+#    3073 | Register.be Parkpage
+#    3043 | Parallels Operations Automation Default Page
+#    2946 | Domain Registered
     2937 | Domínio LocaWeb
     2928 | Bluehost.com
     2917 | Binero Webbhotell - vänligast på webben
     2898 | Accueil
     2859 | 無効なURLです
-    2837 | 404
+#    2837 | 404
     2823 | Home -
     2775 | Roundcube Webmail :: Welcome to Roundcube Webmail
-    2728 | Under construction
-    2682 | NamesPro.ca | Register with Confidence
+#    2728 | Under construction
+#    2682 | NamesPro.ca | Register with Confidence
     2682 | Website Unavailable
     2676 | Private Site
     2673 | Untitled Page
     2668 | HostGator - Please Configure Your Name Servers
-    2638 | 403 Forbidden
-    2625 | Cheap Domains - Registered
-    2610 | 404 - PAGE NOT FOUND
+#    2638 | 403 Forbidden
+#    2625 | Cheap Domains - Registered
+#    2610 | 404 - PAGE NOT FOUND
     2578 | Facebook
     2531 | InMotion Hosting
-    2523 | Domain parked by OnlyDomains
+#    2523 | Domain parked by OnlyDomains
     2502 | Log into Facebook | Facebook
     2502 | Protected Blog › Log in
     2485 | Срок регистрации домена закончился. Купить домен можно тут.
@@ -139,41 +141,41 @@ It may be worth looking at the URLs that go along with these to see if we can ex
     2319 | This domain may be for sale
     2311 | Documento sin título
     2283 | []
-    2254 | Microsoft Internet Information Services 8
+#    2254 | Microsoft Internet Information Services 8
     2236 | Business-Class Web Hosting by (mt) Media Temple
     2217 | SmarterMail
-    2182 | Domain Parked
-    2175 | default.secureserver.net
+#    2182 | Domain Parked
+#    2175 | default.secureserver.net
     2152 | Her flytter snart en ny gæst ind
     2138 | Shared IP
-    2119 | Irish Domain Parking Page
+#    2119 | Irish Domain Parking Page
     2111 | Site Maintenance
     2109 | Maintenance
     2092 | You are being redirected...
     2058 | Neue Internetpräsenz
     2056 | Vision XE – Connect your offline ad to the online stage
     2044 | Telmex - Nuestra página está bajo construcción.
-    2043 | Namecheap Parking Page
+#    2043 | Namecheap Parking Page
     2043 | Hostnet: De grootste domeinnaam- en hostingprovider van Nederland.
-    2034 | Test Page for the Nginx HTTP Server on Fedora
-    2026 | HTTP Server Test Page powered by CentOS-WebPanel.com
+#    2034 | Test Page for the Nginx HTTP Server on Fedora
+#    2026 | HTTP Server Test Page powered by CentOS-WebPanel.com
     2002 | Squarespace - Claim This Domain
     1983 | - Home
     1972 | StackPath
     1934 | WordPress.com
     1930 | Unbenanntes Dokument
-    1871 | :: This Site is Under Construction ::
+#    1871 | :: This Site is Under Construction ::
     1865 | My blog – Just another WordPress site
-    1851 | Domein Gereserveerd - Mijndomein.nl
+#    1851 | Domein Gereserveerd - Mijndomein.nl
     1849 | mysite
-    1814 | TransIP - Reserved domain
+#    1814 | TransIP - Reserved domain
     1814 | Redirect
     1791 | null
-    1781 | The web site is under construction
+#    1781 | The web site is under construction
     1755 | WEB.DE MailDomain & Hosting
     1742 | Domínio não encontrado
     1737 | Outlook Web App
-    1735 | porkbun.com | domain for sale
+#    1735 | porkbun.com | domain for sale
     1732 | Mysite
     1708 | Unknown address
     1690 | Good night, Posterous
@@ -183,15 +185,15 @@ It may be worth looking at the URLs that go along with these to see if we can ex
     1618 | About Us
     1613 | Cargo
     1599 | Hjem
-    1595 | Website is under construction
+#    1595 | Website is under construction
     1587 | phpinfo()
     1539 | Hier entsteht eine neue Internetpräsenz - hosted by 1blu
     1532 | DOMAIN ERROR
     1528 | future home of .pro
     1527 | Site Offline
     1522 | Too Many Requests
-    1478 | Parked Domain name on Hostinger DNS system
-    1455 | Web hosting provider - Bluehost.com - domain hosting - PHP Hosting - cheap web hosting - Frontpage Hosting E-Commerce Web Hosting Bluehost
+#    1478 | Parked Domain name on Hostinger DNS system
+#    1455 | Web hosting provider - Bluehost.com - domain hosting - PHP Hosting - cheap web hosting - Frontpage Hosting E-Commerce Web Hosting Bluehost
     1453 | Wir arbeiten gerade an unserer Website
     1449 | 官网
     1447 | Operations Automation Default Page
@@ -208,21 +210,21 @@ It may be worth looking at the URLs that go along with these to see if we can ex
     1335 | Redirecting...
     1326 | ACTIVE 24, s.r.o.
     1323 | AT&T Website Solutions
-    1317 | Default PLESK Page
+#    1317 | Default PLESK Page
     1304 | 寰宇头条-更多你想要的头条资讯
     1301 | 여러분의 방문을 환영합니다.
     1297 | DreamHost
     1292 | Login Page
     1284 | Hello! Welcome to Synology Web Station!
-    1272 | Welcome to nginx on Debian!
+#    1272 | Welcome to nginx on Debian!
     1271 | seks-vod.info
     1263 | ドメインパーキング
-    1259 | Web Hosting from HostPapa
-    1249 | :::: -This Site is Under Construction- ::::
-    1247 | Web Hosting by InMotion Hosting
+#    1259 | Web Hosting from HostPapa
+#    1249 | :::: -This Site is Under Construction- ::::
+#    1247 | Web Hosting by InMotion Hosting
     1229 | Sign In
     1227 | Viaduc®
-    1215 | Coming soon page | Register your own domain at GKG.NET
+#    1215 | Coming soon page | Register your own domain at GKG.NET
     1215 | Your Domains
     1214 | Website not yet configured
     1205 | Default page
@@ -232,7 +234,7 @@ It may be worth looking at the URLs that go along with these to see if we can ex
     1182 | Domeny.pl
     1171 | Redirecting
     1167 | Laravel
-    1152 | Hosting Ireland - Holding Page - Your Domain Has Been Successfully Registered!
+#    1152 | Hosting Ireland - Holding Page - Your Domain Has Been Successfully Registered!
     1148 | This Web site coming soon
     1145 | AgentMarketing | Real Estate Marketing Solutions
     1139 | Build a Free Website - Sitebeat
@@ -241,7 +243,7 @@ It may be worth looking at the URLs that go along with these to see if we can ex
     1119 | 请稍等，正在进入...
     1119 | |
     1114 | About
-    1110 | porkbun.com | expired domain
+#    1110 | porkbun.com | expired domain
     1109 | www
     1105 | Free domain sharing - Site not yet configured
     1104 | Webmail :: Welcome to Webmail
@@ -257,14 +259,14 @@ It may be worth looking at the URLs that go along with these to see if we can ex
     1050 | Zen Internet | cPanel Holding Page
     1042 | Op deze domeinnaam is nog geen website geconfigureerd
     1032 | Site en construction
-    1030 | Home - domain expired
+#    1030 | Home - domain expired
     1029 | Parallels H-Sphere
     1028 | Oops, something lost
     1023 | HostGator Web Hosting Website Startup Guide
     1010 | Parkovací stránka
-    1001 | This domain is hosted by UnoEuro Webhosting
-     999 | Coming Soon!
-     992 | Default Page
+#    1001 | This domain is hosted by UnoEuro Webhosting
+#     999 | Coming Soon!
+#     992 | Default Page
      987 | Coming soon - 1-grid
      980 | Local index - HTTrack Website Copier
      976 | Welcome to SellOff.us, selling top level domain names world wide

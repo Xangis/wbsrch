@@ -1180,8 +1180,8 @@ def IsDomainParked(item):
         (' is for sale' in pagetext) or
         ('This domain name is parked' in pagetitle) or
         ('Registered at Namecheap.com' in pagetitle) or
-        (pagetitle == 'Suspended Domain') or
         ('is registered by NetNames' in pagetitle) or
+        (pagetitle == 'Suspended Domain') or
         (pagetitle == 'Domain Registered at Safenames') or
         (pagetitle == 'STRATO - Domain reserved') or
         (pagetitle == 'WEBSITE.WS - Your Internet Address For Life™') or
@@ -1190,6 +1190,7 @@ def IsDomainParked(item):
         (pagetitle == 'Hosted By One.com | Webhosting made simple') or
         (pagetitle == 'Domain hosted by DanDomain - Domæner, hjemmeside, email, it-hosting, webshop') or
         (pagetitle == 'Expired - domain expired') or
+        (pagetitle == 'Home - domain expired') or
         (pagetitle == 'Domain parked by Instra') or
         (pagetitle == 'RealNames | A more meaningful email address') or
         (pagetitle == 'Domain Registered at Safenames') or
@@ -1205,7 +1206,38 @@ def IsDomainParked(item):
         (pagetitle == 'Web hosting, domain name registration and web services by 1&1 Internet') or
         (pagetitle == 'This domain was registered by Youdot.io') or
         (pagetitle == 'GoDaddy Domain Name Search') or
-        (pagetitle == 'Domain is Parked')
+        (pagetitle == 'Domain is Parked') or
+        (pagetitle == 'HugeDomains.com') or
+        (pagetitle == 'Reserved from Registration') or
+        (pagetitle == 'Parked at Loopia') or
+        (pagetitle == 'Domein Gereserveerd - Mijndomein.nl') or
+        (pagetitle == 'porkbun.com | parked domain') or
+        (pagetitle == 'porkbun.com | domain for sale') or
+        (pagetitle == 'porkbun.com | expired domain') or
+        (pagetitle == 'Web hosting provider - Bluehost.com - domain hosting - PHP Hosting - cheap web hosting - Frontpage Hosting E-Commerce Web Hosting Bluehost') or
+        (pagetitle == 'Domain hosted by DanDomain - Domæner, hjemmeside, email, it-hosting, webshop') or
+        (pagetitle == 'geregistreerd via Argeweb') or
+        (pagetitle == 'Domænet er hosted af ScanNet - Tlf. 75 53 35 00') or
+        (pagetitle == 'Combell.com Parkpage') or
+        (pagetitle == 'Domain Parked With VentraIP Australia') or
+        (pagetitle == 'Site not found · DreamHost') or
+        (pagetitle == 'Parked Domain') or
+        (pagetitle == 'Domain Parked') or
+        (pagetitle == 'This domain is hosted by UnoEuro Webhosting') or
+        (pagetitle == 'TransIP - Reserved domain') or
+        (pagetitle == 'Irish Domain Parking Page') or
+        (pagetitle == 'Namecheap Parking Page') or
+        (pagetitle == 'NamesPro.ca | Register with Confidence') or
+        (pagetitle == 'Domain Registered') or
+        (pagetitle == 'Web Hosting from HostPapa') or
+        (pagetitle == 'Web Hosting by InMotion Hosting') or
+        (pagetitle == 'Coming soon page | Register your own domain at GKG.NET') or
+        (pagetitle == 'Hosting Ireland - Holding Page - Your Domain Has Been Successfully Registered!') or
+        (pagetitle == 'Cheap Domains - Registered') or
+        (pagetitle == 'RealNames | A more meaningful email address') or
+        (pagetitle == 'Domain parked by OnlyDomains') or
+        (pagetitle == 'Parked Domain name on Hostinger DNS system') or
+        (pagetitle == 'Register.be Parkpage')
     ):
         return True
     return False
@@ -1226,19 +1258,45 @@ def HasNoContent(item):
         (item.pagetitle == "Web Server's Default Page") or
         (item.pagetitle == 'IIS7') or
         (item.pagetitle == 'IIS Windows Server') or
+        (item.pagetitle == 'Microsoft Internet Information Services 8') or
         (item.pagetitle == 'Coming Soon') or
         (item.pagetitle == 'Welcome to nginx!') or
+        (item.pagetitle == 'Welcome to nginx on Debian!') or
+        (item.pagetitle == 'Test Page for the Nginx HTTP Server on Fedora') or
+        (item.pagetitle == 'HTTP Server Test Page powered by CentOS-WebPanel.com') or
         (item.pagetitle == '502 Bad Gateway') or
+        (item.pagetitle == '404 Not Found') or
+        (item.pagetitle == '404 Error') or
+        (item.pagetitle == '404') or
+        (item.pagetitle == '404 - PAGE NOT FOUND') or
+        (item.pagetitle == '403 Forbidden') or
+        (item.pagetitle == 'Page Not Found') or
+        (item.pagetitle == ':: This Site is Under Construction ::') or
+        (item.pagetitle == ':::: -This Site is Under Construction- ::::') or
         (item.pagetitle == 'Default Parallels Plesk Panel Page') or
         (item.pagetitle == 'Default Parallels Plesk Page') or
+        (item.pagetitle == 'Default PLESK Page') or
+        (item.pagetitle == 'Parallels Operations Automation Default Page') or
         (item.pagetitle == 'Apache2 Ubuntu Default Page: It works') or
         (item.pagetitle == 'Apache2 Debian Default Page: It works') or
         (item.pagetitle == 'Welcome to your new website') or
         (item.pagetitle == 'Registered & Protected by MarkMonitor') or
         (item.pagetitle == 'Coming Soon - Future home of something quite cool') or
         (item.pagetitle == 'Coming Soon...') or
+        (item.pagetitle == 'Coming Soon!') or
+        (item.pagetitle == 'Default Page') or
         (item.pagetitle == 'Coming Soon page') or
-        (item.pagetitle == 'Parallels Operations Automation Default Page')
+        (item.pagetitle == 'UNDER CONSTRUCTION') or
+        (item.pagetitle == 'Under construction') or
+        (item.pagetitle == 'Under Construction') or
+        (item.pagetitle == 'Web Page Under Construction') or
+        (item.pagetitle == 'This site is under development') or
+        (item.pagetitle == 'Website is under construction') or
+        (item.pagetitle == 'The web site is under construction') or
+        (item.pagetitle == 'default.secureserver.net') or
+        (item.pagetitle == 'Parallels Operations Automation Default Page') or
+        (item.pagetitle == 'TM Webhosting Default Page') or
+        (item.pagetitle == 'Site Under Construction')
     ):
         return True
     return False
