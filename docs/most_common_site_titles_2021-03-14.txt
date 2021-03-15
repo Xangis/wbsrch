@@ -23,11 +23,11 @@ It may be worth looking at the URLs that go along with these to see if we can ex
 #   24043 | IIS Windows Server
 #   23604 | IIS7
 #   20478 | Untitled Document
-   19996 | Under Construction
+#   19996 | Under Construction
 #   19224 | Home Page
 #   17861 | 502 Bad Gateway
 #   17459 | Default Parallels Plesk Panel Page
-   16173 | Web Page Under Construction
+#   16173 | Web Page Under Construction
 #   15358 | Parked at Loopia
    14483 | index
 #   14172 | Apache2 Ubuntu Default Page: It works
@@ -39,12 +39,12 @@ It may be worth looking at the URLs that go along with these to see if we can ex
 #   12744 | Default Parallels Plesk Page
    12231 | Welcome
    11778 | HOME
-   11644 | This site is under development
+#   11644 | This site is under development
 #   10731 | 404 Not Found
 #   10185 | Domain Registered at Safenames
 #   10166 | Domain parked by Instra
     9953 | Attention Required! | Cloudflare
-    9555 | RealNames | A more meaningful email address
+#    9555 | RealNames | A more meaningful email address
     9198 | Welcome!
     8609 | My Site
     8409 | Redireccion
@@ -54,7 +54,7 @@ It may be worth looking at the URLs that go along with these to see if we can ex
     7904 | Confixx
 #    7830 | Welcome to your new website
     7461 | Registrant WHOIS contact information verification | Namecheap.com
-    7086 | UNDER CONSTRUCTION
+#    7086 | UNDER CONSTRUCTION
 #    6710 | Registered & Protected by MarkMonitor
 #    6644 | Suspended Domain
 #    6634 | Hello, this domain has been purchased at Hostpoint
