@@ -1477,8 +1477,6 @@ class IndexerTestCase(TestCase):
 # behavior of partially-indexed phrases and queueing terms for indexing.
 class SearchTestCase(TestCase):
     def setUp(self):
-        # Dumb stopgap fix.
-        IndexTerm.objects.all().delete()
         term = IndexTerm()
         term.keywords = "pants"
         term.page_rankings = '{}'
@@ -2523,10 +2521,10 @@ class GetDomainExtensionAdjustmentTextCase(TestCase):
         self.assertEqual(GetDomainExtensionRankAdjustment('example.unknowndomainextension', 'en'), -3)
 
     def testcasaen(self):
-        self.assertEqual(GetDomainExtensionRankAdjustment('mi.casa', 'en'), -1)
+        self.assertEqual(GetDomainExtensionRankAdjustment('mi.casa', 'en'), -3)
 
     def testcasaes(self):
-        self.assertEqual(GetDomainExtensionRankAdjustment('mi.casa', 'es'), 1)
+        self.assertEqual(GetDomainExtensionRankAdjustment('mi.casa', 'es'), -1)
 
 
 class RemoveExtraSpacesTestCase(TestCase):
