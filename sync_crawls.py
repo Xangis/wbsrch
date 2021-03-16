@@ -29,11 +29,13 @@ indb = psycopg2.connect(options.input)
 outdb = psycopg2.connect(options.output)
 inurldb = psycopg2.connect(options.inputurls)
 outurldb = psycopg2.connect(options.outputurls)
+languagepagedb = psycopg2.connect("dbname=language_pages user=language_pages password=lfnmb.88urklh,e3gtg")
 
 incur = indb.cursor()
 outcur = outdb.cursor()
 inurlcur = inurldb.cursor()
 outurlcur = outurldb.cursor()
+languagedbcur = languagepagedb.cursor()
 
 incur.execute("SELECT version()")
 outcur.execute("SELECT version()")
@@ -65,17 +67,22 @@ def SavePage(page, update=False, lang='site_info'):
     columns = page.keys()
     values = [page[column] for column in columns]
 
+    destcur = outcur
+    destdb = outdb
+    if lang != 'site_info':
+        destcur = languagedbcur
+        destdb = languagepagedb
     if not update:
         statement = "INSERT INTO {0} (%s) values %s".format(lang)
         # print(statement)
         # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values))))
-        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
-        outdb.commit()
+        destcur.execute(statement, (AsIs(','.join(columns)), tuple(values)))
+        destdb.commit()
     else:
         statement = 'UPDATE {0} SET (%s) = (%s) WHERE id = %s'.format(lang)
         # print(outcur.mogrify(statement, (AsIs(','.join(columns)), tuple(values), page['id'])))
-        outcur.execute(statement, (AsIs(','.join(columns)), tuple(values), page['id']))
-        outdb.commit()
+        destcur.execute(statement, (AsIs(','.join(columns)), tuple(values), page['id']))
+        destdb.commit()
 
     url = page['url']
 
@@ -578,13 +585,21 @@ if not options.nopages:
         else:
             lang = 'site_info'
         query = 'SELECT * FROM {} WHERE URL = %s'.format(lang)
-        outcur.execute(query, (url,))
-        num_existing = outcur.rowcount
+        if lang == 'site_info':
+            outcur.execute(query, (url,))
+            num_existing = outcur.rowcount
+        else:
+            languagedbcur.execute(query, (url,))
+            num_existing = languagedbcur.rowcount
         if num_existing > 0:
             existing_record = {}
             # print('The url {0} already exists in the output database table {1}.'.format(url, lang))
-            existing_row = outcur.fetchone()
-            existing_colnames = [desc[0] for desc in outcur.description]
+            if lang == 'site_info':
+                existing_row = outcur.fetchone()
+                existing_colnames = [desc[0] for desc in outcur.description]
+            else:
+                existing_row = languagedbcur.fetchone()
+                existing_colnames = [desc[0] for desc in languagedbcur.description]
             # print(existing_colnames)
             colpos = {}
             for index in range(len(colnames)):
