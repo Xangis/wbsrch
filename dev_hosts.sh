@@ -1,0 +1,7 @@
+export ZETAWEB_HOST='127.0.0.1'
+export URLS_HOST='127.0.0.1'
+export INDEXES_HOST='127.0.0.1'
+export LIVE_INDEXES_HOST='wbsrch.com'
+export LANGUAGE_PAGES_HOST='10.0.0.177'
+export LANGUAGE_INDEXES_HOST='10.0.0.177'
+export NEWS_HOST='127.0.0.1'
