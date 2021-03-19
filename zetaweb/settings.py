@@ -24,7 +24,7 @@ if DEBUG:
 
 MANAGERS = ADMINS
 
-SERVER_EMAIL = 'jchampion@wbsrch.com'
+SERVER_EMAIL = 'jason@wbsrch.com'
 
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
@@ -33,8 +33,7 @@ ZETAWEB_PASSWORD = os.getenv('ZETAWEB_PASSWORD', 'password')
 URLS_PASSWORD = os.getenv('URLS_PASSWORD', 'password')
 INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'password')
 
-LIVE_INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'jf89mvk9.3r9jn.8fjf')
-# LIVE_INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'password')
+LIVE_INDEXES_PASSWORD = os.getenv('LIVE_INDEXES_PASSWORD', 'jf89mvk9.3r9jn.8fjf')
 NEWS_PASSWORD = os.getenv('NEWS_PASSWORD', 'password')
 LANGUAGE_PAGES_PASSWORD = os.getenv('LANGUAGE_PAGES_PASSWORD', 'lfnmb.88urklh,e3gtg')
 LANGUAGE_INDEXES_PASSWORD = os.getenv('LANGUAGE_PAGES_PASSWORD', '948kl,39l3yfok3t')
@@ -44,9 +43,7 @@ INDEXES_HOST = os.getenv('INDEXES_HOST', '127.0.0.1')
 LIVE_INDEXES_HOST = os.getenv('INDEXES_HOST', 'wbsrch.com')
 LANGUAGE_PAGES_HOST = os.getenv('LANGUAGE_PAGES_HOST', '127.0.0.1')
 LANGUAGE_INDEXES_HOST = os.getenv('LANGUAGE_INDEXES_HOST', '127.0.0.1')
-# LIVE_INDEXES_HOST = os.getenv('INDEXES_HOST', '10.0.0.29')
 NEWS_HOST = os.getenv('NEWS_HOST', '127.0.0.1')
-LIVE_INDEXES_DATABASE = os.getenv('LIVE_INDEXES_DATABASE', 'indexes')
 LIVE_INDEXES_DATABASE = os.getenv('LIVE_INDEXES_DATABASE', 'indexes')
 
 if True:
