@@ -1,5 +1,11 @@
 from subprocess import call
 import time
+import optparse
+
+parser = optparse.OptionParser()
+parser.set_defaults(seconds=1)
+parser.add_option('-s', '--seconds', action='store', default=1, type='int', dest='seconds', help='Seconds between indexes. (default=1)')
+(options, args) = parser.parse_args()
 
 language_list = ['en', 'an', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
 
@@ -17,9 +23,9 @@ while True:
         # take advantage of caching (which may or may not make a difference,
         # we haven't benchmarked anything).
         indexcount = lang_index_counts.get(language, 10)
-        call(['python', 'manage.py', 'index', '-p', '-m', str(indexcount), '-s', '0', '-l', language])
+        call(['python', 'manage.py', 'index', '-p', '-m', str(indexcount), '-s', str(options.seconds), '-l', language])
         # Wait a few seconds between context switches
-        time.sleep(1)
-        call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount), '-s', '0', '-l', language])
+        time.sleep(options.seconds)
+        call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount), '-s', str(options.seconds), '-l', language])
         # Wait a few seconds between cycles.
-        time.sleep(1)
+        time.sleep(options.seconds)
