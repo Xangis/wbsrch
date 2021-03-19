@@ -9,7 +9,7 @@ import datetime
 import whois
 from socket import gaierror, timeout
 
-BAD_DATE_STRINGS = ('b', ':', 'N', 'None', '0', '2', 'B')
+BAD_DATE_STRINGS = ('b', ':', 'N', 'None', '0', '2', 'B', 'before 19950101')
 
 
 # Accepts a DomainInfo object and updates its whois information.
@@ -47,37 +47,57 @@ def UpdateDomainWhois(domain, detailed=False):
             print('Invalid domain_updated date "{0}". Resetting to None'.format(domain.domain_updated))
             domain.domain_updated = None
         try:
-            domain.whois_name = info['name'][0:60]
+            name = info['name']
+            if type(name) is str:
+                domain.whois_name = name[0:90]
+            elif name:
+                domain.whois_name = ', '.join(name)[0:90]
         except TypeError:
             pass
         except KeyError:
             pass
         try:
-            domain.whois_city = info['city'][0:40]
+            city = info['city']
+            if type(city) is str:
+                domain.whois_city = city[0:40]
+            elif city:
+                domain.whois_city = ', '.join(city)[0:40]
         except TypeError:
             pass
         except KeyError:
             pass
         try:
-            domain.whois_country = info['country'][0:16]
+            country = info['country']
+            if type(country) is str:
+                domain.whois_country = country[0:40]
+            elif country:
+                domain.whois_country = ', '.join(country)[0:40]
         except TypeError:
             pass
         except KeyError:
             pass
         try:
-            domain.whois_state = info['state'][0:3]
+            domain.whois_state = info['state'][0:40]
         except TypeError:
             pass
         except KeyError:
             pass
         try:
-            domain.whois_address = info['address'][0:60]
+            address = info['address']
+            if type(address) is str:
+                domain.whois_address = address[0:120]
+            elif address:
+                domain.whois_address = ', '.join(address)[0:120]
         except TypeError:
             pass
         except KeyError:
             pass
         try:
-            domain.whois_org = info['org'][0:60]
+            org = info['org']
+            if type(org) is str:
+                domain.whois_org = org[0:100]
+            elif org:
+                domain.whois_org = ', '.join(org)[0:100]
         except TypeError:
             pass
         except KeyError:
@@ -89,7 +109,11 @@ def UpdateDomainWhois(domain, detailed=False):
         except KeyError:
             pass
         try:
-            domain.whois_zipcode = info['zipcode'][0:8]
+            zipcode = info['zipcode']
+            if type(zipcode) is str:
+                domain.whois_zipcode = zipcode[0:40]
+            elif zipcode:
+                domain.whois_zipcode = ', '.join(zipcode)[0:40]
         except TypeError:
             pass
         except KeyError:
