@@ -49,7 +49,7 @@ NEWS_HOST = os.getenv('NEWS_HOST', '127.0.0.1')
 LIVE_INDEXES_DATABASE = os.getenv('LIVE_INDEXES_DATABASE', 'indexes')
 LIVE_INDEXES_DATABASE = os.getenv('LIVE_INDEXES_DATABASE', 'indexes')
 
-if DEBUG:
+if True:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -107,34 +107,6 @@ if DEBUG:
             'HOST': LANGUAGE_INDEXES_HOST,
             'PORT': '',
         }
-    }
-else:
-    # ONLY the indexes database is allowed for prouduction.
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'indexes',
-            'USER': 'indexes',
-            'PASSWORD': LIVE_INDEXES_PASSWORD,
-            'HOST': INDEXES_HOST,
-            'PORT': '',
-        },
-        'indexes': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'indexes',
-            'USER': 'indexes',
-            'PASSWORD': LIVE_INDEXES_PASSWORD,
-            'HOST': INDEXES_HOST,
-            'PORT': '',
-        },
-        'language_indexes': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'indexes',
-            'USER': 'indexes',
-            'PASSWORD': LIVE_INDEXES_PASSWORD,
-            'HOST': INDEXES_HOST,
-            'PORT': '',
-        },
     }
 
 DATABASE_ROUTERS = ['zetaweb.dbrouter.ModelDatabaseRouter', ]
