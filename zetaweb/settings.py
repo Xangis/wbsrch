@@ -29,12 +29,12 @@ SERVER_EMAIL = 'jason@wbsrch.com'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 25
 
-ZETAWEB_PASSWORD = os.getenv('ZETAWEB_PASSWORD', 'password')
-URLS_PASSWORD = os.getenv('URLS_PASSWORD', 'password')
-INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'password')
+ZETAWEB_PASSWORD = os.getenv('ZETAWEB_PASSWORD', '.vasd,f.ef,,.dii.')
+URLS_PASSWORD = os.getenv('URLS_PASSWORD', 'fd=dgsm=fe~td4=3')
+INDEXES_PASSWORD = os.getenv('INDEXES_PASSWORD', 'jsanvsiuyeh8u8m3')
 
 LIVE_INDEXES_PASSWORD = os.getenv('LIVE_INDEXES_PASSWORD', 'jf89mvk9.3r9jn.8fjf')
-NEWS_PASSWORD = os.getenv('NEWS_PASSWORD', 'password')
+NEWS_PASSWORD = os.getenv('NEWS_PASSWORD', 'kjd3jkjklj33jk3jk3')
 LANGUAGE_PAGES_PASSWORD = os.getenv('LANGUAGE_PAGES_PASSWORD', 'lfnmb.88urklh,e3gtg')
 LANGUAGE_INDEXES_PASSWORD = os.getenv('LANGUAGE_PAGES_PASSWORD', '948kl,39l3yfok3t')
 ZETAWEB_HOST = os.getenv('ZETAWEB_HOST', '127.0.0.1')
