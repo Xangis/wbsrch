@@ -1,5 +1,10 @@
 from subprocess import call
+import optparse
 
+parser = optparse.OptionParser()
+parser.set_defaults(seconds=5)
+parser.add_option('-s', '--seconds', action='store', default=5, type='int', dest='seconds', help='Seconds between pages. (default=5)')
+(options, args) = parser.parse_args()
 
 language_list = ['en', 'an', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'es', 'et', 'eu', 'fi', 'fr', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'wo', 'xh', 'yo', 'zu']
 
@@ -17,4 +22,4 @@ while True:
             if language == 'en':
                 continue
             lang_crawl_count = lang_crawl_counts.get(language, 1)
-            call(['python', 'manage.py', 'crawl', '-r', '-m', str(lang_crawl_count), '-s', '5', '-o', str(x * lang_crawl_count), '-l', language])
+            call(['python', 'manage.py', 'crawl', '-r', '-m', str(lang_crawl_count), '-s', str(options.seconds), '-o', str(x * lang_crawl_count), '-l', language])
