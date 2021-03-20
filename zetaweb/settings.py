@@ -257,7 +257,7 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
             # This file must be writable by the "run as" user in /etc/init.d/django-wbsrch.
-            'filename': '../log/spoofed_requests.log',
+            'filename': './log/spoofed_requests.log',
         },
     },
     'loggers': {
