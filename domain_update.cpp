@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
    }
 
    try {
-      connection C("dbname = zetaweb user = zetaweb password = password \
+      connection C("dbname = zetaweb user = zetaweb password = .vasd,f.ef,,.dii. \
       hostaddr = 127.0.0.1 port = 5432");
       if (C.is_open()) {
          cout << "Opened database successfully: " << C.dbname() << endl;
@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
          cout << "Can't open database" << endl;
          return 1;
       }
-      connection D("dbname = urls user = urls password = password \
+      connection D("dbname = urls user = urls password = fd=dgsm=fe~td4=3 \
       hostaddr = 127.0.0.1 port = 5432");
       if (D.is_open()) {
          cout << "Opened database successfully: " << D.dbname() << endl;
@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
          cout << "Can't open database" << endl;
          return 1;
       }
-      connection E("dbname = indexes user = indexes password = password \
+      connection E("dbname = indexes user = indexes password = jsanvsiuyeh8u8m3 \
       hostaddr = 127.0.0.1 port = 5432");
       if (E.is_open()) {
          cout << "Opened database successfully: " << E.dbname() << endl;
