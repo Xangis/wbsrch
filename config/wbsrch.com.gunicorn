@@ -1,6 +1,6 @@
 server {
 	listen 80;
-	server_name 139.64.135.85;
+	server_name 216.151.2.50;
         return 301 https://wbsrch.com/;
 }
 
