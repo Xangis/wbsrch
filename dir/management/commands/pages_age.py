@@ -29,10 +29,10 @@ class Command(BaseCommand):
                           item, age, GetOldestPageAge(item)))
         else:
             if before:
-                model = GetSiteInfoModelFromLanguage(item)
+                model = GetSiteInfoModelFromLanguage(options['language'])
                 total = model.objects.filter(lastcrawled__lt=before).count()
                 grand_total += total
-                print('There are {0} pages for "{1}" that are older than {2}'.format(total, item, before))
+                print('There are {0} pages for "{1}" that are older than {2}'.format(total, options['language'], before))
             else:
                 age = GetPagesAverageAge(options['language'])
                 print('Pages for "{0}" have average age of {1} days, oldest is {2}.'.format(
