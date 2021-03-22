@@ -47,4 +47,4 @@ tlds==2021013000
 tox==3.21.4
 elasticsearch==7.10.1
 gunicorn==20.0.4
-flake8==3.8.4
+flake8==3.9.0
