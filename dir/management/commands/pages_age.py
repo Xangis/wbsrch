@@ -13,11 +13,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         days = options.get('days', None)
         before = options.get('before', None)
+        grand_total = 0
         if options['language'] == 'all':
             for item in language_list:
                 if before:
                     model = GetSiteInfoModelFromLanguage(item)
                     total = model.objects.filter(lastcrawled__lt=before).count()
+                    grand_total += total
                     print('There are {0} pages for "{1}" that are older than {2}'.format(total, item, before))
                 else:
                     age = GetPagesAverageAge(item)
@@ -29,8 +31,11 @@ class Command(BaseCommand):
             if before:
                 model = GetSiteInfoModelFromLanguage(item)
                 total = model.objects.filter(lastcrawled__lt=before).count()
+                grand_total += total
                 print('There are {0} pages for "{1}" that are older than {2}'.format(total, item, before))
             else:
                 age = GetPagesAverageAge(options['language'])
                 print('Pages for "{0}" have average age of {1} days, oldest is {2}.'.format(
                       options['language'], age, GetOldestPageAge(options['language'])))
+        if before:
+            print('{0} total pages are older than {1}'.format(grand_total, before))
