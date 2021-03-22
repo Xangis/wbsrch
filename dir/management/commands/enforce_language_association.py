@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from dir.models import DomainInfo, language_list, SiteInfo
-from dir.utils import MoveSiteTo
+from dir.utils import MoveSiteTo, GetSiteInfoModelFromLanguage
 
 
 class Command(BaseCommand):
@@ -13,9 +13,38 @@ class Command(BaseCommand):
     """
 
     def add_arguments(self, parser):
-        pass
+        parser.add_argument('-c', '--cleanup', default=False, action='store_true', dest='cleanup', help='Delete all non-English pages from language indexes if they are not tagged that language.')
 
     def handle(self, *args, **options):
+        if options['cleanup']:
+            loglines = []
+            for language in language_list:
+                if language == 'en':
+                    continue
+                deleted = 0
+                bad_domains = 0
+                good_domains = 0
+                print('Processing language {0}'.format(language))
+                site_model = GetSiteInfoModelFromLanguage(language)
+                domains_to_check = site_model.objects.values_list('rooturl', flat=True).distinct().order_by('rooturl')
+                for domain in domains_to_check:
+                    info = DomainInfo.objects.filter(url=domain).first()
+                    if not info or info.language_association != language:
+                        print('{0} is not {1}. Deleting.'.format(domain, language))
+                        count = site_model.objects.filter(rooturl=domain).count()
+                        print('Deleting {0} pages.'.format(count))
+                        deleted += count
+                        bad_domains += 1
+                        site_model.objects.filter(rooturl=domain).delete()
+                    else:
+                        print('{0} is good.'.format(domain))
+                        good_domains += 1
+                logline = '{0}: {1} domains were good and {2} were not. {3} pages were deleted.'.format(language, good_domains, bad_domains, deleted)
+                loglines.append(logline)
+                print(logline)
+            for line in loglines:
+                print(line)
+            return
         domain_data = DomainInfo.objects.filter(language_association__in=language_list).exclude(language_association='en').order_by('url').values('url', 'language_association')
         print('Need to process {0} domains.'.format(len(domain_data)))
         count = 0
