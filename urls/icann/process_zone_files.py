@@ -65,11 +65,11 @@ def ProcessDomains(filename):
 
 
 print('Processing zone files with .gz extension in directory {0}.'.format(options.directory))
+processed = 0
 for filename in os.listdir(options.directory):
-    processed = 0
     if filename.endswith('.gz'):
         print('Processing {0}'.format(filename))
         count = ProcessDomains(filename)
         print('{0} contains {1} domains'.format(filename, count))
         processed += 1
-    print('Processed {0} files.'.format(processed))
+print('Processed {0} files.'.format(processed))
