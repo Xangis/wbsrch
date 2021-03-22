@@ -1,0 +1,85 @@
+zetaweb=# select count(*) from dir_domaininfo where url ilike '%.dk' and language_association = 'sv';
+ count 
+-------
+ 18089
+(1 row)
+
+zetaweb=# select count(*) from dir_domaininfo where url ilike '%.no' and language_association = 'sv';
+ count 
+-------
+  5060
+(1 row)
+
+
+Things to take from zetaweb_2015_01_28:
+
+dir_searchlog_da
+dir_searchlog_no
+dir_searchlog_is
+query dir_indexterm_* for indexes to attempt.
+
+re-enabled languages:
+['ha', 'rw', 'sn', 'so', 'wo', 'xh', 'yo', 'zu']
+No support in langid: ha, sn, so, wo, yo
+Support in langid: rw, xh, zu
+-- Can we train models for rwanda, xhosa, and zulu?
+
+This query shows information we can probably steal:
+
+select count(*), language_association from dir_domaininfo where language_association is not null group by language_association order by count(*) desc;
+
+
+Indexes not in current Wbsrch
+dir_siteinfo_(langcode):
+	ak
+	bm
+	ee
+	ff
+	fo
+	fy
+	ig
+	kg
+	ki
+	lg
+	ln
+	nap
+	nso
+	ny
+	oc
+	om
+	pms
+	rn
+	sc
+	scn
+	sk
+	sn
+	ss
+	st
+	tn
+	ts
+	ve
+	vec
+	
+	Langid supports:
+	
+	af, am, an, ar, as, az, be, bg, bn, br, bs, ca, cs, cy, da, de, dz, el, en, eo, es, et, eu, fa, fi, fo, fr, ga, gl, gu, he, hi, hr, ht, hu, hy, id, is, it, ja, jv, ka, kk, km, kn, ko, ku, ky, la, lb, lo, lt, lv, mg, mk, ml, mn, mr, ms, mt, nb, ne, nl, nn, no, oc, or, pa, pl, ps, pt, qu, ro, ru, rw, se, si, sk, sl, sq, sr, sv, sw, ta, te, th, tl, tr, ug, uk, ur, vi, vo, wa, xh, zh, zu
+	
+	Should we add?
+	af = afrikaans
+	bs = bosnian
+	eo = esperanto
+	fo = faroese
+	ga = irish
+	ht = haitian creole
+	la = latin
+	lb = luxembourgish
+	mg = malagasy
+	mt = maltese
+	nb, nn = norwegian (make sure langid handles those too?)
+	oc = occitan
+	qu = quechua
+	sr = serbian
+	vo = volapuk
+	wa = walloon
+	
+Verified that we block all the languages that langid detects and we don't want.

@@ -6,6 +6,7 @@
 # Requires a LOT of RAM because the .com zone file is ~22GB.
 import codecs
 import argparse
+import gzip
 import os
 
 parser = argparse.ArgumentParser(description="Load a file containing one domain per line and count the number of domains with each extension.")
@@ -24,7 +25,7 @@ nameserver_list = ['ns1', 'ns2', 'ns3', 'ns4', 'ns5', 'ns6', 'ns7', 'ns8', 'ns9'
 def ProcessDomains(filename):
     processed = 0
     domains = set()
-    f = open("{0}/{1}".format(options.directory, filename), 'rb')
+    f = gzip.open("{0}/{1}".format(options.directory, filename), 'rb')
     reader = codecs.getreader('utf8')(f)
     filenumber = 0
 
@@ -63,7 +64,12 @@ def ProcessDomains(filename):
     return processed
 
 
+print('Processing zone files with .gz extension in directory {0}.'.format(options.directory))
+processed = 0
 for filename in os.listdir(options.directory):
-    if filename.endswith('.txt'):
+    if filename.endswith('.gz'):
+        print('Processing {0}'.format(filename))
         count = ProcessDomains(filename)
         print('{0} contains {1} domains'.format(filename, count))
+        processed += 1
+print('Processed {0} files.'.format(processed))

@@ -1,0 +1,16 @@
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_cs WHERE is_bot = false AND last_search > '2014-03-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_da WHERE is_bot = false AND last_search > '2014-03-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_nl WHERE is_bot = false AND last_search > '2014-03-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_fr WHERE is_bot = false AND last_search > '2013-12-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_de WHERE is_bot = false AND last_search > '2013-12-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_hu WHERE is_bot = false AND last_search > '2013-12-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_it WHERE is_bot = false AND last_search > '2014-03-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_no WHERE is_bot = false AND last_search > '2013-12-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_pl WHERE is_bot = false AND last_search > '2013-12-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_pt WHERE is_bot = false AND last_search > '2014-03-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_ro WHERE is_bot = false AND last_search > '2014-03-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog WHERE is_bot = false AND last_search > '2013-03-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_so WHERE is_bot = false AND last_search > '2015-06-30' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_es WHERE is_bot = false AND last_search > '2013-12-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_sv WHERE is_bot = false AND last_search > '2013-12-31' GROUP BY mo ORDER BY mo ASC;
+SELECT count(*), date_trunc('month', last_search) AS mo FROM dir_searchlog_tr WHERE is_bot = false AND last_search > '2014-03-31' GROUP BY mo ORDER BY mo ASC;
