@@ -455,7 +455,6 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
         elif recrawl:
             if descriptive:
                 print('Updating existing URL in database: {0}'.format(realurl))
-            # TODO: See if this and CopySiteData are duplicate code. They probably are.
             previous.pagesize = info.pagesize
             previous.pagedescription = info.pagedescription
             previous.pagekeywords = info.pagekeywords
@@ -464,7 +463,7 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
             previous.pagefirstheadtag = info.pagefirstheadtag
             previous.pagefirsth2tag = info.pagefirsth2tag
             previous.pagefirsth3tag = info.pagefirsth3tag
-            previous.lastcrawled = info.lastcrawled
+            previous.lastcrawled = timezone.now()
             previous.rooturl = info.rooturl
             previous.ip = info.ip
             previous.server_header = info.server_header
