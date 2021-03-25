@@ -355,7 +355,9 @@ def languages(request):
     mylist = set(language_list)
     for item in hidden_language_list:
         mylist.remove(item)
-    return render_to_response('languages.htm', {'language_code': language_code, 'language_list': mylist})
+    languages = list(mylist)
+    languages.sort()
+    return render_to_response('languages.htm', {'language_code': language_code, 'language_list': languages})
 
 
 def tld_stats(request):
