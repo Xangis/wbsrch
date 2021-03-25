@@ -82,7 +82,7 @@ if True:
         'news': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'news',
-            'USER': 'zetaweb',
+            'USER': 'news',
             'PASSWORD': NEWS_PASSWORD,
             'HOST': NEWS_HOST,
             'PORT': '',

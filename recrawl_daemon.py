@@ -9,4 +9,4 @@ parser.add_option('-o', '--offset', action='store', default=0, type='int', dest=
 
 while True:
     for x in range(100000, -20, -20):
-        call(['python', 'manage.py', 'crawl', '-r', '-m', '20', '-s', str(options.seconds), '-o', str(x+options.offset)])
+        call(['python', 'manage.py', 'crawl', '-r', '-m', '20', '-s', str(options.seconds), '-o', str(x + options.offset)])

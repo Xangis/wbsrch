@@ -351,7 +351,11 @@ def languages(request):
     language_code = request.LANGUAGE_CODE
     if language_code == 'en-us':
         language_code = 'en'
-    return render_to_response('languages.htm', {'language_code': language_code, 'language_list': language_list})
+    # Hide "hidden" languages.
+    mylist = set(language_list)
+    for item in hidden_language_list:
+        mylist.remove(item)
+    return render_to_response('languages.htm', {'language_code': language_code, 'language_list': mylist})
 
 
 def tld_stats(request):

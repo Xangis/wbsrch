@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from django.core.exceptions import ObjectDoesNotExist
 from dir.models import language_list
 from dir.utils import GetSearchLogModelFromLanguage
 from django.utils import timezone
