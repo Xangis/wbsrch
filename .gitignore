@@ -41,3 +41,4 @@ urls/icann/out/*.txt
 log/*.txt
 zonefiles_*
 .vscode/
+index

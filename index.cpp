@@ -143,7 +143,7 @@ bool SaveTerm(IndexTerm term)
     return true;
 }
 
-bool BuildIndexForTerm(std::string keywords, connection C)
+bool BuildIndexForTerm(std::string keywords, connection* C)
 {
     if( keywords.empty() )
     {
@@ -170,7 +170,7 @@ bool BuildIndexForTerm(std::string keywords, connection C)
     term.num_pages = 0;
 
     std::string query = "SELECT id, num_results, num_pages, date_indexed FROM dir_indexterm where keywords = " + keywords;
-    nontransaction N(C);
+    nontransaction N(*C);
     result R (N.exec(query.c_str()));
     N.commit();
 
@@ -185,7 +185,7 @@ bool BuildIndexForTerm(std::string keywords, connection C)
 
     query = GetPageTermQuery(term);
 
-    nontransaction O(C);
+    nontransaction O(*C);
     result S( O.exec( query.c_str() ));
     O.commit();
     std::list<std::pair<float, int>> ratings;
@@ -195,13 +195,13 @@ bool BuildIndexForTerm(std::string keywords, connection C)
         std::vector<std::string> rowdata;
         for(pqxx::row::iterator field = row.begin(); field != row.end(); ++field)
         {
-            rowdata.push_back(field);
+            rowdata.push_back(field.c_str());
         }
         float weight = CalculateTermValue(rowdata, keywords, "en");
-        ratings.insert(weight, id);
+        ratings.push_back(std::pair<float, int>(weight, id));
     }
     term.num_pages = ratings.size();
-    sort(ratings.begin(), ratings.end());
+    ratings.sort();
     if(ratings.size() > 5000)
     {
         cout << "TODO: Write a slice function to trim ratings down to 5000" << endl;
@@ -220,7 +220,7 @@ bool BuildIndexForTerm(std::string keywords, connection C)
 
     std::string encoded_rankings = std::string("[");
     bool first = true;
-    for( std::list<std::pair<int, float>>::iterator i; i < i.end(); i++)
+    for( std::list<std::pair<float, int>>::iterator i = ratings.begin(); i != ratings.end(); i++)
     {
         if( !first )
         {
@@ -288,16 +288,17 @@ int main(int argc, char* argv[]) {
    }
 
    try {
-      connection C("dbname = zetaweb user = zetaweb password = password \
-      hostaddr = 127.0.0.1 port = 5432");
+      connection C("dbname = zetaweb user = zetaweb password = '.vasd,f.ef,,.dii.' \
+      hostaddr = 216.151.2.54 port = 5432");
       if (C.is_open()) {
          cout << "Opened database successfully: " << C.dbname() << endl;
       } else {
          cout << "Can't open database" << endl;
          return 1;
       }
-      connection D("dbname = indexes user = indexes password = password \
-      hostaddr = 127.0.0.1 port = 5432");
+
+      connection D("dbname = indexes user = indexes password = 'jsanvsiuyeh8u8m3' \
+      hostaddr = 216.151.2.50 port = 5432");
       if (D.is_open()) {
          cout << "Opened database successfully: " << D.dbname() << endl;
       } else {
@@ -327,7 +328,7 @@ int main(int argc, char* argv[]) {
          std::string keywords = c[1].as<string>();
          cout << "ID = " << id << ", Keywords = " << keywords << endl;
 
-         BuildIndexForTerm(keywords, C);
+         BuildIndexForTerm(keywords, &C);
 
          // Python: RemoveFromPending(keywords)
          std::string sqlthree("DELETE FROM dir_pendingindex WHERE KEYWORDS = %s");
