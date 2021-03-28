@@ -2170,6 +2170,8 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
             del queryparams['utm_medium']
         if 'utm_campaign' in queryparams:
             del queryparams['utm_campaign']
+        if 'utm_campaign_source' in queryparams:
+            del queryparams['utm_campaign_source']
         if 'utm_term' in queryparams:
             del queryparams['utm_term']
         if 'utm_content' in queryparams:
