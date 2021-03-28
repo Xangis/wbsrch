@@ -135,11 +135,13 @@ std::string GetPageTermQuery(std::string query)
 
 bool JsonifyIndexTerm(IndexTerm term, std::string language)
 {
+    cout << "JsonifyIndexTerm: noop" << endl;
     return true;
 }
 
 bool SaveTerm(IndexTerm term)
 {
+    cout << "SaveTerm: noop" << endl;
     return true;
 }
 
@@ -176,6 +178,7 @@ bool BuildIndexForTerm(std::string keywords, connection* C)
 
     if( R.size() < 1 )
     {
+        cout << "This is a new term." << endl;
         term.new_term = true;
     }
 
@@ -184,6 +187,7 @@ bool BuildIndexForTerm(std::string keywords, connection* C)
     // printf("(Reindex) Term had {0} results and {1} pages last index on {2}".format(term.num_results, term.num_pages, term.date_indexed))
 
     query = GetPageTermQuery(term);
+    cout << "GetPageTermQuery returned " << query << endl;
 
     nontransaction O(*C);
     result S( O.exec( query.c_str() ));
@@ -320,6 +324,7 @@ int main(int argc, char* argv[]) {
       cout << "Executing: " << sql.str() << endl;
       /* Execute SQL query */
       result R( N.exec( sql.str() ));
+      N.commit();
 
       /* Print all records */
       int count = 0;
@@ -331,12 +336,11 @@ int main(int argc, char* argv[]) {
          BuildIndexForTerm(keywords, &C);
 
          // Python: RemoveFromPending(keywords)
-         std::string sqlthree("DELETE FROM dir_pendingindex WHERE KEYWORDS = %s");
+         cout << "Indexed term " << keywords << ", deleting any dir_pendingindex entry." << endl;
+         D.prepare("delete", "DELETE FROM dir_pendingindex WHERE KEYWORDS = $1");
          count += 1;
-         // cout << "Executing: " << sqlthree << endl;
-         cout << "Indexed term " << keywords << endl;
          nontransaction P(D);
-         result T( P.exec( sqlthree.c_str(), keywords ));
+         result T( P.exec_prepared("delete", keywords));
          P.commit();
       }
       cout << "Operation done successfully. " << count << " terms indexed." << endl;
