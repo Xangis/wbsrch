@@ -9,9 +9,8 @@ import uuid
 import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
 
-language_list = ['en', 'af', 'an', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fi', 'fo', 'fr', 'ga', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'la', 'lb', 'lt', 'lv', 'mg', 'mt', 'nl', 'no', 'oc', 'pl', 'pt', 'qu', 'ro', 'rw', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'vo', 'wa', 'wo', 'xh', 'yo', 'zu']
-hidden_language_list = ['af', 'bs', 'eo', 'fo', 'ga', 'la', 'lb', 'mg', 'mt', 'oc', 'qu', 'vo', 'wa']
-# language_list = ['en', 'de', 'fr', 'es', 'pl', 'it', 'nl', 'pt', 'tr', 'cs', 'ro', 'el', 'sv', 'da', 'hu', 'hr', 'sk', 'lt', 'no', 'fi', 'et', 'lv', 'sl', 'is', 'sw', 'yo', 'so', 'wo', 'ha', 'rw', 'sn', 'ca']
+language_list = ['en', 'af', 'an', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fi', 'fo', 'fr', 'ga', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'la', 'lb', 'lt', 'lv', 'mg', 'mt', 'nl', 'no', 'oc', 'pl', 'pt', 'qu', 'ro', 'rw', 'sk', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'vo', 'wa', 'wo', 'xh', 'yo', 'zu']
+hidden_language_list = ['af', 'bs', 'eo', 'fo', 'ga', 'la', 'lb', 'mg', 'mt', 'oc', 'qu', 'sk', 'vo', 'wa']
 
 # Only including languages that aren't also a valid country. This means that "ar", which could be argentina,
 # and "uk" which could be the united kingdom, are not listed as blocked. Doing so could cause it to auto-delete
@@ -351,123 +350,6 @@ class SiteInfo(URLInfo):
         return self.url
 
 
-class SiteInfo_cs(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_de(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_el(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_es(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_fi(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_fr(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_hu(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_it(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_nl(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_pl(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_pt(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_sv(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
-class SiteInfo_tr(URLInfo):
-
-    def __str__(self):
-        return self.url
-
-    class Meta:
-        in_db = 'language_pages'
-
-
 class DomainInfo(models.Model):
     url = models.CharField(max_length=255, unique=True, db_index=True)
     language_association = models.CharField(max_length=8, null=True, blank=True)
@@ -629,132 +511,6 @@ class SearchLog(SearchLogBase):
         return self.keywords
 
 
-class SearchLog_cs(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_de(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_el(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_es(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_fi(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_fr(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_hu(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_it(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_nl(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_pl(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_pt(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_sk(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_sv(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class SearchLog_tr(SearchLogBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
 class DomainSearchLog(SearchLogBase):
     # What language site was this domain searched from?
     language = models.CharField(max_length=6)
@@ -792,123 +548,6 @@ class PendingIndex(PendingIndexBase):
         verbose_name_plural = "pending indexes"
 
 
-class PendingIndex_cs(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_de(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_el(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_es(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_fi(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_fr(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_hu(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_it(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_nl(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_pl(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_pt(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_sv(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class PendingIndex_tr(PendingIndexBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
 class IndexTermBase(models.Model):
     keywords = models.CharField(max_length=240, unique=True)
     date_indexed = models.DateTimeField(default=timezone.now)
@@ -941,123 +580,6 @@ class IndexTerm(IndexTermBase):
 
     def __str__(self):
         return self.keywords
-
-
-class IndexTerm_cs(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_de(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_el(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_es(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_fi(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_fr(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_hu(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_it(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_nl(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_pl(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_pt(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_sv(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class IndexTerm_tr(IndexTermBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
 
 
 class FeedbackItem(models.Model):
@@ -1182,71 +704,6 @@ class KeywordRanking(KeywordRank):
     pass
 
 
-class KeywordRanking_cs(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_de(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_el(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_es(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_fi(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_fr(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_hu(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_it(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_nl(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_pl(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_pt(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_sv(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class KeywordRanking_tr(KeywordRank):
-    class Meta:
-        in_db = 'language_indexes'
-
-
 class QueryParameter(models.Model):
     """
     Represents a URL query parameter that should be changed or removed for a site.
@@ -1341,123 +798,6 @@ class AutoComplete(AutoCompleteBase):
         return self.keywords
 
 
-class AutoComplete_cs(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_de(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_el(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_es(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_fi(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_fr(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_hu(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_it(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_nl(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_pl(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_pt(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_sv(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class AutoComplete_tr(AutoCompleteBase):
-
-    def __str__(self):
-        return self.keywords
-
-    class Meta:
-        in_db = 'language_indexes'
-
-
 class ResultClickBase(models.Model):
     keywords = models.TextField(unique=False)
     search_id = models.UUIDField(null=True, editable=False, db_index=True)
@@ -1478,76 +818,6 @@ class ResultClickBase(models.Model):
 
 class ResultClick(ResultClickBase):
     pass
-
-
-class ResultClick_cs(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_de(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_el(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_es(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_fi(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_fr(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_hu(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_it(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_nl(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_pl(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_pt(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_sk(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_sv(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
-
-
-class ResultClick_tr(ResultClickBase):
-    class Meta:
-        in_db = 'language_indexes'
 
 
 class APIUser(models.Model):
@@ -1585,6 +855,7 @@ class APIUsage(models.Model):
         in_db = 'indexes'
 
 
+# Incvidual language class definitions. Presence or absence of the language code in language_list enables or disables these.
 if 'af' in language_list:
     class SiteInfo_af(URLInfo):
         def __str__(self):
@@ -1766,6 +1037,53 @@ if 'ca' in language_list:
             in_db = 'language_indexes'
 
 
+if 'cs' in language_list:
+    class SiteInfo_cs(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_cs(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_cs(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_cs(KeywordRank):
+        pass
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_cs(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_cs(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_cs(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
 if 'cy' in language_list:
     class SiteInfo_cy(URLInfo):
         def __str__(self):
@@ -1856,6 +1174,100 @@ if 'da' in language_list:
             in_db = 'language_indexes'
 
 
+if 'de' in language_list:
+    class SiteInfo_de(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_de(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_de(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_de(KeywordRank):
+        pass
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_de(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_de(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_de(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
+if 'el' in language_list:
+    class SiteInfo_el(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_el(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_el(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_el(KeywordRank):
+        pass
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_el(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_el(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_el(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
 if 'eo' in language_list:
     class SiteInfo_eo(URLInfo):
         def __str__(self):
@@ -1894,6 +1306,51 @@ if 'eo' in language_list:
             in_db = 'language_indexes'
 
     class AutoComplete_eo(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
+if 'es' in language_list:
+    class SiteInfo_es(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_es(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_es(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_es(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_es(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_es(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_es(AutoCompleteBase):
         def __str__(self):
             return self.keywords
 
@@ -1991,6 +1448,51 @@ if 'eu' in language_list:
             in_db = 'language_indexes'
 
 
+if 'fi' in language_list:
+    class SiteInfo_fi(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_fi(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_fi(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_fi(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_fi(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_fi(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_fi(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
 if 'fo' in language_list:
     class SiteInfo_fo(URLInfo):
         def __str__(self):
@@ -2029,6 +1531,51 @@ if 'fo' in language_list:
             in_db = 'language_indexes'
 
     class AutoComplete_fo(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
+if 'fr' in language_list:
+    class SiteInfo_fr(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_fr(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_fr(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_fr(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_fr(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_fr(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_fr(AutoCompleteBase):
         def __str__(self):
             return self.keywords
 
@@ -2213,6 +1760,51 @@ if 'hr' in language_list:
             in_db = 'language_indexes'
 
 
+if 'hu' in language_list:
+    class SiteInfo_hu(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_hu(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_hu(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_hu(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_hu(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_hu(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_hu(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
 if 'is' in language_list:
     class SiteInfo_is(URLInfo):
         def __str__(self):
@@ -2251,6 +1843,51 @@ if 'is' in language_list:
             in_db = 'language_indexes'
 
     class AutoComplete_is(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
+if 'it' in language_list:
+    class SiteInfo_it(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_it(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_it(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_it(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_it(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_it(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_it(AutoCompleteBase):
         def __str__(self):
             return self.keywords
 
@@ -2528,6 +2165,51 @@ if 'mt' in language_list:
             in_db = 'language_indexes'
 
 
+if 'nl' in language_list:
+    class SiteInfo_nl(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_nl(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_nl(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_nl(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_nl(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_nl(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_nl(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
 if 'no' in language_list:
     class SiteInfo_no(URLInfo):
         def __str__(self):
@@ -2611,6 +2293,96 @@ if 'oc' in language_list:
             in_db = 'language_indexes'
 
     class AutoComplete_oc(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
+if 'pl' in language_list:
+    class SiteInfo_pl(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_pl(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_pl(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_pl(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_pl(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_pl(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_pl(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
+if 'pt' in language_list:
+    class SiteInfo_pt(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_pt(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_pt(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_pt(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_pt(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_pt(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_pt(AutoCompleteBase):
         def __str__(self):
             return self.keywords
 
@@ -2746,6 +2518,51 @@ if 'rw' in language_list:
             in_db = 'language_indexes'
 
     class AutoComplete_rw(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
+if 'sk' in language_list:
+    class SiteInfo_sk(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_sk(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_sk(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_sk(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_sk(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_sk(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_sk(AutoCompleteBase):
         def __str__(self):
             return self.keywords
 
@@ -2889,6 +2706,51 @@ if 'so' in language_list:
             in_db = 'language_indexes'
 
 
+if 'sv' in language_list:
+    class SiteInfo_sv(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_sv(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_sv(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_sv(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_sv(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_sv(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_sv(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
 if 'sw' in language_list:
     class SiteInfo_sw(URLInfo):
         def __str__(self):
@@ -2927,6 +2789,51 @@ if 'sw' in language_list:
             in_db = 'language_indexes'
 
     class AutoComplete_sw(AutoCompleteBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+
+if 'tr' in language_list:
+    class SiteInfo_tr(URLInfo):
+        def __str__(self):
+            return self.url
+
+        class Meta:
+            in_db = 'language_pages'
+
+    class PendingIndex_tr(PendingIndexBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class IndexTerm_tr(IndexTermBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class KeywordRanking_tr(KeywordRank):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class SearchLog_tr(SearchLogBase):
+        def __str__(self):
+            return self.keywords
+
+        class Meta:
+            in_db = 'language_indexes'
+
+    class ResultClick_tr(ResultClickBase):
+        class Meta:
+            in_db = 'language_indexes'
+
+    class AutoComplete_tr(AutoCompleteBase):
         def __str__(self):
             return self.keywords
 
