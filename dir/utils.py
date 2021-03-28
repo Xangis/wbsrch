@@ -276,8 +276,6 @@ def GetPendingIndexModelFromLanguage(language):
         return PendingIndex
     if 'nn' in language or 'nb' in language:
         language = 'no'
-    if 'sk' in language:
-        language = 'cs'
     try:
         model = apps.get_model('dir', 'PendingIndex_' + language)
     except LookupError:
@@ -293,8 +291,6 @@ def GetIndexModelFromLanguage(language):
         return IndexTerm
     if 'nn' in language or 'nb' in language:
         language = 'no'
-    if 'sk' in language:
-        language = 'cs'
     try:
         model = apps.get_model('dir', 'IndexTerm_' + language)
     except LookupError:
@@ -310,8 +306,6 @@ def GetSiteInfoModelFromLanguage(language):
         return SiteInfo
     if 'nn' in language or 'nb' in language:
         language = 'no'
-    if 'sk' in language:
-        language = 'cs'
     try:
         model = apps.get_model('dir', 'SiteInfo_' + language)
     except LookupError:
@@ -327,8 +321,6 @@ def GetSearchLogModelFromLanguage(language):
         return SearchLog
     if 'nn' in language or 'nb' in language:
         language = 'no'
-    if 'sk' in language:
-        language = 'cs'
     try:
         model = apps.get_model('dir', 'SearchLog_' + language)
     except LookupError:
@@ -344,8 +336,6 @@ def GetKeywordRankingModelFromLanguage(language):
         return KeywordRanking
     if 'nn' in language or 'nb' in language:
         language = 'no'
-    if 'sk' in language:
-        language = 'cs'
     try:
         model = apps.get_model('dir', 'KeywordRanking_' + language)
     except LookupError:
@@ -361,8 +351,6 @@ def GetAutoCompleteModelFromLanguage(language):
         return AutoComplete
     if 'nn' in language or 'nb' in language:
         language = 'no'
-    if 'sk' in language:
-        language = 'cs'
     try:
         model = apps.get_model('dir', 'AutoComplete_' + language)
     except LookupError:
@@ -378,8 +366,6 @@ def GetResultClickModelFromLanguage(language):
         return ResultClick
     if 'nn' in language or 'nb' in language:
         language = 'no'
-    if 'sk' in language:
-        language = 'cs'
     try:
         model = apps.get_model('dir', 'ResultClick_' + language)
     except LookupError:
@@ -2184,6 +2170,8 @@ def NormalizeUrl(url, pre_crawl_replacement=False, post_crawl_replacement=False,
             del queryparams['utm_medium']
         if 'utm_campaign' in queryparams:
             del queryparams['utm_campaign']
+        if 'utm_campaign_source' in queryparams:
+            del queryparams['utm_campaign_source']
         if 'utm_term' in queryparams:
             del queryparams['utm_term']
         if 'utm_content' in queryparams:

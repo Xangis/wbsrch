@@ -135,16 +135,19 @@ std::string GetPageTermQuery(std::string query)
 
 bool JsonifyIndexTerm(IndexTerm term, std::string language)
 {
+    cout << "JsonifyIndexTerm: noop" << endl;
     return true;
 }
 
 bool SaveTerm(IndexTerm term)
 {
+    cout << "SaveTerm: noop" << endl;
     return true;
 }
 
 bool BuildIndexForTerm(std::string keywords, connection* C)
 {
+    cout << "BuildIndexForTerm called." << endl;
     if( keywords.empty() )
     {
         return false;
@@ -156,34 +159,44 @@ bool BuildIndexForTerm(std::string keywords, connection* C)
     if(keywords.find(" ") != string::npos)
         multiword = true;
 
-     keywords = strip(keywords);
+    keywords = strip(keywords);
+    cout << "Stripped keywords: '" << keywords << "'" << endl;
 
     if( keywords.length() < 1)
-        printf("Keyword is empty after calling strip(). Refusing to index.");
+    {
+        cout << "Keyword is empty after calling strip(). Refusing to index." << endl;
         return false;
+    }
 
     keywords = lower(keywords);
+    cout << "Lower keywords: '" << keywords << "'" << endl;
     IndexTerm term;
     term.new_term = false;
     term.keywords = keywords;
     term.num_results = 0;
     term.num_pages = 0;
 
-    std::string query = "SELECT id, num_results, num_pages, date_indexed FROM dir_indexterm where keywords = " + keywords;
+    (*C).prepare("existingindex", "SELECT id, num_results, num_pages, date_indexed FROM dir_indexterm where keywords = $1");
     nontransaction N(*C);
-    result R (N.exec(query.c_str()));
+    result R (N.exec_prepared("existingindex", keywords));
     N.commit();
 
     if( R.size() < 1 )
     {
+        cout << "This is a new term." << endl;
         term.new_term = true;
+    }
+    else
+    {
+        cout << "This is a reindex." << endl;
     }
 
     // Store the num_pages if the previous index is found because it determines how many fields we will query.
 
     // printf("(Reindex) Term had {0} results and {1} pages last index on {2}".format(term.num_results, term.num_pages, term.date_indexed))
 
-    query = GetPageTermQuery(term);
+    std::string query = GetPageTermQuery(term);
+    cout << "GetPageTermQuery returned " << query << endl;
 
     nontransaction O(*C);
     result S( O.exec( query.c_str() ));
@@ -308,7 +321,7 @@ int main(int argc, char* argv[]) {
 
       /* Create SQL statement */
       if (!redo ) {
-          sql << "SELECT id, keywords FROM dir_pendingindex ORDER BY date_added ASC LIMIT " << numitems << endl;
+          sql << "SELECT id, keywords FROM dir_pendingindex ORDER BY priority, date_added ASC LIMIT " << numitems << endl;
       } else {
           sql << "SELECT id, keywords FROM dir_indexterm ORDER BY date_indexed ASC LIMIT " << numitems << endl;
       }
@@ -320,6 +333,7 @@ int main(int argc, char* argv[]) {
       cout << "Executing: " << sql.str() << endl;
       /* Execute SQL query */
       result R( N.exec( sql.str() ));
+      N.commit();
 
       /* Print all records */
       int count = 0;
@@ -331,13 +345,12 @@ int main(int argc, char* argv[]) {
          BuildIndexForTerm(keywords, &C);
 
          // Python: RemoveFromPending(keywords)
-         std::string sqlthree("DELETE FROM dir_pendingindex WHERE KEYWORDS = %s");
+         cout << "Indexed term " << keywords << ", deleting any dir_pendingindex entry." << endl;
+         D.prepare("delete", "DELETE FROM dir_pendingindex WHERE KEYWORDS = $1");
          count += 1;
-         // cout << "Executing: " << sqlthree << endl;
-         cout << "Indexed term " << keywords << endl;
-         nontransaction P(D);
-         result T( P.exec( sqlthree.c_str(), keywords ));
-         P.commit();
+         //nontransaction P(D);
+         //result T( P.exec_prepared("delete", keywords));
+         //P.commit();
       }
       cout << "Operation done successfully. " << count << " terms indexed." << endl;
       C.disconnect ();

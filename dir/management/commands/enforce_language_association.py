@@ -14,11 +14,16 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('-c', '--cleanup', default=False, action='store_true', dest='cleanup', help='Delete all non-English pages from language indexes if they are not tagged that language.')
+        parser.add_argument('-l', '--language', default=None, action='store', dest='languages', help='Check this comma-seperated list of language codes, only works with -c. (default=all)')
 
     def handle(self, *args, **options):
         if options['cleanup']:
+            if 'languages' not in options:
+                languages = language_list
+            else:
+                languages = options['languages'].split(',')
             loglines = []
-            for language in language_list:
+            for language in languages:
                 if language == 'en':
                     continue
                 deleted = 0
