@@ -16,7 +16,7 @@ options = parser.parse_args()
 
 def ProcessCSVFile(filename):
     column = options.column
-    with open(filename, 'rb') as csvfile:
+    with open(filename, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter='\t', quotechar=None)
         for row in reader:
             if len(row) >= column:
