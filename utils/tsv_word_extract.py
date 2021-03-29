@@ -10,17 +10,79 @@ import argparse
 
 parser = argparse.ArgumentParser(description="Load a file containing a tsv of words or indexterms one per line and print those words.")
 parser.add_argument('input', action='store', type=str, help='Input filename.')
-parser.add_argument('column', default=2, action='store', type=int, help='Column number to check. Default=2.')
+parser.add_argument('-c', '--column', default=2, dest='column', action='store', type=int, help='Column number to check. Default=2.')
 options = parser.parse_args()
 
 
 def ProcessCSVFile(filename):
-    column = options['column']
+    column = options.column
     with open(filename, 'rb') as csvfile:
-        reader = csv.reader(csvfile, delimiter='\t')
+        reader = csv.reader(csvfile, delimiter='\t', quotechar=None)
         for row in reader:
             if len(row) >= column:
-                print(row[column-1])
+                word = row[column-1].strip()
+                if len(word) < 2:
+                    continue
+                if ':' in word:
+                    continue
+                if '(' in word:
+                    continue
+                if ']' in word:
+                    continue
+                if ')' in word:
+                    continue
+                if '[' in word:
+                    continue
+                if '«' in word:
+                    continue
+                if '»' in word:
+                    continue
+                if '…' in word:
+                    continue
+                if '‘' in word:
+                    continue
+                if '.' in word:
+                    continue
+                if ',' in word:
+                    continue
+                if '–' in word:
+                    continue
+                if '”' in word:
+                    continue
+                if '†' in word:
+                    continue
+                if '•' in word:
+                    continue
+                if '·' in word:
+                    continue
+                if '‹' in word:
+                    continue
+                if '›' in word:
+                    continue
+                if '₤' in word:
+                    continue
+                if '⁰' in word:
+                    continue
+                if '™' in word:
+                    continue
+                if '″' in word:
+                    continue
+                if '‶' in word:
+                    continue
+                if '≈' in word:
+                    continue
+                if 'ℓ' in word:
+                    continue
+                if '≥' in word:
+                    continue
+                if '¡' in word:
+                    continue
+                if '¿' in word:
+                    continue
+                if '°' in word:
+                    continue
+                if 'µ' in word:
+                    continue
+                print(word)
 
-
-ProcessCSVFile(options['input'])
+ProcessCSVFile(options.input)
