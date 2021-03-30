@@ -21,7 +21,7 @@ class Command(BaseCommand):
         else:
             langs = language_list
         thirtydaysago = timezone.now() - timedelta(days=30)
-        for language in language_list:
+        for language in langs:
             searchlog_model = GetSearchLogModelFromLanguage(language)
             total_searches = searchlog_model.objects.filter(is_bot=False).count()
             print('{0} total searches for {1}'.format(total_searches, language))
