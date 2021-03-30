@@ -5,6 +5,7 @@ import optparse
 parser = optparse.OptionParser()
 parser.set_defaults(seconds=1)
 parser.add_option('-s', '--seconds', action='store', default=1, type='int', dest='seconds', help='Seconds between indexes. (default=1)')
+parser.add_option('-n', '--noreindex', action='store_true', default=False, dest='noreindex', help='No reindex, only pending. (default=False)')
 (options, args) = parser.parse_args()
 
 language_list = ['en', 'af', 'an', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fi', 'fo', 'fr', 'ga', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'la', 'lb', 'lt', 'lv', 'mg', 'mt', 'nl', 'no', 'oc', 'pl', 'pt', 'qu', 'ro', 'rw', 'sk', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'vo', 'wa', 'wo', 'xh', 'yo', 'zu']
@@ -24,8 +25,6 @@ lang_index_counts = {
   'wa': 2, 'wo': 1, 'xh': 2, 'yo': 1, 'zu': 1
 }
 
-lang_index_counts = {'lt': 4, 'lv': 3, 'is': 4, 'sw': 2, 'yo': 2, 'so': 2, 'wo': 2, 'ha': 2, 'rw': 2, 'sn': 2, 'ca': 2, 'cs': 15, 'fi': 10, 'el': 10, 'hu': 8, 'pl': 10, 'tr': 14, 'da': 7, 'et': 4, 'de': 15, 'no': 5, 'pt': 10, 'nl': 8, 'sk': 8, 'sl': 8, 'es': 12, 'sv': 8, 'hr': 5, 'it': 8, 'fr': 12, 'ro': 6}
-
 # Slowly indexes terms, one per minute maximum.
 while True:
     for language in language_list:
@@ -39,6 +38,7 @@ while True:
         call(['python', 'manage.py', 'index', '-p', '-m', str(indexcount), '-s', str(options.seconds), '-l', language])
         # Wait a few seconds between context switches
         time.sleep(options.seconds)
-        call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount), '-s', str(options.seconds), '-l', language])
-        # Wait a few seconds between cycles.
-        time.sleep(options.seconds)
+        if not options.noreindex:
+            call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount), '-s', str(options.seconds), '-l', language])
+            # Wait a few seconds between cycles.
+            time.sleep(options.seconds)
