@@ -61,8 +61,8 @@ class Command(BaseCommand):
                         except Exception:
                             pass
                     else:
-                        AddPendingTerm(line, language, 'add_new_to_pending from file {0}'.format(filename), priority=2)
-                        print('Added {0}.'.format(line))
+                        if AddPendingTerm(line, language, 'add_new_to_pending from file {0}'.format(filename), priority=2):
+                            print('Added {0}.'.format(line))
                         numadded = numadded + 1
                 if not noindividual and not domains:
                     if ' ' in line:

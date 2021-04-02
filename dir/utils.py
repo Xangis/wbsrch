@@ -2749,7 +2749,7 @@ def ClearErrors(url):
 
 def AddPendingTerm(item, language_code='en', reason=None, priority=2):
     if BannedSearchString(item):
-        return
+        return False
     pending_model = GetPendingIndexModelFromLanguage(language_code)
     # Don't index things that only have a quote on one side - trim them.
     if item.startswith("'") and not item.endswith("'"):
@@ -2765,6 +2765,7 @@ def AddPendingTerm(item, language_code='en', reason=None, priority=2):
     item = item.lower()
     try:
         pending_model.objects.get(keywords=item)
+        return False
     except ObjectDoesNotExist:
         new_index = pending_model()
         new_index.keywords = item
@@ -2775,8 +2776,10 @@ def AddPendingTerm(item, language_code='en', reason=None, priority=2):
         # This can happen if two searches happen at once and there's a race condition.
         try:
             new_index.save()
+            return True
         except Exception:
             pass
+    return False
 
 
 def RemoveExtraSpaces(text):
