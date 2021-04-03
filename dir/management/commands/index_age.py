@@ -2,6 +2,8 @@
 from django.core.management.base import BaseCommand
 from dir.models import language_list
 from dir.utils import GetIndexAverageAge, GetOldestIndexAge, GetIndexModelFromLanguage
+from django.utils.timezone import utc
+from dateutil.parser import parse
 
 
 class Command(BaseCommand):
@@ -13,12 +15,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         days = options.get('days', None)
         before = options.get('before', None)
+        if before:
+            before = parse(before)
+            before = before.replace(tzinfo=utc)
         if options['language'] == 'all':
             for item in language_list:
                 if before:
                     model = GetIndexModelFromLanguage(item)
                     total = model.objects.filter(date_indexed__lt=before).count()
-                    print('There are {0} index terms for "{1}" that are older than {2}'.format(total, item, before))
+                    if total:
+                        print('There are {0} index terms for "{1}" that are older than {2}'.format(total, item, before))
                 else:
                     age = GetIndexAverageAge(item)
                     if days and (age.days < days):
