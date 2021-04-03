@@ -14,13 +14,13 @@ class Command(BaseCommand):
     """
 
     def add_arguments(self, parser):
-        pass
+        parser.add_argument('-a', '--alll', default=False, action='store_true', dest='all', help='Check all language indexes for blocked site pages (default=False).')
 
     def handle(self, *args, **options):
         sites = BlockedSite.objects.all().order_by('url')
         count = 0
         for site in sites:
-            RemoveURLsForDomain(site.url, verbose=True)
+            RemoveURLsForDomain(site.url, verbose=True, all_languages=options['all'])
             count += 1
             if count % 10000 == 0:
                 print('Processed {0}'.format(count))

@@ -2,6 +2,8 @@
 from django.core.management.base import BaseCommand
 from dir.models import language_list
 from dir.utils import GetPagesAverageAge, GetOldestPageAge, GetSiteInfoModelFromLanguage
+from django.utils.timezone import utc
+from dateutil.parser import parse
 
 
 class Command(BaseCommand):
@@ -13,6 +15,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         days = options.get('days', None)
         before = options.get('before', None)
+        if before:
+            before = parse(before)
+            before = before.replace(tzinfo=utc)
         grand_total = 0
         if options['language'] == 'all':
             for item in language_list:
@@ -20,7 +25,8 @@ class Command(BaseCommand):
                     model = GetSiteInfoModelFromLanguage(item)
                     total = model.objects.filter(lastcrawled__lt=before).count()
                     grand_total += total
-                    print('There are {0} pages for "{1}" that are older than {2}'.format(total, item, before))
+                    if total > 0:
+                        print('There are {0} pages for "{1}" that are older than {2}'.format(total, item, before))
                 else:
                     age = GetPagesAverageAge(item)
                     if days and (age.days < days):

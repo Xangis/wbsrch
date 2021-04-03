@@ -3,7 +3,7 @@ python-memcached==1.59
 Django==1.11.29
 # If this fails, run sudo apt-get install python-dev libpq-dev
 beautifulsoup4==4.7.1
-coverage==5.4
+coverage==5.5
 flup==1.0.3
 nltk==3.5
 ipaddr==2.2.0
@@ -39,12 +39,12 @@ simhash==2.0.0
 backports.functools-lru-cache==1.6.1
 favicon==0.7.0
 psycopg2-binary==2.8.6
-Pillow==8.1.0
+Pillow==8.1.2
 selenium==3.141.0
 requests==2.25.1
 zone-file==0.1.5
-tlds==2021013000
-tox==3.21.4
+tlds==2021033102
+tox==3.23.0
 elasticsearch==7.10.1
-gunicorn==20.0.4
-flake8==3.8.4
+gunicorn==20.1.0
+flake8==3.9.0
