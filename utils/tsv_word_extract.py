@@ -20,7 +20,7 @@ def ProcessCSVFile(filename):
         reader = csv.reader(csvfile, delimiter='\t', quotechar=None)
         for row in reader:
             if len(row) >= column:
-                word = row[column-1].strip()
+                word = row[column - 1].strip()
                 if len(word) < 2:
                     continue
                 if ':' in word:
@@ -84,5 +84,6 @@ def ProcessCSVFile(filename):
                 if 'µ' in word:
                     continue
                 print(word)
+
 
 ProcessCSVFile(options.input)
