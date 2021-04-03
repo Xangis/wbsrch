@@ -20,7 +20,7 @@ class Command(BaseCommand):
         sites = BlockedSite.objects.all().order_by('url')
         count = 0
         for site in sites:
-            RemoveURLsForDomain(site.url, verbose=True, all_languages=options.all)
+            RemoveURLsForDomain(site.url, verbose=True, all_languages=options['all'])
             count += 1
             if count % 10000 == 0:
                 print('Processed {0}'.format(count))
