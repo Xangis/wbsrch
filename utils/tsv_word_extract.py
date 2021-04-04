@@ -83,6 +83,36 @@ def ProcessCSVFile(filename):
                     continue
                 if 'µ' in word:
                     continue
+                if word.endswith('-'):
+                    continue
+                if 'д' in word:
+                    continue
+                if 'й' in word:
+                    continue
+                if 'ф' in word:
+                    continue
+                if 'л' in word:
+                    continue
+                if 'ц' in word:
+                    continue
+                if 'и' in word:
+                    continue
+                if 'т' in word:
+                    continue
+                if 'ם' in word:
+                    continue
+                if 'ר' in word:
+                    continue
+                if 'ה' in word:
+                    continue
+                if 'א' in word:
+                    continue
+                if 'ウ' in word:
+                    continue
+                if 'タ' in word:
+                    continue
+                if 'ー' in word:
+                    continue
                 print(word)
 
 
