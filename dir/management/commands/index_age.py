@@ -15,6 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         days = options.get('days', None)
         before = options.get('before', None)
+        grand_total = 0
         if before:
             before = parse(before)
             before = before.replace(tzinfo=utc)
@@ -23,6 +24,7 @@ class Command(BaseCommand):
                 if before:
                     model = GetIndexModelFromLanguage(item)
                     total = model.objects.filter(date_indexed__lt=before).count()
+                    grand_total += total
                     if total:
                         print('There are {0} index terms for "{1}" that are older than {2}'.format(total, item, before))
                 else:
@@ -35,8 +37,11 @@ class Command(BaseCommand):
             if before:
                 model = GetIndexModelFromLanguage(item)
                 total = model.objects.filter(date_indexed__lt=before).count()
+                grand_total += total
                 print('There are {0} index terms for "{1}" that are older than {2}'.format(total, item, before))
             else:
                 age = GetIndexAverageAge(options['language'])
                 print('Index "{0}" has average age of {1}, oldest is {2}.'.format(
                       options['language'], age, GetOldestIndexAge(options['language'])))
+        if before:
+            print('{0} total indexes are older than {1}'.format(grand_total, before))
