@@ -14,8 +14,10 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('-l', '--language', action='store', dest='language', default='all', help='Language(s) to check, comma-separated, default = all'),
         parser.add_argument('-d', '--daily', default=False, action='store_true', dest='daily', help='Show daily totals instead of monthly (default=False)'),
+        parser.add_argument('-m', '--min', default=0, action='store', type=int, dest='min', help='Min number of searches in the past month for a language to be displayed. (default=0)')
 
     def handle(self, *args, **options):
+        min = options['min']
         if options['language'] == 'all':
             langs = language_list
         else:
@@ -25,4 +27,5 @@ class Command(BaseCommand):
             searchlog_model = GetSearchLogModelFromLanguage(language)
             total_searches = searchlog_model.objects.filter(is_bot=False).count()
             searches_past_month = searchlog_model.objects.filter(is_bot=False, last_search__gte=thirtydaysago).count()
-            print('{0} searches in the last 30 days and {1} all-time searches for {2}'.format(searches_past_month, total_searches, language))
+            if searches_past_month >= min:
+                print('{0} searches in the last 30 days and {1} all-time searches for {2}'.format(searches_past_month, total_searches, language))
