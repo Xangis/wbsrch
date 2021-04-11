@@ -35,10 +35,10 @@ class Command(BaseCommand):
                           item, age, GetOldestIndexAge(item)))
         else:
             if before:
-                model = GetIndexModelFromLanguage(item)
+                model = GetIndexModelFromLanguage(options['language'])
                 total = model.objects.filter(date_indexed__lt=before).count()
                 grand_total += total
-                print('There are {0} index terms for "{1}" that are older than {2}'.format(total, item, before))
+                print('There are {0} index terms for "{1}" that are older than {2}'.format(total, options['language'], before))
             else:
                 age = GetIndexAverageAge(options['language'])
                 print('Index "{0}" has average age of {1}, oldest is {2}.'.format(
