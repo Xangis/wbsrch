@@ -5,7 +5,7 @@ Django==1.11.29
 beautifulsoup4==4.7.1
 coverage==5.5
 flup==1.0.3
-nltk==3.5
+nltk==3.6.1
 ipaddr==2.2.0
 python-whois==0.7.3
 # Requires python-dev
