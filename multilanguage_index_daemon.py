@@ -4,8 +4,9 @@ import optparse
 
 parser = optparse.OptionParser()
 parser.set_defaults(seconds=1)
-parser.add_option('-s', '--seconds', action='store', default=1, type='int', dest='seconds', help='Seconds between indexes. (default=1)')
 parser.add_option('-n', '--noreindex', action='store_true', default=False, dest='noreindex', help='No reindex, only pending. (default=False)')
+parser.add_option('-o', '--offset', action='store', default=0, type='int', dest='offset', help='Offset multiplier, 1 = skip one batch of indexes, i.e. 1x20 for fr (default=0)')
+parser.add_option('-s', '--seconds', action='store', default=1, type='int', dest='seconds', help='Seconds between indexes. (default=1)')
 (options, args) = parser.parse_args()
 
 language_list = ['en', 'af', 'an', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fi', 'fo', 'fr', 'ga', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'la', 'lb', 'lt', 'lv', 'mg', 'mt', 'nl', 'no', 'oc', 'pl', 'pt', 'qu', 'ro', 'rw', 'sk', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'vo', 'wa', 'wo', 'xh', 'yo', 'zu']
@@ -27,6 +28,7 @@ lang_index_counts = {
 
 # Slowly indexes terms, one per minute maximum.
 while True:
+    offset = options.offset
     for language in language_list:
         if language == 'en':
             continue
@@ -35,10 +37,10 @@ while True:
         # take advantage of caching (which may or may not make a difference,
         # we haven't benchmarked anything).
         indexcount = lang_index_counts.get(language, 10)
-        call(['python', 'manage.py', 'index', '-p', '-m', str(indexcount), '-s', str(options.seconds), '-l', language])
+        call(['python', 'manage.py', 'index', '-p', '-m', str(indexcount), '-s', str(options.seconds), '-l', language, '-o', str(options.offset * indexcount)])
         # Wait a few seconds between context switches
         time.sleep(options.seconds)
         if not options.noreindex:
-            call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount), '-s', str(options.seconds), '-l', language])
+            call(['python', 'manage.py', 'index', '-r', '-m', str(indexcount), '-s', str(options.seconds), '-l', language, '-o', str(options.offset * indexcount)])
             # Wait a few seconds between cycles.
             time.sleep(options.seconds)
