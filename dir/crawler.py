@@ -377,6 +377,9 @@ def ParseHtml(pendinglinks, url, response, descriptive=False, recrawl=False):
         if recrawl:
             count = RemoveFromDatabase(realurl, descriptive, all_languages=True, model=SiteInfo)
             print('Removed {0} instances of invalid language page {1} from the {2} database.'.format(count, realurl, SiteInfo))
+            if realurl != url:
+                count = RemoveFromDatabase(url, descriptive, all_languages=True, model=SiteInfo)
+                print('Removed {0} instances of page {1} that redirects to an invalid language page from the {2} database.'.format(count, url, SiteInfo))
         return False
     info = site_model()
     info.rooturl = rooturl
