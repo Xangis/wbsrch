@@ -14,16 +14,16 @@ language_list = ['en', 'af', 'an', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'eo
 # Index ratio controls how quickly we cycle through terms for a language.
 # Counts for languages not in the index are ignored.
 lang_index_counts = {
-  'af': 2, 'an': 2, 'bs': 2, 'ca': 3, 'cs': 8,
-  'cy': 2, 'da': 8, 'de': 30, 'el': 6, 'eo': 2,
-  'es': 25, 'et': 4, 'eu': 2, 'fi': 6, 'fo': 2,
-  'fr': 20, 'ga': 2, 'gl': 2, 'ha': 2, 'hr': 4,
-  'hu': 4, 'is': 2, 'it': 15, 'la': 2, 'lb': 2,
-  'lt': 3, 'lv': 2, 'mg': 2, 'mt': 2, 'nl': 15,
-  'no': 5, 'oc': 2, 'pl': 8, 'pt': 12, 'qu': 2,
-  'ro': 3, 'rw': 2, 'sk': 3, 'sl': 3, 'sn': 1,
-  'so': 1, 'sv': 7, 'sw': 2, 'tr': 6, 'vo': 2,
-  'wa': 2, 'wo': 1, 'xh': 2, 'yo': 1, 'zu': 1
+  'af': 1, 'an': 1, 'bs': 1, 'ca': 3, 'cs': 12,
+  'cy': 1, 'da': 10, 'de': 30, 'el': 9, 'eo': 1,
+  'es': 26, 'et': 6, 'eu': 1, 'fi': 10, 'fo': 1,
+  'fr': 22, 'ga': 1, 'gl': 1, 'ha': 1, 'hr': 8,
+  'hu': 8, 'is': 4, 'it': 18, 'la': 1, 'lb': 1,
+  'lt': 5, 'lv': 5, 'mg': 1, 'mt': 1, 'nl': 18,
+  'no': 8, 'oc': 1, 'pl': 12, 'pt': 14, 'qu': 1,
+  'ro': 7, 'rw': 1, 'sk': 2, 'sl': 5, 'sn': 1,
+  'so': 1, 'sv': 10, 'sw': 1, 'tr': 10, 'vo': 1,
+  'wa': 1, 'wo': 1, 'xh': 1, 'yo': 1, 'zu': 1
 }
 
 # Slowly indexes terms, one per minute maximum.
