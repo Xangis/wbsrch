@@ -22,7 +22,7 @@ domains = []
 def ProcessCSVFile(filename):
     num_domains = 0
     print('Opening {0}'.format(filename))
-    with open(filename, 'rb') as csvfile:
+    with open(filename, 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         # Set all Alexa results as old.
         for row in reader:

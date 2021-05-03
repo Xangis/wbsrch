@@ -11,10 +11,10 @@ def ProcessCSVFile(filename):
         reader = csv.reader(csvfile, delimiter=',')
         # Set all Alexa results as old.
         for row in reader:
-            if row[1] == 'Domain':
-                continue
             if len(row) >= 2:
-                domains.append(row[1])
+                if row[2] == 'Domain':
+                    continue
+                domains.append(row[2])
                 num_domains = num_domains + 1
     with open(filename + '.txt', 'w') as outfile:
         for item in domains:
@@ -23,5 +23,5 @@ def ProcessCSVFile(filename):
     print('Processed {0} domains in {1}.'.format(num_domains, filename))
 
 
-for file in ('top10milliondomains.csv',):
+for file in ('majestic_million_2021-05-03.csv',):
     ProcessCSVFile(file)
