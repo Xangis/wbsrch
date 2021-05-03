@@ -19,15 +19,15 @@ language_list = ['en', 'af', 'an', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el',
 # Adjust accordingly as indexes evolve.
 # Default is 1, which is appropriate for all small (<5k) indexes.
 lang_crawl_counts = {
-  'af': 1, 'an': 1, 'bs': 1, 'ca': 3, 'cs': 8,
-  'cy': 1, 'da': 8, 'de': 50, 'el': 6, 'eo': 1,
-  'es': 25, 'et': 2, 'eu': 1, 'fi': 7, 'fo': 1,
-  'fr': 20, 'ga': 1, 'gl': 1, 'ha': 1, 'hr': 4,
-  'hu': 8, 'is': 1, 'it': 15, 'la': 1, 'lb': 2,
-  'lt': 3, 'lv': 2, 'mg': 1, 'mt': 1, 'nl': 15,
-  'no': 6, 'oc': 1, 'pl': 12, 'pt': 18, 'qu': 1,
-  'ro': 5, 'rw': 2, 'sk': 4, 'sl': 2, 'sn': 1,
-  'so': 1, 'sv': 7, 'sw': 1, 'tr': 8, 'vo': 1,
+  'af': 1, 'an': 1, 'bs': 1, 'ca': 2, 'cs': 8,
+  'cy': 1, 'da': 9, 'de': 60, 'el': 7, 'eo': 1,
+  'es': 30, 'et': 2, 'eu': 1, 'fi': 8, 'fo': 1,
+  'fr': 25, 'ga': 1, 'gl': 1, 'ha': 1, 'hr': 5,
+  'hu': 10, 'is': 1, 'it': 18, 'la': 1, 'lb': 2,
+  'lt': 5, 'lv': 2, 'mg': 1, 'mt': 1, 'nl': 20,
+  'no': 7, 'oc': 1, 'pl': 15, 'pt': 20, 'qu': 1,
+  'ro': 6, 'rw': 2, 'sk': 5, 'sl': 2, 'sn': 1,
+  'so': 1, 'sv': 8, 'sw': 1, 'tr': 10, 'vo': 1,
   'wa': 1, 'wo': 1, 'xh': 1, 'yo': 1, 'zu': 1
 }
 
