@@ -7,7 +7,7 @@ import subprocess
 
 parser = argparse.ArgumentParser(description="Load a file containing one domain per line and count the number of domains with each extension.")
 parser.add_argument('directory', action='store', type=str, help='Input directory.')
-parser.add_argument('-p', '--processes', default=8, action='store', type=int, dest='processes', help='Number of concurrent processes for crawling (default=4).')
+parser.add_argument('-p', '--processes', default=8, action='store', type=int, dest='processes', help='Number of concurrent processes for crawling (default=8).')
 options = parser.parse_args()
 
 

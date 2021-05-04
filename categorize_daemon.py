@@ -1,4 +1,22 @@
 from subprocess import call
+from multiprocessing import Pool
+import argparse
+
+
+parser = argparse.ArgumentParser(description="Categorize language by extension, multiprocess version.")
+parser.add_argument('extensions', default=None, action='store', type=str, dest='extensions', help='Comma-separated list of extensions to process.')
+parser.add_argument('-p', '--processes', default=4, action='store', type=int, dest='processes', help='Number of concurrent processes for categorization (default=4).')
+options = parser.parse_args()
+
+
+# Block, then categorize, then tag English.
+def ProcessExtension(extension):
+    print('Processing extension {0}'.format(extension))
+    call(['python', 'manage.py', 'categorize_language', '-c', '-t', '-b', 'am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh', '-q', '-i', '10000000', '-u', '.{0}'.format(extension)])
+    call(['python', 'manage.py', 'categorize_language', '-c', '-t', '-a', 'an,ca,cs,cy,da,de,el,es,et,eu,fi,fr,gl,hr,hu,is,it,lt,lv,nl,no,pl,pt,ro,rw,sl,sv,sw,tr,rw,xh,zu', '-q', '-o', '-j', '-i', '10000000', '-u', '.{0}'.format(extension)])
+    call(['python', 'manage.py', 'categorize_language', '-e', '-o', '-t', '-q', '-n', '3', '-i', '10000000', '-u', '.{0}'.format(extension)])
+    print('Done processing extension {0}'.format(extensions))
+
 
 # These are the extensions found in a 3 million URL crawl ordered from least common to most.
 extensions = ['abb', 'scb', 'whoswho', 'new', 'mango', 'nra', 'softbank', 'autos', 'rmit', 'cancerresearch',
@@ -80,9 +98,29 @@ extensions = ['abb', 'scb', 'whoswho', 'new', 'mango', 'nra', 'softbank', 'autos
 'ie', 'es', 'kr', 'no', 'edu', 'mx', 'mobi', 'jp', 'dk', 'ws', 'br', 'tv', 'nl', 'eu', 'sk', 'it', 'me', 'nz',
 'ch', 'za', 'co', 'be', 'de', 'in', 'us', 'ca', 'info', 'au', 'biz', 'uk', 'org', 'net', 'com']
 
-# Block, then categorize, then tag English.
-for count, extension in enumerate(extensions):
-    print('Processing extension {0} of {1}'.format(count, len(extensions)))
-    call(['python', 'manage.py', 'categorize_language', '-c', '-t', '-b', 'am,ar,as,az,be,bg,bn,cn,dz,fa,gu,he,hi,hy,id,ja,jv,ka,kk,km,kn,ko,ku,ky,lo,mk,ml,mn,mr,ms,ne,or,pa,ps,ru,si,sq,sr,ta,te,th,tl,ug,uk,ur,vi,zh', '-q', '-i', '10000000', '-u', '.{0}'.format(extension)])
-    call(['python', 'manage.py', 'categorize_language', '-c', '-t', '-a', 'an,ca,cs,cy,da,de,el,es,et,eu,fi,fr,gl,hr,hu,is,it,lt,lv,nl,no,pl,pt,ro,rw,sl,sv,sw,tr,rw,xh,zu', '-q', '-o', '-j', '-i', '10000000', '-u', '.{0}'.format(extension)])
-    call(['python', 'manage.py', 'categorize_language', '-e', '-o', '-t', '-q', '-n', '3', '-i', '10000000', '-u', '.{0}'.format(extension)])
+extensions = [
+# Not processed yet, but running in another thread
+# 'co', 'cz', 'dk', 'es', 'eu', 'fr', 'it', 'nl',
+# 'pl', 'ro', 'sk', 'za', 'uk', 'us', 'au', 'ca', 'de'
+# Languages that are NOT done after they've been processed (redo in new run):
+'br', 'ch', 'co', 'cz', 'dk', 'eu',
+# Languages that are DONE after they've been processed:
+'es', 'fr', 'it', 'nl', 'pl', 'ro', 'sk', 'za', 'uk',
+'at', 'be', 'us', 'au', 'ca', 'de',
+# ICANN extensions that are ready to process even though we haven't crawled the full files.
+# Be sure to crawl these on the next ICANN crawl (all but .com are done crawling).
+'app', 'bid', 'biz', 'buzz', 'club', 'dev', 'fun', 'icu', 'info', 'live', 'mobi', 'online',
+'pro', 'rent', 'shop', 'site', 'space', 'store', 'tech', 'top', 'vip', 'website', 'work',
+'xyz', 'org', 'net', 'com'
+]
+
+
+if __name__ == '__main__':
+    files = []
+    if options.extensions:
+        extensions = options.extensions.split(',')
+    else:
+        pass
+    print('Processing {0} extensions: \n{1}'.format(len(extensions), extensions))
+    with Pool(options.processes) as p:
+        p.map(ProcessExtension, extensions)
