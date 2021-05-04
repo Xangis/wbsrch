@@ -4,7 +4,7 @@ import argparse
 
 
 parser = argparse.ArgumentParser(description="Categorize language by extension, multiprocess version.")
-parser.add_argument('extensions', default=None, action='store', type=str, dest='extensions', help='Comma-separated list of extensions to process.')
+parser.add_argument('-e', '--extensions', default=None, action='store', type=str, dest='extensions', help='Comma-separated list of extensions to process.')
 parser.add_argument('-p', '--processes', default=4, action='store', type=int, dest='processes', help='Number of concurrent processes for categorization (default=4).')
 options = parser.parse_args()
 
@@ -103,10 +103,11 @@ extensions = [
 # 'co', 'cz', 'dk', 'es', 'eu', 'fr', 'it', 'nl',
 # 'pl', 'ro', 'sk', 'za', 'uk', 'us', 'au', 'ca', 'de'
 # Languages that are NOT done after they've been processed (redo in new run):
-'br', 'ch', 'co', 'cz', 'dk', 'eu',
+'br', 'eu',
 # Languages that are DONE after they've been processed:
 'es', 'fr', 'it', 'nl', 'pl', 'ro', 'sk', 'za', 'uk',
 'at', 'be', 'us', 'au', 'ca', 'de',
+'ch', 'co', 'cz', 'dk',
 # ICANN extensions that are ready to process even though we haven't crawled the full files.
 # Be sure to crawl these on the next ICANN crawl (all but .com are done crawling).
 'app', 'bid', 'biz', 'buzz', 'club', 'dev', 'fun', 'icu', 'info', 'live', 'mobi', 'online',
