@@ -1824,6 +1824,10 @@ def CalculateTermValue(item, keywords, abbreviated=False, lang=None, verbose=Fal
         value *= 0.75
         if verbose:
             rulematches.append('Lose 25% for being a directory listing page.')
+    if item.pagetitle == 'Untitled Document' or item.pagetitle == 'untitled document' or item.pagetitle == 'untitled' or item.pagetitle == 'Untitled Page' or item.pagetitle == 'Untitled document' or item.pagetitle == 'Untitled Web Page' or item.pagetitle == 'Untitled page' or item.pagetitle == 'Untitled':
+        value *= 0.8
+        if verbose:
+            rulematches.append('Lose 20% for being an Untitled Document.')
     # Empty pages without any content, are penalized severely. Sites only lose 60%, rather
     # than the 2/3 lost by a parked page (6.66% better), so they will tend to rank slightly
     # above parked pages, but barely.
