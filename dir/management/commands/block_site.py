@@ -28,7 +28,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('-s', '--site', action='store', dest='site', help='Site to block.'),
-        parser.add_argument('-r', '--reason', default=8, action='store', type=int, dest='reason', help='Reason (4=porn, 5=pills, 8=unindexed language, 20=arabic, 21=chinese, 25=japanese, 28=russian)'),
+        parser.add_argument('-r', '--reason', default=8, action='store', type=int, dest='reason', help='Reason (4=porn, 5=pills, 8=unindexed language, 20=arabic, 21=chinese, 25=japanese, 28=russian, 80=jerks)'),
 
     def handle(self, *args, **options):
         site = options.get('site')

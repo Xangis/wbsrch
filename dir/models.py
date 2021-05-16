@@ -186,6 +186,7 @@ EXCLUDED_SITE_REASONS = (
         (29, 'Unindexed Language - Vietnamese'),
         # Warez/torrent/crack/piracy sites.
         (9, 'Piracy'),
+        (80, 'Undesirable Site'), # Jerks wo reported us to IP abuse sites or said bad things in general.
         # Sites that encourage human rights violations, racism, general douchebaggery.
         (10, 'Human Rights Abuses'),
         # This isn't a web site - it's an ad server.
