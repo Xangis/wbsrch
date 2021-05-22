@@ -307,6 +307,7 @@ font-weight: bold;
 .site {
 margin-left: 6px;
 background: #f9f9f9;
+margin-bottom: 12px;
 }
 
 .section {
