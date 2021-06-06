@@ -36,6 +36,8 @@ class Command(BaseCommand):
         site = options.get('site')
         reason = int(options.get('reason'))
         filename = options.get('file', None)
+        blocked = 0
+        alreadyblocked = 0
 
         sites = set()
         if site:
@@ -59,8 +61,11 @@ class Command(BaseCommand):
                 # If the domain is already blocked, the URL must have been added erroneously.
                 # in that case, just delete it.
                 RemoveURLsForDomain(site)
+                alreadyblocked += 1
             except ObjectDoesNotExist:
                 bsite = BlockedSite()
                 bsite.url = site
                 bsite.reason = reason
                 bsite.save()
+                blocked += 1
+        print('Blocked {0} sites and {1} were already blocked.'.format(blocked, alreadyblocked))
