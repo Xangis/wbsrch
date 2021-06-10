@@ -43,7 +43,7 @@ Pillow==8.1.2
 selenium==3.141.0
 requests==2.25.1
 zone-file==0.1.5
-tlds==2021051900
+tlds==2021060900
 tox==3.23.0
 elasticsearch==7.10.1
 gunicorn==20.1.0
