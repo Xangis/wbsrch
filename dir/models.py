@@ -10,7 +10,7 @@ import django.db.models.options as options
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
 
 language_list = ['en', 'af', 'an', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fi', 'fo', 'fr', 'ga', 'gl', 'ha', 'hr', 'hu', 'is', 'it', 'la', 'lb', 'lt', 'lv', 'mg', 'mt', 'nl', 'no', 'oc', 'pl', 'pt', 'qu', 'ro', 'rw', 'sk', 'sl', 'sn', 'so', 'sv', 'sw', 'tr', 'vo', 'wa', 'wo', 'xh', 'yo', 'zu']
-hidden_language_list = ['eo', 'fo', 'la', 'mg', 'mt', 'oc', 'qu', 'vo', 'wa']
+hidden_language_list = ['vo', ]
 
 # Only including languages that aren't also a valid country. This means that "ar", which could be argentina,
 # and "uk" which could be the united kingdom, are not listed as blocked. Doing so could cause it to auto-delete
@@ -186,7 +186,7 @@ EXCLUDED_SITE_REASONS = (
         (29, 'Unindexed Language - Vietnamese'),
         # Warez/torrent/crack/piracy sites.
         (9, 'Piracy'),
-        (80, 'Undesirable Site'), # Jerks wo reported us to IP abuse sites or said bad things in general.
+        (80, 'Undesirable Site'),  # Jerks who reported us to IP abuse sites or said bad things in general.
         # Sites that encourage human rights violations, racism, general douchebaggery.
         (10, 'Human Rights Abuses'),
         # This isn't a web site - it's an ad server.
