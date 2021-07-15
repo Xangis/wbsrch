@@ -337,163 +337,193 @@ EXTRA_LANG_INFO = {
         'bidi': False,
         'code': 'ak',
         'name': 'Akan',
-        'name_local': u'Akan'
+        'name_local': 'Akan'
     },
     'an': {
         'bidi': False,
         'code': 'an',
         'name': 'Aragonese',
-        'name_local': u'Aragonés'
+        'name_local': 'Aragonés'
     },
     'bm': {
         'bidi': False,
         'code': 'bm',
         'name': 'Bambara',
-        'name_local': u'Bamanankan'
+        'name_local': 'Bamanankan'
     },
     'ff': {
         'bidi': False,
         'code': 'ff',
         'name': 'Fulani',
-        'name_local': u'Fufulde'
+        'name_local': 'Fufulde'
     },
     'fo': {
         'bidi': False,
         'code': 'fo',
         'name': 'Faroese',
-        'name_local': u'Føroyskt'
+        'name_local': 'Føroyskt'
     },
     'ha': {
         'bidi': False,
         'code': 'ha',
         'name': 'Hausa',
-        'name_local': u'Hausa'
+        'name_local': 'Hausa'
     },
     'ig': {
         'bidi': False,
         'code': 'ig',
         'name': 'Igbo',
-        'name_local': u'Asụsụ Igbo'
+        'name_local': 'Asụsụ Igbo'
     },
     'kg': {
         'bidi': False,
         'code': 'kg',
         'name': 'Kongo',
-        'name_local': u'Kikongo'
+        'name_local': 'Kikongo'
     },
     'ki': {
         'bidi': False,
         'code': 'ki',
         'name': 'Kikuyu',
-        'name_local': u'Gikuyu'
+        'name_local': 'Gikuyu'
     },
     'la': {
         'bidi': False,
         'code': 'la',
         'name': 'Latin',
-        'name_local': u'Latina'
+        'name_local': 'Latina'
     },
     'lg': {
         'bidi': False,
         'code': 'lg',
         'name': 'Luganda',
-        'name_local': u'Oluganda'
+        'name_local': 'Oluganda'
     },
     'ln': {
         'bidi': False,
         'code': 'ln',
         'name': 'Lingala',
-        'name_local': u'Ngala'
+        'name_local': 'Ngala'
+    },
+    'mg': {
+        'bidi': False,
+        'code': 'mg',
+        'name': 'Malagasy',
+        'name_local': 'Malagasy'
+    },
+    'mt': {
+        'bidi': False,
+        'code': 'mt',
+        'name': 'Maltese',
+        'name_local': 'Malti'
     },
     'ny': {
         'bidi': False,
         'code': 'ny',
         'name': 'Nyanja',
-        'name_local': u'Chinyanja'
+        'name_local': 'Chinyanja'
+    },
+    'oc': {
+        'bidi': False,
+        'code': 'oc',
+        'name': 'Occitan',
+        'name_local': 'Occitan'
     },
     'om': {
         'bidi': False,
         'code': 'om',
         'name': 'Oromo',
-        'name_local': u'Afaan Oromoo'
+        'name_local': 'Afaan Oromoo'
+    },
+    'qu': {
+        'bidi': False,
+        'code': 'qu',
+        'name': 'Quechua',
+        'name_local': 'Quechua'
     },
     'rw': {
         'bidi': False,
         'code': 'rw',
         'name': 'Rwanda',
-        'name_local': u'Kinyarwanda'
+        'name_local': 'Kinyarwanda'
     },
     'sc': {
         'bidi': False,
         'code': 'sc',
         'name': 'Sardinian',
-        'name_local': u'Sardinian'
+        'name_local': 'Sardinian'
     },
     'scn': {
         'bidi': False,
         'code': 'scn',
         'name': 'Sicilian',
-        'name_local': u'Sicilianu'
+        'name_local': 'Sicilianu'
     },
     'sn': {
         'bidi': False,
         'code': 'sn',
         'name': 'Shona',
-        'name_local': u'chiShona'
+        'name_local': 'chiShona'
     },
     'so': {
         'bidi': False,
         'code': 'so',
         'name': 'Somali',
-        'name_local': u'Af-Soomaali'
+        'name_local': 'Af-Soomaali'
     },
     'ss': {
         'bidi': False,
         'code': 'ss',
         'name': 'Swazi',
-        'name_local': u'SiSwati'
+        'name_local': 'SiSwati'
     },
     'tn': {
         'bidi': False,
         'code': 'tn',
         'name': 'Tswana',
-        'name_local': u'Setswana'
+        'name_local': 'Setswana'
     },
     'ts': {
         'bidi': False,
         'code': 'ts',
         'name': 'Tsonga',
-        'name_local': u'Xitsonga'
+        'name_local': 'Xitsonga'
     },
     've': {
         'bidi': False,
         'code': 've',
         'name': 'Venda',
-        'name_local': u'Tshivenda'
+        'name_local': 'Tshivenda'
+    },
+    'wa': {
+        'bidi': False,
+        'code': 'wa',
+        'name': 'Walloon',
+        'name_local': 'Walon'
     },
     'wo': {
         'bidi': False,
         'code': 'wo',
         'name': 'Wolof',
-        'name_local': u'Wolof'
+        'name_local': 'Wolof'
     },
     'xh': {
         'bidi': False,
         'code': 'xh',
         'name': 'Xhosa',
-        'name_local': u'isiXhosa'
+        'name_local': 'isiXhosa'
     },
     'yo': {
         'bidi': False,
         'code': 'yo',
         'name': 'Yoruba',
-        'name_local': u'èdè Yorùbá'
+        'name_local': 'èdè Yorùbá'
     },
     'zu': {
         'bidi': False,
         'code': 'zu',
         'name': 'Zulu',
-        'name_local': u'isiZulu'
+        'name_local': 'isiZulu'
     },
 }
 
