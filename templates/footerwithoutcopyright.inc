@@ -9,20 +9,24 @@
 <a href="/howto/">{% trans "How to Use WbSrch" %}</a> |
 <a href="/most-linked-to-domains/">Top 100 Most-Linked-To Domains</a> |
 </p>
+</p>
 <p class="centered">
-<a href="/terms/">{% trans "Terms of Service" %}</a> |
-<a href="/privacy/">{% trans "Privacy Policy" %}</a> |
+<a href="/most-crawled-domains/">{% trans "Most-Crawled Domains" %}</a> |
+<a href="/most-keywords-ranked-domains/">{% trans "Most-Ranked Domains" %}</a> |
 <a href="/tld-stats/">{% trans "TLD Stats" %}</a> |
 <a href="/faq/">{% trans "Frequently Asked Questions" %}</a> |
 <a href="/criteria/">{% trans "Ranking Criteria" %}</a> |
 <a href="/dmca/">{% trans "DMCA and Copyright Policy" %}</a> |
 <a href="/wbrank/">WbRank</a> |
-<a href="/contact/">{% trans "Contact Information" %}</a></p>
+<a href="/contact/">{% trans "Contact Information" %}</a>
+</p>
 <p class="centered">
 <a href="https://wbsrch.onfastspring.com">WbSrch Data Shop</a> |
-<a href="https://stats.wbsrch.com">WbSrch Stats</a> |
+<a href="https://stats.wbsrch.com">WbSrch Stats</a> | 
 <a href="https://maps.wbsrch.com">WbSrch Maps</a> |
-<a href="https://musicsrch.com">MusicSrch Music Search</a>
+<a href="https://musicsrch.com">MusicSrch Music Search</a> | 
+<a href="/terms/">{% trans "Terms of Service" %}</a> |
+<a href="/privacy/">{% trans "Privacy Policy" %}</a>  
 </p>
 </div>
 <br/>
