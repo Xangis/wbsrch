@@ -20,7 +20,7 @@
 {% include 'adsense.inc' %}
 <ol>
 {% for domain in domains %}
-<li><a href="/domain/?q={{ domain.url }}">{{ domain.url }}</a> ({{ domain.num_urls }})</li>
+<li><a href="/domain/?q={{ domain.url }}">{{ domain.url }}</a> ({{ domain.num_urls }} pages)</li>
 {% endfor %}
 </ol>
 <p>These are the domains with the most pages crawled by the WbSrch search engine. Counts are taken based on the number of pages in our index. Many of these will be domain squatters, parkers, and resellers.</p>
