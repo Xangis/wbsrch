@@ -1,0 +1,33 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ language_code }}">
+<head>
+<!-- Cached Query: {{ cached }} -->
+<meta name="keywords" content="{% trans "search engine" %}, web, {% trans "index" %}, {% trans "keywords" %}, {% trans "most highly ranked domains" %}, {% trans "terms" %}, {% trans "ranked" %}, {% trans "search" %}, {% trans "most keywords" %}, {% trans "high-ranking" %}">
+<meta name="description" content="WbSrch {% trans "Web Search" %}, home of {% trans "The Independent Search Engine" %}.">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>{% trans "Domains With the Most Ranked Keywords" %} in {{ report.year }} - {{ report.month }} | WbSrch {% trans "Web Search" %}</title>
+{% include 'style.inc' %}
+{% include 'analytics.inc' %}
+</head>
+<body>
+<div class="head"><h1><a href="/"><img class="logo" src="/images/WbSrchLogo.png" alt="WbSrch {% trans "Web Search" %}" /></a>&nbsp;WbSrch Web 
+{% trans "Search" %} {% trans "Domains With The Most Keywords Ranked" %}</h1></div>
+<div class="page">
+<h2 class="left">Domains with the Most Keywords Ranked</h2><br/>
+{% include 'adsense.inc' %}
+<ol>
+{% for domain in domains %}
+<li><a href="/domain/?q={{ domain.url }}">{{ domain.url }}</a> ({{ domain.num_keywords_ranked }})</li>
+{% endfor %}
+</ol>
+<p>These are the domains with the most keywords ranked in our search results.</p>
+{% if not domains %}<h4 class="centered">Database error - no data was found.</h4>{% endif %}
+<br /><p><a href="/">{% trans "Back to search form" %}.</a></p>
+{% include 'adsense.inc' %}
+</div>
+{% include 'footer.inc' %}
+</body>
+</html>

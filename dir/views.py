@@ -1113,6 +1113,28 @@ def most_linked_domains(request):
     return render_to_response('mostlinked.htm', {'domains': domains, 'cached': cached, 'language_code': language_code})
 
 
+def most_crawled_pages(request):
+    language_code = request.LANGUAGE_CODE
+    cached = False
+    if language_code == 'en-us':
+        language_code = 'en'
+
+    domains = DomainInfo.objects.filter(num_urls__isnull=False).order_by('-num_urls')[0:100]
+
+    return render_to_response('mostcrawled.htm', {'domains': domains, 'cached': cached, 'language_code': language_code})
+
+
+def most_keywords_ranked(request):
+    language_code = request.LANGUAGE_CODE
+    cached = False
+    if language_code == 'en-us':
+        language_code = 'en'
+
+    domains = DomainInfo.objects.filter(num_keywords_ranked__isnull=False).order_by('-num_keywords_ranked')[0:100]
+
+    return render_to_response('mostkeywords.htm', {'domains': domains, 'cached': cached, 'language_code': language_code})
+
+
 def popular_searches(request, year=None, month=None):
     language_code = request.LANGUAGE_CODE
     current = False
