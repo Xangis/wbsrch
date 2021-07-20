@@ -4186,6 +4186,9 @@ def GetPagesAverageAge(language):
         except OverflowError:
             print('Overflow Error: we have added up too much time for {0} pages.'.format(language))
             return total_ages / total_items
+        except TypeError:
+            if item is None:
+                print('Page in language {0} found with lastcrawled = None'.format(language))
         total_items += 1
     if total_items > 0:
         return total_ages / total_items
