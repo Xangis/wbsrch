@@ -1,8 +1,11 @@
 SHELL=/bin/bash
-PATH=/var/django/wbsrch
+PATH=/home/xangis/wbsrch
 MAILTO=jchampion@sigmacentauri.com
 
 # run-parts
-1 2 * * * xangis cd /var/django/wbsrch && /home/xangis/.virtualenvs/wbsrch/bin/python /var/django/wbsrch/manage.py generate_index_stats
-1 4 * * * xangis cd /var/django/wbsrch && /var/django/wbsrch/wget_alexa.sh
-1 5 * * * xangis cd /var/django/wbsrch && /var/django/wbsrch/wget_majestic.sh
+1 2 * * * xangis cd /home/xangis/wbsrch && /home/xangis/wbsrch/env/bin/python3 /home/xangis/wbsrch/manage.py generate_index_stats > /home/xangis/wbsrch/log/generate_index_stats.cronlog 2>&1
+1 4 * * * xangis cd /home/xangis/wbsrch && /home/xangis/wbsrch/wget_alexa.sh > /home/xangis/wbsrch/log/wget_alexa.cronlog 2>&1
+1 5 * * * xangis cd /home/xangis/wbsrch && /home/xangis/wbsrch/wget_majestic.sh > /home/xangis/wbsrch/log/wget_majestic.cronlog 2>&1
+30 1 1 * * xangis cd /home/xangis/wbsrch && /home/xangis/wbsrch/env/bin/python3 /home/xangis/wbsrch/manage.py domain_suffix_stats > /home/xangis/wbsrch/log/domain_suffix_stats.cronlog 2>&1
+30 3 1 * * xangis cd /home/xangis/wbsrch && /home/xangis/wbsrch/wget_domcop.sh > /home/xangis/wbsrch/log/wget_domcop.cronlog 2>&1
+30 4 1 * * xangis cd /home/xangis/wbsrch && /home/xangis/wbsrch/env/bin/python3 /home/xangis/wbsrch/manage.py generate_search_report > /home/xangis/wbsrch/log/generate_search_report.cronlog 2>&1
